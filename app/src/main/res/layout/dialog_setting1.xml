@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:background="@drawable/login_window"
+    android:gravity="center_horizontal"
+    android:orientation="vertical"
+    android:paddingTop="22dp">
+
+
+    <TextView
+        android:id="@+id/tv_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:textColor="@color/context_2"
+        android:paddingBottom="8dp"
+        android:text="版本更新"
+        android:textSize="24sp" />
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingBottom="32dp"
+        android:paddingTop="32dp">
+
+        <TextView
+            android:id="@+id/cet_content"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/context_2"
+            android:layout_marginLeft="36dp"
+            android:text="发现新版本是否更新？"
+            android:textSize="16sp" />
+    </RelativeLayout>
+
+
+
+    <RelativeLayout
+        android:layout_width="320dp"
+        android:layout_height="match_parent"
+        >
+
+        <TextView
+            android:layout_alignTop="@+id/setting_ll"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#d9d9d9" />
+
+        <LinearLayout
+            android:id="@+id/setting_ll"
+            android:layout_width="320dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:orientation="horizontal"
+            android:padding="8dp">
+
+            <TextView
+                android:id="@+id/bt_cancle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:layout_weight="1"
+                android:textColor="@color/context_2"
+                android:gravity="center"
+                android:paddingBottom="8dp"
+                android:paddingLeft="16dp"
+                android:paddingRight="16dp"
+                android:paddingTop="8dp"
+                android:text="关闭"
+                android:textSize="18sp" />
+
+            <TextView
+                android:layout_width="1dp"
+                android:layout_height="match_parent"
+                android:background="#d9d9d9" />
+
+            <TextView
+                android:id="@+id/bt_confirm"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:layout_marginRight="16dp"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:paddingBottom="8dp"
+                android:paddingLeft="16dp"
+                android:paddingRight="16dp"
+                android:paddingTop="8dp"
+                android:text="确定"
+                android:textColor="@color/blue"
+                android:textSize="18sp" />
+
+        </LinearLayout>
+    </RelativeLayout>
+</LinearLayout>

@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.zhy.android.percent.support.PercentRelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/prl_title"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/blue_head_1">
+
+    <com.zhy.android.percent.support.PercentRelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_paddingLeftPercent="3%w"
+        app:layout_paddingRightPercent="3%w">
+
+
+        <ImageView
+            android:id="@+id/back_iv"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_centerVertical="true"
+            android:src="@mipmap/back_chevron"
+            app:layout_widthPercent="@string/title_menu_height_percent"
+            app:layout_heightPercent="@string/title_menu_height_percent"
+            app:layout_paddingPercent="3.5%w"/>
+
+        <TextView
+            android:id="@+id/title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:textColor="@android:color/white"
+            app:layout_textSizePercent="@string/size_5w"/>
+
+        <TextView
+            android:id="@+id/save"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:textColor="@android:color/white"
+            app:layout_marginRightPercent="4%"
+            app:layout_textSizePercent="@string/size_5w"/>
+
+        <ImageView
+            android:id="@+id/menu"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:visibility="invisible"
+            app:layout_paddingPercent="2.5%w"/>
+    </com.zhy.android.percent.support.PercentRelativeLayout>
+</com.zhy.android.percent.support.PercentRelativeLayout>

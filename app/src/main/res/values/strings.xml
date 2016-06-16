@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">库内PDA</string>
+
+    <string name="size_5w">5%w</string>
+    <string name="title_menu_height_percent">12%w</string>
+    <string name="username_hint">输入帐号</string>
+    <string name="password_hint">输入密码</string>
+    <string name="login">登  录</string>
+    <string name="notempty">用户名或密码不能为空</string>
+</resources>
