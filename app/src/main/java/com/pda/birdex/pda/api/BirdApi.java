@@ -73,4 +73,17 @@ public class BirdApi {
         post(context, "UpdateCenter/CheckVersion", params, jsonHttpResponseHandler);
     }
 
+
+    // 上传图片
+    public static void upLoadPic(Context context, RequestParams params, JsonHttpResponseHandler jsonHttpResponseHandler) {
+        post(context, "app_upload.php", params, jsonHttpResponseHandler);
+    }
+
+    // 上传 upc 图片 url
+    public static void upLoadUpc(Context context, RequestParams params, JsonHttpResponseHandler jsonHttpResponseHandler) {
+//        MyApplication.ahc.post(context, "http://192.168.1.215:8012/bs-product/productUpc/newByApp", params, jsonHttpResponseHandler);
+//        MyApplication.ahc.post(context, "http://bs-product.apiv2.a.com/productUpc/newByApp", params, jsonHttpResponseHandler);
+        MyApplication.ahc.post(context, "http://bs-product.apiv2.birdex.cn/productUpc/newByApp", params, jsonHttpResponseHandler);
+    }
+
 }

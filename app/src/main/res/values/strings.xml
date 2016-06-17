@@ -7,4 +7,10 @@
     <string name="password_hint">输入密码</string>
     <string name="login">登  录</string>
     <string name="notempty">用户名或密码不能为空</string>
+
+    <!-- 绑定区域 -->
+    <string name="areabind">绑定区域</string>
+    <string name="bind">绑定</string>
+    <string name="lanshouno">揽收单号/揽收箱号：</string>
+    <string name="areacode">区域条码：</string>
 </resources>
