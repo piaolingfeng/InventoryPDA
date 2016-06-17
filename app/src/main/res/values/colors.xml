@@ -11,5 +11,6 @@
     <color name="selected">#039FFF</color>
     <color name="blue">#039FFF</color>
     <color name="context_2">#666666</color>
+    <color name="single_line">#D7D7D7</color>
 
 </resources>
