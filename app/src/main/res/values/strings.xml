@@ -1,7 +1,9 @@
 <resources>
     <string name="app_name">库内PDA</string>
 
+    <string name="size_25p">25%w</string>
     <string name="size_50p">50%w</string>
+    <string name="size_5w_h">5.5%w</string>
     <string name="size_10w_h">8.5%w</string>
 
     <string name="size_5w">5%w</string>
@@ -16,4 +18,10 @@
     <string name="bind">绑定</string>
     <string name="lanshouno">揽收单号/揽收箱号：</string>
     <string name="areacode">区域条码：</string>
+
+    <!-- 打印揽收单 -->
+    <string name="printlanshou">打印揽收单</string>
+    <string name="print">打\t印</string>
+    <string name="printsame">打印相同箱号</string>
+    <string name="printnew">打印新的箱号</string>
 </resources>

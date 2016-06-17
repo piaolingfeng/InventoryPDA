@@ -65,6 +65,11 @@
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan|stateHidden">
         </activity>
+
+        <activity
+            android:name=".activity.LanshouPrintActivity"
+            android:windowSoftInputMode="adjustUnspecified|stateHidden"
+            android:screenOrientation="portrait" />
     </application>
 
 </manifest>

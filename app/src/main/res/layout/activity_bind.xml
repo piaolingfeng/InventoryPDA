@@ -25,8 +25,9 @@
             android:textColor="@android:color/black"
             android:textSize="24sp" />
 
-        <EditText
+        <com.pda.birdex.pda.widget.ClearEditText
             android:id="@+id/no_et"
+            android:singleLine="true"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="5dp" />
@@ -40,8 +41,9 @@
             android:textColor="@android:color/black"
             android:textSize="24sp" />
 
-        <EditText
+        <com.pda.birdex.pda.widget.ClearEditText
             android:id="@+id/code_et"
+            android:singleLine="true"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="5dp" />

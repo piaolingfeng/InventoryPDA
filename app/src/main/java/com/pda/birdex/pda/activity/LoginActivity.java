@@ -188,7 +188,6 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                 // 先检查帐号密码不能为空
                 if (TextUtils.isEmpty(username.getText()) || TextUtils.isEmpty(password.getText())) {
                     T.showShort(MyApplication.getInstans(), getString(R.string.notempty));
-                    login();
                 } else {
                     login();
                 }

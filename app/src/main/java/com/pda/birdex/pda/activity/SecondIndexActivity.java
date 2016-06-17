@@ -58,10 +58,19 @@ public class SecondIndexActivity extends BaseActivity {
                         startActivity(intent);
                         break;
                     case 1:
+                        // 拍照
+                        intent.setClass(SecondIndexActivity.this, PhotoActivity.class);
+                        startActivity(intent);
                         break;
                     case 2:
+                        //打印揽收单
+                        intent.setClass(SecondIndexActivity.this, LanshouPrintActivity.class);
+                        startActivity(intent);
                         break;
                     case 3:
+                        // 绑定区域
+                        intent.setClass(SecondIndexActivity.this, BindActivity.class);
+                        startActivity(intent);
                         break;
                 }
             }

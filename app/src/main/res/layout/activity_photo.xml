@@ -2,6 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="#FFFFFF"
     android:orientation="vertical">
 
@@ -31,32 +32,35 @@
                     android:textSize="16sp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />
-                <EditText
+                <com.pda.birdex.pda.widget.ClearEditText
+                    android:singleLine="true"
                     android:layout_weight="1"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content" />
 
             </LinearLayout>
 
-            <RelativeLayout
+            <com.zhy.android.percent.support.PercentRelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="22dp"
                 android:layout_marginTop="22dp">
+
 
                 <Button
                     android:id="@+id/photo"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerInParent="true"
-                    android:paddingBottom="10dp"
-                    android:paddingLeft="25dp"
-                    android:paddingRight="25dp"
-                    android:paddingTop="10dp"
                     android:text="拍 照"
-                    android:textColor="#039FFF"
-                    android:textSize="20sp" />
-            </RelativeLayout>
+                    android:background="@drawable/rect_fullbluew_selector"
+                    android:textColor="@color/btn_blue_selector"
+                    android:textSize="20sp"
+                    app:layout_paddingBottomPercent="5%w"
+                    app:layout_paddingLeftPercent="25%w"
+                    app:layout_paddingRightPercent="25%w"
+                    app:layout_paddingTopPercent="5%w"/>
+            </com.zhy.android.percent.support.PercentRelativeLayout>
 
             <TextView
                 android:layout_width="match_parent"
@@ -85,7 +89,7 @@
                 android:text="标记异常"
                 android:textColor="#979797" />
 
-            <RelativeLayout
+            <com.zhy.android.percent.support.PercentRelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
@@ -94,17 +98,19 @@
 
                 <Button
                     android:id="@+id/upload"
-                    android:layout_width="100dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerInParent="true"
-                    android:paddingBottom="10dp"
-                    android:paddingLeft="25dp"
-                    android:paddingRight="25dp"
-                    android:paddingTop="10dp"
                     android:text="提 交"
-                    android:textColor="#039FFF"
-                    android:textSize="20sp" />
-            </RelativeLayout>
+                    android:background="@drawable/rect_fullbluew_selector"
+                    android:textColor="@color/btn_blue_selector"
+                    android:textSize="20sp"
+                    app:layout_paddingBottomPercent="5%w"
+                    app:layout_paddingLeftPercent="25%w"
+                    app:layout_paddingRightPercent="25%w"
+                    app:layout_paddingTopPercent="5%w"/>
+
+            </com.zhy.android.percent.support.PercentRelativeLayout>
 
             <Button
                 android:id="@+id/gallery"
