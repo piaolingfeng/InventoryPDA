@@ -103,14 +103,6 @@ public class MyApplication extends Application {
         initAsyncHttpClient();
     }
 
-    public String getUmengToken() {
-        device_token = sp.getString(SP_Umeng, "");
-        if (!TextUtils.isEmpty(device_token.trim())) {
-            return device_token;
-        }
-        return device_token;
-
-    }
 
     private void initFile() {
         File file = new File(Constant.BASEPATH);
