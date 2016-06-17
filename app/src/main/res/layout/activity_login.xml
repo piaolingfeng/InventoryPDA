@@ -60,10 +60,14 @@
             android:id="@+id/remember_cb"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="30dp"
+            android:layout_marginTop="10dp"
+            android:paddingRight="20dp"
+            android:paddingBottom="20dp"
+            android:paddingTop="20dp"
             android:button="@null"
             android:drawableLeft="@drawable/checkbox_selector"
             android:drawablePadding="5dp"
+            android:background="@null"
             android:text="记住密码"
             android:textColor="#979797"
             app:layout_marginLeftPercent="2%"
@@ -79,12 +83,12 @@
             android:background="@drawable/rect_fullbluew_selector"
             android:text="@string/login"
             android:textColor="@color/btn_blue_selector"
-            android:textSize="20sp"
-            app:layout_marginTopPercent="12%"
-            app:layout_paddingBottomPercent="5%w"
+            android:textSize="17sp"
+            app:layout_marginTopPercent="5%"
+            app:layout_paddingBottomPercent="4%w"
             app:layout_paddingLeftPercent="25%w"
             app:layout_paddingRightPercent="25%w"
-            app:layout_paddingTopPercent="5%w" />
+            app:layout_paddingTopPercent="4%w" />
 
 
         <ImageView

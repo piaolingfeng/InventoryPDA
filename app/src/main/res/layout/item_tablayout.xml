@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="40dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/white">
+
+    <com.zhy.android.percent.support.PercentRelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="40dp">
+
+        <TextView
+            android:id="@+id/tv_context"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:maxLines="1"
+            android:ellipsize="end"
+            android:background="@drawable/list_item_selector"
+            android:gravity="left|center"
+            android:text="123123"
+            android:textColor="@color/context_2"
+            app:layout_textSizePercent="33%"
+            app:layout_paddingLeftPercent="12%w"
+            />
+
+        <TextView
+            android:id="@+id/tv_bottom_line"
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:layout_alignParentBottom="true"
+            android:background="@color/single_line" />
+    </com.zhy.android.percent.support.PercentRelativeLayout>
+</LinearLayout>
