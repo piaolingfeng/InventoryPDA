@@ -1,6 +1,9 @@
 <resources>
     <string name="app_name">库内PDA</string>
 
+    <string name="size_50p">50%w</string>
+    <string name="size_10w_h">8.5%w</string>
+
     <string name="size_5w">5%w</string>
     <string name="title_menu_height_percent">12%w</string>
     <string name="username_hint">输入帐号</string>

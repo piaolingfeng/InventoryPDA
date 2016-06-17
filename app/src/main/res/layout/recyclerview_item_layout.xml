@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.zhy.android.percent.support.PercentRelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="20px">
+
+    <TextView
+        android:id="@+id/item_context"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_centerInParent="true"
+        android:background="@drawable/rect_fullbluew_selector"
+        android:textColor="@color/btn_blue_selector"
+        android:gravity="center"
+        app:layout_heightPercent="@string/size_50p"
+        app:layout_textSizePercent="@string/size_10w_h" />
+</com.zhy.android.percent.support.PercentRelativeLayout>

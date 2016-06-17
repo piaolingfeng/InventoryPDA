@@ -1,7 +1,7 @@
 package com.pda.birdex.pda.activity;
 
+
 import android.content.Intent;
-import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
@@ -16,17 +16,16 @@ import java.util.List;
 import butterknife.Bind;
 
 /**
- * Created by chuming.zhuang on 2016/6/15.
+ * Created by chuming.zhuang on 2016/6/17.
  */
-public class MainActivity extends BaseActivity {
-    String tag = "MainActivity";
+public class SecondIndexActivity extends BaseActivity {
+    String tag = "SecondIndexActivity";
     @Bind(R.id.rcy)
     RecyclerView rcy;
     @Bind(R.id.title)
     TitleView title;
     IndexAdapter adapter;
-    String []lists = {"收货","出货","仓库","清点"};
-    String []takinglists = {"揽收","拍照","打印揽收单","绑定区域"};//收货
+    String []lists={""};
     List<String> indexList = new ArrayList<>();
     @Override
     public int getContentLayoutResId() {
@@ -35,8 +34,15 @@ public class MainActivity extends BaseActivity {
 
     @Override
     public void initializeContentViews() {
-        title.setBackIvVisble(false);
-        title.setTitle("首页");
+        String text = "";
+        if(getIntent().getExtras()!=null) {
+            text = getIntent().getStringExtra("name");
+            lists = getIntent().getStringArrayExtra("list");
+            if(lists==null){
+                lists=new String[]{};
+            }
+        }
+        title.setTitle(text);
         for(int i =0;i<lists.length;i++){
             indexList.add(lists[i]);
         }
@@ -44,11 +50,12 @@ public class MainActivity extends BaseActivity {
         adapter.setOnRecycleViewItemClickListener(new OnRecycleViewItemClickListener() {
             @Override
             public void onItemClick(int position) {
-                Intent intent = new Intent(MainActivity.this,SecondIndexActivity.class);
-                Bundle b = new Bundle();
-                switch (position){
+                Intent intent = new Intent();
+                intent.putExtra("name", indexList.get(position));
+                switch (position) {
                     case 0:
-                        b.putStringArray("list",takinglists);
+                        intent.setClass(SecondIndexActivity.this, TakingActivity.class);
+                        startActivity(intent);
                         break;
                     case 1:
                         break;
@@ -57,9 +64,6 @@ public class MainActivity extends BaseActivity {
                     case 3:
                         break;
                 }
-                b.putString("name",indexList.get(position));
-                intent.putExtras(b);
-                startActivity(intent);
             }
         });
         rcy.setLayoutManager(new GridLayoutManager(this,2));
