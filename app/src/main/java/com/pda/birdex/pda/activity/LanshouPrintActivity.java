@@ -3,6 +3,7 @@ package com.pda.birdex.pda.activity;
 import android.view.View;
 
 import com.pda.birdex.pda.R;
+import com.pda.birdex.pda.widget.ClearEditText;
 
 import butterknife.Bind;
 import butterknife.OnClick;
@@ -10,20 +11,27 @@ import butterknife.OnClick;
 /**
  * Created by hyj on 2016/6/17.
  */
-public class LanshouPrintActivity extends BaseActivity implements View.OnClickListener {
+public class LanshouPrintActivity extends BarScanActivity implements View.OnClickListener {
 
     @Bind(R.id.titleView)
     com.pda.birdex.pda.widget.TitleView titleView;
 
+    @Bind(R.id.code_et)
+    com.pda.birdex.pda.widget.ClearEditText codeEt;
+
     @Override
-    public int getContentLayoutResId() {
+    public int getbarContentLayoutResId() {
         return R.layout.activity_lanshouprint;
     }
 
     @Override
-    public void initializeContentViews() {
-
+    public void barInitializeContentViews() {
         titleView.setTitle(getString(R.string.printlanshou));
+    }
+
+    @Override
+    public ClearEditText getClearEditText() {
+        return codeEt;
     }
 
     @OnClick({R.id.printsame, R.id.printnew})

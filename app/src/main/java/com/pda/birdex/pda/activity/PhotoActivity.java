@@ -29,6 +29,7 @@ import com.pda.birdex.pda.R;
 import com.pda.birdex.pda.adapter.PhotoGVAdapter;
 import com.pda.birdex.pda.api.BirdApi;
 import com.pda.birdex.pda.utils.T;
+import com.pda.birdex.pda.widget.ClearEditText;
 
 import org.apache.http.Header;
 import org.json.JSONArray;
@@ -53,7 +54,7 @@ import butterknife.OnClick;
 /**
  * Created by hyj on 2016/6/16.
  */
-public class PhotoActivity extends BaseActivity implements View.OnClickListener{
+public class PhotoActivity extends BarScanActivity implements View.OnClickListener {
     private final static int SCANNIN_GREQUEST_CODE = 1;
     private final static int PHOTO_GREQUEST_CODE = 2;
     private final static int COMPRESS_DOWN = 3;
@@ -87,6 +88,9 @@ public class PhotoActivity extends BaseActivity implements View.OnClickListener{
 
     @Bind(R.id.titleView)
     com.pda.birdex.pda.widget.TitleView titleView;
+
+    @Bind(R.id.lanshouno_et)
+    com.pda.birdex.pda.widget.ClearEditText lanshouno_et;
 
 
     private static final int PIC_COMPRESS = 1;
@@ -233,15 +237,12 @@ public class PhotoActivity extends BaseActivity implements View.OnClickListener{
 
 
     @Override
-    public int getContentLayoutResId() {
+    public int getbarContentLayoutResId() {
         return R.layout.activity_photo;
     }
 
     @Override
-    public void initializeContentViews() {
-//        mTextView = (TextView) findViewById(R.id.result);
-//        mImageView = (ImageView) findViewById(R.id.qrcode_bitmap);
-
+    public void barInitializeContentViews() {
         // 初始化 title
         titleView.setTitle("拍照");
 
@@ -274,6 +275,11 @@ public class PhotoActivity extends BaseActivity implements View.OnClickListener{
 
         PhotoGVAdapter adapter = new PhotoGVAdapter(getApplication(), pathList);
         gv.setAdapter(adapter);
+    }
+
+    @Override
+    public ClearEditText getClearEditText() {
+        return lanshouno_et;
     }
 
     /**
@@ -310,7 +316,7 @@ public class PhotoActivity extends BaseActivity implements View.OnClickListener{
                     if (!sdStatus.equals(Environment.MEDIA_MOUNTED)) { // 检测sd是否可用
                         Log.i("TestFile",
                                 "SD card is not avaiable/writeable right now.");
-                        T.showLong(this,"SDCard读取失败，请重试");
+                        T.showLong(this, "SDCard读取失败，请重试");
                         return;
                     }
                     pathList.add(filePath);
@@ -347,7 +353,16 @@ public class PhotoActivity extends BaseActivity implements View.OnClickListener{
             options -= 10;//每次都减少10
         }
         ByteArrayInputStream isBm = new ByteArrayInputStream(baos.toByteArray());//把压缩后的数据baos存放到ByteArrayInputStream中
-        Bitmap bitmap = BitmapFactory.decodeStream(isBm, null, null);//把ByteArrayInputStream数据生成图片
+
+        BitmapFactory.Options options1 = new BitmapFactory.Options();
+        options1.inPreferredConfig = Bitmap.Config.RGB_565;
+
+        Bitmap bitmap = BitmapFactory.decodeStream(isBm, null, options1);//把ByteArrayInputStream数据生成图片
+        try {
+            isBm.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         return bitmap;
     }
 
@@ -357,7 +372,7 @@ public class PhotoActivity extends BaseActivity implements View.OnClickListener{
 
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         image.compress(Bitmap.CompressFormat.JPEG, 100, baos);
-        if (baos.toByteArray().length / 1024 > 1024) {//判断如果图片大于1M,进行压缩避免在生成图片（BitmapFactory.decodeStream）时溢出
+        if (baos.toByteArray().length / 1024 > 100) {//判断如果图片大于1M,进行压缩避免在生成图片（BitmapFactory.decodeStream）时溢出
             baos.reset();//重置baos即清空baos
             image.compress(Bitmap.CompressFormat.JPEG, 50, baos);//这里压缩50%，把压缩后的数据存放到baos中
         }
@@ -385,7 +400,13 @@ public class PhotoActivity extends BaseActivity implements View.OnClickListener{
         //重新读入图片，注意此时已经把options.inJustDecodeBounds 设回false了
         isBm = new ByteArrayInputStream(baos.toByteArray());
         bitmap = BitmapFactory.decodeStream(isBm, null, newOpts);
-        return compressImage(bitmap);//压缩好比例大小后再进行质量压缩
+        try {
+            isBm.close();
+            baos.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return bitmap;//压缩好比例大小后再进行质量压缩
     }
 
     // 将 bitmap 保存成图片
@@ -406,7 +427,7 @@ public class PhotoActivity extends BaseActivity implements View.OnClickListener{
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.photo:
-                if (pathList.size() < 10) {
+                if (pathList.size() <= 10) {
                     Intent photoIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
 
                     filePath = getFileName();
@@ -423,14 +444,14 @@ public class PhotoActivity extends BaseActivity implements View.OnClickListener{
                 if (pathList.size() == 0) {
                     T.showShort(PhotoActivity.this, "条形码和照片不能同时为空");
                 } else {
-                    if (!(pathList.size() < 3 || pathList.size() > 5)) {
+                    if (pathList.size() <= 10) {
                         // 进度条
                         progressDialog();
                         // 上传图片
                         uploadPic();
                     } else {
                         // 限制图片数量在 3-5 之间
-                        T.showShort(PhotoActivity.this, "图片数量应在3-5之间");
+                        T.showShort(PhotoActivity.this, "照片不能超过10张");
                     }
                 }
                 break;

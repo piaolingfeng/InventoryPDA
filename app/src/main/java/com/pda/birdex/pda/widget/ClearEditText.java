@@ -12,6 +12,8 @@ import android.view.View;
 import android.widget.EditText;
 
 import com.pda.birdex.pda.R;
+import com.pda.birdex.pda.activity.BindActivity;
+import com.pda.birdex.pda.utils.T;
 
 
 /**
@@ -98,6 +100,16 @@ public class ClearEditText extends EditText implements View.OnFocusChangeListene
      */
     @Override
     public void onFocusChange(View v, boolean hasFocus) {
+        this.hasFoucs = hasFocus;
+        if (hasFocus) {
+            setClearIconVisible(getText().length() > 0);
+        } else {
+            setClearIconVisible(false);
+        }
+    }
+
+    // 重写过 onFocusChange 后，需要调用
+    public void overrideOnFocusChange(boolean hasFocus){
         this.hasFoucs = hasFocus;
         if (hasFocus) {
             setClearIconVisible(getText().length() > 0);
