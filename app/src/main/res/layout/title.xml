@@ -28,7 +28,7 @@
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             android:textColor="@android:color/white"
-            app:layout_textSizePercent="@string/size_5w"/>
+            app:layout_textSizePercent="6%w"/>
 
         <TextView
             android:id="@+id/save"
@@ -38,7 +38,7 @@
             android:layout_centerVertical="true"
             android:textColor="@android:color/white"
             app:layout_marginRightPercent="4%"
-            app:layout_textSizePercent="@string/size_5w"/>
+            app:layout_textSizePercent="6%w"/>
 
         <ImageView
             android:id="@+id/menu"

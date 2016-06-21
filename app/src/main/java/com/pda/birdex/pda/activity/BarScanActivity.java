@@ -62,7 +62,7 @@ public abstract class BarScanActivity extends BaseActivity {
             barcodeStr = new String(barcode, 0, barocodelen);
 
             edt_input.setText(barcodeStr);
-
+            ClearEditTextCallBack(barcodeStr);
         }
 
     };
@@ -159,5 +159,9 @@ public abstract class BarScanActivity extends BaseActivity {
 
     public abstract void barInitializeContentViews();
 
+    //获取界面的clearedit
     public abstract ClearEditText getClearEditText();
+
+    //扫描回调接口
+    public abstract void ClearEditTextCallBack(String code);
 }

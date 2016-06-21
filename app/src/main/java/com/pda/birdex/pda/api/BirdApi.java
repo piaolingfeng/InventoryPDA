@@ -15,8 +15,8 @@ import org.apache.http.Header;
  * 请求接口
  */
 public class BirdApi {
-    public static String SERVER_ADDRESS = "192.168.1.207";
-    public static String PORT = "8089";//8002
+    public static String SERVER_ADDRESS = "192.168.1.225";
+    public static String PORT = "8001";//8002
     public static String BASE_URL = "http://" + SERVER_ADDRESS + ":" + PORT;//
 
     /**

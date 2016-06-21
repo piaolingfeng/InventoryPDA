@@ -4,12 +4,23 @@
     <string name="size_50p">50%w</string>
     <string name="size_10w_h">8.5%w</string>
 
-    <string name="size_5w">5%w</string>
+    <string name="size_7w">7%w</string>
+    <string name="size_5w">4.5%w</string>
     <string name="title_menu_height_percent">12%w</string>
+
+    <string name="size_5_5w">5.5%w</string>
 
     <string name="margin_5w">5%w</string>
     <string name="username_hint">输入帐号</string>
     <string name="password_hint">输入密码</string>
     <string name="login">登  录</string>
     <string name="notempty">用户名或密码不能为空</string>
+
+    <string name="taking_error">该批入库商品未匹配到预报单，请手动选择。</string>
+    <string name="taking_edit">点击此处进行编辑</string>
+    <string name="taking_discript_commit">该预报单已完成揽收提交</string>
+    <string name="taking_discript_save">该预报单已暂存</string>
+
+    <string name="print_list">打印揽收单</string>
+
 </resources>
