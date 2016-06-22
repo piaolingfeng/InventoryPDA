@@ -11,6 +11,7 @@
     <string name="size_5_5w">5.5%w</string>
 
     <string name="margin_5w">5%w</string>
+    <string name="item_padding_3w">3%w</string>
     <string name="username_hint">输入帐号</string>
     <string name="password_hint">输入密码</string>
     <string name="login">登  录</string>
@@ -26,6 +27,19 @@
     <string name="callBack_error">回调方法有误,请联系技术!</string>
     <string name="successCallBack_error">返回错误!</string>
 
+    <string name="count_bussiness_input">请选择商家:</string>
+    <string name="edt_input_business_hint">可输入,可扫码.搜索所有商家</string>
+    <string name="tv_bussiness">商 家:</string>
+    <string name="tv_count_mission">待清点任务:</string>
+
+    <string name="tv_count_num">清点单号</string>
+    <string name="tv_last_time">截止时间</string>
+    <string name="tv_status">状态</string>
+
+
+
+
+    
     //打印
     <string name="print_title">BTPrinter</string>
 
