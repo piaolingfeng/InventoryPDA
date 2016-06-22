@@ -282,6 +282,11 @@ public class PhotoActivity extends BarScanActivity implements View.OnClickListen
         return lanshouno_et;
     }
 
+    @Override
+    public void ClearEditTextCallBack(String code) {
+
+    }
+
     /**
      * 生成文件路径和文件名
      *

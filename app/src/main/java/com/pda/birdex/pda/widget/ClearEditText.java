@@ -12,8 +12,6 @@ import android.view.View;
 import android.widget.EditText;
 
 import com.pda.birdex.pda.R;
-import com.pda.birdex.pda.activity.BindActivity;
-import com.pda.birdex.pda.utils.T;
 
 
 /**

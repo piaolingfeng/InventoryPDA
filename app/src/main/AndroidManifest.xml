@@ -52,7 +52,7 @@
             android:screenOrientation="portrait" />
 
         <activity
-            android:name=".activity.BindActivity"
+            android:name=".activity.TakingBindActivity"
             android:windowSoftInputMode="adjustUnspecified|stateHidden"
             android:screenOrientation="portrait" />
         <activity
@@ -75,7 +75,22 @@
         </activity>
 
         <activity
-            android:name=".activity.LanshouPrintActivity"
+            android:name=".activity.TakingPrintActivity"
+            android:windowSoftInputMode="adjustUnspecified|stateHidden"
+            android:screenOrientation="portrait" />
+
+        <activity
+            android:name=".activity.CountBindActivity"
+            android:windowSoftInputMode="adjustUnspecified|stateHidden"
+            android:screenOrientation="portrait" />
+
+        <activity
+            android:name=".activity.CountPrintActivity"
+            android:windowSoftInputMode="adjustUnspecified|stateHidden"
+            android:screenOrientation="portrait" />
+
+        <activity
+            android:name=".activity.CountTrackActivity"
             android:windowSoftInputMode="adjustUnspecified|stateHidden"
             android:screenOrientation="portrait" />
     </application>

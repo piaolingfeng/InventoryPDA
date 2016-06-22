@@ -10,9 +10,19 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_centerInParent="true"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
         android:background="@drawable/rect_fullbluew_selector"
         android:textColor="@color/btn_blue_selector"
         android:gravity="center"
         app:layout_heightPercent="@string/size_50p"
         app:layout_textSizePercent="@string/size_10w_h" />
+
+    <com.pda.birdex.pda.widget.BadgeView
+        android:id="@+id/item_bv"
+        android:layout_alignParentRight="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        />
 </com.zhy.android.percent.support.PercentRelativeLayout>
