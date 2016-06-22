@@ -20,8 +20,12 @@ import com.loopj.android.http.RequestParams;
 import com.pda.birdex.pda.MyApplication;
 import com.pda.birdex.pda.R;
 import com.pda.birdex.pda.api.BirdApi;
+import com.pda.birdex.pda.interfaces.RequestCallBackInterface;
 import com.pda.birdex.pda.utils.PreferenceUtils;
 import com.pda.birdex.pda.utils.T;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import butterknife.Bind;
 import butterknife.OnClick;
@@ -101,6 +105,19 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
 
     private void initData() {
 
+        // 先检查是否保存了 token，如果不为空说明不再需要登录
+        String oldToken = PreferenceUtils.getPrefString(MyApplication.getInstans(),"token","");
+        if (!TextUtils.isEmpty(oldToken)) {
+            // 将 token 添加进去
+            MyApplication.ahc.addHeader("x-access-token", oldToken);
+
+            Intent intent = new Intent(MyApplication.getInstans(), MainActivity.class);
+
+            startActivity(intent);
+            finish();
+        }
+
+
         // 确认是否勾选了 记住密码
         boolean ischecked = PreferenceUtils.getPrefBoolean(this, "remember", false);
         if (ischecked) {
@@ -145,6 +162,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
         super.onDestroy();
     }
 
+
     // 执行登录操作
     private void login() {
 //        showLoading();
@@ -152,10 +170,28 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
         RequestParams params = new RequestParams();
         params.put("account", username.getText().toString());
         params.put("password", password.getText().toString());
-        Intent intent = new Intent(this, MainActivity.class);
-        startActivity(intent);
 
-//        BirdApi.login(MyApplication.getInstans(), params, handler);
+
+        BirdApi.login(this, username.getText().toString() + "/" + password.getText().toString(), new RequestCallBackInterface(){
+
+            @Override
+            public void successCallBack(JSONObject object) {
+                try {
+                    String token = object.getString("token");
+                    MyApplication.ahc.addHeader("x-access-token", token);
+                    PreferenceUtils.setPrefString(MyApplication.getInstans(), "token", token);
+                    Intent intent = new Intent(MyApplication.getInstans(), MainActivity.class);
+                    startActivity(intent);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void errorCallBack(JSONObject object) {
+                T.showShort(MyApplication.getInstans(),"用户名或密码错误");
+            }
+        }, TAG, true);
     }
 
 
