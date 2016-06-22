@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical">
+
+
+    <com.pda.birdex.pda.widget.TitleView
+        android:id="@+id/title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <com.zhy.android.percent.support.PercentRelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="8dp">
+
+        <ImageView
+            android:id="@+id/img_print"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            app:layout_marginTopPercent="@string/margin_5w"
+            app:layout_widthPercent="70%w"
+            app:layout_heightPercent="70%w"
+            android:src="@drawable/chrome"/>
+
+        <LinearLayout
+            android:id="@+id/linearLayout_FontGrayScale"
+            android:layout_width="match_parent"
+            android:layout_above="@+id/linearLayout_Button"
+            app:layout_marginBottomPercent="@string/margin_5w"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/fontGrayscaleName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/fontGrayscaleName" />
+
+            <EditText
+                android:id="@+id/fontGrayscaleValue"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.07"
+                android:inputType="number"
+                android:text="@string/default_font_gray_scale" />
+
+            <TextView
+                android:id="@+id/fontGrayScaleRange"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.06"
+                android:text="@string/fontGrayScaleRange" />
+
+        </LinearLayout>
+
+        <com.zhy.android.percent.support.PercentRelativeLayout
+            android:id="@+id/linearLayout_Button"
+            android:layout_width="match_parent"
+            android:layout_alignParentBottom="true"
+            app:layout_marginBottomPercent="@string/margin_5w"
+            android:layout_height="wrap_content">
+
+            <Button
+                android:id="@+id/button_send"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toLeftOf="@+id/tv_center"
+                android:background="@drawable/rect_fullbluew_selector"
+                android:text="@string/send"
+                android:textColor="@color/btn_blue_selector"
+                app:layout_marginRightPercent="@string/margin_5w" />
+
+            <TextView
+                android:id="@+id/tv_center"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true" />
+
+            <Button
+                android:id="@+id/button_print"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toRightOf="@+id/tv_center"
+                android:background="@drawable/rect_fullbluew_selector"
+                android:text="@string/Print"
+                android:textColor="@color/btn_blue_selector"
+                app:layout_marginLeftPercent="@string/margin_5w" />
+
+        </com.zhy.android.percent.support.PercentRelativeLayout>
+    </com.zhy.android.percent.support.PercentRelativeLayout>
+</LinearLayout>

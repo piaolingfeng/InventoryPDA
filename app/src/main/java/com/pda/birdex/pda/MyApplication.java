@@ -25,7 +25,7 @@ public class MyApplication extends Application {
 
 
     public static AsyncHttpClient ahc;
-    public static String appName = "bird";
+    public static String appName = "库内PDA";
     // 推送设备号
     public static String device_token;
     // app 版本号
