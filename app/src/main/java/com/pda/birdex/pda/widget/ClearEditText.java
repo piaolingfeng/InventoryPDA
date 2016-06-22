@@ -106,6 +106,16 @@ public class ClearEditText extends EditText implements View.OnFocusChangeListene
         }
     }
 
+    // 重写过 onFocusChange 后，需要调用
+    public void overrideOnFocusChange(boolean hasFocus){
+        this.hasFoucs = hasFocus;
+        if (hasFocus) {
+            setClearIconVisible(getText().length() > 0);
+        } else {
+            setClearIconVisible(false);
+        }
+    }
+
     protected void setClearIconVisible(boolean visible) {
         Drawable right = visible ? mClearDrawable : null;
         setCompoundDrawables(getCompoundDrawables()[0],

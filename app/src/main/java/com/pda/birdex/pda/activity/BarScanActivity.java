@@ -29,6 +29,10 @@ public abstract class BarScanActivity extends BaseActivity {
 
     private ClearEditText edt_input;
 
+    public void setEdt_input(ClearEditText edt_input) {
+        this.edt_input = edt_input;
+    }
+
     @Override
     public int getContentLayoutResId() {
         return getbarContentLayoutResId();

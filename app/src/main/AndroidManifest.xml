@@ -42,6 +42,21 @@
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan|stateHidden">
         </activity>
+
+        <activity
+            android:name=".activity.PhotoActivity"
+            android:windowSoftInputMode="adjustUnspecified|stateHidden"
+            android:screenOrientation="portrait" />
+
+        <activity
+            android:name=".activity.PhotoShowActivity"
+            android:windowSoftInputMode="adjustUnspecified|stateHidden"
+            android:screenOrientation="portrait" />
+
+        <activity
+            android:name=".activity.TakingBindActivity"
+            android:windowSoftInputMode="adjustUnspecified|stateHidden"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".activity.SecondIndexActivity"
             android:hardwareAccelerated="false"
@@ -72,6 +87,26 @@
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan|stateHidden">
         </activity>
+
+        <activity
+            android:name=".activity.TakingPrintActivity"
+            android:windowSoftInputMode="adjustUnspecified|stateHidden"
+            android:screenOrientation="portrait" />
+
+        <activity
+            android:name=".activity.CountBindActivity"
+            android:windowSoftInputMode="adjustUnspecified|stateHidden"
+            android:screenOrientation="portrait" />
+
+        <activity
+            android:name=".activity.CountPrintActivity"
+            android:windowSoftInputMode="adjustUnspecified|stateHidden"
+            android:screenOrientation="portrait" />
+
+        <activity
+            android:name=".activity.CountTrackActivity"
+            android:windowSoftInputMode="adjustUnspecified|stateHidden"
+            android:screenOrientation="portrait" />
     </application>
 
 </manifest>

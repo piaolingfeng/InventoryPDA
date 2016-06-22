@@ -21,6 +21,13 @@ import butterknife.ButterKnife;
  */
 public class IndexAdapter extends RecyclerView.Adapter<IndexAdapter.IndexAdapterHolder> {
 
+    // com.pda.birdex.pda.widget.BadgeView 值
+    private String bvValue = "";
+
+    public void setBvValue(String bvValue) {
+        this.bvValue = bvValue;
+    }
+
     private Context mContext;
     OnRecycleViewItemClickListener onRecycleViewItemClickListener;
 
@@ -40,10 +47,17 @@ public class IndexAdapter extends RecyclerView.Adapter<IndexAdapter.IndexAdapter
         return new IndexAdapterHolder(LayoutInflater.from(mContext).inflate(R.layout.recyclerview_item_layout,null));
     }
 
+
+
     @Override
     public void onBindViewHolder(IndexAdapterHolder holder, int position) {
         holder.position = position;
         holder.item_context.setText(list.get(position));
+        if(!"".equals(bvValue) && "清点任务".equals(list.get(position))) {
+            holder.item_bv.setText(bvValue);
+        } else {
+            holder.item_bv.setVisibility(View.GONE);
+        }
     }
 
     @Override
@@ -61,6 +75,9 @@ public class IndexAdapter extends RecyclerView.Adapter<IndexAdapter.IndexAdapter
 
         @Bind(R.id.item_context)
         TextView item_context;
+
+        @Bind(R.id.item_bv)
+        com.pda.birdex.pda.widget.BadgeView item_bv;
 
         public IndexAdapterHolder(View itemView) {
             super(itemView);

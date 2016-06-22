@@ -1,7 +1,9 @@
 <resources>
     <string name="app_name">库内PDA</string>
 
+    <string name="size_25p">25%w</string>
     <string name="size_50p">50%w</string>
+    <string name="size_5w_h">5.5%w</string>
     <string name="size_10w_h">8.5%w</string>
 
     <string name="size_7w">7%w</string>
@@ -16,6 +18,22 @@
     <string name="password_hint">输入密码</string>
     <string name="login">登  录</string>
     <string name="notempty">用户名或密码不能为空</string>
+    <string name="submit">提\t交</string>
+
+    <!-- 绑定区域 -->
+    <string name="areabind">绑定区域</string>
+    <string name="bind">绑定</string>
+    <string name="lanshouno">揽收单号/揽收箱号：</string>
+    <string name="areacode">区域条码：</string>
+
+    <string name="taking">收货</string>
+    <string name="count">清点</string>
+
+    <!-- 打印揽收单 -->
+    <string name="printlanshou">打印揽收单</string>
+    <string name="print">打\t印</string>
+    <string name="printsame">打印相同箱号</string>
+    <string name="printnew">打印新的箱号</string>
 
     <string name="taking_error">该批入库商品未匹配到预报单，请手动选择。</string>
     <string name="taking_edit">点击此处进行编辑</string>
@@ -40,6 +58,16 @@
 
 
     
+    <!-- 清点 -->
+    <string name="count_task">清点任务</string>
+    <string name="count_area">区域：</string>
+    <string name="count_vessel_no">容器号：</string>
+    <string name="count_no">清点单号：</string>
+    <string name="count_print_no">打印清点单</string>
+    <string name="count_now_no">现容器号：</string>
+    <string name="count_old_no">原容器号：</string>
+    <string name="count_track_no">追踪箱号</string>
+
     //打印
     <string name="print_title">BTPrinter</string>
 

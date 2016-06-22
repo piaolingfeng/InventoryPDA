@@ -191,12 +191,13 @@ public class TakingDetailActivity extends BaseActivity implements View.OnClickLi
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     private void showAlertDialog() {
         final Dialog myDialog = new Dialog(this, R.style.semester_dialog);
-        View view = LayoutInflater.from(this).inflate(R.layout.dialog_print, null);
-        LinearLayout.LayoutParams params  = new LinearLayout.LayoutParams(300,250);
-        view.setLayoutParams(params);
-        myDialog.show();
-        Window window = myDialog.getWindow();
-        window.setContentView(view);
+        View view = LayoutInflater.from(TakingDetailActivity.this).inflate(R.layout.dialog_print, null);
+//        LinearLayout.LayoutParams params  = new LinearLayout.LayoutParams(300,250);
+//        view.setLayoutParams(params);
+        myDialog.setContentView(view);
+
+//        Window window = myDialog.getWindow();
+//        window.setContentView(view);
         myDialog.setCanceledOnTouchOutside(false);
         Button confirm = (Button) view.findViewById(R.id.btn_confirm);
         confirm.setOnClickListener(new View.OnClickListener() {
@@ -206,6 +207,7 @@ public class TakingDetailActivity extends BaseActivity implements View.OnClickLi
                 //打印
             }
         });
+        myDialog.show();
     }
 
     private void showPopupWindow(View viewID, RecyclerView.Adapter adapter) {

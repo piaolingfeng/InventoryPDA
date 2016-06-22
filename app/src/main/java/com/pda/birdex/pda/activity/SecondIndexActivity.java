@@ -27,6 +27,10 @@ public class SecondIndexActivity extends BaseActivity {
     IndexAdapter adapter;
     String []lists={""};
     List<String> indexList = new ArrayList<>();
+
+    // 传过来的 title
+    private String titleStr;
+
     @Override
     public int getContentLayoutResId() {
         return R.layout.activity_main;
@@ -34,15 +38,14 @@ public class SecondIndexActivity extends BaseActivity {
 
     @Override
     public void initializeContentViews() {
-        String text = "";
         if(getIntent().getExtras()!=null) {
-            text = getIntent().getStringExtra("name");
+            titleStr = getIntent().getStringExtra("name");
             lists = getIntent().getStringArrayExtra("list");
             if(lists==null){
                 lists=new String[]{};
             }
         }
-        title.setTitle(text);
+        title.setTitle(titleStr);
         for(int i =0;i<lists.length;i++){
             indexList.add(lists[i]);
         }
@@ -54,21 +57,71 @@ public class SecondIndexActivity extends BaseActivity {
                 intent.putExtra("name", indexList.get(position));
                 switch (position) {
                     case 0:
-                        intent.setClass(SecondIndexActivity.this, TakingActivity.class);
-                        startActivity(intent);
+                        if(getString(R.string.taking).equals(titleStr)) {
+                            intent.setClass(SecondIndexActivity.this, TakingActivity.class);
+                            startActivity(intent);
+                        } else if(getString(R.string.count).equals(titleStr)) {
+
+                        }
                         break;
                     case 1:
-                        intent.setClass(SecondIndexActivity.this,PrintActivity.class);
-                        startActivity(intent);
+                        if(getString(R.string.taking).equals(titleStr)) {
+                            // 拍照
+                            intent.setClass(SecondIndexActivity.this, PhotoActivity.class);
+                            startActivity(intent);
+                        } else if(getString(R.string.count).equals(titleStr)) {
+                            // 绑定区域
+                            intent.setClass(SecondIndexActivity.this, CountBindActivity.class);
+                            startActivity(intent);
+                        }
                         break;
                     case 2:
+                        if(getString(R.string.taking).equals(titleStr)) {
+                            //打印揽收单
+                            intent.setClass(SecondIndexActivity.this, TakingPrintActivity.class);
+                            startActivity(intent);
+                        } else if(getString(R.string.count).equals(titleStr)) {
+                            // 打印清点单
+                            intent.setClass(SecondIndexActivity.this, CountPrintActivity.class);
+                            startActivity(intent);
+                        }
                         break;
                     case 3:
+                        if(getString(R.string.taking).equals(titleStr)) {
+                            // 绑定区域
+                            intent.setClass(SecondIndexActivity.this, TakingBindActivity.class);
+                            startActivity(intent);
+                        } else if(getString(R.string.count).equals(titleStr)) {
+                            // 追踪箱号
+                            intent.setClass(SecondIndexActivity.this, CountTrackActivity.class);
+                            startActivity(intent);
+                        }
                         break;
                 }
             }
         });
-        rcy.setLayoutManager(new GridLayoutManager(this,2));
+        GridLayoutManager myGLManager = new GridLayoutManager(this,2);
+        // 如果是清点任务，第一行 需要跨列 2行
+        if(lists.length > 0) {
+            if (getString(R.string.count_task).equals(lists[0])) {
+                myGLManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
+
+                    @Override
+                    public int getSpanSize(int position) {
+                        int spanSize = 1;
+                        if (position == 0) {
+                            spanSize = 2;
+                        }
+                        return spanSize;
+                    }
+                });
+                // 清点任务  右上角显示任务条数
+                adapter.setBvValue("88");
+            }
+        } else {
+            adapter.setBvValue("");
+        }
+        rcy.setLayoutManager(myGLManager);
         rcy.setAdapter(adapter);
     }
 }

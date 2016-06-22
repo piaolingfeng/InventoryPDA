@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical">
+
+    <com.pda.birdex.pda.widget.TitleView
+        android:id="@+id/titleView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:text="@string/count_now_no"
+            android:textColor="@android:color/black"
+            android:textSize="24sp" />
+
+        <com.pda.birdex.pda.widget.ClearEditText
+            android:id="@+id/now_et"
+            android:singleLine="true"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp" />
+
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="50dp"
+            android:text="@string/count_old_no"
+            android:textColor="@android:color/black"
+            android:textSize="24sp" />
+
+        <com.pda.birdex.pda.widget.ClearEditText
+            android:id="@+id/old_et"
+            android:singleLine="true"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp" />
+
+        <com.zhy.android.percent.support.PercentRelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="100dp">
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:text="@string/submit"
+                android:background="@drawable/rect_fullbluew_selector"
+                android:textColor="@color/btn_blue_selector"
+                android:textSize="20sp"
+                app:layout_paddingBottomPercent="5%w"
+                app:layout_paddingLeftPercent="25%w"
+                app:layout_paddingRightPercent="25%w"
+                app:layout_paddingTopPercent="5%w"/>
+
+        </com.zhy.android.percent.support.PercentRelativeLayout>
+
+    </LinearLayout>
+
+</LinearLayout>
