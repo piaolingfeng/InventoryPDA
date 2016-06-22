@@ -11,7 +11,7 @@ import butterknife.OnClick;
 /**
  * Created by hyj on 2016/6/17.
  */
-public class LanshouPrintActivity extends BarScanActivity implements View.OnClickListener {
+public class TakingPrintActivity extends BarScanActivity implements View.OnClickListener {
 
     @Bind(R.id.titleView)
     com.pda.birdex.pda.widget.TitleView titleView;
@@ -32,6 +32,11 @@ public class LanshouPrintActivity extends BarScanActivity implements View.OnClic
     @Override
     public ClearEditText getClearEditText() {
         return codeEt;
+    }
+
+    @Override
+    public void ClearEditTextCallBack(String code) {
+
     }
 
     @OnClick({R.id.printsame, R.id.printnew})

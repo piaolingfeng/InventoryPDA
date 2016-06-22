@@ -13,4 +13,7 @@
     <color name="context_2">#666666</color>
     <color name="single_line">#D7D7D7</color>
 
+    <color name="red">#FF0000</color>
+    <color name="gray">#C0C0C0</color>
+
 </resources>

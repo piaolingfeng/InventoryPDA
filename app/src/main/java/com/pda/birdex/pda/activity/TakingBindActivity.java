@@ -11,7 +11,7 @@ import butterknife.Bind;
 /**
  * Created by hyj on 2016/6/17.
  */
-public class BindActivity extends BarScanActivity{
+public class TakingBindActivity extends BarScanActivity{
 
     @Bind(R.id.no_et)
     com.pda.birdex.pda.widget.ClearEditText noEt;
@@ -54,6 +54,11 @@ public class BindActivity extends BarScanActivity{
     @Override
     public ClearEditText getClearEditText() {
         return noEt;
+    }
+
+    @Override
+    public void ClearEditTextCallBack(String code) {
+
     }
 
 

@@ -16,7 +16,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:layout_textSizePercent="@string/size_5w"
+            app:layout_textSizePercent="@string/size_7w"
             android:textColor="@color/context_2"
             android:text="预报号码:"/>
         <com.zhy.android.percent.support.PercentRelativeLayout
@@ -29,14 +29,18 @@
                 android:layout_alignParentLeft="true"
                 android:layout_centerVertical="true"
                 android:imeOptions="actionSearch"
-                android:layout_toLeftOf="@+id/btn_more"
+                android:layout_toLeftOf="@+id/img_add"
                 android:singleLine="true"/>
-            <Button
-                android:id="@+id/btn_more"
+            <ImageView
+                android:id="@+id/img_add"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
-                android:layout_alignParentRight="true"/>
+                android:src="@drawable/add"
+                android:layout_alignParentRight="true"
+                app:layout_paddingTopPercent="@string/size_5w"
+                app:layout_paddingBottomPercent="@string/size_5w"
+                app:layout_paddingLeftPercent="@string/size_5w"/>
         </com.zhy.android.percent.support.PercentRelativeLayout>
     </com.zhy.android.percent.support.PercentLinearLayout>
 </com.zhy.android.percent.support.PercentLinearLayout>

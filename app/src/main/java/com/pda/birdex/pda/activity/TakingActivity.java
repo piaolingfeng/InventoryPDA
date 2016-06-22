@@ -1,24 +1,16 @@
 package com.pda.birdex.pda.activity;
 
 import android.app.Activity;
-import android.content.BroadcastReceiver;
-import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
-import android.device.ScanManager;
 import android.graphics.drawable.BitmapDrawable;
-import android.media.AudioManager;
-import android.media.SoundPool;
-import android.os.Vibrator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.TextView;
@@ -40,13 +32,11 @@ import butterknife.OnClick;
 /**
  * Created by chuming.zhuang on 2016/6/17.
  */
-public class TakingActivity extends BarScanActivity implements View.OnClickListener{
+public class TakingActivity extends BarScanActivity implements View.OnClickListener {
     @Bind(R.id.title)
     TitleView title;
     @Bind(R.id.edt_input)
     ClearEditText edt_input;
-    @Bind(R.id.btn_more)
-    Button btn_more;
 
     @Override
     public int getbarContentLayoutResId() {
@@ -56,8 +46,8 @@ public class TakingActivity extends BarScanActivity implements View.OnClickListe
     @Override
     public void barInitializeContentViews() {
         title.setTitle("扫描预报单号");
-        for(int i=0;i<5;i++){
-            saveList.add("aaa"+i);
+        for (int i = 0; i < 5; i++) {
+            saveList.add("aaa" + i);
         }
         edt_input.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
@@ -66,7 +56,7 @@ public class TakingActivity extends BarScanActivity implements View.OnClickListe
                 if (actionId == EditorInfo.IME_ACTION_SEARCH) {
                     String string = v.getText().toString();
 //                    search(string);
-                    T.showShort(MyApplication.getInstans(),"dddd"+actionId);
+                    T.showShort(MyApplication.getInstans(), "dddd" + actionId);
                 }
                 return false;
             }
@@ -75,35 +65,49 @@ public class TakingActivity extends BarScanActivity implements View.OnClickListe
 
     }
 
+    //获取暂存列表
+    public void getSaveList(){
+
+    }
 
     @Override
     public ClearEditText getClearEditText() {
         return edt_input;
     }
 
-    //暂存的list
-    List<String> saveList = new ArrayList<>();
+    //扫描回调接口
+    @Override
+    public void ClearEditTextCallBack(String code) {
+        Intent intent = new Intent(this, TakingDetailActivity.class);
+        intent.putExtra("code",code);
+        startActivity(intent);
+    }
 
-    @OnClick(R.id.btn_more)
+
+    //暂存的list
+    List<String> saveList = new ArrayList<String>();
+
+    @OnClick(R.id.img_add)
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.btn_more:
-                showMenuWindow(v,saveList);
-            break;
+            case R.id.img_add:
+                getSaveList();
+                showMenuWindow(v, saveList);
+                break;
         }
     }
 
-    private void showPopupWindow(View viewID,  RecyclerView.Adapter adapter) {
+    private void showPopupWindow(View viewID, RecyclerView.Adapter adapter) {
         LayoutInflater mLayoutInflater = (LayoutInflater) this.getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
         final View popWindow = LayoutInflater.from(this).inflate(R.layout.common_recycleview_layout, null);
 //        popWindow.setBackgroundColor(Color.TRANSPARENT);
         RecyclerView rcy = (RecyclerView) popWindow.findViewById(R.id.rcy);
         rcy.setLayoutManager(new LinearLayoutManager(this));
         rcy.setAdapter(adapter);
-                int width = getWindowManager().getDefaultDisplay().getWidth();
+        int width = getWindowManager().getDefaultDisplay().getWidth();
 //        int width = viewID.getWidth();
-        mPopupWindow = new PopupWindow(popWindow, width/2 , LinearLayout.LayoutParams.WRAP_CONTENT);
+        mPopupWindow = new PopupWindow(popWindow, width / 2, LinearLayout.LayoutParams.WRAP_CONTENT);
         mPopupWindow.setFocusable(true);
         mPopupWindow.setOutsideTouchable(true);
         mPopupWindow.setBackgroundDrawable(new BitmapDrawable());
@@ -116,7 +120,7 @@ public class TakingActivity extends BarScanActivity implements View.OnClickListe
 
     PopupWindow mPopupWindow;
 
-    public void showMenuWindow(View viewID, final List<String> list) {
+    public void showMenuWindow(final View viewID, final List<String> list) {
         CommonSimpleAdapter adapter = new CommonSimpleAdapter(this, list);
         adapter.setOnRecyclerViewItemClickListener(new OnRecycleViewItemClickListener() {
             @Override
@@ -124,10 +128,10 @@ public class TakingActivity extends BarScanActivity implements View.OnClickListe
                 if (mPopupWindow.isShowing()) {
                     mPopupWindow.dismiss();
                 }
+                ((ClearEditText)viewID).setText(list.get(position));
             }
         });
         showPopupWindow(viewID, adapter);
     }
-
 
 }
