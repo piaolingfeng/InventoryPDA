@@ -32,4 +32,5 @@ dependencies {
     compile 'com.zhy:percent-support-extends:1.1.1'
     compile 'com.google.code.gson:gson:2.6.2'
     compile files('libs/platform_sdk_v2.0.0.jar')
+    compile 'com.jcodecraeer:xrecyclerview:1.2.7'
 }
