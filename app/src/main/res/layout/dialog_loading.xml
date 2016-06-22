@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <com.birdex.bird.widget.RotateLoading
+    <com.pda.birdex.pda.widget.RotateLoading
         android:id="@+id/rotateloading"
         android:layout_width="80dp"
         android:layout_height="80dp"

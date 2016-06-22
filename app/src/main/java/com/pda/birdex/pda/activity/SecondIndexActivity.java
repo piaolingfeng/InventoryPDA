@@ -58,6 +58,8 @@ public class SecondIndexActivity extends BaseActivity {
                         startActivity(intent);
                         break;
                     case 1:
+                        intent.setClass(SecondIndexActivity.this,PrintActivity.class);
+                        startActivity(intent);
                         break;
                     case 2:
                         break;

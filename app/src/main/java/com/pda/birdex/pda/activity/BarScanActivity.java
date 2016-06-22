@@ -71,8 +71,7 @@ public abstract class BarScanActivity extends BaseActivity {
         // TODO Auto-generated method stub
         mScanManager = new ScanManager();
         mScanManager.openScanner();
-
-        mScanManager.switchOutputMode( 0);
+        mScanManager.switchOutputMode(0);
         soundpool = new SoundPool(1, AudioManager.STREAM_NOTIFICATION, 100); // MODE_RINGTONE
         soundid = soundpool.load("/etc/Scan_new.ogg", 1);
     }
@@ -136,7 +135,7 @@ public abstract class BarScanActivity extends BaseActivity {
     protected void onPause() {
         // TODO Auto-generated method stub
         super.onPause();
-        if(mScanManager != null) {
+        if (mScanManager != null) {
             mScanManager.stopDecode();
             isScaning = false;
         }

@@ -15,13 +15,19 @@ import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 
+import com.loopj.android.http.RequestParams;
 import com.pda.birdex.pda.MyApplication;
 import com.pda.birdex.pda.R;
 import com.pda.birdex.pda.adapter.CommonSimpleAdapter;
+import com.pda.birdex.pda.api.BirdApi;
 import com.pda.birdex.pda.interfaces.OnRecycleViewItemClickListener;
+import com.pda.birdex.pda.interfaces.RequestCallBackInterface;
+import com.pda.birdex.pda.utils.GsonHelper;
 import com.pda.birdex.pda.utils.T;
 import com.pda.birdex.pda.widget.ClearEditText;
 import com.pda.birdex.pda.widget.TitleView;
+
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,6 +39,7 @@ import butterknife.OnClick;
  * Created by chuming.zhuang on 2016/6/17.
  */
 public class TakingActivity extends BarScanActivity implements View.OnClickListener {
+    String tag = "TakingActivity";
     @Bind(R.id.title)
     TitleView title;
     @Bind(R.id.edt_input)
@@ -56,7 +63,8 @@ public class TakingActivity extends BarScanActivity implements View.OnClickListe
                 if (actionId == EditorInfo.IME_ACTION_SEARCH) {
                     String string = v.getText().toString();
 //                    search(string);
-                    T.showShort(MyApplication.getInstans(), "dddd" + actionId);
+                    ClearEditTextCallBack(string);
+//                    T.showShort(MyApplication.getInstans(), "dddd" + actionId);
                 }
                 return false;
             }
@@ -78,11 +86,29 @@ public class TakingActivity extends BarScanActivity implements View.OnClickListe
     //扫描回调接口
     @Override
     public void ClearEditTextCallBack(String code) {
-        Intent intent = new Intent(this, TakingDetailActivity.class);
-        intent.putExtra("code",code);
-        startActivity(intent);
+        BirdApi.Check(this, code, new RequestCallBackInterface() {
+            @Override
+            public void successCallBack(JSONObject object) {
+//                T.showShort(TakingActivity.this,"show");
+//               GsonHelper.getPerson(object.toString(),)
+            }
+
+            @Override
+            public void errorCallBack(JSONObject object) {
+
+            }
+
+        },tag,true);
+//        Intent intent = new Intent(this, TakingDetailActivity.class);
+//        intent.putExtra("code",code);
+//        startActivity(intent);
     }
 
+    @Override
+    protected void onDestroy() {
+        BirdApi.cancelRequestWithTag(tag);
+        super.onDestroy();
+    }
 
     //暂存的list
     List<String> saveList = new ArrayList<String>();
