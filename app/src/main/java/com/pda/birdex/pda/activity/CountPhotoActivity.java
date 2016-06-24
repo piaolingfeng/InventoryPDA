@@ -13,15 +13,10 @@ import android.os.Handler;
 import android.os.Message;
 import android.provider.MediaStore;
 import android.telephony.TelephonyManager;
-import android.text.TextUtils;
-import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.Button;
 import android.widget.GridView;
-import android.widget.ImageView;
-import android.widget.TextView;
 
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
@@ -53,27 +48,22 @@ import butterknife.Bind;
 import butterknife.OnClick;
 
 /**
- * Created by hyj on 2016/6/16.
+ * Created by hyj on 2016/6/23.
  */
-public class PhotoActivity extends BarScanActivity implements View.OnClickListener {
-    private final static int SCANNIN_GREQUEST_CODE = 1;
-    private final static int PHOTO_GREQUEST_CODE = 2;
-    private final static int COMPRESS_DOWN = 3;
-    private final static int PHOTO_SHOW = 4;
-    /**
-     * ��ʾɨ����
-     */
-//    private TextView mTextView;
-    /**
-     * ��ʾɨ���ĵ�ͼƬ
-     */
-    private ImageView mImageView;
+public class CountPhotoActivity extends BarScanActivity implements View.OnClickListener{
+
+    @Bind(R.id.vessel_et)
+    com.pda.birdex.pda.widget.ClearEditText vessel_et;
+
+    @Bind(R.id.upc_et)
+    com.pda.birdex.pda.widget.ClearEditText upc_et;
+
+    @Bind(R.id.titleView)
+    com.pda.birdex.pda.widget.TitleView titleView;
 
     // 存放照片的 gridview
-    private GridView gv;
-
-    // 存储照片的 list
-    private List<Bitmap> bitmapList = new ArrayList<>();
+    @Bind(R.id.gv)
+    com.pda.birdex.pda.widget.MyGridView gv;
 
     // 存储照片路径的 list
     private ArrayList<String> pathList = new ArrayList<String>();
@@ -81,15 +71,16 @@ public class PhotoActivity extends BarScanActivity implements View.OnClickListen
     // 图片 path
     private String filePath;
 
-    @Bind(R.id.upload)
-    Button upload;
 
-    @Bind(R.id.titleView)
-    com.pda.birdex.pda.widget.TitleView titleView;
+    private final static int SCANNIN_GREQUEST_CODE = 1;
+    private final static int PHOTO_GREQUEST_CODE = 2;
+    private final static int COMPRESS_DOWN = 3;
+    private final static int PHOTO_SHOW = 4;
 
-    @Bind(R.id.lanshouno_et)
-    com.pda.birdex.pda.widget.ClearEditText lanshouno_et;
-
+    @Override
+    public int getbarContentLayoutResId() {
+        return R.layout.activity_count_photo;
+    }
 
     private static final int PIC_COMPRESS = 1;
     private static final int UPC_COMPRESS = 2;
@@ -101,9 +92,9 @@ public class PhotoActivity extends BarScanActivity implements View.OnClickListen
 
             switch (msg.what) {
                 case PIC_COMPRESS:
-//                    String path = (String) msg.obj;
+                    String path = (String) msg.obj;
                     MyTask task = new MyTask();
-                    task.execute();
+                    task.execute(path);
                     break;
                 case UPC_COMPRESS:
                     // 执行 upc 及 图片urls 上传
@@ -115,7 +106,7 @@ public class PhotoActivity extends BarScanActivity implements View.OnClickListen
                     upcParams.put("userCode", szImei);
 //                    upcParams.put("upc", mTextView.getText().toString());
                     upcParams.put("imgUrls", urls);
-                    BirdApi.upLoadUpc(PhotoActivity.this, upcParams, new JsonHttpResponseHandler() {
+                    BirdApi.upLoadUpc(CountPhotoActivity.this, upcParams, new JsonHttpResponseHandler() {
                         @Override
                         public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                             super.onSuccess(statusCode, headers, response);
@@ -125,7 +116,7 @@ public class PhotoActivity extends BarScanActivity implements View.OnClickListen
                                     mProgress.dismiss();
                                     clearList();
                                 } else {
-                                    T.showShort(PhotoActivity.this, response.getString("message"));
+                                    T.showShort(CountPhotoActivity.this, response.getString("message"));
                                 }
                             } catch (JSONException e) {
                                 e.printStackTrace();
@@ -161,9 +152,6 @@ public class PhotoActivity extends BarScanActivity implements View.OnClickListen
                     RequestParams myparams = new RequestParams();
                     File file = new File(path1);
 
-                    progress++;
-                    mProgress.setProgress(progress);
-
                     try {
                         myparams.put("file", file, "image/jpeg");
                     } catch (FileNotFoundException e) {
@@ -171,51 +159,51 @@ public class PhotoActivity extends BarScanActivity implements View.OnClickListen
                         mProgress.dismiss();
                     }
 
-//                    BirdApi.upLoadPic(PhotoActivity.this, myparams, new JsonHttpResponseHandler() {
-//                        @Override
-//                        public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-//                            super.onSuccess(statusCode, headers, response);
-//                            try {
-//                                if (response.getString("code").equals("0")) {
-//                                    urls.add(response.getString("file"));
-//                                    progress++;
-//                                    mProgress.setProgress(progress);
-//                                    if (progress == pathList.size()) {
-////                                    mProgress.dismiss();
-//                                        T.showShort(MyApplication.getInstans(), "图片上传成功");
-//                                        Message msg = Message.obtain();
-//                                        msg.what = UPC_COMPRESS;
-//                                        handler.sendMessage(msg);
-//                                    }
-//                                } else {
-//                                    T.showShort(PhotoActivity.this, response.getString("message"));
-//                                }
-//                            } catch (JSONException e) {
-//                                e.printStackTrace();
-//                            }
-//                        }
-//
-//                        @Override
-//                        public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
-//                            super.onFailure(statusCode, headers, responseString, throwable);
-//                            T.showShort(MyApplication.getInstans(), "上传失败");
-//                            mProgress.dismiss();
-//                        }
-//
-//                        @Override
-//                        public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONArray errorResponse) {
-//                            super.onFailure(statusCode, headers, throwable, errorResponse);
-//                            T.showShort(MyApplication.getInstans(), "上传失败");
-//                            mProgress.dismiss();
-//                        }
-//
-//                        @Override
-//                        public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
-//                            super.onFailure(statusCode, headers, throwable, errorResponse);
-//                            T.showShort(MyApplication.getInstans(), "上传失败");
-//                            mProgress.dismiss();
-//                        }
-//                    });
+                    BirdApi.upLoadPic(CountPhotoActivity.this, myparams, new JsonHttpResponseHandler() {
+                        @Override
+                        public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                            super.onSuccess(statusCode, headers, response);
+                            try {
+                                if (response.getString("code").equals("0")) {
+                                    urls.add(response.getString("file"));
+                                    progress++;
+                                    mProgress.setProgress(progress);
+                                    if (progress == pathList.size()) {
+//                                    mProgress.dismiss();
+                                        T.showShort(MyApplication.getInstans(), "图片上传成功");
+                                        Message msg = Message.obtain();
+                                        msg.what = UPC_COMPRESS;
+                                        handler.sendMessage(msg);
+                                    }
+                                } else {
+                                    T.showShort(CountPhotoActivity.this, response.getString("message"));
+                                }
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }
+
+                        @Override
+                        public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+                            super.onFailure(statusCode, headers, responseString, throwable);
+                            T.showShort(MyApplication.getInstans(), "上传失败");
+                            mProgress.dismiss();
+                        }
+
+                        @Override
+                        public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONArray errorResponse) {
+                            super.onFailure(statusCode, headers, throwable, errorResponse);
+                            T.showShort(MyApplication.getInstans(), "上传失败");
+                            mProgress.dismiss();
+                        }
+
+                        @Override
+                        public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+                            super.onFailure(statusCode, headers, throwable, errorResponse);
+                            T.showShort(MyApplication.getInstans(), "上传失败");
+                            mProgress.dismiss();
+                        }
+                    });
                     break;
             }
         }
@@ -238,16 +226,28 @@ public class PhotoActivity extends BarScanActivity implements View.OnClickListen
 
 
     @Override
-    public int getbarContentLayoutResId() {
-        return R.layout.activity_photo;
-    }
-
-    @Override
     public void barInitializeContentViews() {
-        // 初始化 title
-        titleView.setTitle("拍照");
+        titleView.setTitle(getString(R.string.photo));
 
-        gv = (GridView) findViewById(R.id.gv);
+        vessel_et.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                vessel_et.overrideOnFocusChange(hasFocus);
+                if (hasFocus) {
+                    setEdt_input(vessel_et);
+                }
+            }
+        });
+        upc_et.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                upc_et.overrideOnFocusChange(hasFocus);
+                if(hasFocus){
+                    setEdt_input(upc_et);
+                }
+            }
+        });
+
 
         gv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -257,7 +257,6 @@ public class PhotoActivity extends BarScanActivity implements View.OnClickListen
 
                     Intent showIntent = new Intent();
                     Bundle b = new Bundle();
-//                b.putParcelable("bitmap",bitmapList.get(position));
                     b.putString("path", pathList.get(position) + "");
                     b.putInt("position", position);
                     showIntent.putExtras(b);
@@ -273,54 +272,15 @@ public class PhotoActivity extends BarScanActivity implements View.OnClickListen
 
                         startActivityForResult(photoIntent, PHOTO_GREQUEST_CODE);
                     } else {
-                        T.showShort(PhotoActivity.this, "照片不能超过10张");
+                        T.showShort(CountPhotoActivity.this, "照片不能超过10张");
                     }
                 }
             }
         });
 
-//        Intent intent = new Intent();
-//        intent.setClass(PhotoActivity.this, MipcaActivityCapture.class);
-//        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-//        startActivityForResult(intent, SCANNIN_GREQUEST_CODE);
-
         PhotoGVAdapter adapter = new PhotoGVAdapter(getApplication(), pathList);
         gv.setAdapter(adapter);
     }
-
-    @Override
-    public ClearEditText getClearEditText() {
-        return lanshouno_et;
-    }
-
-    @Override
-    public void ClearEditTextCallBack(String code) {
-
-    }
-
-    /**
-     * 生成文件路径和文件名
-     *
-     * @return
-     */
-    private String getFileName() {
-        String saveDir = Environment.getExternalStorageDirectory() + "/myPic";
-        File dir = new File(saveDir);
-        if (!dir.exists()) {
-            dir.mkdirs(); // 创建文件夹
-        }
-        //用日期作为文件名，确保唯一性
-        Date date = new Date();
-        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss");
-        String fileName = saveDir + "/" + formatter.format(date) + ".jpg";
-
-//        File file = new File(fileName);
-//        if (!file.exists()) {
-//            file.mkdirs();
-//        }
-        return fileName;
-    }
-
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -336,8 +296,7 @@ public class PhotoActivity extends BarScanActivity implements View.OnClickListen
                         return;
                     }
                     pathList.add(filePath);
-                    MyTask1 myTask1 = new MyTask1();
-                    myTask1.execute(filePath);
+
                     PhotoGVAdapter adapter = new PhotoGVAdapter(getApplication(), pathList);
                     gv.setAdapter(adapter);
                 }
@@ -358,30 +317,25 @@ public class PhotoActivity extends BarScanActivity implements View.OnClickListen
 
     }
 
-    // 图片压缩
-    private Bitmap compressImage(Bitmap image) {
-
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        image.compress(Bitmap.CompressFormat.JPEG, 100, baos);//质量压缩方法，这里100表示不压缩，把压缩后的数据存放到baos中
-        int options = 100;
-        while (baos.toByteArray().length / 1024 > 100) {  //循环判断如果压缩后图片是否大于100kb,大于继续压缩
-            baos.reset();//重置baos即清空baos
-            image.compress(Bitmap.CompressFormat.JPEG, options, baos);//这里压缩options%，把压缩后的数据存放到baos中
-            options -= 10;//每次都减少10
+    /**
+     * 生成文件路径和文件名
+     *
+     * @return
+     */
+    private String getFileName() {
+        String saveDir = Environment.getExternalStorageDirectory() + "/myPic";
+        File dir = new File(saveDir);
+        if (!dir.exists()) {
+            dir.mkdirs(); // 创建文件夹
         }
-        ByteArrayInputStream isBm = new ByteArrayInputStream(baos.toByteArray());//把压缩后的数据baos存放到ByteArrayInputStream中
+        //用日期作为文件名，确保唯一性
+        Date date = new Date();
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss");
+        String fileName = saveDir + "/" + formatter.format(date) + ".jpg";
 
-        BitmapFactory.Options options1 = new BitmapFactory.Options();
-        options1.inPreferredConfig = Bitmap.Config.RGB_565;
-
-        Bitmap bitmap = BitmapFactory.decodeStream(isBm, null, options1);//把ByteArrayInputStream数据生成图片
-        try {
-            isBm.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return bitmap;
+        return fileName;
     }
+
 
     private Bitmap comp(String path) {
 
@@ -414,20 +368,12 @@ public class PhotoActivity extends BarScanActivity implements View.OnClickListen
         if (be <= 0)
             be = 1;
         newOpts.inSampleSize = be;//设置缩放比例
-        try {
-            if(isBm != null) {
-                isBm.close();
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
         //重新读入图片，注意此时已经把options.inJustDecodeBounds 设回false了
         isBm = new ByteArrayInputStream(baos.toByteArray());
         bitmap = BitmapFactory.decodeStream(isBm, null, newOpts);
         try {
             isBm.close();
             baos.close();
-            System.gc();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -451,11 +397,10 @@ public class PhotoActivity extends BarScanActivity implements View.OnClickListen
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-
             case R.id.upload:
                 // 如果 upc 为空，照片 list 也为空， 不进行上传操作
                 if (pathList.size() == 0) {
-                    T.showShort(PhotoActivity.this, "条形码和照片不能同时为空");
+                    T.showShort(CountPhotoActivity.this, "条形码和照片不能同时为空");
                 } else {
                     if (pathList.size() <= 10) {
                         // 进度条
@@ -464,7 +409,7 @@ public class PhotoActivity extends BarScanActivity implements View.OnClickListen
                         uploadPic();
                     } else {
                         // 限制图片数量在 3-5 之间
-                        T.showShort(PhotoActivity.this, "照片不能超过10张");
+                        T.showShort(CountPhotoActivity.this, "照片不能超过10张");
                     }
                 }
                 break;
@@ -484,19 +429,14 @@ public class PhotoActivity extends BarScanActivity implements View.OnClickListen
     // 上传图片
     private void uploadPic() {
 
-//        for (int i = 0; i < pathList.size(); i++) {
-//
-//            Message message = Message.obtain();
-//            message.what = PIC_COMPRESS;
-//            message.obj = pathList.get(i);
-//            handler.sendMessage(message);
-//
-//        }
+        for (int i = 0; i < pathList.size(); i++) {
 
-        Message message = Message.obtain();
-        message.what = PIC_COMPRESS;
-//        message.obj = pathList.get(i);
-        handler.sendMessage(message);
+            Message message = Message.obtain();
+            message.what = PIC_COMPRESS;
+            message.obj = pathList.get(i);
+            handler.sendMessage(message);
+
+        }
 
     }
 
@@ -522,90 +462,29 @@ public class PhotoActivity extends BarScanActivity implements View.OnClickListen
 
         @Override
         protected Void doInBackground(String... params) {
-//            path = params[0];
-            for(int i=0;i<pathList.size();i++) {
-                path = pathList.get(i);
-//                Bitmap bt = comp(path);
-//                saveBitmapFile(bt, path);
+            path = params[0];
 
-                Message message = Message.obtain();
-                message.what = COMPRESS_DOWN;
-                message.obj = path;
-                handler.sendMessage(message);
-            }
+            saveBitmapFile(comp(path), path);
             return null;
         }
 
         @Override
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
-//            Message message = Message.obtain();
-//            message.what = COMPRESS_DOWN;
-//            message.obj = path;
-//            handler.sendMessage(message);
+            Message message = Message.obtain();
+            message.what = COMPRESS_DOWN;
+            message.obj = path;
+            handler.sendMessage(message);
         }
     }
 
-    // 压缩图片的 Task
-    class MyTask1 extends AsyncTask<String,Void,Void> {
-
-        @Override
-        protected Void doInBackground(String... params) {
-            String picPath = params[0];
-//            Bitmap bt = comp(picPath);
-//            saveBitmapFile(bt, picPath);
-            compress(picPath);
-            return null;
-        }
+    @Override
+    public ClearEditText getClearEditText() {
+        return vessel_et;
     }
 
-    private DisplayMetrics dm;
+    @Override
+    public void ClearEditTextCallBack(String code) {
 
-    public void compress(String srcPath) {
-        dm = new DisplayMetrics();
-        getWindowManager().getDefaultDisplay().getMetrics(dm);
-
-        float hh = dm.heightPixels;
-        float ww = dm.widthPixels;
-        BitmapFactory.Options opts = new BitmapFactory.Options();
-        opts.inJustDecodeBounds = true;
-        Bitmap bitmap = BitmapFactory.decodeFile(srcPath, opts);
-        opts.inJustDecodeBounds = false;
-        int w = opts.outWidth;
-        int h = opts.outHeight;
-        int size = 0;
-        if (w <= ww && h <= hh) {
-            size = 1;
-        } else {
-            double scale = w >= h ? w / ww : h / hh;
-            double log = Math.log(scale) / Math.log(2);
-            double logCeil = Math.ceil(log);
-            size = (int) Math.pow(2, logCeil);
-        }
-        opts.inSampleSize = size;
-        bitmap = BitmapFactory.decodeFile(srcPath, opts);
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        int quality = 100;
-        bitmap.compress(Bitmap.CompressFormat.JPEG, quality, baos);
-        System.out.println(baos.toByteArray().length);
-        while (baos.toByteArray().length > 100 * 1024) {
-            baos.reset();
-            bitmap.compress(Bitmap.CompressFormat.JPEG, quality, baos);
-            quality -= 20;
-            System.out.println(baos.toByteArray().length);
-        }
-        try {
-//            baos.writeTo(new FileOutputStream("/mnt/sdcard/Servyou/photo/buffer/22.jpg"));
-            baos.writeTo(new FileOutputStream(srcPath));
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            try {
-                baos.flush();
-                baos.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
     }
 }

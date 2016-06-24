@@ -20,6 +20,7 @@
     <string name="login">登  录</string>
     <string name="notempty">用户名或密码不能为空</string>
     <string name="submit">提\t交</string>
+    <string name="photo">拍照</string>
 
     <!-- 绑定区域 -->
     <string name="areabind">绑定区域</string>
@@ -74,6 +75,7 @@
     <string name="count_now_no">现容器号：</string>
     <string name="count_old_no">原容器号：</string>
     <string name="count_track_no">追踪箱号</string>
+    <string name="count_box_no">清点箱号：</string>
     
 
     //打印

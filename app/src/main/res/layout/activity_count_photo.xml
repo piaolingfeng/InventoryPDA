@@ -28,12 +28,31 @@
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
                 <TextView
-                    android:text="揽收箱号："
+                    android:text="容器号："
                     android:textSize="16sp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />
                 <com.pda.birdex.pda.widget.ClearEditText
-                    android:id="@+id/lanshouno_et"
+                    android:id="@+id/vessel_et"
+                    android:singleLine="true"
+                    android:layout_weight="1"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_marginTop="20dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                <TextView
+                    android:text="UPC："
+                    android:textSize="16sp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+                <com.pda.birdex.pda.widget.ClearEditText
+                    android:id="@+id/upc_et"
                     android:singleLine="true"
                     android:layout_weight="1"
                     android:layout_width="0dp"
@@ -47,8 +66,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
+                android:layout_marginTop="30dp"
                 android:layout_marginRight="10dp"
-                android:layout_marginTop="20dp"
                 android:horizontalSpacing="20dp"
                 android:listSelector="#00000000"
                 android:numColumns="4" />

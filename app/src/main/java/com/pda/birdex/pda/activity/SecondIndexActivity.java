@@ -2,6 +2,7 @@ package com.pda.birdex.pda.activity;
 
 
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
@@ -82,12 +83,20 @@ public class SecondIndexActivity extends BaseActivity {
                         break;
                     case 2:
                         if(getString(R.string.taking).equals(titleStr)) {
+                            Bundle b = new Bundle();
+                            b.putString("title",getString(R.string.printlanshou));
+                            b.putString("inputname",getString(R.string.lanshouno));
+                            intent.putExtras(b);
                             //打印揽收单
                             intent.setClass(SecondIndexActivity.this, TakingPrintActivity.class);
                             startActivity(intent);
                         } else if(getString(R.string.count).equals(titleStr)) {
+                            Bundle b = new Bundle();
+                            b.putString("title",getString(R.string.count_print_no));
+                            b.putString("inputname",getString(R.string.count_box_no));
+                            intent.putExtras(b);
                             // 打印清点单
-                            intent.setClass(SecondIndexActivity.this, CountPrintActivity.class);
+                            intent.setClass(SecondIndexActivity.this, TakingPrintActivity.class);
                             startActivity(intent);
                         }
                         break;
@@ -99,6 +108,13 @@ public class SecondIndexActivity extends BaseActivity {
                         } else if(getString(R.string.count).equals(titleStr)) {
                             // 追踪箱号
                             intent.setClass(SecondIndexActivity.this, CountTrackActivity.class);
+                            startActivity(intent);
+                        }
+                        break;
+                    case 4:
+                        if(getString(R.string.count).equals(titleStr)) {
+                            // 拍照
+                            intent.setClass(SecondIndexActivity.this, CountPhotoActivity.class);
                             startActivity(intent);
                         }
                         break;
