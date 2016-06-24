@@ -19,6 +19,7 @@ import com.pda.birdex.pda.widget.RotateLoading;
 
 import org.apache.http.Header;
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 /**
@@ -124,7 +125,15 @@ public class BirdApi {
                 super.onSuccess(statusCode, headers, response);
                 if (callBackInterface != null) {
                     if(response!=null) {
-                        callBackInterface.successCallBack(response);
+                        try {
+                            if("success".equals(response.getString("result"))){
+                                callBackInterface.successCallBack(response);
+                            }else{
+                                T.showShort(mContext,response.getString("errMsg"));
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
                     }else{
                         T.showShort(mContext,mContext.getString(R.string.successCallBack_error));
                     }
@@ -181,7 +190,17 @@ public class BirdApi {
                 super.onSuccess(statusCode, headers, response);
                 if (callBackInterface != null) {
                     if(response!=null) {
-                        callBackInterface.successCallBack(response);
+                        try {
+                            if("success".equals(response.getString("result"))){
+                                callBackInterface.successCallBack(response);
+                            }else{
+                                T.showShort(mContext,response.getString("errMsg"));
+                                callBackInterface.errorCallBack(response);
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+
                     }else{
                         T.showShort(mContext,mContext.getString(R.string.successCallBack_error));
                     }

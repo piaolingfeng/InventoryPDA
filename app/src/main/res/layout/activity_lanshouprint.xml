@@ -10,32 +10,38 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
 
-    <com.zhy.android.percent.support.PercentLinearLayout
+    <com.zhy.android.percent.support.PercentRelativeLayout
+        android:id="@+id/main"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:orientation="vertical">
 
         <TextView
+            android:id="@+id/no_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="50dp"
+            android:layout_marginTop="20dp"
             android:text="@string/lanshouno"
             android:textColor="@android:color/black"
             android:textSize="24sp" />
 
         <com.pda.birdex.pda.widget.ClearEditText
             android:id="@+id/code_et"
+            android:layout_below="@+id/no_tv"
             android:singleLine="true"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="5dp" />
 
         <com.zhy.android.percent.support.PercentLinearLayout
+            android:id="@+id/button_ll"
+            android:visibility="gone"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="50dp"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="50dp"
             android:orientation="horizontal">
 
             <TextView
@@ -70,26 +76,6 @@
 
         </com.zhy.android.percent.support.PercentLinearLayout>
 
-        <com.zhy.android.percent.support.PercentRelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="100dp">
-
-            <Button
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerInParent="true"
-                android:text="@string/print"
-                android:background="@drawable/rect_fullbluew_selector"
-                android:textColor="@color/btn_blue_selector"
-                android:textSize="20sp"
-                app:layout_paddingBottomPercent="5%w"
-                app:layout_paddingLeftPercent="25%w"
-                app:layout_paddingRightPercent="25%w"
-                app:layout_paddingTopPercent="5%w"/>
-
-        </com.zhy.android.percent.support.PercentRelativeLayout>
-
-    </com.zhy.android.percent.support.PercentLinearLayout>
+    </com.zhy.android.percent.support.PercentRelativeLayout>
 
 </LinearLayout>

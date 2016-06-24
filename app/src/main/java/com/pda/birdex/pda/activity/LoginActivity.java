@@ -106,7 +106,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
     private void initData() {
 
         // 先检查是否保存了 token，如果不为空说明不再需要登录
-        String oldToken = PreferenceUtils.getPrefString(MyApplication.getInstans(),"token","");
+        String oldToken = PreferenceUtils.getPrefString(MyApplication.getInstans(), "token", "");
         if (!TextUtils.isEmpty(oldToken)) {
             // 将 token 添加进去
             MyApplication.ahc.addHeader("x-access-token", oldToken);
@@ -172,7 +172,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
         params.put("password", password.getText().toString());
 
 
-        BirdApi.login(this, username.getText().toString() + "/" + password.getText().toString(), new RequestCallBackInterface(){
+        BirdApi.login(this, username.getText().toString() + "/" + password.getText().toString(), new RequestCallBackInterface() {
 
             @Override
             public void successCallBack(JSONObject object) {
@@ -189,7 +189,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
 
             @Override
             public void errorCallBack(JSONObject object) {
-                T.showShort(MyApplication.getInstans(),"用户名或密码错误");
+                T.showShort(MyApplication.getInstans(), "用户名或密码错误");
             }
         }, TAG, true);
     }
