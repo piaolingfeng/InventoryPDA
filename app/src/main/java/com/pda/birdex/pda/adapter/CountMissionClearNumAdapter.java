@@ -17,28 +17,26 @@ import butterknife.ButterKnife;
 /**
  * Created by chuming.zhuang on 2016/6/22.
  */
-public class CountMissionClearAdapter extends RecyclerView.Adapter<CountMissionClearAdapter.CountMissionClearAdapterHolder> {
+public class CountMissionClearNumAdapter extends RecyclerView.Adapter<CountMissionClearNumAdapter.CountMissionClearNumAdapterHolder> {
 
     Context mContext;
-
-
     OnRecycleViewItemClickListener onRecycleViewItemClickListener;
 
     public void setOnRecycleViewItemClickListener(OnRecycleViewItemClickListener onRecycleViewItemClickListener) {
         this.onRecycleViewItemClickListener = onRecycleViewItemClickListener;
     }
 
-    public CountMissionClearAdapter(Context mContext){
+    public CountMissionClearNumAdapter(Context mContext){
         this.mContext = mContext;
     }
 
     @Override
-    public CountMissionClearAdapterHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        return new CountMissionClearAdapterHolder(LayoutInflater.from(mContext).inflate(R.layout.item_countbussiness_layout,null));
+    public CountMissionClearNumAdapterHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        return new CountMissionClearNumAdapterHolder(LayoutInflater.from(mContext).inflate(R.layout.item_countbussiness_layout,null));
     }
 
     @Override
-    public void onBindViewHolder(CountMissionClearAdapterHolder holder, int position) {
+    public void onBindViewHolder(CountMissionClearNumAdapterHolder holder, int position) {
         holder.position = position;
     }
 
@@ -47,7 +45,7 @@ public class CountMissionClearAdapter extends RecyclerView.Adapter<CountMissionC
         return 20;
     }
 
-    public class CountMissionClearAdapterHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
+    public class CountMissionClearNumAdapterHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
 
         @Bind(R.id.tv_clear_num)
         TextView tv_clear_num;
@@ -59,7 +57,7 @@ public class CountMissionClearAdapter extends RecyclerView.Adapter<CountMissionC
         PercentLinearLayout pll_item;
         int position=0;
 
-        public CountMissionClearAdapterHolder(View itemView) {
+        public CountMissionClearNumAdapterHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this,itemView);
             itemView.setOnClickListener(this);

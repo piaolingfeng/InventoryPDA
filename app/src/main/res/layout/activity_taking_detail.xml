@@ -27,7 +27,7 @@
                 android:layout_height="wrap_content"
                 android:text="商家:"
                 android:textColor="@color/context_2"
-                app:layout_textSizePercent="@string/size_7w" />
+                app:layout_textSizePercent="@string/size_6w" />
 
             <com.zhy.android.percent.support.PercentRelativeLayout
                 android:layout_width="match_parent"
@@ -90,7 +90,7 @@
                 android:layout_height="wrap_content"
                 android:text="箱数:"
                 android:textColor="@color/context_2"
-                app:layout_textSizePercent="@string/size_7w" />
+                app:layout_textSizePercent="@string/size_6w" />
 
             <com.zhy.android.percent.support.PercentRelativeLayout
                 android:layout_width="match_parent"

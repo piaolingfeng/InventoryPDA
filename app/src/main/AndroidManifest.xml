@@ -107,6 +107,18 @@
             android:name=".activity.CountTrackActivity"
             android:windowSoftInputMode="adjustUnspecified|stateHidden"
             android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.CountBussinessActivity"
+            android:windowSoftInputMode="adjustUnspecified|stateHidden"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.CountMissionActivity"
+            android:windowSoftInputMode="adjustUnspecified|stateHidden"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.CountMissionClearNumActivity"
+            android:windowSoftInputMode="adjustUnspecified|stateHidden"
+            android:screenOrientation="portrait" />
     </application>
 
 </manifest>

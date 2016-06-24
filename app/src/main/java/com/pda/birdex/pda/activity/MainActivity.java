@@ -7,6 +7,7 @@ import android.support.v7.widget.RecyclerView;
 
 import com.pda.birdex.pda.R;
 import com.pda.birdex.pda.adapter.IndexAdapter;
+import com.pda.birdex.pda.entity.CommonItemEntity;
 import com.pda.birdex.pda.interfaces.OnRecycleViewItemClickListener;
 import com.pda.birdex.pda.widget.TitleView;
 
@@ -29,7 +30,7 @@ public class MainActivity extends BaseActivity {
     String[] takinglists = {"揽收", "拍照", "打印揽收单", "绑定区域"};//收货
     String[] countToLists = {"清点任务", "绑定区域", "打印清点单", "追踪箱号", "拍照"};//清点
 
-    List<String> indexList = new ArrayList<>();
+    List<CommonItemEntity> indexList = new ArrayList<>();
 
     @Override
     public int getContentLayoutResId() {
@@ -41,7 +42,10 @@ public class MainActivity extends BaseActivity {
         title.setBackIvVisble(false);
         title.setTitle("首页");
         for (int i = 0; i < lists.length; i++) {
-            indexList.add(lists[i]);
+            CommonItemEntity entity = new CommonItemEntity();
+            entity.setName(lists[i]);
+            entity.setCount("99");
+            indexList.add(entity);
         }
         adapter = new IndexAdapter(this, indexList);
         adapter.setOnRecycleViewItemClickListener(new OnRecycleViewItemClickListener() {
@@ -62,7 +66,7 @@ public class MainActivity extends BaseActivity {
                         b.putStringArray("list", countToLists);
                         break;
                 }
-                b.putString("name", indexList.get(position));
+                b.putString("name", indexList.get(position).getName());
                 intent.putExtras(b);
                 startActivity(intent);
             }

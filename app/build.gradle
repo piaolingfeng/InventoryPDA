@@ -32,4 +32,7 @@ dependencies {
     compile 'com.google.code.gson:gson:2.6.2'
     compile files('libs/platform_sdk_v2.0.0.jar')
     compile 'com.jcodecraeer:xrecyclerview:1.2.7'
+    compile 'org.greenrobot:eventbus:3.0.0'
+    compile 'com.android.support:appcompat-v7:23.2.1'
+    compile 'com.android.support:design:23.2.1'
 }

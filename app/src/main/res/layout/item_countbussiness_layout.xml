@@ -6,9 +6,11 @@
     android:orientation="vertical">
 
     <com.zhy.android.percent.support.PercentLinearLayout
+        android:id="@+id/pll_item"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:background="@color/gray">
 
         <TextView
             android:id="@+id/tv_clear_num"
@@ -41,6 +43,17 @@
             android:text="@string/tv_status"
             android:textColor="@color/context_2"
             app:layout_paddingPercent="@string/item_padding_3w"
+            app:layout_textSizePercent="@string/size_5w" />
+        <TextView
+            android:id="@+id/tv_status_1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="@string/tv_status"
+            android:textColor="@color/context_2"
+            app:layout_paddingPercent="@string/item_padding_3w"
+            android:visibility="gone"
             app:layout_textSizePercent="@string/size_5w" />
     </com.zhy.android.percent.support.PercentLinearLayout>
 

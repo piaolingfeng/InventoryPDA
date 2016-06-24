@@ -12,23 +12,25 @@
     <com.zhy.android.percent.support.PercentLinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:orientation="vertical"
         app:layout_paddingPercent="@string/margin_5w">
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/count_bussiness_input"
-            app:layout_textSizePercent="@string/size_7w"/>
+            app:layout_textSizePercent="@string/size_6w"/>
         <com.pda.birdex.pda.widget.ClearEditText
             android:id="@+id/edt_input_business"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:singleLine="true"
             android:hint="@string/edt_input_business_hint"
             android:imeOptions="actionSearch"/>
 
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/rcy"
+        <FrameLayout
+            android:id="@+id/framelayout"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"></android.support.v7.widget.RecyclerView>
+            android:layout_height="match_parent"></FrameLayout>
     </com.zhy.android.percent.support.PercentLinearLayout>
 
 </com.zhy.android.percent.support.PercentLinearLayout>

@@ -16,7 +16,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:layout_textSizePercent="@string/size_7w"
+            app:layout_textSizePercent="@string/size_6w"
             android:textColor="@color/context_2"
             android:text="预报号码:"/>
         <com.zhy.android.percent.support.PercentRelativeLayout

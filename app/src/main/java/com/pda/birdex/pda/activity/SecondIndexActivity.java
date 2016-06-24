@@ -7,6 +7,7 @@ import android.support.v7.widget.RecyclerView;
 
 import com.pda.birdex.pda.R;
 import com.pda.birdex.pda.adapter.IndexAdapter;
+import com.pda.birdex.pda.entity.CommonItemEntity;
 import com.pda.birdex.pda.interfaces.OnRecycleViewItemClickListener;
 import com.pda.birdex.pda.widget.TitleView;
 
@@ -26,7 +27,7 @@ public class SecondIndexActivity extends BaseActivity {
     TitleView title;
     IndexAdapter adapter;
     String []lists={""};
-    List<String> indexList = new ArrayList<>();
+    List<CommonItemEntity> indexList = new ArrayList<>();
 
     // 传过来的 title
     private String titleStr;
@@ -46,22 +47,26 @@ public class SecondIndexActivity extends BaseActivity {
             }
         }
         title.setTitle(titleStr);
-        for(int i =0;i<lists.length;i++){
-            indexList.add(lists[i]);
+        for (int i = 0; i < lists.length; i++) {
+            CommonItemEntity entity = new CommonItemEntity();
+            entity.setName(lists[i]);
+            entity.setCount("1");
+            indexList.add(entity);
         }
         adapter = new IndexAdapter(this,indexList);
         adapter.setOnRecycleViewItemClickListener(new OnRecycleViewItemClickListener() {
             @Override
             public void onItemClick(int position) {
                 Intent intent = new Intent();
-                intent.putExtra("name", indexList.get(position));
+                intent.putExtra("name", indexList.get(position).getName());
                 switch (position) {
                     case 0:
                         if(getString(R.string.taking).equals(titleStr)) {
                             intent.setClass(SecondIndexActivity.this, TakingActivity.class);
                             startActivity(intent);
                         } else if(getString(R.string.count).equals(titleStr)) {
-
+                            intent.setClass(SecondIndexActivity.this,CountMissionActivity.class);
+                            startActivity(intent);
                         }
                         break;
                     case 1:
@@ -116,10 +121,7 @@ public class SecondIndexActivity extends BaseActivity {
                     }
                 });
                 // 清点任务  右上角显示任务条数
-                adapter.setBvValue("88");
             }
-        } else {
-            adapter.setBvValue("");
         }
         rcy.setLayoutManager(myGLManager);
         rcy.setAdapter(adapter);

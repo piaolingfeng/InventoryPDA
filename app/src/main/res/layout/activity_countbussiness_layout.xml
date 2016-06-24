@@ -10,58 +10,93 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
-    <com.zhy.android.percent.support.PercentLinearLayout
+    <android.support.design.widget.CoordinatorLayout xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_paddingPercent="@string/margin_5w">
+        android:layout_height="match_parent">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/tv_bussiness"
-            app:layout_textSizePercent="@string/size_7w" />
-
-        <TextView
-            android:id="@+id/tv_business"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:layout_marginLeftPercent="@string/margin_5w"
-            app:layout_textSizePercent="@string/size_7w" />
-    </com.zhy.android.percent.support.PercentLinearLayout>
-
-    <com.zhy.android.percent.support.PercentLinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        app:layout_paddingLeftPercent="@string/margin_5w"
-        app:layout_paddingRightPercent="@string/margin_5w">
-
-        <com.zhy.android.percent.support.PercentRelativeLayout
+        <android.support.design.widget.AppBarLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:background="@color/background"
+            android:orientation="vertical">
 
-            <TextView
-                android:layout_width="wrap_content"
+            <com.zhy.android.percent.support.PercentLinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/tv_count_mission"
-                app:layout_textSizePercent="@string/size_7w" />
+                android:orientation="vertical"
+                app:layout_scrollFlags="scroll|enterAlways">
 
-            <TextView
-                android:id="@+id/tv_count_mission"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:text="99"
-                android:textColor="@color/red"
-                app:layout_marginLeftPercent="@string/margin_5w"
-                app:layout_textSizePercent="14%w" />
-        </com.zhy.android.percent.support.PercentRelativeLayout>
+                <com.zhy.android.percent.support.PercentLinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    app:layout_paddingPercent="@string/margin_5w">
 
-        <com.birdex.bird.widget.xrecyclerview.XRecyclerView
-            android:id="@+id/xrcy"
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/tv_bussiness"
+                        app:layout_textSizePercent="@string/size_6w" />
+
+                    <TextView
+                        android:id="@+id/tv_business"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:layout_marginLeftPercent="@string/margin_2w"
+                        app:layout_textSizePercent="@string/size_6w" />
+                </com.zhy.android.percent.support.PercentLinearLayout>
+
+                <com.zhy.android.percent.support.PercentLinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    app:layout_paddingLeftPercent="@string/margin_5w"
+                    app:layout_paddingRightPercent="@string/margin_5w">
+
+                    <com.zhy.android.percent.support.PercentRelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/tv_count_mission"
+                            app:layout_textSizePercent="@string/size_6w" />
+
+                        <TextView
+                            android:id="@+id/tv_count_mission"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentRight="true"
+                            android:text="99"
+                            android:textColor="@color/red"
+                            app:layout_marginLeftPercent="@string/margin_2w"
+                            app:layout_textSizePercent="14%w" />
+                    </com.zhy.android.percent.support.PercentRelativeLayout>
+
+
+                </com.zhy.android.percent.support.PercentLinearLayout>
+                <include layout="@layout/item_countbussiness_layout"
+                    android:layout_height="wrap_content"
+                    android:layout_width="match_parent"/>
+
+            </com.zhy.android.percent.support.PercentLinearLayout>
+        </android.support.design.widget.AppBarLayout>
+
+        <com.zhy.android.percent.support.PercentLinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:overScrollMode="never" />
-    </com.zhy.android.percent.support.PercentLinearLayout>
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+            <com.jcodecraeer.xrecyclerview.XRecyclerView
+                android:id="@+id/xrcy"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:fillViewport="true"
+                android:overScrollMode="never" />
+        </com.zhy.android.percent.support.PercentLinearLayout>
+    </android.support.design.widget.CoordinatorLayout>
+
+
 </com.zhy.android.percent.support.PercentLinearLayout>

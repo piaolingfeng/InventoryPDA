@@ -8,9 +8,9 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.pda.birdex.pda.R;
+import com.pda.birdex.pda.entity.CommonItemEntity;
 import com.pda.birdex.pda.interfaces.OnRecycleViewItemClickListener;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.Bind;
@@ -22,18 +22,13 @@ import butterknife.ButterKnife;
 public class IndexAdapter extends RecyclerView.Adapter<IndexAdapter.IndexAdapterHolder> {
 
     // com.pda.birdex.pda.widget.BadgeView 值
-    private String bvValue = "";
-
-    public void setBvValue(String bvValue) {
-        this.bvValue = bvValue;
-    }
+    List<CommonItemEntity> list;
 
     private Context mContext;
     OnRecycleViewItemClickListener onRecycleViewItemClickListener;
 
-    List<String> list;
 
-    public IndexAdapter(Context mContext,List<String> list){
+    public IndexAdapter(Context mContext, List<CommonItemEntity> list) {
         this.list = list;
         this.mContext = mContext;
     }
@@ -44,17 +39,19 @@ public class IndexAdapter extends RecyclerView.Adapter<IndexAdapter.IndexAdapter
 
     @Override
     public IndexAdapterHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        return new IndexAdapterHolder(LayoutInflater.from(mContext).inflate(R.layout.recyclerview_item_layout,null));
+        return new IndexAdapterHolder(LayoutInflater.from(mContext).inflate(R.layout.recyclerview_item_layout, null));
     }
-
 
 
     @Override
     public void onBindViewHolder(IndexAdapterHolder holder, int position) {
         holder.position = position;
-        holder.item_context.setText(list.get(position));
-        if(!"".equals(bvValue) && "清点任务".equals(list.get(position))) {
-            holder.item_bv.setText(bvValue);
+        holder.item_context.setText(list.get(position).getName());
+        if (list.get(position).getCount() != "") {
+            if (Integer.parseInt(list.get(position).getCount()) > 99) {
+                holder.item_bv.setText("99+");
+            } else
+                holder.item_bv.setText(list.get(position).getCount());
         } else {
             holder.item_bv.setVisibility(View.GONE);
         }
@@ -63,8 +60,8 @@ public class IndexAdapter extends RecyclerView.Adapter<IndexAdapter.IndexAdapter
     @Override
     public int getItemCount() {
         int size = 0;
-        if (list!=null){
-            size=list.size();
+        if (list != null) {
+            size = list.size();
         }
         return size;
     }
@@ -87,7 +84,7 @@ public class IndexAdapter extends RecyclerView.Adapter<IndexAdapter.IndexAdapter
 
         @Override
         public void onClick(View v) {
-            if (onRecycleViewItemClickListener!=null){
+            if (onRecycleViewItemClickListener != null) {
                 onRecycleViewItemClickListener.onItemClick(position);
             }
         }

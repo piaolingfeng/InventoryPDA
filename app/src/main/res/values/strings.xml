@@ -6,13 +6,14 @@
     <string name="size_5w_h">5.5%w</string>
     <string name="size_10w_h">8.5%w</string>
 
-    <string name="size_7w">7%w</string>
+    <string name="size_6w">6%w</string>
     <string name="size_5w">4.5%w</string>
     <string name="title_menu_height_percent">12%w</string>
 
     <string name="size_5_5w">5.5%w</string>
 
     <string name="margin_5w">5%w</string>
+    <string name="margin_2w">2%w</string>
     <string name="item_padding_3w">3%w</string>
     <string name="username_hint">输入帐号</string>
     <string name="password_hint">输入密码</string>
@@ -54,8 +55,14 @@
     <string name="tv_last_time">截止时间</string>
     <string name="tv_status">状态</string>
 
+    <string name="operate_vessl">待操作容器：</string>
+    <string name="count_num">清点单号：</string>
+    <string name="last_time">截止时间：</string>
 
-
+    <string name="not_start">未开始</string>
+    <string name="has_classified">已分类</string>
+    <string name="has_counted">已清点</string>
+    <string name="has_transfer">已交接</string>
 
     
     <!-- 清点 -->
@@ -67,6 +74,7 @@
     <string name="count_now_no">现容器号：</string>
     <string name="count_old_no">原容器号：</string>
     <string name="count_track_no">追踪箱号</string>
+    
 
     //打印
     <string name="print_title">BTPrinter</string>
