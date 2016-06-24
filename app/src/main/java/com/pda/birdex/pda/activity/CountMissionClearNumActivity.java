@@ -1,5 +1,6 @@
 package com.pda.birdex.pda.activity;
 
+import android.content.Intent;
 import android.support.design.widget.TabLayout;
 import android.support.design.widget.TabLayout.OnTabSelectedListener;
 import android.support.v7.widget.LinearLayoutManager;
@@ -35,6 +36,9 @@ public class CountMissionClearNumActivity extends BaseActivity implements OnTabS
     TextView tv_last_time;
     @Bind(R.id.tv_operate_vessl)
     TextView tv_operate_vessl;
+    @Bind(R.id.tv_status)
+    TextView tv_status;
+
     @Bind(R.id.btn_count_print_no)
     Button btn_count_print_no;
 
@@ -50,8 +54,10 @@ public class CountMissionClearNumActivity extends BaseActivity implements OnTabS
     @Override
     public void initializeContentViews() {
         title.setTitle(getString(R.string.count_task));
+        tv_status.setVisibility(View.GONE);//隐藏状态栏
+
         String []tabList = {getString(R.string.not_start),getString(R.string.has_classified),
-                getString(R.string.has_counted),getString(R.string.has_transfer)};
+                getString(R.string.has_counted),getString(R.string.has_transfer)};//tablayoutName
         xrcy.setLoadingMoreEnabled(true);
         xrcy.setPullRefreshEnabled(false);
         xrcy.setLoadingListener(this);//加载监听器
@@ -109,6 +115,8 @@ public class CountMissionClearNumActivity extends BaseActivity implements OnTabS
 
     @Override
     public void onItemClick(int position) {
-
+        Intent intent = new Intent(this,CountToolActivity.class);
+        intent.putExtra("statusPosition",tablayout.getSelectedTabPosition());
+        startActivity(intent);
     }
 }

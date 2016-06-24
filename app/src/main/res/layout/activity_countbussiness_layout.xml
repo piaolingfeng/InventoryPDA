@@ -60,8 +60,10 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:gravity="bottom"
+                            android:layout_centerVertical="true"
                             android:text="@string/tv_count_mission"
-                            app:layout_textSizePercent="@string/size_6w" />
+                            app:layout_textSizePercent="@string/size_6w"/>
 
                         <TextView
                             android:id="@+id/tv_count_mission"

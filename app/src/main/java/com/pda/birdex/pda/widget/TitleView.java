@@ -3,17 +3,23 @@ package com.pda.birdex.pda.widget;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.pda.birdex.pda.R;
+import com.pda.birdex.pda.adapter.CommonSimpleAdapter;
+import com.pda.birdex.pda.interfaces.OnRecycleViewItemClickListener;
 import com.pda.birdex.pda.interfaces.TitleBarBackInterface;
 import com.pda.birdex.pda.utils.Constant;
 import com.zhy.android.percent.support.PercentRelativeLayout;
@@ -73,6 +79,9 @@ public class TitleView extends RelativeLayout implements View.OnClickListener {
                     } else
                         ((Activity) mContext).finish();
                 break;
+            case R.id.save:
+//                show
+                break;
         }
     }
 
@@ -87,7 +96,7 @@ public class TitleView extends RelativeLayout implements View.OnClickListener {
         back_iv.setOnClickListener(this);
         save = (TextView) view.findViewById(R.id.save);
         prl_title = (PercentRelativeLayout) view.findViewById(R.id.prl_title);
-
+        save.setOnClickListener(this);
         LayoutParams params = new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
         if (Build.VERSION.SDK_INT >= 19 && Constant.Status_Height != 0) {
             prl_title.setPadding(0, Constant.Status_Height, 0, 0);
@@ -123,6 +132,43 @@ public class TitleView extends RelativeLayout implements View.OnClickListener {
     public void setSaveText(String text) {
         save.setVisibility(View.VISIBLE);
         save.setText(text);
+    }
+
+    public void showMenuWindow(View viewID, final List<String> list, final int w) {
+        CommonSimpleAdapter adapter = new CommonSimpleAdapter(mContext, list);
+        adapter.setOnRecyclerViewItemClickListener(new OnRecycleViewItemClickListener() {
+            @Override
+            public void onItemClick(int position) {
+                if (mPopupWindow.isShowing()) {
+                    mPopupWindow.dismiss();
+                }
+
+            }
+        });
+        showPopupWindow(viewID, w, adapter);
+    }
+
+    private void showPopupWindow(View viewID, int w, RecyclerView.Adapter adapter) {
+        LayoutInflater mLayoutInflater = (LayoutInflater) mContext.getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
+        final View popWindow = LayoutInflater.from(mContext).inflate(R.layout.common_recycleview_layout, null);
+//        popWindow.setBackgroundColor(Color.TRANSPARENT);
+        RecyclerView rcy = (RecyclerView) popWindow.findViewById(R.id.rcy);
+        rcy.setLayoutManager(new LinearLayoutManager(mContext));
+        rcy.setAdapter(adapter);
+        //        int width = getWindowManager().getDefaultDisplay().getWidth();
+        int width = viewID.getWidth();
+        mPopupWindow = new PopupWindow(popWindow, width / w, LinearLayout.LayoutParams.WRAP_CONTENT);
+        mPopupWindow.setFocusable(true);
+        mPopupWindow.setOutsideTouchable(true);
+        mPopupWindow.setBackgroundDrawable(new BitmapDrawable());
+        mPopupWindow.update();
+        if(rcy!=null){
+            rcy.setBackgroundResource(R.drawable.pop_right_bg);
+        }
+        if (w > 1)
+            mPopupWindow.showAsDropDown(viewID, (width / w) * (w - 1), 0);
+        else
+            mPopupWindow.showAsDropDown(viewID, 0, 0);
     }
 
     public void setSaveCompoundDrawables(Drawable left, Drawable top, Drawable right, Drawable bottom) {

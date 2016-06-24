@@ -1,4 +1,4 @@
-package com.pda.birdex.pda.activity;
+package com.pda.birdex.pda.fragments;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -7,15 +7,16 @@ import android.content.IntentFilter;
 import android.device.ScanManager;
 import android.media.SoundPool;
 import android.os.Vibrator;
+import android.view.KeyEvent;
 import android.view.Window;
 import android.view.WindowManager;
 
 import com.pda.birdex.pda.widget.ClearEditText;
 
 /**
- * Created by chuming.zhuang on 2016/6/17.
+ * Created by chuming.zhuang on 2016/6/24.
  */
-public abstract class BarScanActivity extends BaseActivity {
+public abstract class BarScanBaseFragment extends BaseFragment {
 
     private final String SCAN_ACTION = "urovo.rcv.message";//扫描结束action
 
@@ -27,6 +28,7 @@ public abstract class BarScanActivity extends BaseActivity {
     private boolean isScaning = false;
 
     private ClearEditText edt_input;
+
 
     public void setEdt_input(ClearEditText edt_input) {
         this.edt_input = edt_input;
@@ -41,9 +43,9 @@ public abstract class BarScanActivity extends BaseActivity {
     public void initializeContentViews() {
         barInitializeContentViews();
         edt_input = getClearEditText();
-        Window window = getWindow();
+        Window window = getActivity().getWindow();
         window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-        mVibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+        mVibrator = (Vibrator) getActivity().getSystemService(Context.VIBRATOR_SERVICE);
         setupView();
     }
 
@@ -129,31 +131,42 @@ public abstract class BarScanActivity extends BaseActivity {
     }
 
     @Override
-    protected void onDestroy() {
+    public void onDestroy() {
         // TODO Auto-generated method stub
         super.onDestroy();
     }
 
     @Override
-    protected void onPause() {
+    public void onPause() {
         // TODO Auto-generated method stub
         super.onPause();
         if (mScanManager != null) {
             mScanManager.stopDecode();
             isScaning = false;
         }
-        unregisterReceiver(mScanReceiver);
+        getActivity().unregisterReceiver(mScanReceiver);
     }
 
     @Override
-    protected void onResume() {
+    public void onResume() {
         // TODO Auto-generated method stub
         super.onResume();
         initScan();
         edt_input.setText("");
         IntentFilter filter = new IntentFilter();
         filter.addAction(SCAN_ACTION);
-        registerReceiver(mScanReceiver, filter);
+        getActivity().registerReceiver(mScanReceiver, filter);
+    }
+
+
+    @Override
+    protected void key(int keyCode, KeyEvent event) {
+
+    }
+
+    @Override
+    protected void lazyLoad() {
+
     }
 
     //设置布局

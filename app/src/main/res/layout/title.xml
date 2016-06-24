@@ -37,8 +37,9 @@
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:textColor="@android:color/white"
-            app:layout_marginRightPercent="4%"
-            app:layout_textSizePercent="6%w"/>
+            app:layout_marginRightPercent="2%w"
+            app:layout_textSizePercent="6%w"
+            app:layout_paddingPercent="2%w"/>
 
         <ImageView
             android:id="@+id/menu"
@@ -46,7 +47,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
-            android:visibility="invisible"
+            android:visibility="gone"
             app:layout_paddingPercent="4.5%w"/>
     </com.zhy.android.percent.support.PercentRelativeLayout>
 </com.zhy.android.percent.support.PercentRelativeLayout>

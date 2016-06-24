@@ -40,6 +40,7 @@ public class CountMissionClearAdapter extends RecyclerView.Adapter<CountMissionC
     @Override
     public void onBindViewHolder(CountMissionClearAdapterHolder holder, int position) {
         holder.position = position;
+        holder.pll_item.setBackgroundColor(mContext.getResources().getColor(R.color.white));
     }
 
     @Override

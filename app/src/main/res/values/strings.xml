@@ -48,8 +48,8 @@
 
     <string name="count_bussiness_input">请选择商家:</string>
     <string name="edt_input_business_hint">可输入,可扫码.搜索所有商家</string>
-    <string name="tv_bussiness">商 家:</string>
-    <string name="tv_count_mission">待清点任务:</string>
+    <string name="tv_bussiness">商 家：</string>
+    <string name="tv_count_mission">待清点任务：</string>
 
     <string name="tv_count_num">清点单号</string>
     <string name="tv_last_time">截止时间</string>
