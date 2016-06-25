@@ -5,7 +5,6 @@ import android.app.Application;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
-import android.text.TextUtils;
 
 import com.loopj.android.http.AsyncHttpClient;
 import com.pda.birdex.pda.utils.Constant;
@@ -98,7 +97,7 @@ public class MyApplication extends Application {
         instants = this;
         sp = getSharedPreferences("login", Activity.MODE_PRIVATE);
         initFile();
-//        iniCrash();
+        iniCrash();
         app_version = getVersionLocal();
         initAsyncHttpClient();
     }

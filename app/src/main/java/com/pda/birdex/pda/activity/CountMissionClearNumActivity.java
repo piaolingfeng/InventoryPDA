@@ -88,8 +88,6 @@ public class CountMissionClearNumActivity extends BaseActivity implements OnTabS
                 break;
             case 2:
                 break;
-            case  3:
-                break;
         }
     }
 
@@ -115,8 +113,10 @@ public class CountMissionClearNumActivity extends BaseActivity implements OnTabS
 
     @Override
     public void onItemClick(int position) {
-        Intent intent = new Intent(this,CountToolActivity.class);
-        intent.putExtra("statusPosition",tablayout.getSelectedTabPosition());
-        startActivity(intent);
+        if(tablayout.getSelectedTabPosition()!=3) {
+            Intent intent = new Intent(this, CountToolActivity.class);
+            intent.putExtra("statusPosition", tablayout.getSelectedTabPosition());
+            startActivity(intent);
+        }
     }
 }
