@@ -6,6 +6,8 @@ import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 
 import com.pda.birdex.pda.R;
+import com.pda.birdex.pda.api.BirdApi;
+import com.pda.birdex.pda.entity.TakingOrderNoInfoEntity;
 import com.pda.birdex.pda.fragments.BaseFragment;
 import com.pda.birdex.pda.fragments.TakingToolBindAreaFragment;
 import com.pda.birdex.pda.fragments.TakingToolBindNumFragment;
@@ -14,7 +16,11 @@ import com.pda.birdex.pda.fragments.TakingToolPhotoFragment;
 import com.pda.birdex.pda.fragments.TakingToolPrintNumFragment;
 import com.pda.birdex.pda.interfaces.BackHandledInterface;
 import com.pda.birdex.pda.interfaces.OnRecycleViewItemClickListener;
+import com.pda.birdex.pda.interfaces.RequestCallBackInterface;
+import com.pda.birdex.pda.utils.GsonHelper;
 import com.pda.birdex.pda.widget.TitleView;
+
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,6 +31,7 @@ import butterknife.Bind;
  * Created by chuming.zhuang on 2016/6/25.
  */
 public class TakingToolActivity extends BaseActivity implements OnRecycleViewItemClickListener, BaseFragment.OnFragmentInteractionListener, BackHandledInterface {
+    String tag = "TakingToolActivity";
     @Bind(R.id.title)
     TitleView title;
 
@@ -40,6 +47,9 @@ public class TakingToolActivity extends BaseActivity implements OnRecycleViewIte
     private TakingToolPhotoFragment photoFragment = null;
     private FragmentTransaction transaction;
 
+    public static String takingOrderNo;//揽收单号
+
+    public static TakingOrderNoInfoEntity orderNoInfo;
     @Override
     public void setSelectedFragment(BaseFragment selectedFragment) {
 
@@ -52,6 +62,7 @@ public class TakingToolActivity extends BaseActivity implements OnRecycleViewIte
 
     @Override
     public void initializeContentViews() {
+        takingOrderNo = getIntent().getStringExtra("takingOrderNo");//
         if(printNumFragment==null)
             printNumFragment= new TakingToolPrintNumFragment();
         if(photoFragment == null)
@@ -75,6 +86,23 @@ public class TakingToolActivity extends BaseActivity implements OnRecycleViewIte
         title.setOnSaveItemClickListener(this);//saveMenu clicklistener
         title.setSaveList(currentMenuList);
         addFragment(currentPosition,false);//初始默认第一个fragment
+        getTakingOrderNoInfo();
+    }
+
+    //通过揽收单详情
+    private void getTakingOrderNoInfo(){
+        BirdApi.takingOrderNoInfo(this, takingOrderNo, new RequestCallBackInterface() {
+            @Override
+            public void successCallBack(JSONObject object) {
+                orderNoInfo = GsonHelper.getPerson(object.toString(), TakingOrderNoInfoEntity.class);
+                addFragment(currentPosition,true);//初始默认第一个fragment
+            }
+
+            @Override
+            public void errorCallBack(JSONObject object) {
+
+            }
+        },tag,true);
     }
 
     //处理save list
@@ -201,8 +229,6 @@ public class TakingToolActivity extends BaseActivity implements OnRecycleViewIte
         if (clearFragment != null)
             transaction.hide(clearFragment);
     }
-
-
 
     @Override
     public void onFragmentInteraction(Uri uri) {
