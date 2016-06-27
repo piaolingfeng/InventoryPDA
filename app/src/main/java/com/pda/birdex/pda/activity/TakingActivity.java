@@ -9,24 +9,20 @@ import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
-import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 
-import com.loopj.android.http.RequestParams;
-import com.pda.birdex.pda.MyApplication;
 import com.pda.birdex.pda.R;
 import com.pda.birdex.pda.adapter.CommonSimpleAdapter;
 import com.pda.birdex.pda.api.BirdApi;
 import com.pda.birdex.pda.interfaces.OnRecycleViewItemClickListener;
 import com.pda.birdex.pda.interfaces.RequestCallBackInterface;
-import com.pda.birdex.pda.utils.GsonHelper;
 import com.pda.birdex.pda.utils.T;
 import com.pda.birdex.pda.widget.ClearEditText;
 import com.pda.birdex.pda.widget.TitleView;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
@@ -52,25 +48,21 @@ public class TakingActivity extends BarScanActivity implements View.OnClickListe
 
     @Override
     public void barInitializeContentViews() {
-        title.setTitle("扫描预报单号");
-        for (int i = 0; i < 5; i++) {
-            saveList.add("aaa" + i);
-        }
+        title.setTitle(getString(R.string.scan_logistics));
+//        for (int i = 0; i < 5; i++) {
+//            saveList.add("aaa" + i);
+//        }
         edt_input.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
 
                 if (actionId == EditorInfo.IME_ACTION_SEARCH) {
                     String string = v.getText().toString();
-//                    search(string);
                     ClearEditTextCallBack(string);
-//                    T.showShort(MyApplication.getInstans(), "dddd" + actionId);
                 }
                 return false;
             }
         });
-
-
     }
 
     //获取暂存列表
@@ -91,6 +83,17 @@ public class TakingActivity extends BarScanActivity implements View.OnClickListe
             public void successCallBack(JSONObject object) {
 //                T.showShort(TakingActivity.this,"show");
 //               GsonHelper.getPerson(object.toString(),)
+                try {
+                    if(object.getBoolean("isExist")){
+                        Intent intent = new Intent(TakingActivity.this,TakingToolActivity.class);
+                        intent.putExtra("takingOrderNo",object.getString("takingOrderNo"));
+                        startActivity(intent);
+                    }else{
+                        T.showShort(TakingActivity.this, getString(R.string.taking_isExist));
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
             }
 
             @Override
