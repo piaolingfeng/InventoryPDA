@@ -59,38 +59,42 @@ public class SecondIndexActivity extends BaseActivity {
             @Override
             public void onItemClick(int position) {
                 Intent intent = new Intent();
-                intent.putExtra("name", indexList.get(position).getName());
-                switch (position) {
-                    case 0:
-                        if(getString(R.string.taking).equals(titleStr)) {
+                intent.putExtra("HeadName", titleStr);
+                //揽收
+                if(getString(R.string.taking).equals(titleStr)){
+                    switch (position){
+                        case 0:
                             intent.setClass(SecondIndexActivity.this, TakingActivity.class);
-                            startActivity(intent);
-                        } else if(getString(R.string.count).equals(titleStr)) {
-                            intent.setClass(SecondIndexActivity.this,CountMissionActivity.class);
-                            startActivity(intent);
-                        }
-                        break;
-                    case 1:
-                        if(getString(R.string.taking).equals(titleStr)) {
-                            // 拍照
+                            break;
+                        case 1:
+                            intent.setClass(SecondIndexActivity.this,CountMissionActivity.class);//揽收任务，跟清点任务页面相同
+                            break;
+                        case 2:
                             intent.setClass(SecondIndexActivity.this, PhotoActivity.class);
-                            startActivity(intent);
-                        } else if(getString(R.string.count).equals(titleStr)) {
-                            // 绑定区域
-                            intent.setClass(SecondIndexActivity.this, CountBindActivity.class);
-                            startActivity(intent);
-                        }
-                        break;
-                    case 2:
-                        if(getString(R.string.taking).equals(titleStr)) {
+                            break;
+                        case 3:
                             Bundle b = new Bundle();
-                            b.putString("title",getString(R.string.printlanshou));
-                            b.putString("inputname",getString(R.string.lanshouno));
+                            b.putString("title", getString(R.string.printlanshou));
+                            b.putString("inputname", getString(R.string.lanshouno));
                             intent.putExtras(b);
                             //打印揽收单
                             intent.setClass(SecondIndexActivity.this, TakingPrintActivity.class);
-                            startActivity(intent);
-                        } else if(getString(R.string.count).equals(titleStr)) {
+                            break;
+                        case 4:
+                            intent.setClass(SecondIndexActivity.this, TakingBindActivity.class);
+                            break;
+                    }
+                }
+                //清点
+                if(getString(R.string.count).equals(titleStr)){
+                    switch (position){
+                        case 0:
+                            intent.setClass(SecondIndexActivity.this,CountMissionActivity.class);
+                            break;
+                        case 1:
+                            intent.setClass(SecondIndexActivity.this, CountBindActivity.class);
+                            break;
+                        case 2:
                             Bundle b = new Bundle();
                             b.putString("title",getString(R.string.count_print_no));
                             b.putString("inputname",getString(R.string.count_box_no));
@@ -98,27 +102,16 @@ public class SecondIndexActivity extends BaseActivity {
                             // 打印清点单
                             intent.setClass(SecondIndexActivity.this, TakingPrintActivity.class);
                             startActivity(intent);
-                        }
-                        break;
-                    case 3:
-                        if(getString(R.string.taking).equals(titleStr)) {
-                            // 绑定区域
+                            break;
+                        case 3:
                             intent.setClass(SecondIndexActivity.this, TakingBindActivity.class);
-                            startActivity(intent);
-                        } else if(getString(R.string.count).equals(titleStr)) {
-                            // 追踪箱号
-                            intent.setClass(SecondIndexActivity.this, CountTrackActivity.class);
-                            startActivity(intent);
-                        }
-                        break;
-                    case 4:
-                        if(getString(R.string.count).equals(titleStr)) {
-                            // 拍照
+                            break;
+                        case 4:
                             intent.setClass(SecondIndexActivity.this, CountPhotoActivity.class);
-                            startActivity(intent);
-                        }
-                        break;
+                            break;
+                    }
                 }
+                startActivity(intent);
             }
         });
         GridLayoutManager myGLManager = new GridLayoutManager(this,2);

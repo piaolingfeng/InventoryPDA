@@ -60,7 +60,8 @@ public class CountMissionBussniessFragment extends BaseFragment {
                     bus.post("count_mission_other");//进入到其他页面，数据替换成其他list的实体
                 } else {
                     Intent intent = new Intent(getActivity(), CountBussinessActivity.class);
-                    intent.putExtra("bussinessCode","");
+                    bundle.putString("bussinessCode", "");
+                    intent.putExtras(bundle);
                     getActivity().startActivity(intent);
                 }
             }

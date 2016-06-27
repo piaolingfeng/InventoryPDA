@@ -4,8 +4,10 @@ import android.content.Intent;
 import android.support.design.widget.TabLayout;
 import android.support.design.widget.TabLayout.OnTabSelectedListener;
 import android.support.v7.widget.LinearLayoutManager;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.TextView;
 
@@ -16,14 +18,16 @@ import com.pda.birdex.pda.R;
 import com.pda.birdex.pda.adapter.CountMissionClearNumAdapter;
 import com.pda.birdex.pda.interfaces.OnRecycleViewItemClickListener;
 import com.pda.birdex.pda.utils.T;
+import com.pda.birdex.pda.widget.ClearEditText;
 import com.pda.birdex.pda.widget.TitleView;
+import com.zhy.android.percent.support.PercentLinearLayout;
 
 import butterknife.Bind;
 
 /**
  * Created by chuming.zhuang on 2016/6/23.
  */
-public class CountMissionClearNumActivity extends BaseActivity implements OnTabSelectedListener,LoadingListener,OnRecycleViewItemClickListener{
+public class CountMissionClearNumActivity extends BarScanActivity implements OnTabSelectedListener, LoadingListener, OnRecycleViewItemClickListener {
     @Bind(R.id.tablayout)
     TabLayout tablayout;
     @Bind(R.id.xrcy)
@@ -41,23 +45,48 @@ public class CountMissionClearNumActivity extends BaseActivity implements OnTabS
 
     @Bind(R.id.btn_count_print_no)
     Button btn_count_print_no;
+    //揽收清点的空间
+    @Bind(R.id.tv_name_count_num)
+    TextView tv_name_count_num;
+    @Bind(R.id.pll_taking_scan_no)
+    PercentLinearLayout pll_taking_scan_no;
+    @Bind(R.id.edt_taking_scan_no)
+    ClearEditText edt_taking_scan_no;
 
     CountMissionClearNumAdapter adapter;
 
-//    public String []tabList = {getString(R.string.not_start),getString(R.string.has_classified),
+    String HeadName="";
+    //    public String []tabList = {getString(R.string.not_start),getString(R.string.has_classified),
 //            getString(R.string.has_counted),getString(R.string.has_transfer)};
+
     @Override
-    public int getContentLayoutResId() {
+    public int getbarContentLayoutResId() {
         return R.layout.activity_countmission_clearnum_layout;
     }
 
     @Override
-    public void initializeContentViews() {
+    public void barInitializeContentViews() {
         title.setTitle(getString(R.string.count_task));
+        HeadName = getIntent().getStringExtra("HeadName");
+        if(getResources().getString(R.string.taking).equals(HeadName)){//揽收
+            tv_name_count_num.setText(getString(R.string.tv_taking_num));
+            btn_count_print_no.setText(getString(R.string.taking_print_no));
+            pll_taking_scan_no.setVisibility(View.VISIBLE);
+        }
+        edt_taking_scan_no.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+                    String string = v.getText().toString();
+                    ClearEditTextCallBack(string);
+                }
+                return false;
+            }
+        });
         tv_status.setVisibility(View.GONE);//隐藏状态栏
 
-        String []tabList = {getString(R.string.not_start),getString(R.string.has_classified),
-                getString(R.string.has_counted),getString(R.string.has_transfer)};//tablayoutName
+        String[] tabList = {getString(R.string.not_start), getString(R.string.has_classified),
+                getString(R.string.has_counted), getString(R.string.has_transfer)};//tablayoutName
         xrcy.setLoadingMoreEnabled(true);
         xrcy.setPullRefreshEnabled(false);
         xrcy.setLoadingListener(this);//加载监听器
@@ -68,8 +97,8 @@ public class CountMissionClearNumActivity extends BaseActivity implements OnTabS
 
         xrcy.setAdapter(adapter);
         //添加4种分类
-        for(int i=0;i<tabList.length;i++){
-            View view = LayoutInflater.from(this).inflate(R.layout.item_tab_layout,null);
+        for (int i = 0; i < tabList.length; i++) {
+            View view = LayoutInflater.from(this).inflate(R.layout.item_tab_layout, null);
             TextView textView = (TextView) view.findViewById(R.id.tv_tab_title);
             textView.setText(tabList[i]);
             tablayout.addTab(tablayout.newTab().setCustomView(view));
@@ -79,9 +108,19 @@ public class CountMissionClearNumActivity extends BaseActivity implements OnTabS
     }
 
     @Override
+    public ClearEditText getClearEditText() {
+        return edt_taking_scan_no;
+    }
+
+    @Override
+    public void ClearEditTextCallBack(String code) {
+        //扫描回调
+    }
+
+    @Override
     public void onTabSelected(TabLayout.Tab tab) {
-        T.showShort(CountMissionClearNumActivity.this,"");
-        switch (tab.getPosition()){
+        T.showShort(CountMissionClearNumActivity.this, "");
+        switch (tab.getPosition()) {
             case 0:
                 break;
             case 1:
@@ -113,10 +152,16 @@ public class CountMissionClearNumActivity extends BaseActivity implements OnTabS
 
     @Override
     public void onItemClick(int position) {
-        if(tablayout.getSelectedTabPosition()!=3) {
-            Intent intent = new Intent(this, CountToolActivity.class);
-            intent.putExtra("statusPosition", tablayout.getSelectedTabPosition());
-            startActivity(intent);
+        if (tablayout.getSelectedTabPosition() != 3) {
+            if(getResources().getString(R.string.taking).equals(HeadName)){//揽收
+                Intent intent = new Intent(this, TakingToolActivity.class);
+                intent.putExtra("statusPosition", tablayout.getSelectedTabPosition());
+                startActivity(intent);
+            }else {
+                Intent intent = new Intent(this, CountToolActivity.class);
+                intent.putExtra("statusPosition", tablayout.getSelectedTabPosition());
+                startActivity(intent);
+            }
         }
     }
 }
