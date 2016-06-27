@@ -26,9 +26,9 @@ public class MainActivity extends BaseActivity {
     @Bind(R.id.title)
     TitleView title;
     IndexAdapter adapter;
-    String[] lists = {"收货", "出货", "仓库", "清点"};
-    String[] takinglists = {"揽收", "拍照", "打印揽收单", "绑定区域"};//收货
-    String[] countToLists = {"清点任务", "绑定区域", "打印清点单", "追踪箱号", "拍照"};//清点
+    String[] lists ;
+    String[] takinglists;//收货
+    String[] countToLists ;//清点
 
     List<CommonItemEntity> indexList = new ArrayList<>();
 
@@ -39,6 +39,9 @@ public class MainActivity extends BaseActivity {
 
     @Override
     public void initializeContentViews() {
+        lists=getResources().getStringArray(R.array.index_list);
+        takinglists = getResources().getStringArray(R.array.taking_list);
+        countToLists = getResources().getStringArray(R.array.count_list);
         title.setBackIvVisble(false);
         title.setTitle("首页");
         for (int i = 0; i < lists.length; i++) {
@@ -57,13 +60,14 @@ public class MainActivity extends BaseActivity {
                     case 0:
                         b.putStringArray("list", takinglists);
                         break;
-                    case 1:
+                    case 1:// 清点
+                        b.putStringArray("list", countToLists);
                         break;
                     case 2:
                         break;
                     case 3:
-                        // 清点
-                        b.putStringArray("list", countToLists);
+
+
                         break;
                 }
                 b.putString("name", indexList.get(position).getName());

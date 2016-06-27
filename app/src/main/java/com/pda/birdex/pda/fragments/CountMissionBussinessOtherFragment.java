@@ -25,7 +25,9 @@ public class CountMissionBussinessOtherFragment extends BaseFragment {
     XRecyclerView xrcy;
     CountMissionItemOtherAdapter adapter;
     List<CommonItemEntity> list = new ArrayList<>();
-    String []alists ={"aaa","bbb","ccc","ddd","eee"};
+    String[] alists = {"aaa", "bbb", "ccc", "ddd", "eee"};
+    String title = "";
+
     @Override
     protected void key(int keyCode, KeyEvent event) {
 
@@ -44,12 +46,13 @@ public class CountMissionBussinessOtherFragment extends BaseFragment {
             entity.setCount("20");
             list.add(entity);
         }
-        adapter = new CountMissionItemOtherAdapter(getContext(),list);
+        adapter = new CountMissionItemOtherAdapter(getContext(), list);
         adapter.setOnRecycleViewItemClickListener(new OnRecycleViewItemClickListener() {
             @Override
             public void onItemClick(int position) {
                 Intent intent = new Intent(getActivity(), CountBussinessActivity.class);
-                intent.putExtra("bussinessCode","");
+                bundle.putString("bussinessCode", "");
+                intent.putExtras(bundle);
                 getActivity().startActivity(intent);
             }
         });
@@ -73,7 +76,7 @@ public class CountMissionBussinessOtherFragment extends BaseFragment {
     }
 
     //通过网络请求获取其他商家信息
-    public void getOtherBussiness(){
+    public void getOtherBussiness() {
 
     }
 

@@ -1,6 +1,7 @@
 package com.pda.birdex.pda.activity;
 
 import android.net.Uri;
+import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.inputmethod.EditorInfo;
 import android.widget.TextView;
@@ -41,13 +42,17 @@ public class CountMissionActivity extends BarScanActivity implements BaseFragmen
     @Override
     public void barInitializeContentViews() {
         EventBus.getDefault().register(this);
-        title.setTitle(getString(R.string.count_task));
+        if(getResources().getString(R.string.taking).equals(getIntent().getStringExtra("HeadName"))){//揽收
+            title.setTitle(getString(R.string.taking_task));
+        }else {
+            title.setTitle(getString(R.string.count_task));
+        }
         title.setBackInterface(new TitleBarBackInterface() {//
             @Override
             public void onBackClick() {
-                if(getSupportFragmentManager().getBackStackEntryCount()>0)
+                if (getSupportFragmentManager().getBackStackEntryCount() > 0)
                     getSupportFragmentManager().popBackStack();
-                else{
+                else {
                     CountMissionActivity.this.finish();
                 }
             }
@@ -64,11 +69,15 @@ public class CountMissionActivity extends BarScanActivity implements BaseFragmen
                 return false;
             }
         });
+        Bundle b = new Bundle();
+        b.putString("HeadName", getIntent().getStringExtra("HeadName"));
         if (otherFragment == null)
             otherFragment = new CountMissionBussinessOtherFragment();
         if (bussniessFragment == null) {
             bussniessFragment = new CountMissionBussniessFragment();
         }
+        otherFragment.setUIArguments(b);
+        bussniessFragment.setUIArguments(b);
         getSupportFragmentManager().beginTransaction().replace(R.id.framelayout, bussniessFragment).commit();
     }
 

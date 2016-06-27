@@ -54,7 +54,7 @@ public abstract class BarScanActivity extends BaseActivity {
         public void onReceive(Context context, Intent intent) {
             // TODO Auto-generated method stub
             isScaning = false;
-            soundpool.play(soundid, 1, 1, 0, 0, 1);
+//            soundpool.play(soundid, 1, 1, 0, 0, 1);
             if (edt_input != null)
                 edt_input.setText("");
             mVibrator.vibrate(100);

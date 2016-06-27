@@ -55,9 +55,9 @@ public abstract class BarScanBaseFragment extends BaseFragment {
         public void onReceive(Context context, Intent intent) {
             // TODO Auto-generated method stub
             isScaning = false;
-            soundpool.play(soundid, 1, 1, 0, 0, 1);
+//            soundpool.play(soundid, 1, 1, 0, 0, 1);
             if(edt_input!=null)
-            edt_input.setText("");
+                edt_input.setText("");
             mVibrator.vibrate(100);
 
             byte[] barcode = intent.getByteArrayExtra("barocode");
@@ -67,7 +67,7 @@ public abstract class BarScanBaseFragment extends BaseFragment {
             android.util.Log.i("debug", "----codetype--" + temp);
             barcodeStr = new String(barcode, 0, barocodelen);
             if(edt_input!=null)
-            edt_input.setText(barcodeStr);
+                edt_input.setText(barcodeStr);
             ClearEditTextCallBack(barcodeStr);
         }
 

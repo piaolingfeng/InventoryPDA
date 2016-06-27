@@ -18,7 +18,7 @@ import butterknife.Bind;
  * Created by chuming.zhuang on 2016/6/22.
  */
 public class CountBussinessActivity extends BaseActivity {
-    String tag="CountBussinessActivity";
+    String tag = "CountBussinessActivity";
 
     @Bind(R.id.title)
     TitleView title;
@@ -28,10 +28,14 @@ public class CountBussinessActivity extends BaseActivity {
     TextView tv_business;
     @Bind(R.id.tv_count_mission)
     TextView tv_count_mission;
-
+    @Bind(R.id.tv_name_count_mission)
+    TextView tv_name_count_mission;
+    @Bind(R.id.tv_clear_num)
+    TextView tv_clear_num;
     CountMissionClearAdapter adapter;
 
-    String bussinessCode="";
+    String bussinessCode = "";
+    String HeadName = "";
 
     @Override
     public int getContentLayoutResId() {
@@ -41,8 +45,13 @@ public class CountBussinessActivity extends BaseActivity {
     @Override
     public void initializeContentViews() {
         title.setTitle(getString(R.string.count_task));
-        if(getIntent().getExtras()!=null){
+        if (getIntent().getExtras() != null) {
             bussinessCode = getIntent().getStringExtra("bussinessCode");
+            HeadName = getIntent().getStringExtra("HeadName");
+        }
+        if (getResources().getString(R.string.taking).equals(HeadName)) {//揽收清点
+            tv_name_count_mission.setText(getResources().getString(R.string.tv_taking_mission));
+            tv_clear_num.setText(getResources().getString(R.string.tv_taking_num));
         }
         xrcy.setLoadingMoreProgressStyle(ProgressStyle.SquareSpin);
         xrcy.setLoadingMoreEnabled(true);
@@ -65,8 +74,9 @@ public class CountBussinessActivity extends BaseActivity {
         adapter.setOnRecycleViewItemClickListener(new OnRecycleViewItemClickListener() {
             @Override
             public void onItemClick(int position) {
-                Intent intent = new Intent(CountBussinessActivity.this,CountMissionClearNumActivity.class);
-                intent.putExtra("clear_num","");
+                Intent intent = new Intent(CountBussinessActivity.this, CountMissionClearNumActivity.class);
+                intent.putExtra("clear_num", "");
+                intent.putExtra("HeadName",HeadName);
                 startActivity(intent);
             }
         });
@@ -74,8 +84,12 @@ public class CountBussinessActivity extends BaseActivity {
     }
 
     //通过网络请求获取商家待清点任务列表
-    private void getBussinessMission(){
+    private void getBussinessMission() {
+        if (getResources().getString(R.string.taking).equals(HeadName)) {//揽收清点
 
+        } else {//清点
+
+        }
     }
 
     @Override
