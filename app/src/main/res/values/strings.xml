@@ -65,6 +65,7 @@
     <string name="has_counted">已清点</string>
     <string name="has_transfer">已交接</string>
     <string name="area">区 域：</string>
+    <string name="area_toast">区域不能为空</string>
     <string name="check_map">查看地图</string>
 
     <!-- 揽收 -->
@@ -98,6 +99,7 @@
     <string name="amount">数量：</string>
 
     <string name="taking_num">揽收容器号：</string>
+    <string name="taking_num_toast">揽收容器号不能为空</string>
     <string name="count_container_no">清点容器号：</string>
     <string name="unbind">解 绑</string>
     <string name="count_length">数 量：</string>

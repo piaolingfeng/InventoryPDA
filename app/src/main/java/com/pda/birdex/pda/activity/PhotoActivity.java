@@ -175,6 +175,7 @@ public class PhotoActivity extends BarScanActivity implements View.OnClickListen
 
                     RequestParams myparams = new RequestParams();
                     File file = new File(path1);
+//                    File file = new File("/storage/sdcard0/logs/recovery/20150430_104402.log");
 
                     try {
                         myparams.put("file", file);
@@ -187,8 +188,24 @@ public class PhotoActivity extends BarScanActivity implements View.OnClickListen
                         @Override
                         public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                             super.onSuccess(statusCode, headers, response);
-                            progress++;
-                            mProgress.setProgress(progress);
+                            try {
+                                if("false".equals(response.getString("ret"))){
+                                    T.showShort(MyApplication.getInstans(), "上传失败");
+                                    mProgress.dismiss();
+                                }
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }
+
+                        @Override
+                        public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
+                            super.onSuccess(statusCode, headers, response);
+                        }
+
+                        @Override
+                        public void onSuccess(int statusCode, Header[] headers, String responseString) {
+                            super.onSuccess(statusCode, headers, responseString);
                         }
 
                         @Override
@@ -236,10 +253,14 @@ public class PhotoActivity extends BarScanActivity implements View.OnClickListen
                                             }
                                         },TAG,true);
                                     }
+                                } else {
+                                    T.showShort(MyApplication.getInstans(), "上传失败");
+                                    mProgress.dismiss();
                                 }
+                            } else {
+                                T.showShort(MyApplication.getInstans(), "上传失败");
+                                mProgress.dismiss();
                             }
-//                            T.showShort(MyApplication.getInstans(), "上传失败");
-//                            mProgress.dismiss();
                         }
 
                         @Override
@@ -255,53 +276,13 @@ public class PhotoActivity extends BarScanActivity implements View.OnClickListen
                             T.showShort(MyApplication.getInstans(), "上传失败");
                             mProgress.dismiss();
                         }
+
+                        @Override
+                        public void onFinish() {
+                            super.onFinish();
+                        }
                     });
 
-//                    BirdApi.upLoadPic(PhotoActivity.this, myparams, new JsonHttpResponseHandler() {
-//                        @Override
-//                        public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-//                            super.onSuccess(statusCode, headers, response);
-//                            try {
-//                                if (response.getString("code").equals("0")) {
-//                                    urls.add(response.getString("file"));
-//                                    progress++;
-//                                    mProgress.setProgress(progress);
-//                                    if (progress == pathList.size()) {
-////                                    mProgress.dismiss();
-//                                        T.showShort(MyApplication.getInstans(), "图片上传成功");
-//                                        Message msg = Message.obtain();
-//                                        msg.what = UPC_COMPRESS;
-//                                        handler.sendMessage(msg);
-//                                    }
-//                                } else {
-//                                    T.showShort(PhotoActivity.this, response.getString("message"));
-//                                }
-//                            } catch (JSONException e) {
-//                                e.printStackTrace();
-//                            }
-//                        }
-//
-//                        @Override
-//                        public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
-//                            super.onFailure(statusCode, headers, responseString, throwable);
-//                            T.showShort(MyApplication.getInstans(), "上传失败");
-//                            mProgress.dismiss();
-//                        }
-//
-//                        @Override
-//                        public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONArray errorResponse) {
-//                            super.onFailure(statusCode, headers, throwable, errorResponse);
-//                            T.showShort(MyApplication.getInstans(), "上传失败");
-//                            mProgress.dismiss();
-//                        }
-//
-//                        @Override
-//                        public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
-//                            super.onFailure(statusCode, headers, throwable, errorResponse);
-//                            T.showShort(MyApplication.getInstans(), "上传失败");
-//                            mProgress.dismiss();
-//                        }
-//                    });
                     break;
             }
         }
