@@ -12,29 +12,12 @@ import butterknife.Bind;
 /**
  * Created by chuming.zhuang on 2016/6/24.
  */
-public class CountToolActivity extends BarScanActivity {
+public class CountToolActivity extends BaseActivity {
     @Bind(R.id.title)
     TitleView title;
 
     int tabPosition=0;
     List<String> currentMenuList = new ArrayList<>();
-    @Override
-    public int getbarContentLayoutResId() {
-        return R.layout.activity_tool_layout;
-    }
-
-    @Override
-    public void barInitializeContentViews() {
-        String []tabList = {getString(R.string.not_start),getString(R.string.has_classified),
-                getString(R.string.has_counted),getString(R.string.has_transfer)};//tablayoutName
-        tabPosition = getIntent().getIntExtra("statusPosition",0);
-        String []toolMenu = getResources().getStringArray(R.array.tool_menu);
-        for (String title:toolMenu){
-            currentMenuList.add(title);
-        }
-        title.setTitle(currentMenuList.get(0));
-//        title.
-    }
 
     private void dealToolMenuList(){
         switch (tabPosition){
@@ -48,12 +31,20 @@ public class CountToolActivity extends BarScanActivity {
     }
 
     @Override
-    public ClearEditText getClearEditText() {
-        return null;
+    public int getContentLayoutResId() {
+        return R.layout.activity_tool_layout;
     }
 
     @Override
-    public void ClearEditTextCallBack(String code) {
-
+    public void initializeContentViews() {
+        String []tabList = {getString(R.string.not_start),getString(R.string.has_classified),
+                getString(R.string.has_counted),getString(R.string.has_transfer)};//tablayoutName
+        tabPosition = getIntent().getIntExtra("statusPosition",0);
+        String []toolMenu = getResources().getStringArray(R.array.tool_menu);
+        for (String title:toolMenu){
+            currentMenuList.add(title);
+        }
+        title.setTitle(currentMenuList.get(0));
+//        title.
     }
 }

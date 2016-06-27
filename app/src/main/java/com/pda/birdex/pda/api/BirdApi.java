@@ -6,6 +6,7 @@ import android.content.DialogInterface;
 import android.view.LayoutInflater;
 import android.view.View;
 
+import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 import com.loopj.android.http.ResponseHandlerInterface;
@@ -31,6 +32,8 @@ public class BirdApi {
     public static String PORT = "3000";//8002
     public static String BASE_URL = "http://" + SERVER_ADDRESS + ":" + PORT;//
     private static Dialog loadingDialog;
+
+    private static AsyncHttpClient ahc;
 
     public static void showLoading(Context mContext) {
         if (loadingDialog == null)
@@ -108,6 +111,35 @@ public class BirdApi {
         getRequest(context, callBackInterface, "user/login/" + params, tag, showDialog);
     }
 
+    // 揽收：绑定区域
+    public static void takingBind(Context context,RequestParams params, RequestCallBackInterface callBackInterface, String tag, boolean showDialog) {
+        postRequest(context, params, callBackInterface, "taking/lock", tag, showDialog);
+    }
+
+    // 揽收：打印揽收单
+    public static void takingPrint(Context context,RequestParams params, RequestCallBackInterface callBackInterface, String tag, boolean showDialog) {
+        postRequest(context, params, callBackInterface, "taking/code/print", tag, showDialog);
+    }
+
+    public static final String UPLOADIP = "http://192.168.1.223:4869/";
+
+    // 上传图片
+    public static void uploadPic(Context context, RequestParams params, JsonHttpResponseHandler jsonHttpResponseHandler) {
+        if(ahc == null){
+            ahc = new AsyncHttpClient();//获取网络连接超时
+            ahc.setTimeout(8 * 1000);//设置30秒超时
+            ahc.setConnectTimeout(4 * 1000);//设置30秒超时
+            ahc.setMaxConnections(5);
+        }
+//        ahc.addHeader("Content-Type","jpeg");
+        ahc.post(context, UPLOADIP + "upload", params, jsonHttpResponseHandler);
+    }
+
+    // 提交上传图片
+    public static void uploadPicSubmit(Context context,RequestParams params, RequestCallBackInterface callBackInterface, String tag, boolean showDialog) {
+        postRequest(context, params, callBackInterface, "photo", tag, showDialog);
+    }
+
     /**
      * mContext 上下文对象
      * params请求参数
@@ -144,9 +176,30 @@ public class BirdApi {
             }
 
             @Override
+            public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
+                super.onSuccess(statusCode, headers, response);
+
+            }
+
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, String responseString) {
+                super.onSuccess(statusCode, headers, responseString);
+            }
+
+            @Override
             public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
                 super.onFailure(statusCode, headers, responseString, throwable);
                 T.showShort(mContext, mContext.getString(R.string.request_error));
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+                super.onFailure(statusCode, headers, throwable, errorResponse);
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONArray errorResponse) {
+                super.onFailure(statusCode, headers, throwable, errorResponse);
             }
 
             @Override
@@ -161,11 +214,6 @@ public class BirdApi {
         post(mContext, url, params, jsonHttpResponseHandler);
     }
 
-
-    // 上传图片
-    public static void upLoadPic(Context context, RequestParams params, JsonHttpResponseHandler jsonHttpResponseHandler) {
-        post(context, "app_upload.php", params, jsonHttpResponseHandler);
-    }
 
     // 上传 upc 图片 url
     public static void upLoadUpc(Context context, RequestParams params, JsonHttpResponseHandler jsonHttpResponseHandler) {
