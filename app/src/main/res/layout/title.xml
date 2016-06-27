@@ -47,6 +47,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
+            android:src="@mipmap/menu"
             android:visibility="gone"
             app:layout_paddingPercent="4.5%w"/>
     </com.zhy.android.percent.support.PercentRelativeLayout>

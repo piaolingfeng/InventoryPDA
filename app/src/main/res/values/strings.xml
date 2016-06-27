@@ -64,6 +64,8 @@
     <string name="has_classified">已分类</string>
     <string name="has_counted">已清点</string>
     <string name="has_transfer">已交接</string>
+    <string name="area">区 域：</string>
+    <string name="check_map">查看地图</string>
 
     <!-- 揽收 -->
     <string name="taking_no_empty">\"揽收单号/揽收箱号\"不能为空</string>
@@ -85,6 +87,12 @@
     <string name="count_box_no">清点箱号：</string>
     <string name="upc">UPC：</string>
     <string name="amount">数量：</string>
+
+    <string name="taking_num">揽收容器号：</string>
+    <string name="count_container_no">清点容器号：</string>
+    <string name="unbind">解 绑</string>
+    <string name="count_length">数 量：</string>
+    <string name="upc_code">UPC：</string>
 
 
     //打印

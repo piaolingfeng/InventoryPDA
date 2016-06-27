@@ -56,6 +56,7 @@ public abstract class BarScanBaseFragment extends BaseFragment {
             // TODO Auto-generated method stub
             isScaning = false;
             soundpool.play(soundid, 1, 1, 0, 0, 1);
+            if(edt_input!=null)
             edt_input.setText("");
             mVibrator.vibrate(100);
 
@@ -65,7 +66,7 @@ public abstract class BarScanBaseFragment extends BaseFragment {
             byte temp = intent.getByteExtra("barcodeType", (byte) 0);
             android.util.Log.i("debug", "----codetype--" + temp);
             barcodeStr = new String(barcode, 0, barocodelen);
-
+            if(edt_input!=null)
             edt_input.setText(barcodeStr);
             ClearEditTextCallBack(barcodeStr);
         }
@@ -152,6 +153,7 @@ public abstract class BarScanBaseFragment extends BaseFragment {
         // TODO Auto-generated method stub
         super.onResume();
         initScan();
+        if(edt_input!=null)
         edt_input.setText("");
         IntentFilter filter = new IntentFilter();
         filter.addAction(SCAN_ACTION);

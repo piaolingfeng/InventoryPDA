@@ -55,7 +55,8 @@ public abstract class BarScanActivity extends BaseActivity {
             // TODO Auto-generated method stub
             isScaning = false;
             soundpool.play(soundid, 1, 1, 0, 0, 1);
-            edt_input.setText("");
+            if (edt_input != null)
+                edt_input.setText("");
             mVibrator.vibrate(100);
 
             byte[] barcode = intent.getByteArrayExtra("barocode");
@@ -65,7 +66,8 @@ public abstract class BarScanActivity extends BaseActivity {
             android.util.Log.i("debug", "----codetype--" + temp);
             barcodeStr = new String(barcode, 0, barocodelen);
 
-            edt_input.setText(barcodeStr);
+            if (edt_input != null)
+                edt_input.setText(barcodeStr);
             ClearEditTextCallBack(barcodeStr);
         }
 
@@ -151,7 +153,8 @@ public abstract class BarScanActivity extends BaseActivity {
         // TODO Auto-generated method stub
         super.onResume();
         initScan();
-        edt_input.setText("");
+        if (edt_input != null)
+            edt_input.setText("");
         IntentFilter filter = new IntentFilter();
         filter.addAction(SCAN_ACTION);
         registerReceiver(mScanReceiver, filter);

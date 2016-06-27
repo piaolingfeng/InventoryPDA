@@ -24,6 +24,7 @@ import com.pda.birdex.pda.interfaces.TitleBarBackInterface;
 import com.pda.birdex.pda.utils.Constant;
 import com.zhy.android.percent.support.PercentRelativeLayout;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -39,6 +40,9 @@ public class TitleView extends RelativeLayout implements View.OnClickListener {
     List<String> menuList;//menu菜单list
     PercentRelativeLayout prl_title;
 
+    OnRecycleViewItemClickListener onSaveItemClickListener;
+    List<String> saveList;
+
     TitleBarBackInterface backInterface;
 
     public TitleView(Context context, AttributeSet attrs) {
@@ -50,6 +54,13 @@ public class TitleView extends RelativeLayout implements View.OnClickListener {
         initView();
     }
 
+    public void setOnSaveItemClickListener(OnRecycleViewItemClickListener onSaveItemClickListener) {
+        this.onSaveItemClickListener = onSaveItemClickListener;
+    }
+
+    public void setSaveList(List<String> saveList) {
+        this.saveList = saveList;
+    }
 
     public TitleView(Context context) {
         super(context);
@@ -79,8 +90,10 @@ public class TitleView extends RelativeLayout implements View.OnClickListener {
                     } else
                         ((Activity) mContext).finish();
                 break;
-            case R.id.save:
-//                show
+            case R.id.menu:
+                if(saveList==null)
+                    saveList = new ArrayList<>();
+                showMenuWindow(v,saveList);
                 break;
         }
     }
@@ -96,7 +109,8 @@ public class TitleView extends RelativeLayout implements View.OnClickListener {
         back_iv.setOnClickListener(this);
         save = (TextView) view.findViewById(R.id.save);
         prl_title = (PercentRelativeLayout) view.findViewById(R.id.prl_title);
-        save.setOnClickListener(this);
+//        save.setOnClickListener(this);
+        menu.setOnClickListener(this);
         LayoutParams params = new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
         if (Build.VERSION.SDK_INT >= 19 && Constant.Status_Height != 0) {
             prl_title.setPadding(0, Constant.Status_Height, 0, 0);
@@ -134,7 +148,7 @@ public class TitleView extends RelativeLayout implements View.OnClickListener {
         save.setText(text);
     }
 
-    public void showMenuWindow(View viewID, final List<String> list, final int w) {
+    public void showMenuWindow(View viewID, final List<String> list) {
         CommonSimpleAdapter adapter = new CommonSimpleAdapter(mContext, list);
         adapter.setOnRecyclerViewItemClickListener(new OnRecycleViewItemClickListener() {
             @Override
@@ -142,22 +156,24 @@ public class TitleView extends RelativeLayout implements View.OnClickListener {
                 if (mPopupWindow.isShowing()) {
                     mPopupWindow.dismiss();
                 }
-
+                if(onSaveItemClickListener!=null){
+                    onSaveItemClickListener.onItemClick(position);
+                }
             }
         });
-        showPopupWindow(viewID, w, adapter);
+        showPopupWindow(viewID, adapter);
     }
 
-    private void showPopupWindow(View viewID, int w, RecyclerView.Adapter adapter) {
+    private void showPopupWindow(View viewID, RecyclerView.Adapter adapter) {
         LayoutInflater mLayoutInflater = (LayoutInflater) mContext.getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
         final View popWindow = LayoutInflater.from(mContext).inflate(R.layout.common_recycleview_layout, null);
 //        popWindow.setBackgroundColor(Color.TRANSPARENT);
         RecyclerView rcy = (RecyclerView) popWindow.findViewById(R.id.rcy);
         rcy.setLayoutManager(new LinearLayoutManager(mContext));
         rcy.setAdapter(adapter);
-        //        int width = getWindowManager().getDefaultDisplay().getWidth();
-        int width = viewID.getWidth();
-        mPopupWindow = new PopupWindow(popWindow, width / w, LinearLayout.LayoutParams.WRAP_CONTENT);
+                int width = view.getWidth();
+//        int width = viewID.getWidth();
+        mPopupWindow = new PopupWindow(popWindow, width / 2, LinearLayout.LayoutParams.WRAP_CONTENT);
         mPopupWindow.setFocusable(true);
         mPopupWindow.setOutsideTouchable(true);
         mPopupWindow.setBackgroundDrawable(new BitmapDrawable());
@@ -165,10 +181,7 @@ public class TitleView extends RelativeLayout implements View.OnClickListener {
         if(rcy!=null){
             rcy.setBackgroundResource(R.drawable.pop_right_bg);
         }
-        if (w > 1)
-            mPopupWindow.showAsDropDown(viewID, (width / w) * (w - 1), 0);
-        else
-            mPopupWindow.showAsDropDown(viewID, 0, 0);
+         mPopupWindow.showAsDropDown(viewID, 0, 0);
     }
 
     public void setSaveCompoundDrawables(Drawable left, Drawable top, Drawable right, Drawable bottom) {
