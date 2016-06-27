@@ -159,7 +159,7 @@ public class CountPhotoActivity extends BarScanActivity implements View.OnClickL
                         mProgress.dismiss();
                     }
 
-                    BirdApi.upLoadPic(CountPhotoActivity.this, myparams, new JsonHttpResponseHandler() {
+                    BirdApi.uploadPic(CountPhotoActivity.this, myparams, new JsonHttpResponseHandler() {
                         @Override
                         public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                             super.onSuccess(statusCode, headers, response);
