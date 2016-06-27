@@ -70,12 +70,37 @@ public class TakingToolActivity extends BaseActivity implements OnRecycleViewIte
         for (String title : toolMenu) {
             currentMenuList.add(title);
         }
-//        dealToolMenuList();//处理数据
+        dealToolMenuList();//处理数据后获取默认首页的位置
         title.setMenuVisble(true);
         title.setOnSaveItemClickListener(this);//saveMenu clicklistener
         title.setSaveList(currentMenuList);
-//        addFragment(0,false);//初始默认第一个fragment
+        addFragment(currentPosition,false);//初始默认第一个fragment
     }
+
+    //处理save list
+    private void dealToolMenuList() {
+        switch (tabPosition) {
+            case 0://未开始
+                currentPosition = 0;
+                title.setTitle(currentMenuList.get(0));
+                break;
+            case 1://已分类
+                currentPosition = 1;
+                title.setTitle(currentMenuList.get(2));
+                currentMenuList.remove(toolMenu[0]);
+                currentMenuList.remove(toolMenu[1]);
+                break;
+            case 2://已清点/已交接
+            case 3:
+                currentPosition = 0;
+                currentMenuList.remove(toolMenu[0]);
+                currentMenuList.remove(toolMenu[1]);
+                currentMenuList.remove(toolMenu[3]);
+                break;
+        }
+        title.setTitle(currentMenuList.get(currentPosition));
+    }
+
 
     /**
      * 隐藏添加fragment
@@ -186,6 +211,10 @@ public class TakingToolActivity extends BaseActivity implements OnRecycleViewIte
 
     @Override
     public void onItemClick(int position) {
-
+        if (position != currentPosition) {//点击同个位置给予忽略
+            currentPosition = position;
+            title.setTitle(currentMenuList.get(currentPosition));
+            addFragment(position, true);
+        }
     }
 }
