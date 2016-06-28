@@ -121,6 +121,16 @@ public class BirdApi {
         postRequest(context, params, callBackInterface, "taking/code/print", tag, showDialog);
     }
 
+    // 揽收：揽收清点提交
+    public static void takingSubmit(Context context,RequestParams params, RequestCallBackInterface callBackInterface, String tag, boolean showDialog) {
+        postRequest(context, params, callBackInterface, "taking/submit", tag, showDialog);
+    }
+
+    // 揽收：绑单提交
+    public static void takingBindorderSubmit(Context context,RequestParams params, RequestCallBackInterface callBackInterface, String tag, boolean showDialog) {
+        postRequest(context, params, callBackInterface, "code/bindOrder", tag, showDialog);
+    }
+
     public static final String UPLOADIP = "http://192.168.1.223:4869/";
 
     // 上传图片

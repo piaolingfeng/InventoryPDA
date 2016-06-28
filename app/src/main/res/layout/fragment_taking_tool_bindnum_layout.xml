@@ -73,7 +73,7 @@
                         android:id="@+id/edt_taking_num"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:imeOptions="actionSearch"
+                        android:imeOptions="actionDone"
                         android:singleLine="true"
                         android:textColor="@color/context_2" />
                 </com.zhy.android.percent.support.PercentLinearLayout>
@@ -85,6 +85,19 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 app:layout_paddingPercent="@string/item_padding_3w">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/taking_bind_count"
+                    app:layout_paddingLeftPercent="10%w"
+                    app:layout_textSizePercent="@string/size_6w"/>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="1px"
+                    android:layout_marginTop="5dp"
+                    android:background="@color/single_line" />
 
                 <com.jcodecraeer.xrecyclerview.XRecyclerView
                     android:id="@+id/xrcy"

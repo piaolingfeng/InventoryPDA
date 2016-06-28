@@ -75,11 +75,11 @@ public abstract class BarScanActivity extends BaseActivity {
 
     private void initScan() {
         // TODO Auto-generated method stub
-        mScanManager = new ScanManager();
-        mScanManager.openScanner();
-        mScanManager.switchOutputMode(0);
-        soundpool = new SoundPool(1, AudioManager.STREAM_NOTIFICATION, 100); // MODE_RINGTONE
-        soundid = soundpool.load("/etc/Scan_new.ogg", 1);
+//        mScanManager = new ScanManager();
+//        mScanManager.openScanner();
+//        mScanManager.switchOutputMode(0);
+//        soundpool = new SoundPool(1, AudioManager.STREAM_NOTIFICATION, 100); // MODE_RINGTONE
+//        soundid = soundpool.load("/etc/Scan_new.ogg", 1);
     }
 
     private void setupView() {
