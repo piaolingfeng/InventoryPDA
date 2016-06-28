@@ -92,6 +92,10 @@
     <string name="box_size">箱 数：</string>
     <string name="box_size_toast">请输入箱数</string>
     <string name="print_num">打印数量：</string>
+    <string name="taking_predictcode">物流号码/揽收单号</string>
+    <string name="scan_logistics">扫描物流号</string>
+    <string name="taking_isExist">该揽收单不存在。</string>
+
 
     <!-- 清点 -->
     <string name="count_task">清点任务</string>

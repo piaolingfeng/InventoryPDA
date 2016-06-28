@@ -18,14 +18,15 @@
             android:layout_height="wrap_content"
             app:layout_textSizePercent="@string/size_6w"
             android:textColor="@color/context_2"
-            android:text="预报号码:"/>
+            android:text="@string/taking_predictcode"/>
         <com.zhy.android.percent.support.PercentRelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
             <com.pda.birdex.pda.widget.ClearEditText
                 android:id="@+id/edt_input"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+
                 android:layout_alignParentLeft="true"
                 android:layout_centerVertical="true"
                 android:imeOptions="actionSearch"
@@ -33,6 +34,7 @@
                 android:singleLine="true"/>
             <ImageView
                 android:id="@+id/img_add"
+                android:visibility="gone"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"

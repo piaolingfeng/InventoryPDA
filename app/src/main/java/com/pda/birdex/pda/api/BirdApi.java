@@ -106,6 +106,10 @@ public class BirdApi {
         getRequest(context, callBackInterface, "taking/check/" + expressNo, tag, showDialog);
     }
 
+    public static void takingOrderNoInfo(Context context,String orderNo, RequestCallBackInterface callBackInterface, String tag, boolean showDialog) {
+        getRequest(context, callBackInterface, "taking/info/" + orderNo, tag, showDialog);
+    }
+
     //登录
     public static void login(Context context,String params, RequestCallBackInterface callBackInterface, String tag, boolean showDialog) {
         getRequest(context, callBackInterface, "user/login/" + params, tag, showDialog);
