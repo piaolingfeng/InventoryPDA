@@ -6,18 +6,27 @@ import android.view.KeyEvent;
 import android.view.inputmethod.EditorInfo;
 import android.widget.TextView;
 
+import com.pda.birdex.pda.MyApplication;
 import com.pda.birdex.pda.R;
+import com.pda.birdex.pda.api.BirdApi;
 import com.pda.birdex.pda.fragments.BaseFragment;
 import com.pda.birdex.pda.fragments.CountMissionBussinessOtherFragment;
 import com.pda.birdex.pda.fragments.CountMissionBussniessFragment;
 import com.pda.birdex.pda.interfaces.BackHandledInterface;
+import com.pda.birdex.pda.interfaces.RequestCallBackInterface;
 import com.pda.birdex.pda.interfaces.TitleBarBackInterface;
+import com.pda.birdex.pda.response.MerchantEntity;
+import com.pda.birdex.pda.response.MerchantListEntity;
+import com.pda.birdex.pda.utils.GsonHelper;
 import com.pda.birdex.pda.utils.HideSoftKeyboardUtil;
 import com.pda.birdex.pda.widget.ClearEditText;
 import com.pda.birdex.pda.widget.TitleView;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
+import org.json.JSONObject;
+
+import java.io.Serializable;
 
 import butterknife.Bind;
 
@@ -25,7 +34,7 @@ import butterknife.Bind;
  * Created by chuming.zhuang on 2016/6/22.
  */
 public class CountMissionActivity extends BarScanActivity implements BaseFragment.OnFragmentInteractionListener, BackHandledInterface {
-
+    String tag = "CountMissionActivity";
     @Bind(R.id.title)
     TitleView title;
     @Bind(R.id.edt_input_business)
@@ -34,6 +43,7 @@ public class CountMissionActivity extends BarScanActivity implements BaseFragmen
     CountMissionBussinessOtherFragment otherFragment;
     CountMissionBussniessFragment bussniessFragment;
 
+    MerchantListEntity merchantListEntity;
     @Override
     public int getbarContentLayoutResId() {
         return R.layout.activity_countmission_layout;
@@ -47,6 +57,7 @@ public class CountMissionActivity extends BarScanActivity implements BaseFragmen
         }else {
             title.setTitle(getString(R.string.count_task));
         }
+        getAllMerchant();//获取商家列表
         title.setBackInterface(new TitleBarBackInterface() {//
             @Override
             public void onBackClick() {
@@ -62,11 +73,15 @@ public class CountMissionActivity extends BarScanActivity implements BaseFragmen
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 if (actionId == EditorInfo.IME_ACTION_SEARCH) {
                     String string = v.getText().toString();
-//                    search(string);
                     ClearEditTextCallBack(string);
-//                    T.showShort(MyApplication.getInstans(), "dddd" + actionId);
                 }
                 return false;
+            }
+        });
+        edt_input_business.setOnClearETChangeListener(new ClearEditText.OnClearETChangeListener() {
+            @Override
+            public void textChange(CharSequence text) {
+                EventBus.getDefault().post(text.toString());
             }
         });
         Bundle b = new Bundle();
@@ -79,7 +94,49 @@ public class CountMissionActivity extends BarScanActivity implements BaseFragmen
         otherFragment.setUIArguments(b);
         bussniessFragment.setUIArguments(b);
         getSupportFragmentManager().beginTransaction().replace(R.id.framelayout, bussniessFragment).commit();
+
     }
+
+    //获取所有商家的任务数量
+    public void getAllMerchant(){
+        BirdApi.getTakingListCountMerchant(this, "all/unTaking", new RequestCallBackInterface() {
+            @Override
+            public void successCallBack(JSONObject object) {
+                try {
+                    merchantListEntity = GsonHelper.getPerson(object.toString(),MerchantListEntity.class);
+                    dealMerchant(merchantListEntity);
+                    Bundle b = new Bundle();
+                    b.putSerializable("merchantList", (Serializable) merchantListEntity.getMerchantCounts());
+                    otherFragment.setUIArguments(b);
+                    bussniessFragment.setUIArguments(b);
+                    EventBus.getDefault().post(merchantListEntity.getMerchantCounts());
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void errorCallBack(JSONObject object) {
+
+            }
+        }, tag, false);
+    }
+
+    //将商家列表跟商家任务数量匹配在一起
+    public void dealMerchant(MerchantListEntity listEntity){
+        MerchantEntity entity = MyApplication.merchantList;
+        for(int i=0;i<listEntity.getMerchantCounts().size();i++){
+            for(int j=0;j<entity.getList().size();j++){
+                if(entity.getList().get(j).getMerchantId().equals(listEntity.getMerchantCounts().get(i).getMerchantId())){
+                    listEntity.getMerchantCounts().get(i).setMerchantName(entity.getList().get(j).getMerchantName());
+                    break;
+                }
+            }
+        }
+
+    }
+
+
 
     @Override
     public ClearEditText getClearEditText() {
@@ -89,6 +146,7 @@ public class CountMissionActivity extends BarScanActivity implements BaseFragmen
     @Override
     public void ClearEditTextCallBack(String code) {
         HideSoftKeyboardUtil.hideSoftKeyboard(this);
+        EventBus.getDefault().post(code);
     }
 
     @Override

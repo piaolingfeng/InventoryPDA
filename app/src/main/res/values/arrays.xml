@@ -39,4 +39,17 @@
         <item>追踪箱号</item>
         <item>拍照</item>
     </string-array>
+
+    <string-array name="merchant_index">
+        <item>格格家</item>
+        <item>美囤</item>
+        <item>网易惠惠</item>
+        <item>懂球帝</item>
+    </string-array>
+
+    <string-array name="tab_list">
+        <item>未开始</item>
+        <item>进行中</item>
+        <item>已完成</item>
+    </string-array>
 </resources>

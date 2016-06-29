@@ -60,10 +60,6 @@
     <string name="count_num">清点单号：</string>
     <string name="last_time">截止时间：</string>
 
-    <string name="not_start">未开始</string>
-    <string name="has_classified">已分类</string>
-    <string name="has_counted">已清点</string>
-    <string name="has_transfer">已交接</string>
     <string name="area">区 域：</string>
     <string name="area_toast">区域不能为空</string>
     <string name="check_map">查看地图</string>
@@ -87,6 +83,8 @@
     <string name="taking_predictcode">物流号码/揽收单号</string>
     <string name="scan_logistics">扫描物流号</string>
     <string name="taking_isExist">该揽收单不存在。</string>
+    <string name="more">更多</string>
+    <string name="commit_success">提交成功</string>
 
 
     <!-- 清点 -->

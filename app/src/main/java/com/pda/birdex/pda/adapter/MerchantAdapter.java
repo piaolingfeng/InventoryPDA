@@ -8,7 +8,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.pda.birdex.pda.R;
-import com.pda.birdex.pda.response.CommonItemEntity;
+import com.pda.birdex.pda.entity.Merchant;
 import com.pda.birdex.pda.interfaces.OnRecycleViewItemClickListener;
 
 import java.util.List;
@@ -17,23 +17,23 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 
 /**
- * Created by chuming.zhuang on 2016/6/16.
+ * Created by chuming.zhuang on 2016/6/28.
  */
-public class IndexAdapter extends RecyclerView.Adapter<IndexAdapter.IndexAdapterHolder> {
+public class MerchantAdapter extends RecyclerView.Adapter<MerchantAdapter.MerchantAdapterHolder> {
 
     // com.pda.birdex.pda.widget.BadgeView 值
-    List<CommonItemEntity> list;
+    List<Merchant> list;
 
     private Context mContext;
     OnRecycleViewItemClickListener onRecycleViewItemClickListener;
 
 
-    public IndexAdapter(Context mContext, List<CommonItemEntity> list) {
+    public MerchantAdapter(Context mContext, List<Merchant> list) {
         this.list = list;
         this.mContext = mContext;
     }
 
-    public void setList(List<CommonItemEntity> list) {
+    public void setList(List<Merchant> list) {
         this.list = list;
     }
 
@@ -42,21 +42,21 @@ public class IndexAdapter extends RecyclerView.Adapter<IndexAdapter.IndexAdapter
     }
 
     @Override
-    public IndexAdapterHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        return new IndexAdapterHolder(LayoutInflater.from(mContext).inflate(R.layout.recyclerview_item_layout, null));
+    public MerchantAdapterHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        return new MerchantAdapterHolder(LayoutInflater.from(mContext).inflate(R.layout.recyclerview_item_layout, null));
     }
 
 
     @Override
-    public void onBindViewHolder(IndexAdapterHolder holder, int position) {
+    public void onBindViewHolder(MerchantAdapterHolder holder, int position) {
         holder.position = position;
-        holder.item_context.setText(list.get(position).getName());
-        if (list.get(position).getCount() != "") {
-            if (Integer.parseInt(list.get(position).getCount()) > 99) {
+        holder.item_context.setText(list.get(position).getMerchantName());
+        if (list.get(position).getCount() != 0) {
+            if (list.get(position).getCount() > 99) {
                 holder.item_bv.setText("99+");
                 holder.item_bv.setVisibility(View.VISIBLE);
             } else
-                holder.item_bv.setText(list.get(position).getCount());
+                holder.item_bv.setText(list.get(position).getCount()+"");
         } else {
             holder.item_bv.setVisibility(View.GONE);
         }
@@ -71,7 +71,7 @@ public class IndexAdapter extends RecyclerView.Adapter<IndexAdapter.IndexAdapter
         return size;
     }
 
-    public class IndexAdapterHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    public class MerchantAdapterHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         int position = 0;
 
@@ -81,7 +81,7 @@ public class IndexAdapter extends RecyclerView.Adapter<IndexAdapter.IndexAdapter
         @Bind(R.id.item_bv)
         com.pda.birdex.pda.widget.BadgeView item_bv;
 
-        public IndexAdapterHolder(View itemView) {
+        public MerchantAdapterHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
             itemView.setOnClickListener(this);

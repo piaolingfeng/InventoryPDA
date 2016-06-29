@@ -7,6 +7,7 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 
 import com.loopj.android.http.AsyncHttpClient;
+import com.pda.birdex.pda.response.MerchantEntity;
 import com.pda.birdex.pda.utils.Constant;
 import com.pda.birdex.pda.utils.CrashHandler;
 
@@ -40,7 +41,7 @@ public class MyApplication extends Application {
 
     // 登录的相关信息 user
 //    public static User user;
-
+    public static MerchantEntity merchantList;//所有商家
 
     // 清除 activity 栈
     public void clearActivities() {

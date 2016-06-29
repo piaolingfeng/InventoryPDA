@@ -8,7 +8,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.pda.birdex.pda.R;
-import com.pda.birdex.pda.entity.CommonItemEntity;
+import com.pda.birdex.pda.entity.Merchant;
 import com.pda.birdex.pda.interfaces.OnRecycleViewItemClickListener;
 import com.pda.birdex.pda.widget.BadgeView;
 
@@ -20,18 +20,22 @@ import butterknife.ButterKnife;
 /**
  * Created by chuming.zhuang on 2016/6/23.
  */
-public class CountMissionItemOtherAdapter extends RecyclerView.Adapter<CountMissionItemOtherAdapter.CountMissionItemAdapterHolder> {
+public class MerchantOtherAdapter extends RecyclerView.Adapter<MerchantOtherAdapter.CountMissionItemAdapterHolder> {
 
     Context mContext;
     OnRecycleViewItemClickListener onRecycleViewItemClickListener;
-    List<CommonItemEntity> list;
+    List<Merchant> list;
 
     public void setOnRecycleViewItemClickListener(OnRecycleViewItemClickListener onRecycleViewItemClickListener) {
         this.onRecycleViewItemClickListener = onRecycleViewItemClickListener;
     }
 
-    public CountMissionItemOtherAdapter(Context mContext, List<CommonItemEntity> list) {
+    public MerchantOtherAdapter(Context mContext, List<Merchant> list) {
         this.mContext = mContext;
+        this.list = list;
+    }
+
+    public void setList(List<Merchant> list) {
         this.list = list;
     }
 
@@ -43,12 +47,13 @@ public class CountMissionItemOtherAdapter extends RecyclerView.Adapter<CountMiss
     @Override
     public void onBindViewHolder(CountMissionItemAdapterHolder holder, int position) {
         holder.position = position;
-        holder.tv_title.setText(list.get(position).getName());
-        if (list.get(position).getCount() != "") {
-            if (Integer.parseInt(list.get(position).getCount()) > 99) {
+        holder.tv_title.setText(list.get(position).getMerchantName());
+        if (list.get(position).getCount() != 0) {
+            if (list.get(position).getCount() > 99) {
                 holder.badge_count.setText("99+");
+                holder.badge_count.setVisibility(View.VISIBLE);
             } else {
-                holder.badge_count.setText(list.get(position).getCount());
+                holder.badge_count.setText(list.get(position).getCount()+"");
             }
         } else {
             holder.badge_count.setVisibility(View.GONE);

@@ -7,13 +7,17 @@ import android.view.KeyEvent;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
 import com.pda.birdex.pda.R;
 import com.pda.birdex.pda.activity.CountBussinessActivity;
-import com.pda.birdex.pda.adapter.CountMissionItemOtherAdapter;
-import com.pda.birdex.pda.entity.CommonItemEntity;
+import com.pda.birdex.pda.adapter.MerchantOtherAdapter;
+import com.pda.birdex.pda.entity.Merchant;
 import com.pda.birdex.pda.interfaces.OnRecycleViewItemClickListener;
 import com.pda.birdex.pda.utils.decoration.DividerItemDecoration;
 
+import org.greenrobot.eventbus.Subscribe;
+
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import butterknife.Bind;
 
@@ -23,9 +27,9 @@ import butterknife.Bind;
 public class CountMissionBussinessOtherFragment extends BaseFragment {
     @Bind(R.id.xrcy)
     XRecyclerView xrcy;
-    CountMissionItemOtherAdapter adapter;
-    List<CommonItemEntity> list = new ArrayList<>();
-    String[] alists = {"aaa", "bbb", "ccc", "ddd", "eee"};
+    MerchantOtherAdapter adapter;
+    List<Merchant> list;//放所有的商家；
+    List<Merchant> now_displayList;
     String title = "";
 
     @Override
@@ -40,18 +44,18 @@ public class CountMissionBussinessOtherFragment extends BaseFragment {
 
     @Override
     public void initializeContentViews() {
-        for (int i = 0; i < alists.length; i++) {
-            CommonItemEntity entity = new CommonItemEntity();
-            entity.setName(alists[i]);
-            entity.setCount("20");
-            list.add(entity);
+        bus.register(this);
+        if (bundle != null) {
+            list = (List<Merchant>) bundle.get("merchantList");
+            now_displayList = list;//获取到数据后显示首页列表
         }
-        adapter = new CountMissionItemOtherAdapter(getContext(), list);
+        adapter = new MerchantOtherAdapter(getContext(), now_displayList);
         adapter.setOnRecycleViewItemClickListener(new OnRecycleViewItemClickListener() {
             @Override
             public void onItemClick(int position) {
                 Intent intent = new Intent(getActivity(), CountBussinessActivity.class);
-                bundle.putString("bussinessCode", "");
+                bundle.putString("MerchantId", now_displayList.get(position).getMerchantId());
+                bundle.putString("merchantName",now_displayList.get(position).getMerchantName());
                 intent.putExtras(bundle);
                 getActivity().startActivity(intent);
             }
@@ -75,9 +79,40 @@ public class CountMissionBussinessOtherFragment extends BaseFragment {
                 DividerItemDecoration.VERTICAL_LIST));
     }
 
-    //通过网络请求获取其他商家信息
-    public void getOtherBussiness() {
 
+    @Subscribe
+    public void onEvent(List<Merchant> list) {
+        this.list = list;//保存所有商家
+        now_displayList = list;//获取到数据后显示首页列表
+        adapter.setList(now_displayList);
+        adapter.notifyDataSetChanged();
+    }
+
+
+    @Subscribe
+    public void onSerchEvent(String text) {
+        now_displayList = search(text, list);
+        adapter.setList(now_displayList);
+        adapter.notifyDataSetChanged();
+    }
+
+    //模糊查询本地列表
+    public List<Merchant> search(String name, List<Merchant> list) {
+        List<Merchant> results = new ArrayList<>();
+        Pattern pattern = Pattern.compile(name);
+        for (int i = 0; i < list.size(); i++) {
+            Matcher matcher = pattern.matcher(list.get(i).getMerchantName());
+            if (matcher.find()) {
+                results.add(list.get(i));
+            }
+        }
+        return results;
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        bus.unregister(this);
     }
 
     @Override

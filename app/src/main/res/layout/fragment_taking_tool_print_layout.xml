@@ -24,7 +24,6 @@
             android:id="@+id/tv_bussiness"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="dfafdsf"
             android:textColor="@color/context_1"
             app:layout_paddingPercent="@string/item_padding_3w"
             app:layout_textSizePercent="@string/size_6w" />
@@ -50,7 +49,6 @@
             android:id="@+id/tv_taking_num"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="dfafdsf"
             android:textColor="@color/context_1"
             app:layout_paddingPercent="@string/item_padding_3w"
             app:layout_textSizePercent="@string/size_6w" />

@@ -6,5 +6,6 @@
         android:id="@+id/xrcy"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:overScrollMode="never"></com.jcodecraeer.xrecyclerview.XRecyclerView>
+        android:overScrollMode="never">
+    </com.jcodecraeer.xrecyclerview.XRecyclerView>
 </LinearLayout>
