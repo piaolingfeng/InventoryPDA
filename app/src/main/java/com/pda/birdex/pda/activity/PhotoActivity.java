@@ -218,15 +218,16 @@ public class PhotoActivity extends BarScanActivity implements View.OnClickListen
                                 String[] spit2 = tail.split("</h1>");
                                 if (spit2.length >= 2) {
                                     String result = spit2[0].trim();
-                                    String str = BirdApi.UPLOADIP + result;
-                                    photoUrl.add(str);
+//                                    String str = BirdApi.UPLOADIP + result;
+                                    photoUrl.add(result);
                                     progress++;
                                     mProgress.setProgress(progress);
                                     sucCounts++;
                                     if (sucCounts == pathList.size()) {
                                         // 调用提交上传图片接口
                                         RequestParams params = new RequestParams();
-                                        params.put("orderNo", lanshouno_et.getText() + "");
+                                        params.put("containerNo", lanshouno_et.getText() + "");
+                                        params.put("isException", exception_cb.isChecked());
                                         params.put("photoUrl", photoUrl);
 
                                         BirdApi.uploadPicSubmit(PhotoActivity.this,params,new RequestCallBackInterface(){
@@ -434,11 +435,11 @@ public class PhotoActivity extends BarScanActivity implements View.OnClickListen
             case R.id.upload:
                 // 如果 upc 为空，照片 list 也为空， 不进行上传操作
                 if (TextUtils.isEmpty(lanshouno_et.getText())) {
-                    T.showShort(PhotoActivity.this, "揽收箱号不能为空");
+                    T.showShort(PhotoActivity.this, getString(R.string.taking_upload_empty));
                     return;
                 }
                 if (pathList.size() == 0) {
-                    T.showShort(PhotoActivity.this, "照片不能为空");
+                    T.showShort(PhotoActivity.this, getString(R.string.taking_upload_empty_p));
                 } else {
                     if (pathList.size() <= 10) {
                         // 进度条
@@ -446,8 +447,8 @@ public class PhotoActivity extends BarScanActivity implements View.OnClickListen
                         // 上传图片
                         uploadPic();
                     } else {
-                        // 限制图片数量在 3-5 之间
-                        T.showShort(PhotoActivity.this, "照片不能超过10张");
+                        // 限制图片数量不大于10张
+                        T.showShort(PhotoActivity.this, getString(R.string.taking_upload_photo_count));
                     }
                 }
                 break;

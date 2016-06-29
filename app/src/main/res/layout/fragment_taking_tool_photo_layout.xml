@@ -35,7 +35,6 @@
                     android:id="@+id/tv_taking_num"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="dfafdsf"
                     android:textColor="@color/context_1"
                     app:layout_paddingPercent="@string/item_padding_3w"
                     app:layout_textSizePercent="@string/size_6w" />
@@ -129,12 +128,29 @@
                 app:layout_paddingTopPercent="@string/item_padding_3w"
                 app:layout_paddingRightPercent="@string/item_padding_3w">
 
-                <com.jcodecraeer.xrecyclerview.XRecyclerView
-                    android:id="@+id/xrcy"
+                <com.pda.birdex.pda.widget.MyGridView
+                    android:id="@+id/gv"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_marginTop="20dp"
+                    android:horizontalSpacing="20dp"
+                    android:listSelector="#00000000"
+                    android:numColumns="4" />
 
-                </com.jcodecraeer.xrecyclerview.XRecyclerView>
+                <CheckBox
+                    android:id="@+id/exception_cb"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:button="@null"
+                    android:drawableLeft="@drawable/checkbox_selector"
+                    android:drawablePadding="10dp"
+                    android:padding="20dp"
+                    android:background="@null"
+                    android:text="标记异常"
+                    android:textColor="#979797" />
 
             </com.zhy.android.percent.support.PercentLinearLayout>
 

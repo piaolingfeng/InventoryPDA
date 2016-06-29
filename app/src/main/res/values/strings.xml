@@ -69,8 +69,15 @@
     <string name="taking_area_empty">\"区域条码\"不能为空</string>
     <string name="taking_bind_suc">绑定成功</string>
     <string name="taking_bind_fal">绑定失败</string>
+    <string name="taking_bind_no">没有绑定容器</string>
+    <string name="taking_bind_count">待绑定订单的容器号</string>
     <string name="taking_upload_suc">上传成功</string>
     <string name="taking_upload_fal">上传失败</string>
+    <string name="taking_submit_suc">提交成功</string>
+    <string name="taking_submit_fal">提交失败</string>
+    <string name="taking_upload_empty">揽收箱号不能为空</string>
+    <string name="taking_upload_empty_p">照片不能为空</string>
+    <string name="taking_upload_photo_count">照片不能超过10张</string>
 
     <!-- 揽收 -->
     <string name="taking_task">揽收任务</string>
@@ -79,6 +86,7 @@
     <string name="taking_print_no">打印揽收单</string>
     <string name="taking_scan_no">扫描容器号(绑定订单/搜索)</string>
     <string name="box_size">箱 数：</string>
+    <string name="box_size_toast">请输入箱数</string>
     <string name="print_num">打印数量：</string>
     <string name="taking_predictcode">物流号码/揽收单号</string>
     <string name="scan_logistics">扫描物流号</string>

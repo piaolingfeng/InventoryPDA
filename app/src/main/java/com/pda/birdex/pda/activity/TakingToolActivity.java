@@ -171,43 +171,29 @@ public class TakingToolActivity extends BaseActivity implements OnRecycleViewIte
             case 1:
                 switch (position) {
                     case 0:
-                        baseFragment = printNumFragment;
-                        break;
-                    case 1:
-                        baseFragment = bindNumFragment;
-                        break;
-                    case 2:
                         baseFragment = bindAreaFragment;
                         break;
-                    case 3:
+                    case 1:
                         baseFragment = clearFragment;
                         break;
-                    case 4:
+                    case 2:
                         baseFragment = photoFragment;
                         break;
                     default:
-                        baseFragment = printNumFragment;
+                        baseFragment = bindAreaFragment;
                 }
                 break;
             case 2:
+            case 3:
                 switch (position) {
                     case 0:
-                        baseFragment = printNumFragment;
-                        break;
-                    case 1:
-                        baseFragment = bindNumFragment;
-                        break;
-                    case 2:
                         baseFragment = bindAreaFragment;
                         break;
-                    case 3:
+                    case 1:
                         baseFragment = clearFragment;
                         break;
-                    case 4:
-                        baseFragment = photoFragment;
-                        break;
                     default:
-                        baseFragment = printNumFragment;
+                        baseFragment = bindAreaFragment;
                 }
                 break;
         }

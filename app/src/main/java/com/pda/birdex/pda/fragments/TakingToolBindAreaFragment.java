@@ -2,9 +2,11 @@ package com.pda.birdex.pda.fragments;
 
 import android.text.TextUtils;
 import android.view.View;
+import android.widget.TextView;
 
 import com.loopj.android.http.RequestParams;
 import com.pda.birdex.pda.R;
+import com.pda.birdex.pda.activity.TakingToolActivity;
 import com.pda.birdex.pda.api.BirdApi;
 import com.pda.birdex.pda.interfaces.RequestCallBackInterface;
 import com.pda.birdex.pda.utils.T;
@@ -25,6 +27,8 @@ public class TakingToolBindAreaFragment extends BarScanBaseFragment implements V
     com.pda.birdex.pda.widget.ClearEditText edt_taking_num;
     @Bind(R.id.edt_area)
     com.pda.birdex.pda.widget.ClearEditText edt_area;
+    @Bind(R.id.tv_taking_num)
+    TextView tv_taking_num;
 
     @Override
     public int getbarContentLayoutResId() {
@@ -33,6 +37,11 @@ public class TakingToolBindAreaFragment extends BarScanBaseFragment implements V
 
     @Override
     public void barInitializeContentViews() {
+
+        if(TakingToolActivity.takingOrderNo != null) {
+            tv_taking_num.setText(TakingToolActivity.takingOrderNo);
+        }
+
         edt_taking_num.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
