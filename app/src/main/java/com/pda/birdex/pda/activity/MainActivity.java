@@ -5,11 +5,18 @@ import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
+import com.pda.birdex.pda.MyApplication;
 import com.pda.birdex.pda.R;
 import com.pda.birdex.pda.adapter.IndexAdapter;
-import com.pda.birdex.pda.entity.CommonItemEntity;
+import com.pda.birdex.pda.api.BirdApi;
 import com.pda.birdex.pda.interfaces.OnRecycleViewItemClickListener;
+import com.pda.birdex.pda.interfaces.RequestCallBackInterface;
+import com.pda.birdex.pda.response.CommonItemEntity;
+import com.pda.birdex.pda.response.MerchantEntity;
+import com.pda.birdex.pda.utils.GsonHelper;
 import com.pda.birdex.pda.widget.TitleView;
+
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -47,7 +54,7 @@ public class MainActivity extends BaseActivity {
         for (int i = 0; i < lists.length; i++) {
             CommonItemEntity entity = new CommonItemEntity();
             entity.setName(lists[i]);
-            entity.setCount("99");
+            entity.setCount("");
             indexList.add(entity);
         }
         adapter = new IndexAdapter(this, indexList);
@@ -77,5 +84,22 @@ public class MainActivity extends BaseActivity {
         });
         rcy.setLayoutManager(new GridLayoutManager(this, 2));
         rcy.setAdapter(adapter);
+        BirdApi.getAllMerchant(this, new RequestCallBackInterface() {//获取商家列表供后续使用
+            @Override
+            public void successCallBack(JSONObject object) {
+                MyApplication.merchantList = GsonHelper.getPerson(object.toString(), MerchantEntity.class);
+            }
+
+            @Override
+            public void errorCallBack(JSONObject object) {
+
+            }
+        },tag,true);
+    }
+
+    @Override
+    protected void onDestroy() {
+        BirdApi.cancelRequestWithTag(tag);
+        super.onDestroy();
     }
 }

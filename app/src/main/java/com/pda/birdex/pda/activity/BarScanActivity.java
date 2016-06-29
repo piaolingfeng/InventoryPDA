@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.device.ScanManager;
-import android.media.AudioManager;
 import android.media.SoundPool;
 import android.os.Vibrator;
 import android.view.Window;

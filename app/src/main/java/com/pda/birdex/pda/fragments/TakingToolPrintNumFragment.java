@@ -1,11 +1,13 @@
 package com.pda.birdex.pda.fragments;
 
+import android.content.Intent;
 import android.view.View;
 import android.widget.TextView;
 
 import com.pda.birdex.pda.R;
+import com.pda.birdex.pda.activity.PrintActivity;
 import com.pda.birdex.pda.activity.TakingToolActivity;
-import com.pda.birdex.pda.entity.TakingOrderNoInfoEntity;
+import com.pda.birdex.pda.response.TakingOrderNoInfoEntity;
 import com.pda.birdex.pda.widget.ClearEditText;
 
 import butterknife.Bind;
@@ -44,7 +46,7 @@ public class TakingToolPrintNumFragment extends BarScanBaseFragment implements V
                 tv_print_num.setText(getString(R.string.taking_num));
             }
         }
-        tv_print_num.setText(TakingToolActivity.takingOrderNo);
+        tv_taking_num.setText(TakingToolActivity.takingOrderNo);
     }
 
     @Override
@@ -60,6 +62,6 @@ public class TakingToolPrintNumFragment extends BarScanBaseFragment implements V
     @OnClick(R.id.btn_commit)
     @Override
     public void onClick(View v) {
-
+        startActivity(new Intent(getActivity(), PrintActivity.class));
     }
 }

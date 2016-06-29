@@ -2,12 +2,12 @@ package com.pda.birdex.pda.activity;
 
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.PersistableBundle;
 import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 
 import com.pda.birdex.pda.R;
 import com.pda.birdex.pda.api.BirdApi;
-import com.pda.birdex.pda.entity.TakingOrderNoInfoEntity;
 import com.pda.birdex.pda.fragments.BaseFragment;
 import com.pda.birdex.pda.fragments.TakingToolBindAreaFragment;
 import com.pda.birdex.pda.fragments.TakingToolBindNumFragment;
@@ -17,6 +17,7 @@ import com.pda.birdex.pda.fragments.TakingToolPrintNumFragment;
 import com.pda.birdex.pda.interfaces.BackHandledInterface;
 import com.pda.birdex.pda.interfaces.OnRecycleViewItemClickListener;
 import com.pda.birdex.pda.interfaces.RequestCallBackInterface;
+import com.pda.birdex.pda.response.TakingOrderNoInfoEntity;
 import com.pda.birdex.pda.utils.GsonHelper;
 import com.pda.birdex.pda.widget.TitleView;
 
@@ -61,6 +62,11 @@ public class TakingToolActivity extends BaseActivity implements OnRecycleViewIte
     }
 
     @Override
+    public void onSaveInstanceState(Bundle outState, PersistableBundle outPersistentState) {
+        super.onSaveInstanceState(outState, outPersistentState);
+    }
+
+    @Override
     public void initializeContentViews() {
         takingOrderNo = getIntent().getStringExtra("takingOrderNo");//
         if(printNumFragment==null)
@@ -85,7 +91,7 @@ public class TakingToolActivity extends BaseActivity implements OnRecycleViewIte
         title.setMenuVisble(true);
         title.setOnSaveItemClickListener(this);//saveMenu clicklistener
         title.setSaveList(currentMenuList);
-        addFragment(currentPosition,false);//初始默认第一个fragment
+//        addFragment(currentPosition,false);//初始默认第一个fragment
         getTakingOrderNoInfo();
     }
 

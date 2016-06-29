@@ -8,8 +8,11 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.pda.birdex.pda.R;
+import com.pda.birdex.pda.entity.ContainerInfo;
 import com.pda.birdex.pda.interfaces.OnRecycleViewItemClickListener;
 import com.zhy.android.percent.support.PercentLinearLayout;
+
+import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -21,13 +24,19 @@ public class CountMissionClearNumAdapter extends RecyclerView.Adapter<CountMissi
 
     Context mContext;
     OnRecycleViewItemClickListener onRecycleViewItemClickListener;
+    List<ContainerInfo> list;
 
     public void setOnRecycleViewItemClickListener(OnRecycleViewItemClickListener onRecycleViewItemClickListener) {
         this.onRecycleViewItemClickListener = onRecycleViewItemClickListener;
     }
 
-    public CountMissionClearNumAdapter(Context mContext){
+    public CountMissionClearNumAdapter(Context mContext,List<ContainerInfo> list){
         this.mContext = mContext;
+        this.list = list;
+    }
+
+    public void setList(List<ContainerInfo> list) {
+        this.list = list;
     }
 
     @Override
@@ -40,11 +49,17 @@ public class CountMissionClearNumAdapter extends RecyclerView.Adapter<CountMissi
         holder.position = position;
         holder.tv_status.setVisibility(View.GONE);
         holder.pll_item.setBackgroundColor(mContext.getResources().getColor(R.color.white));
+        holder.tv_clear_num.setText(list.get(position).getContainerId());
+        holder.tv_last_time.setText(list.get(position).getArea());
+        holder.tv_status.setText(list.get(position).getCount()+"");
     }
 
     @Override
     public int getItemCount() {
-        return 20;
+        int size=0;
+        if(list!=null)
+            size=list.size();
+        return size;
     }
 
     public class CountMissionClearNumAdapterHolder extends RecyclerView.ViewHolder implements View.OnClickListener{

@@ -8,9 +8,14 @@ import android.support.v7.widget.RecyclerView;
 
 import com.pda.birdex.pda.R;
 import com.pda.birdex.pda.adapter.IndexAdapter;
-import com.pda.birdex.pda.entity.CommonItemEntity;
+import com.pda.birdex.pda.api.BirdApi;
 import com.pda.birdex.pda.interfaces.OnRecycleViewItemClickListener;
+import com.pda.birdex.pda.interfaces.RequestCallBackInterface;
+import com.pda.birdex.pda.response.CommonItemEntity;
 import com.pda.birdex.pda.widget.TitleView;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -51,8 +56,11 @@ public class SecondIndexActivity extends BaseActivity {
         for (int i = 0; i < lists.length; i++) {
             CommonItemEntity entity = new CommonItemEntity();
             entity.setName(lists[i]);
-            entity.setCount("1");
+            entity.setCount("");
             indexList.add(entity);
+        }
+        if(getString(R.string.taking).equals(titleStr)) {//揽收需要统计揽收任务总数
+            getAllMission();
         }
         adapter = new IndexAdapter(this,indexList);
         adapter.setOnRecycleViewItemClickListener(new OnRecycleViewItemClickListener() {
@@ -135,4 +143,24 @@ public class SecondIndexActivity extends BaseActivity {
         rcy.setLayoutManager(myGLManager);
         rcy.setAdapter(adapter);
     }
+
+    public void getAllMission(){
+        BirdApi.getTakingListCountMerchant(this, "null/null", new RequestCallBackInterface() {
+            @Override
+            public void successCallBack(JSONObject object) {
+                try {
+                    indexList.get(1).setCount(object.get("count")+"");
+                    adapter.notifyDataSetChanged();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void errorCallBack(JSONObject object) {
+
+            }
+        }, tag, false);
+    }
+
 }

@@ -36,8 +36,14 @@ public class BirdApi {
     private static AsyncHttpClient ahc;
 
     public static void showLoading(Context mContext) {
-        if (loadingDialog == null)
+//        if (loadingDialog == null)
+        if (loadingDialog != null) {
+            if (loadingDialog.getContext() != mContext) {
+                loadingDialog = new SafeProgressDialog(mContext, R.style.semester_dialog);// 创建自定义样式dialog
+            }
+        } else {
             loadingDialog = new SafeProgressDialog(mContext, R.style.semester_dialog);// 创建自定义样式dialog
+        }
 //        loadingDialog.setCancelable(false);// 不可以用“返回键”取消
         loadingDialog.setCanceledOnTouchOutside(false);
         View view = LayoutInflater.from(mContext).inflate(R.layout.dialog_loading, null);
@@ -102,26 +108,47 @@ public class BirdApi {
     }
 
     //查询揽收单结果
-    public static void Check(Context context,String expressNo, RequestCallBackInterface callBackInterface, String tag, boolean showDialog) {
+    public static void Check(Context context, String expressNo, RequestCallBackInterface callBackInterface, String tag, boolean showDialog) {
         getRequest(context, callBackInterface, "taking/check/" + expressNo, tag, showDialog);
     }
 
-    public static void takingOrderNoInfo(Context context,String orderNo, RequestCallBackInterface callBackInterface, String tag, boolean showDialog) {
+    //揽收单详情
+    public static void takingOrderNoInfo(Context context, String orderNo, RequestCallBackInterface callBackInterface, String tag, boolean showDialog) {
         getRequest(context, callBackInterface, "taking/info/" + orderNo, tag, showDialog);
     }
 
+    //获取所有商家
+    public static void getAllMerchant(Context context, RequestCallBackInterface callBackInterface, String tag, boolean showDialog) {
+        getRequest(context, callBackInterface, "merchant", tag, showDialog);
+    }
+
+    //查询商家揽收单列表
+    public static void getMerchant(Context context, String params, RequestCallBackInterface callBackInterface, String tag, boolean showDialog) {
+        getRequest(context, callBackInterface, "taking/list/" + params, tag, showDialog);
+    }
+
+    //统计某商家某类型订单的数量,merchant=null listType=null时统计揽收任务总数,merchant=all listType=all时统计所有商家的所有类型订单数以List 返回，merchant=meitun listType=taking时统计美囤的揽收完成数
+    public static void getTakingListCountMerchant(Context context, String params, RequestCallBackInterface callBackInterface, String tag, boolean showDialog) {
+        getRequest(context, callBackInterface, "taking/list/count/" + params, tag, showDialog);
+    }
+    //合并结果
+    public static void postTakingOrderNum(Context context, RequestParams params, RequestCallBackInterface callBackInterface, String tag, boolean showDialog) {
+        postRequest(context, params, callBackInterface, "taking/merge", tag, showDialog);
+    }
+
+
     //登录
-    public static void login(Context context,String params, RequestCallBackInterface callBackInterface, String tag, boolean showDialog) {
+    public static void login(Context context, String params, RequestCallBackInterface callBackInterface, String tag, boolean showDialog) {
         getRequest(context, callBackInterface, "user/login/" + params, tag, showDialog);
     }
 
     // 揽收：绑定区域
-    public static void takingBind(Context context,RequestParams params, RequestCallBackInterface callBackInterface, String tag, boolean showDialog) {
+    public static void takingBind(Context context, RequestParams params, RequestCallBackInterface callBackInterface, String tag, boolean showDialog) {
         postRequest(context, params, callBackInterface, "taking/lock", tag, showDialog);
     }
 
     // 揽收：打印揽收单
-    public static void takingPrint(Context context,RequestParams params, RequestCallBackInterface callBackInterface, String tag, boolean showDialog) {
+    public static void takingPrint(Context context, RequestParams params, RequestCallBackInterface callBackInterface, String tag, boolean showDialog) {
         postRequest(context, params, callBackInterface, "taking/code/print", tag, showDialog);
     }
 
@@ -139,7 +166,7 @@ public class BirdApi {
 
     // 上传图片
     public static void uploadPic(Context context, RequestParams params, JsonHttpResponseHandler jsonHttpResponseHandler) {
-        if(ahc == null){
+        if (ahc == null) {
             ahc = new AsyncHttpClient();//获取网络连接超时
             ahc.setTimeout(8 * 1000);//设置30秒超时
             ahc.setConnectTimeout(4 * 1000);//设置30秒超时
@@ -150,7 +177,7 @@ public class BirdApi {
     }
 
     // 提交上传图片
-    public static void uploadPicSubmit(Context context,RequestParams params, RequestCallBackInterface callBackInterface, String tag, boolean showDialog) {
+    public static void uploadPicSubmit(Context context, RequestParams params, RequestCallBackInterface callBackInterface, String tag, boolean showDialog) {
         postRequest(context, params, callBackInterface, "photo", tag, showDialog);
     }
 
@@ -170,21 +197,20 @@ public class BirdApi {
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                 super.onSuccess(statusCode, headers, response);
                 if (callBackInterface != null) {
-                    if(response!=null) {
+                    if (response != null) {
                         try {
-                            if("success".equals(response.getString("result"))){
+                            if ("success".equals(response.getString("result"))) {
                                 callBackInterface.successCallBack(response);
-                            }else{
-                                T.showShort(mContext,response.getString("errMsg"));
+                            } else {
+                                T.showShort(mContext, response.getString("errMsg"));
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
-                    }else{
-                        T.showShort(mContext,mContext.getString(R.string.successCallBack_error));
+                    } else {
+                        T.showShort(mContext, mContext.getString(R.string.successCallBack_error));
                     }
-                }
-                else {
+                } else {
                     T.showShort(mContext, mContext.getString(R.string.callBack_error));
                 }
             }
@@ -245,35 +271,39 @@ public class BirdApi {
      */
     public static void getRequest(final Context mContext, final RequestCallBackInterface callBackInterface,
                                   String url, String tag, final boolean showDialog) {
-        showLoading(mContext);
+        if (showDialog)
+            showLoading(mContext);
         JsonHttpResponseHandler jsonHttpResponseHandler = new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                if (showDialog)
+                    hideLoading();
                 super.onSuccess(statusCode, headers, response);
                 if (callBackInterface != null) {
-                    if(response!=null) {
+                    if (response != null) {
                         try {
-                            if("success".equals(response.getString("result"))){
+                            if ("success".equals(response.getString("result"))) {
                                 callBackInterface.successCallBack(response);
-                            }else{
-                                T.showShort(mContext,response.getString("errMsg"));
+                            } else {
+                                T.showShort(mContext, response.getString("errMsg"));
                                 callBackInterface.errorCallBack(response);
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
 
-                    }else{
-                        T.showShort(mContext,mContext.getString(R.string.successCallBack_error));
+                    } else {
+                        T.showShort(mContext, mContext.getString(R.string.successCallBack_error));
                     }
-                }
-                else {
+                } else {
                     T.showShort(mContext, mContext.getString(R.string.callBack_error));
                 }
             }
 
             @Override
             public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+                if (showDialog)
+                    hideLoading();
                 super.onFailure(statusCode, headers, responseString, throwable);
                 T.showShort(mContext, mContext.getString(R.string.request_error));
             }

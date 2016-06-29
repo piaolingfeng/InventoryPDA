@@ -1,4 +1,4 @@
-package com.pda.birdex.pda.entity;
+package com.pda.birdex.pda.response;
 
 /**
  * Created by chuming.zhuang on 2016/6/27.
@@ -22,4 +22,9 @@ public class BaseEntity {
     public void setErrMsg(String errMsg) {
         this.errMsg = errMsg;
     }
+
+    /**
+     * Created by chuming.zhuang on 2016/6/27.
+     */
+
 }
