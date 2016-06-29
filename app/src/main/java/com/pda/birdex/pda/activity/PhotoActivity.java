@@ -226,7 +226,7 @@ public class PhotoActivity extends BarScanActivity implements View.OnClickListen
                                     if (sucCounts == pathList.size()) {
                                         // 调用提交上传图片接口
                                         RequestParams params = new RequestParams();
-                                        params.put("orderNo", lanshouno_et.getText() + "");
+                                        params.put("containerNo", lanshouno_et.getText() + "");
                                         params.put("isException", exception_cb.isChecked());
                                         params.put("photoUrl", photoUrl);
 

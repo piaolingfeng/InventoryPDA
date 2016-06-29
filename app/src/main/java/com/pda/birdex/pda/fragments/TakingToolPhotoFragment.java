@@ -20,12 +20,14 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.CheckBox;
 import android.widget.GridView;
+import android.widget.TextView;
 
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 import com.pda.birdex.pda.MyApplication;
 import com.pda.birdex.pda.R;
 import com.pda.birdex.pda.activity.PhotoShowActivity;
+import com.pda.birdex.pda.activity.TakingToolActivity;
 import com.pda.birdex.pda.adapter.PhotoGVAdapter;
 import com.pda.birdex.pda.api.BirdApi;
 import com.pda.birdex.pda.interfaces.RequestCallBackInterface;
@@ -62,6 +64,10 @@ public class TakingToolPhotoFragment extends BarScanBaseFragment implements View
     // 标记异常
     @Bind(R.id.exception_cb)
     CheckBox exception_cb;
+
+    // 揽收单号
+    @Bind(R.id.tv_taking_num)
+    TextView tv_taking_num;
 
     // 存放照片的 gridview
     @Bind(R.id.gv)
@@ -165,7 +171,7 @@ public class TakingToolPhotoFragment extends BarScanBaseFragment implements View
                                     if (sucCounts == pathList.size()) {
                                         // 调用提交上传图片接口
                                         RequestParams params = new RequestParams();
-                                        params.put("orderNo", edt_taking_num.getText() + "");
+                                        params.put("containerNo", edt_taking_num.getText() + "");
                                         params.put("isException", exception_cb.isChecked());
                                         params.put("photoUrl", photoUrl);
 
@@ -235,6 +241,10 @@ public class TakingToolPhotoFragment extends BarScanBaseFragment implements View
 
     @Override
     public void barInitializeContentViews() {
+
+        if(TakingToolActivity.takingOrderNo != null) {
+            tv_taking_num.setText(TakingToolActivity.takingOrderNo);
+        }
 
         gv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override

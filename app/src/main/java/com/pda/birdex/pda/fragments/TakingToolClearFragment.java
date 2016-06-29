@@ -24,6 +24,7 @@ import com.loopj.android.http.RequestParams;
 import com.pda.birdex.pda.MyApplication;
 import com.pda.birdex.pda.R;
 import com.pda.birdex.pda.activity.PhotoShowActivity;
+import com.pda.birdex.pda.activity.TakingToolActivity;
 import com.pda.birdex.pda.adapter.PhotoGVAdapter;
 import com.pda.birdex.pda.api.BirdApi;
 import com.pda.birdex.pda.interfaces.RequestCallBackInterface;
@@ -208,6 +209,10 @@ public class TakingToolClearFragment extends BarScanBaseFragment implements View
 
     @Override
     public void barInitializeContentViews() {
+        if(TakingToolActivity.takingOrderNo != null) {
+            tv_taking_num.setText(TakingToolActivity.takingOrderNo);
+        }
+
         gv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {

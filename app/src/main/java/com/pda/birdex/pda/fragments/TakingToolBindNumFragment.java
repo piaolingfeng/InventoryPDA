@@ -9,6 +9,7 @@ import android.widget.TextView;
 
 import com.loopj.android.http.RequestParams;
 import com.pda.birdex.pda.R;
+import com.pda.birdex.pda.activity.TakingToolActivity;
 import com.pda.birdex.pda.adapter.BindNumAdapter;
 import com.pda.birdex.pda.api.BirdApi;
 import com.pda.birdex.pda.interfaces.OnRecycleViewItemClickListener;
@@ -52,6 +53,11 @@ public class TakingToolBindNumFragment extends BarScanBaseFragment implements Vi
 
     @Override
     public void barInitializeContentViews() {
+
+        if(TakingToolActivity.takingOrderNo != null) {
+            tv_taking_num.setText(TakingToolActivity.takingOrderNo);
+        }
+
         xrcy.setLayoutManager(new LinearLayoutManager(getContext()));
         adapter = new BindNumAdapter(getContext(), containerList);
         xrcy.setAdapter(adapter);
