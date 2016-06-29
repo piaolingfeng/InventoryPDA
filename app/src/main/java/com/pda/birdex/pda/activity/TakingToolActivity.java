@@ -80,8 +80,6 @@ public class TakingToolActivity extends BaseActivity implements OnRecycleViewIte
         if(clearFragment == null)
             clearFragment = new TakingToolClearFragment();
 
-        String[] tabList = {getString(R.string.not_start), getString(R.string.has_classified),
-                getString(R.string.has_counted), getString(R.string.has_transfer)};//tablayoutName
         tabPosition = getIntent().getIntExtra("statusPosition", 0);
         toolMenu = getResources().getStringArray(R.array.taking_tool_menu);
         for (String title : toolMenu) {

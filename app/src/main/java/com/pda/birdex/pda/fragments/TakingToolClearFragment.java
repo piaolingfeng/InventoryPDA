@@ -27,6 +27,7 @@ import com.pda.birdex.pda.activity.PhotoShowActivity;
 import com.pda.birdex.pda.activity.TakingToolActivity;
 import com.pda.birdex.pda.adapter.PhotoGVAdapter;
 import com.pda.birdex.pda.api.BirdApi;
+import com.pda.birdex.pda.entity.ContainerInfo;
 import com.pda.birdex.pda.interfaces.RequestCallBackInterface;
 import com.pda.birdex.pda.utils.T;
 import com.pda.birdex.pda.widget.ClearEditText;
@@ -68,6 +69,10 @@ public class TakingToolClearFragment extends BarScanBaseFragment implements View
     @Bind(R.id.tv_taking_num)
     TextView tv_taking_num;
 
+    //区域
+    @Bind(R.id.tv_area)
+    TextView tv_area;
+
 
     // 存储照片路径的 list
     private ArrayList<String> pathList = new ArrayList<String>();
@@ -89,6 +94,9 @@ public class TakingToolClearFragment extends BarScanBaseFragment implements View
         return R.layout.fragment_taking_tool_clear_layout;
     }
 
+    // 标记是从揽收、或者 揽收任务 跳转过来的
+    // 1:揽收 2:揽收任务
+    private String from;
 
     // 记录上传图片成功返回的 url条数
     private int sucCounts = 0;
@@ -245,6 +253,19 @@ public class TakingToolClearFragment extends BarScanBaseFragment implements View
 
         PhotoGVAdapter adapter = new PhotoGVAdapter(getContext(), pathList);
         gv.setAdapter(adapter);
+
+        from = bundle.getString("location");
+        if("2".equals(from)){
+            // 从揽收任务过来的 传过来 区域信息
+            Bundle b = getActivity().getIntent().getExtras();
+            if(b != null){
+                ContainerInfo c = (ContainerInfo) b.get("containerInfo");
+                String area = c.getArea();
+                if(!TextUtils.isEmpty(area)){
+                    tv_area.setText(area);
+                }
+            }
+        }
     }
 
 

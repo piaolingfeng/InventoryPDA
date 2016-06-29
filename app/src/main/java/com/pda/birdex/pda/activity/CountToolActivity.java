@@ -61,8 +61,6 @@ public class CountToolActivity extends BaseActivity implements OnRecycleViewItem
             countToolTrackFragment = new CountToolTrackFragment();
         if (countToolBindAreaFragment == null)
             countToolBindAreaFragment = new CountToolBindAreaFragment();
-        String[] tabList = {getString(R.string.not_start), getString(R.string.has_classified),
-                getString(R.string.has_counted), getString(R.string.has_transfer)};//tablayoutName
         tabPosition = getIntent().getIntExtra("statusPosition", 0);
         toolMenu = getResources().getStringArray(R.array.tool_menu);
         for (String title : toolMenu) {
