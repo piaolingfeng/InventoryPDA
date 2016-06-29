@@ -52,4 +52,10 @@
         <item>进行中</item>
         <item>已完成</item>
     </string-array>
+
+    <string-array name="tab_title">
+        <item>揽收容器号</item>
+        <item>区域</item>
+        <item>数量</item>
+    </string-array>
 </resources>

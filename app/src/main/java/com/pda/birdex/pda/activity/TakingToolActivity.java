@@ -7,7 +7,7 @@ import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 
 import com.pda.birdex.pda.R;
-import com.pda.birdex.pda.api.BirdApi;
+import com.pda.birdex.pda.entity.TakingOrder;
 import com.pda.birdex.pda.fragments.BaseFragment;
 import com.pda.birdex.pda.fragments.TakingToolBindAreaFragment;
 import com.pda.birdex.pda.fragments.TakingToolBindNumFragment;
@@ -16,12 +16,7 @@ import com.pda.birdex.pda.fragments.TakingToolPhotoFragment;
 import com.pda.birdex.pda.fragments.TakingToolPrintNumFragment;
 import com.pda.birdex.pda.interfaces.BackHandledInterface;
 import com.pda.birdex.pda.interfaces.OnRecycleViewItemClickListener;
-import com.pda.birdex.pda.interfaces.RequestCallBackInterface;
-import com.pda.birdex.pda.response.TakingOrderNoInfoEntity;
-import com.pda.birdex.pda.utils.GsonHelper;
 import com.pda.birdex.pda.widget.TitleView;
-
-import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,7 +31,6 @@ public class TakingToolActivity extends BaseActivity implements OnRecycleViewIte
     @Bind(R.id.title)
     TitleView title;
 
-    int tabPosition = 0;//跳转进来的tab的位置
     int currentPosition = 0;//当前savetext list的位置
     List<String> currentMenuList = new ArrayList<>();
     String[] toolMenu;
@@ -48,9 +42,10 @@ public class TakingToolActivity extends BaseActivity implements OnRecycleViewIte
     private TakingToolPhotoFragment photoFragment = null;
     private FragmentTransaction transaction;
 
-    public static String takingOrderNo;//揽收单号
 
-    public static TakingOrderNoInfoEntity orderNoInfo;
+    public TakingOrder orderInfo;
+    String location = "1";
+
     @Override
     public void setSelectedFragment(BaseFragment selectedFragment) {
 
@@ -68,21 +63,22 @@ public class TakingToolActivity extends BaseActivity implements OnRecycleViewIte
 
     @Override
     public void initializeContentViews() {
-        takingOrderNo = getIntent().getStringExtra("takingOrderNo");//
-        if(printNumFragment==null)
-            printNumFragment= new TakingToolPrintNumFragment();
-        if(photoFragment == null)
+//        获取传递过来的数据案例
+//        if(getIntent().getExtras()!=null){
+//            orderInfo = (TakingOrder) getIntent().getExtras().get("takingOrder");
+//            location = getIntent().getStringExtra("location");
+//        }
+        if (printNumFragment == null)
+            printNumFragment = new TakingToolPrintNumFragment();
+        if (photoFragment == null)
             photoFragment = new TakingToolPhotoFragment();
-        if(bindAreaFragment==null)
+        if (bindAreaFragment == null)
             bindAreaFragment = new TakingToolBindAreaFragment();
-        if(bindNumFragment == null)
+        if (bindNumFragment == null)
             bindNumFragment = new TakingToolBindNumFragment();
-        if(clearFragment == null)
+        if (clearFragment == null)
             clearFragment = new TakingToolClearFragment();
 
-        String[] tabList = {getString(R.string.not_start), getString(R.string.has_classified),
-                getString(R.string.has_counted), getString(R.string.has_transfer)};//tablayoutName
-        tabPosition = getIntent().getIntExtra("statusPosition", 0);
         toolMenu = getResources().getStringArray(R.array.taking_tool_menu);
         for (String title : toolMenu) {
             currentMenuList.add(title);
@@ -91,47 +87,47 @@ public class TakingToolActivity extends BaseActivity implements OnRecycleViewIte
         title.setMenuVisble(true);
         title.setOnSaveItemClickListener(this);//saveMenu clicklistener
         title.setSaveList(currentMenuList);
-//        addFragment(currentPosition,false);//初始默认第一个fragment
-        getTakingOrderNoInfo();
+        addFragment(currentPosition, false);//初始默认第一个fragment
+//        getTakingOrderNoInfo();
     }
 
-    //通过揽收单详情
-    private void getTakingOrderNoInfo(){
-        BirdApi.takingOrderNoInfo(this, takingOrderNo, new RequestCallBackInterface() {
-            @Override
-            public void successCallBack(JSONObject object) {
-                orderNoInfo = GsonHelper.getPerson(object.toString(), TakingOrderNoInfoEntity.class);
-                addFragment(currentPosition,true);//初始默认第一个fragment
-            }
-
-            @Override
-            public void errorCallBack(JSONObject object) {
-
-            }
-        },tag,true);
-    }
+//    //通过揽收单详情
+//    private void getTakingOrderNoInfo(){
+//        BirdApi.takingOrderNoInfo(this, takingOrderNo, new RequestCallBackInterface() {
+//            @Override
+//            public void successCallBack(JSONObject object) {
+//                orderNoInfo = GsonHelper.getPerson(object.toString(), TakingOrderNoInfoEntity.class);
+//                addFragment(currentPosition,true);//初始默认第一个fragment
+//            }
+//
+//            @Override
+//            public void errorCallBack(JSONObject object) {
+//
+//            }
+//        },tag,true);
+//    }
 
     //处理save list
     private void dealToolMenuList() {
-        switch (tabPosition) {
-            case 0://未开始
-                currentPosition = 0;
-                title.setTitle(currentMenuList.get(0));
-                break;
-            case 1://已分类
-                currentPosition = 1;
-                title.setTitle(currentMenuList.get(2));
-                currentMenuList.remove(toolMenu[0]);
-                currentMenuList.remove(toolMenu[1]);
-                break;
-            case 2://已清点/已交接
-            case 3:
-                currentPosition = 0;
-                currentMenuList.remove(toolMenu[0]);
-                currentMenuList.remove(toolMenu[1]);
-                currentMenuList.remove(toolMenu[3]);
-                break;
-        }
+//        switch (tabPosition) {
+//            case 0://未开始
+//                currentPosition = 0;
+//                title.setTitle(currentMenuList.get(0));
+//                break;
+//            case 1://已分类
+//                currentPosition = 1;
+//                title.setTitle(currentMenuList.get(2));
+//                currentMenuList.remove(toolMenu[0]);
+//                currentMenuList.remove(toolMenu[1]);
+//                break;
+//            case 2://已清点/已交接
+//            case 3:
+//                currentPosition = 0;
+//                currentMenuList.remove(toolMenu[0]);
+//                currentMenuList.remove(toolMenu[1]);
+//                currentMenuList.remove(toolMenu[3]);
+//                break;
+//        }
         title.setTitle(currentMenuList.get(currentPosition));
     }
 
@@ -146,56 +142,24 @@ public class TakingToolActivity extends BaseActivity implements OnRecycleViewIte
         else
             transaction = getSupportFragmentManager().beginTransaction();
         hideFragment();
-        switch (tabPosition) {
+        switch (position) {
             case 0:
-                switch (position) {
-                    case 0:
-                        baseFragment = printNumFragment;
-                        break;
-                    case 1:
-                        baseFragment = bindNumFragment;
-                        break;
-                    case 2:
-                        baseFragment = bindAreaFragment;
-                        break;
-                    case 3:
-                        baseFragment = clearFragment;
-                        break;
-                    case 4:
-                        baseFragment = photoFragment;
-                        break;
-                    default:
-                        baseFragment = printNumFragment;
-                }
+                baseFragment = printNumFragment;
                 break;
             case 1:
-                switch (position) {
-                    case 0:
-                        baseFragment = bindAreaFragment;
-                        break;
-                    case 1:
-                        baseFragment = clearFragment;
-                        break;
-                    case 2:
-                        baseFragment = photoFragment;
-                        break;
-                    default:
-                        baseFragment = bindAreaFragment;
-                }
+                baseFragment = bindNumFragment;
                 break;
             case 2:
-            case 3:
-                switch (position) {
-                    case 0:
-                        baseFragment = bindAreaFragment;
-                        break;
-                    case 1:
-                        baseFragment = clearFragment;
-                        break;
-                    default:
-                        baseFragment = bindAreaFragment;
-                }
+                baseFragment = bindAreaFragment;
                 break;
+            case 3:
+                baseFragment = clearFragment;
+                break;
+            case 4:
+                baseFragment = photoFragment;
+                break;
+            default:
+                baseFragment = printNumFragment;
         }
         Log.e("android", transaction.isEmpty() + "");
         if (!baseFragment.isAdded())

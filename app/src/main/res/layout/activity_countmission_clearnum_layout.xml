@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.zhy.android.percent.support.PercentLinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<com.zhy.android.percent.support.PercentRelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -10,9 +10,12 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
+
     <android.support.design.widget.CoordinatorLayout xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:layout_above="@+id/pll_item"
+        android:layout_below="@+id/title">
 
         <android.support.design.widget.AppBarLayout
             android:layout_width="match_parent"
@@ -61,7 +64,7 @@
                         android:id="@+id/tv_last_time"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        app:layout_textSizePercent="@string/size_6w" />
+                        app:layout_textSizePercent="@string/size_5w" />
                 </com.zhy.android.percent.support.PercentLinearLayout>
 
                 <com.zhy.android.percent.support.PercentRelativeLayout
@@ -86,7 +89,6 @@
                         android:layout_centerVertical="true"
                         android:layout_toRightOf="@+id/operate_vessl"
                         android:gravity="center"
-                        android:text="eee"
                         android:textColor="@color/red"
                         app:layout_textSizePercent="10%w" />
 
@@ -153,11 +155,13 @@
     </android.support.design.widget.CoordinatorLayout>
 
     <com.zhy.android.percent.support.PercentRelativeLayout
+        android:id="@+id/pll_item"
         android:layout_width="match_parent"
-        android:layout_height="100dp">
+        android:layout_height="100dp"
+        android:layout_alignParentBottom="true">
 
         <Button
-            android:id="@+id/btn_unbind"
+            android:id="@+id/btn_commit"
             android:layout_width="200dp"
             android:layout_height="50dp"
             android:layout_alignParentBottom="true"
@@ -168,4 +172,4 @@
             app:layout_marginBottomPercent="@string/size_5w"
             app:layout_textSizePercent="@string/size_6w" />
     </com.zhy.android.percent.support.PercentRelativeLayout>
-</com.zhy.android.percent.support.PercentLinearLayout>
+</com.zhy.android.percent.support.PercentRelativeLayout>

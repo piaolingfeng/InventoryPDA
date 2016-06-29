@@ -1,9 +1,11 @@
 package com.pda.birdex.pda.entity;
 
+import java.io.Serializable;
+
 /**
  * Created by chuming.zhuang on 2016/6/27.
  */
-public class Person {//商家
+public class Person implements Serializable{//商家
     String org = "";//": "string",商家
     String co = "";//": "string",用户编码
     String name = "";//": "string"收件人姓名

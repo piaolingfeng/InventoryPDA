@@ -1,6 +1,7 @@
 package com.pda.birdex.pda.activity;
 
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.design.widget.TabLayout.OnTabSelectedListener;
 import android.support.v7.widget.LinearLayoutManager;
@@ -71,6 +72,7 @@ public class CountMissionClearNumActivity extends BarScanActivity implements OnT
     @Bind(R.id.edt_taking_scan_no)
     ClearEditText edt_taking_scan_no;
 
+
     CountMissionClearNumAdapter adapter;
     TakingOrderNoInfoEntity orderNoInfoEntity;
     List<ContainerInfo> list;
@@ -94,7 +96,6 @@ public class CountMissionClearNumActivity extends BarScanActivity implements OnT
         HeadName = getIntent().getStringExtra("HeadName");
         takingOrderNum = getIntent().getStringExtra("OrderNum");
         tv_count_num.setText(takingOrderNum);//揽收单号/清点单号
-
         if (getResources().getString(R.string.taking).equals(HeadName)) {//揽收
             tv_name_count_num.setText(getString(R.string.tv_taking_num));
             btn_count_print_no.setText(getString(R.string.taking_print_no));
@@ -110,10 +111,10 @@ public class CountMissionClearNumActivity extends BarScanActivity implements OnT
                 return false;
             }
         });
-        tv_status.setVisibility(View.GONE);//隐藏状态栏
+//        tv_status.setVisibility(View.GONE);//隐藏状态栏
 
-        xrcy.setLoadingMoreEnabled(true);
-        xrcy.setPullRefreshEnabled(false);
+        xrcy.setLoadingMoreEnabled(false);
+        xrcy.setPullRefreshEnabled(true);
         xrcy.setLoadingListener(this);//加载监听器
         xrcy.setLayoutManager(new LinearLayoutManager(this));
         xrcy.setLoadingMoreProgressStyle(ProgressStyle.SquareSpin);//上拉加载类型
@@ -122,10 +123,11 @@ public class CountMissionClearNumActivity extends BarScanActivity implements OnT
 
         xrcy.setAdapter(adapter);
 
+        String[] tabTitle = getResources().getStringArray(R.array.tab_title);
+        tv_clear_num.setText(tabTitle[0]);
+        tv_last_time.setText(tabTitle[1]);
+        tv_status.setText(tabTitle[2]);
         String[] tabList = getResources().getStringArray(R.array.tab_list);
-        tv_clear_num.setText(tabList[0]);
-        tv_last_time.setText(tabList[1]);
-        tv_status.setText(tabList[2]);
         //添加3种分类
         for (int i = 0; i < tabList.length; i++) {
             View view = LayoutInflater.from(this).inflate(R.layout.item_tab_layout, null);
@@ -138,13 +140,23 @@ public class CountMissionClearNumActivity extends BarScanActivity implements OnT
         getTakingOrderDetail();//通过揽收单号获取揽收单详情
     }
 
+    //处理
     private void dealDetail() {
         tv_last_time.setText(orderNoInfoEntity.getDetail().getBaseInfo().getBaseInfo().getDeadLine());
         tv_operate_vessl.setText(orderNoInfoEntity.getDetail().getContainerList().size() + "");
         list = orderNoInfoEntity.getDetail().getContainerList();
+        unassignedList = new ArrayList<>();
+        doneList = new ArrayList<>();
+        assignedList = new ArrayList<>();
         for (int i = 0; i < list.size(); i++) {
-            if (!StringUtils.isEmpty(list.get(i).getArea()) && list.get(i).getCount() > 0) {
-
+            if (!StringUtils.isEmpty(list.get(i).getArea()) && list.get(i).getCount() > 0) {//已完成
+                doneList.add(list.get(i));
+            } else {
+                if (!StringUtils.isEmpty(list.get(i).getArea())) {//进行中
+                    assignedList.add(list.get(i));
+                } else {//未开始
+                    unassignedList.add(list.get(i));
+                }
             }
         }
         switch (tablayout.getSelectedTabPosition()) {
@@ -166,13 +178,14 @@ public class CountMissionClearNumActivity extends BarScanActivity implements OnT
         BirdApi.takingOrderNoInfo(this, takingOrderNum, new RequestCallBackInterface() {
             @Override
             public void successCallBack(JSONObject object) {
+                xrcy.refreshComplete();
                 orderNoInfoEntity = GsonHelper.getPerson(object.toString(), TakingOrderNoInfoEntity.class);
                 dealDetail();
             }
 
             @Override
             public void errorCallBack(JSONObject object) {
-
+                xrcy.refreshComplete();
             }
         }, tag, true);
     }
@@ -190,15 +203,19 @@ public class CountMissionClearNumActivity extends BarScanActivity implements OnT
 
     @Override
     public void onTabSelected(TabLayout.Tab tab) {
-        T.showShort(CountMissionClearNumActivity.this, "");
+//        T.showShort(CountMissionClearNumActivity.this, "");
         switch (tab.getPosition()) {
             case 0:
+                adapter.setList(unassignedList);
                 break;
             case 1:
+                adapter.setList(assignedList);
                 break;
             case 2:
+                adapter.setList(doneList);
                 break;
         }
+        adapter.notifyDataSetChanged();
     }
 
     @Override
@@ -213,7 +230,7 @@ public class CountMissionClearNumActivity extends BarScanActivity implements OnT
 
     @Override
     public void onRefresh() {
-
+        getTakingOrderDetail();
     }
 
     @Override
@@ -223,12 +240,28 @@ public class CountMissionClearNumActivity extends BarScanActivity implements OnT
 
     @Override
     public void onItemClick(int position) {
-        if (tablayout.getSelectedTabPosition() != 2) {
-            if (getResources().getString(R.string.taking).equals(HeadName)) {//揽收
-                Intent intent = new Intent(this, TakingToolActivity.class);
-                intent.putExtra("statusPosition", tablayout.getSelectedTabPosition());
-                startActivity(intent);
-            } else {
+        if (getResources().getString(R.string.taking).equals(HeadName)) {//揽收
+            Intent intent = new Intent(this, TakingToolActivity.class);
+            intent.putExtra("location", "2");//揽收任务
+            Bundle b = new Bundle();
+            b.putSerializable("orderNoInfoEntity",orderNoInfoEntity);
+            switch (tablayout.getSelectedTabPosition()){
+                case 0:
+                    b.putSerializable("containerInfo", unassignedList.get(position));
+                    intent.putExtras(b);
+                    break;
+                case 1:
+                    b.putSerializable("containerInfo", assignedList.get(position));
+                    intent.putExtras(b);
+                    break;
+                case 2:
+                    b.putSerializable("containerInfo", doneList.get(position));
+                    intent.putExtras(b);
+                    break;
+            }
+            startActivity(intent);
+        } else {
+            if (tablayout.getSelectedTabPosition() != 2) {
                 Intent intent = new Intent(this, CountToolActivity.class);
                 intent.putExtra("statusPosition", tablayout.getSelectedTabPosition());
                 startActivity(intent);

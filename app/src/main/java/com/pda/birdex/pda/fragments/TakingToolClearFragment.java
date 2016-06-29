@@ -24,10 +24,12 @@ import com.loopj.android.http.RequestParams;
 import com.pda.birdex.pda.MyApplication;
 import com.pda.birdex.pda.R;
 import com.pda.birdex.pda.activity.PhotoShowActivity;
-import com.pda.birdex.pda.activity.TakingToolActivity;
 import com.pda.birdex.pda.adapter.PhotoGVAdapter;
 import com.pda.birdex.pda.api.BirdApi;
+import com.pda.birdex.pda.entity.ContainerInfo;
+import com.pda.birdex.pda.entity.TakingOrder;
 import com.pda.birdex.pda.interfaces.RequestCallBackInterface;
+import com.pda.birdex.pda.response.TakingOrderNoInfoEntity;
 import com.pda.birdex.pda.utils.T;
 import com.pda.birdex.pda.widget.ClearEditText;
 
@@ -68,6 +70,8 @@ public class TakingToolClearFragment extends BarScanBaseFragment implements View
     @Bind(R.id.tv_taking_num)
     TextView tv_taking_num;
 
+    @Bind(R.id.tv_area)
+    TextView tv_area;
 
     // 存储照片路径的 list
     private ArrayList<String> pathList = new ArrayList<String>();
@@ -84,6 +88,9 @@ public class TakingToolClearFragment extends BarScanBaseFragment implements View
     private final static int COMPRESS_DOWN = 3;
     private final static int PHOTO_SHOW = 4;
 
+    TakingOrder takingOrder;//位置1进来传来的实体
+    TakingOrderNoInfoEntity orderNoInfoEntity;//位置2进来传来的实体
+    ContainerInfo containerInfo;//位置2进来时传进来的item
     @Override
     public int getbarContentLayoutResId() {
         return R.layout.fragment_taking_tool_clear_layout;
@@ -209,8 +216,14 @@ public class TakingToolClearFragment extends BarScanBaseFragment implements View
 
     @Override
     public void barInitializeContentViews() {
-        if(TakingToolActivity.takingOrderNo != null) {
-            tv_taking_num.setText(TakingToolActivity.takingOrderNo);
+        if (getActivity().getIntent().getExtras().getString("location").equals("1")) {
+            takingOrder = (TakingOrder) getActivity().getIntent().getExtras().get("takingOrder");
+            tv_taking_num.setText(takingOrder.getBaseInfo().getTakingOrderNo());
+        } else {//打印数量
+            orderNoInfoEntity = (TakingOrderNoInfoEntity) getActivity().getIntent().getExtras().get("orderNoInfoEntity");
+            containerInfo = (ContainerInfo) getActivity().getIntent().getExtras().get("containerInfo");
+            tv_taking_num.setText(orderNoInfoEntity.getDetail().getBaseInfo().getBaseInfo().getTakingOrderNo());
+            tv_area.setText(containerInfo.getArea());
         }
 
         gv.setOnItemClickListener(new AdapterView.OnItemClickListener() {

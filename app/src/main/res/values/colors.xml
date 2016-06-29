@@ -13,7 +13,8 @@
     <color name="context_1">#333333</color>
     <color name="context_2">#666666</color>
     <color name="single_line">#D7D7D7</color>
-
+    //下拉背景颜色
+    <color name="black">#b0000000</color>
     <color name="green">#33FF33</color>
     <color name="red">#FF0000</color>
     <color name="gray">#C0C0C0</color>

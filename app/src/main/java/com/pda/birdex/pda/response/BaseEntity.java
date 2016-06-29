@@ -1,9 +1,11 @@
 package com.pda.birdex.pda.response;
 
+import java.io.Serializable;
+
 /**
  * Created by chuming.zhuang on 2016/6/27.
  */
-public class BaseEntity {
+public class BaseEntity  implements Serializable{
     String result = "";//返回success,表示成功，fail表示失败
     String errMsg = "";
 

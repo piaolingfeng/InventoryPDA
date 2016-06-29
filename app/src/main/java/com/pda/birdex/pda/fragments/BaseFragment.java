@@ -82,6 +82,10 @@ public abstract class BaseFragment extends android.support.v4.app.Fragment {
 //        });
     }
 
+    public Bundle getUIArguments(){
+        return bundle;
+    }
+
     public void showLoading() {
         if (loadingDialog == null)
             loadingDialog = new SafeProgressDialog(getActivity(), R.style.semester_dialog);// 创建自定义样式dialog

@@ -86,7 +86,7 @@ public class CountBussinessActivity extends BaseActivity {
         xrcy.setLayoutManager(new LinearLayoutManager(this));
 //        View view = LayoutInflater.from(this).inflate(R.layout.item_countbussiness_layout,null);
 //        xrcy.addHeaderView(view);
-        adapter = new CountMissionClearAdapter(this,entity.getTakingList());
+        adapter = new CountMissionClearAdapter(this,takingList);
         adapter.setOnRecycleViewItemClickListener(new OnRecycleViewItemClickListener() {
             @Override
             public void onItemClick(int position) {
