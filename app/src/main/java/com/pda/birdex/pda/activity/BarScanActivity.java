@@ -152,8 +152,8 @@ public abstract class BarScanActivity extends BaseActivity {
         // TODO Auto-generated method stub
         super.onResume();
         initScan();
-        if (edt_input != null)
-            edt_input.setText("");
+//        if (edt_input != null)
+//            edt_input.setText("");
         IntentFilter filter = new IntentFilter();
         filter.addAction(SCAN_ACTION);
         registerReceiver(mScanReceiver, filter);

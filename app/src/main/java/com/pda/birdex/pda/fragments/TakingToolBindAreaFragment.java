@@ -78,7 +78,9 @@ public class TakingToolBindAreaFragment extends BarScanBaseFragment implements V
 
     @Override
     public void ClearEditTextCallBack(String code) {
+        if(this.isVisible()) {
 
+        }
     }
 
     @OnClick(R.id.btn_commit)

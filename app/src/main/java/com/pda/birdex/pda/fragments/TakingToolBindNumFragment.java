@@ -118,7 +118,9 @@ public class TakingToolBindNumFragment extends BarScanBaseFragment implements Vi
 
     @Override
     public void ClearEditTextCallBack(String code) {
-        inputEntry(code);
+        if(this.isVisible()) {
+            inputEntry(code);
+        }
     }
 
 
