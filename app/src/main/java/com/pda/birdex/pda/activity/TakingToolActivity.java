@@ -64,10 +64,10 @@ public class TakingToolActivity extends BaseActivity implements OnRecycleViewIte
     @Override
     public void initializeContentViews() {
 //        获取传递过来的数据案例
-//        if(getIntent().getExtras()!=null){
+        if(getIntent().getExtras()!=null){
 //            orderInfo = (TakingOrder) getIntent().getExtras().get("takingOrder");
-//            location = getIntent().getStringExtra("location");
-//        }
+            location = getIntent().getStringExtra("location");
+        }
         if (printNumFragment == null)
             printNumFragment = new TakingToolPrintNumFragment();
         if (photoFragment == null)
@@ -87,6 +87,9 @@ public class TakingToolActivity extends BaseActivity implements OnRecycleViewIte
         title.setMenuVisble(true);
         title.setOnSaveItemClickListener(this);//saveMenu clicklistener
         title.setSaveList(currentMenuList);
+        if("2".equals(location)){//位置2进来的话会传首先显示的fragment的位置
+            currentPosition = getIntent().getExtras().getInt("location_position");
+        }
         addFragment(currentPosition, false);//初始默认第一个fragment
 //        getTakingOrderNoInfo();
     }

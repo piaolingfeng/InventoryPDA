@@ -17,11 +17,10 @@ import android.widget.TextView;
 import com.pda.birdex.pda.R;
 import com.pda.birdex.pda.adapter.CommonSimpleAdapter;
 import com.pda.birdex.pda.api.BirdApi;
-import com.pda.birdex.pda.response.CheckResultEntity;
 import com.pda.birdex.pda.interfaces.OnRecycleViewItemClickListener;
 import com.pda.birdex.pda.interfaces.RequestCallBackInterface;
+import com.pda.birdex.pda.response.CheckResultEntity;
 import com.pda.birdex.pda.utils.GsonHelper;
-import com.pda.birdex.pda.utils.T;
 import com.pda.birdex.pda.widget.ClearEditText;
 import com.pda.birdex.pda.widget.TitleView;
 
@@ -36,8 +35,8 @@ import butterknife.OnClick;
 /**
  * Created by chuming.zhuang on 2016/6/17.
  */
-public class TakingActivity extends BarScanActivity implements View.OnClickListener {
-    String tag = "TakingActivity";
+public class TakingScanActivity extends BarScanActivity implements View.OnClickListener {
+    String tag = "TakingScanActivity";
     @Bind(R.id.title)
     TitleView title;
     @Bind(R.id.edt_input)
@@ -51,9 +50,6 @@ public class TakingActivity extends BarScanActivity implements View.OnClickListe
     @Override
     public void barInitializeContentViews() {
         title.setTitle(getString(R.string.scan_logistics));
-//        for (int i = 0; i < 5; i++) {
-//            saveList.add("aaa" + i);
-//        }
         edt_input.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
@@ -79,13 +75,13 @@ public class TakingActivity extends BarScanActivity implements View.OnClickListe
 
     //扫描回调接口
     @Override
-    public void ClearEditTextCallBack(String code) {
+    public void ClearEditTextCallBack(final String code) {
         BirdApi.Check(this, code, new RequestCallBackInterface() {
             @Override
             public void successCallBack(JSONObject object) {
                 CheckResultEntity entity = GsonHelper.getPerson(object.toString(), CheckResultEntity.class);
                 if (entity.isExist()) {
-                    Intent intent = new Intent(TakingActivity.this, TakingToolActivity.class);
+                    Intent intent = new Intent(TakingScanActivity.this, TakingToolActivity.class);
 
                     Bundle b = new Bundle();
                     b.putSerializable("takingOrder", entity.getOrderInfo());
@@ -93,7 +89,10 @@ public class TakingActivity extends BarScanActivity implements View.OnClickListe
                     intent.putExtras(b);
                     startActivity(intent);
                 } else {
-                    T.showShort(TakingActivity.this, getString(R.string.taking_isExist));
+//                    T.showShort(TakingScanActivity.this, getString(R.string.taking_isExist));
+                    Intent i = new Intent(TakingScanActivity.this,TakingSelectBussinessActivity.class);
+                    i.putExtra("expressNo",code);
+                    startActivity(i);
                 }
             }
 

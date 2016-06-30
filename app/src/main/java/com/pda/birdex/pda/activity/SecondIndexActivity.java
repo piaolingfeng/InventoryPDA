@@ -72,7 +72,7 @@ public class SecondIndexActivity extends BaseActivity {
                 if(getString(R.string.taking).equals(titleStr)){
                     switch (position){
                         case 0:
-                            intent.setClass(SecondIndexActivity.this, TakingActivity.class);
+                            intent.setClass(SecondIndexActivity.this, TakingScanActivity.class);
                             break;
                         case 1:
                             intent.setClass(SecondIndexActivity.this,CountMissionActivity.class);//揽收任务，跟清点任务页面相同

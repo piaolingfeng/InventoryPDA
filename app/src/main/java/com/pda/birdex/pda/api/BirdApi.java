@@ -135,6 +135,10 @@ public class BirdApi {
     public static void postTakingOrderNum(Context context, RequestParams params, RequestCallBackInterface callBackInterface, String tag, boolean showDialog) {
         postRequest(context, params, callBackInterface, "taking/merge", tag, showDialog);
     }
+    //创建无预报揽收
+    public static void postTakingCreat(Context context, RequestParams params, RequestCallBackInterface callBackInterface, String tag, boolean showDialog) {
+        postRequest(context, params, callBackInterface, "taking/create", tag, showDialog);
+    }
 
 
     //登录
@@ -191,7 +195,8 @@ public class BirdApi {
      */
     public static void postRequest(final Context mContext, RequestParams params, final RequestCallBackInterface callBackInterface,
                                    String url, String tag, final boolean showDialog) {
-        showLoading(mContext);
+        if(showDialog)
+            showLoading(mContext);
         JsonHttpResponseHandler jsonHttpResponseHandler = new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {

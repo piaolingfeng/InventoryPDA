@@ -241,7 +241,7 @@ public class CountMissionClearNumActivity extends BarScanActivity implements OnT
     @Override
     public void onItemClick(int position) {
         if (getResources().getString(R.string.taking).equals(HeadName)) {//揽收
-            Intent intent = new Intent(this, TakingToolActivity.class);
+            Intent intent = new Intent(this, TakingCheckActivity.class);
             intent.putExtra("location", "2");//揽收任务
             Bundle b = new Bundle();
             b.putSerializable("orderNoInfoEntity",orderNoInfoEntity);

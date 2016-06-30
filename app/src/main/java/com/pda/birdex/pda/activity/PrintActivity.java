@@ -58,13 +58,13 @@ public class PrintActivity extends BaseActivity {
 
 
     // Name of the connected device
-    private String mConnectedDeviceName = null;
+    private static String mConnectedDeviceName ;
     // String buffer for outgoing messages
     private StringBuffer mOutStringBuffer;
     // Local Bluetooth adapter
     private BluetoothAdapter mBluetoothAdapter = null;
     // Member object for the services
-    private BluetoothService mService = null;
+    private static BluetoothService mService;
 
     @Override
     public int getContentLayoutResId() {
@@ -98,7 +98,8 @@ public class PrintActivity extends BaseActivity {
             startActivityForResult(enableIntent, REQUEST_ENABLE_BT);
             // Otherwise, setup the session
         } else {
-            if (mService == null) setupChat();
+//            if (mService == null) setupChat();
+            setupChat();
         }
     }
 
@@ -151,7 +152,11 @@ public class PrintActivity extends BaseActivity {
         });
 
         // Initialize the BluetoothService to perform bluetooth connections
-        mService = new BluetoothService(this, mHandler);
+        if(mService==null)//让服务只作用一次
+            mService = new BluetoothService(this, mHandler);
+//        else{
+//            title.setSaveText(getString(R.string.title_connected_to) + mConnectedDeviceName);
+//        }
 
         // Initialize the buffer for outgoing messages
         mOutStringBuffer = new StringBuffer("");
@@ -173,7 +178,7 @@ public class PrintActivity extends BaseActivity {
     public void onDestroy() {
         super.onDestroy();
         // Stop the Bluetooth services
-        if (mService != null) mService.stop();
+//        if (mService != null) mService.stop();
         if(D) Log.e(TAG, "--- ON DESTROY ---");
     }
 
