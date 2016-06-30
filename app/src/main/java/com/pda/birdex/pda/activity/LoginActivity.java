@@ -182,6 +182,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                     PreferenceUtils.setPrefString(MyApplication.getInstans(), "token", token);
                     Intent intent = new Intent(MyApplication.getInstans(), MainActivity.class);
                     startActivity(intent);
+                    finish();
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
