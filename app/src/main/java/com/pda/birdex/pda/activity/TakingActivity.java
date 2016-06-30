@@ -3,6 +3,7 @@ package com.pda.birdex.pda.activity;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.drawable.BitmapDrawable;
+import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.KeyEvent;
@@ -16,13 +17,14 @@ import android.widget.TextView;
 import com.pda.birdex.pda.R;
 import com.pda.birdex.pda.adapter.CommonSimpleAdapter;
 import com.pda.birdex.pda.api.BirdApi;
+import com.pda.birdex.pda.response.CheckResultEntity;
 import com.pda.birdex.pda.interfaces.OnRecycleViewItemClickListener;
 import com.pda.birdex.pda.interfaces.RequestCallBackInterface;
+import com.pda.birdex.pda.utils.GsonHelper;
 import com.pda.birdex.pda.utils.T;
 import com.pda.birdex.pda.widget.ClearEditText;
 import com.pda.birdex.pda.widget.TitleView;
 
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
@@ -66,7 +68,7 @@ public class TakingActivity extends BarScanActivity implements View.OnClickListe
     }
 
     //获取暂存列表
-    public void getSaveList(){
+    public void getSaveList() {
 
     }
 
@@ -81,18 +83,17 @@ public class TakingActivity extends BarScanActivity implements View.OnClickListe
         BirdApi.Check(this, code, new RequestCallBackInterface() {
             @Override
             public void successCallBack(JSONObject object) {
-//                T.showShort(TakingActivity.this,"show");
-//               GsonHelper.getPerson(object.toString(),)
-                try {
-                    if(object.getBoolean("isExist")){
-                        Intent intent = new Intent(TakingActivity.this,TakingToolActivity.class);
-                        intent.putExtra("takingOrderNo",object.getString("takingOrderNo"));
-                        startActivity(intent);
-                    }else{
-                        T.showShort(TakingActivity.this, getString(R.string.taking_isExist));
-                    }
-                } catch (JSONException e) {
-                    e.printStackTrace();
+                CheckResultEntity entity = GsonHelper.getPerson(object.toString(), CheckResultEntity.class);
+                if (entity.isExist()) {
+                    Intent intent = new Intent(TakingActivity.this, TakingToolActivity.class);
+
+                    Bundle b = new Bundle();
+                    b.putSerializable("takingOrder", entity.getOrderInfo());
+                    b.putString("location","1");
+                    intent.putExtras(b);
+                    startActivity(intent);
+                } else {
+                    T.showShort(TakingActivity.this, getString(R.string.taking_isExist));
                 }
             }
 
@@ -101,7 +102,7 @@ public class TakingActivity extends BarScanActivity implements View.OnClickListe
 
             }
 
-        },tag,true);
+        }, tag, true);
 //        Intent intent = new Intent(this, TakingDetailActivity.class);
 //        intent.putExtra("code",code);
 //        startActivity(intent);
@@ -157,7 +158,7 @@ public class TakingActivity extends BarScanActivity implements View.OnClickListe
                 if (mPopupWindow.isShowing()) {
                     mPopupWindow.dismiss();
                 }
-                ((ClearEditText)viewID).setText(list.get(position));
+                ((ClearEditText) viewID).setText(list.get(position));
             }
         });
         showPopupWindow(viewID, adapter);

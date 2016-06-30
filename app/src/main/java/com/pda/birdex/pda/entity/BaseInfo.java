@@ -1,9 +1,11 @@
 package com.pda.birdex.pda.entity;
 
+import java.io.Serializable;
+
 /**
  * Created by chuming.zhuang on 2016/6/27.
  */
-public class BaseInfo {
+public class BaseInfo implements Serializable{
     String takingOrderNo = "";//": "string",揽收单号
     String takingType = "";//": "string",揽收类型
     boolean isExist = false;//": true,是否已预报

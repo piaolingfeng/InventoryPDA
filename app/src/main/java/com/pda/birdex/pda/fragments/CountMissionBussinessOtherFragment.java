@@ -47,6 +47,7 @@ public class CountMissionBussinessOtherFragment extends BaseFragment {
         bus.register(this);
         if (bundle != null) {
             list = (List<Merchant>) bundle.get("merchantList");
+            title = bundle.getString("HeadName");
             now_displayList = list;//获取到数据后显示首页列表
         }
         adapter = new MerchantOtherAdapter(getContext(), now_displayList);

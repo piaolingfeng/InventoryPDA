@@ -106,9 +106,8 @@ public class CountMissionActivity extends BarScanActivity implements BaseFragmen
                     merchantListEntity = GsonHelper.getPerson(object.toString(),MerchantListEntity.class);
                     dealMerchant(merchantListEntity);
                     Bundle b = new Bundle();
-                    b.putSerializable("merchantList", (Serializable) merchantListEntity.getMerchantCounts());
-                    otherFragment.setUIArguments(b);
-                    bussniessFragment.setUIArguments(b);
+                    otherFragment.getUIArguments().putSerializable("merchantList", (Serializable) merchantListEntity.getMerchantCounts());
+                    bussniessFragment.getUIArguments().putSerializable("merchantList", (Serializable) merchantListEntity.getMerchantCounts());
                     EventBus.getDefault().post(merchantListEntity.getMerchantCounts());
                 } catch (Exception e) {
                     e.printStackTrace();

@@ -9,11 +9,13 @@ import android.widget.TextView;
 
 import com.loopj.android.http.RequestParams;
 import com.pda.birdex.pda.R;
-import com.pda.birdex.pda.activity.TakingToolActivity;
 import com.pda.birdex.pda.adapter.BindNumAdapter;
 import com.pda.birdex.pda.api.BirdApi;
+import com.pda.birdex.pda.entity.ContainerInfo;
+import com.pda.birdex.pda.entity.TakingOrder;
 import com.pda.birdex.pda.interfaces.OnRecycleViewItemClickListener;
 import com.pda.birdex.pda.interfaces.RequestCallBackInterface;
+import com.pda.birdex.pda.response.TakingOrderNoInfoEntity;
 import com.pda.birdex.pda.utils.T;
 import com.pda.birdex.pda.widget.ClearEditText;
 
@@ -42,7 +44,9 @@ public class TakingToolBindNumFragment extends BarScanBaseFragment implements Vi
 
     @Bind(R.id.tv_taking_num)
     TextView tv_taking_num;
-
+    TakingOrder takingOrder;//位置1进来传来的实体
+    TakingOrderNoInfoEntity orderNoInfoEntity;//位置2进来传来的实体
+    ContainerInfo containerInfo;//位置2进来时传进来的item
     // 容器 list
     private List<String> containerList = new ArrayList<>();
 
@@ -54,8 +58,13 @@ public class TakingToolBindNumFragment extends BarScanBaseFragment implements Vi
     @Override
     public void barInitializeContentViews() {
 
-        if(TakingToolActivity.takingOrderNo != null) {
-            tv_taking_num.setText(TakingToolActivity.takingOrderNo);
+        if (getActivity().getIntent().getExtras().getString("location").equals("1")) {
+            takingOrder = (TakingOrder) getActivity().getIntent().getExtras().get("takingOrder");
+            tv_taking_num.setText(takingOrder.getBaseInfo().getTakingOrderNo());
+        } else {//打印数量
+            orderNoInfoEntity = (TakingOrderNoInfoEntity) getActivity().getIntent().getExtras().get("orderNoInfoEntity");
+            containerInfo = (ContainerInfo) getActivity().getIntent().getExtras().get("containerInfo");
+            tv_taking_num.setText(orderNoInfoEntity.getDetail().getBaseInfo().getBaseInfo().getTakingOrderNo());
         }
 
         xrcy.setLayoutManager(new LinearLayoutManager(getContext()));

@@ -1,12 +1,13 @@
 package com.pda.birdex.pda.entity;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Created by chuming.zhuang on 2016/6/27.
  */
-public class ContainerInfo {
+public class ContainerInfo implements Serializable{
     String containerId = "";//": "string"箱号 ,
     String status = "";//": "string",状态 ,
     String area = "";//": "string",
