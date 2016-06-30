@@ -109,6 +109,10 @@ public class PhotoActivity extends BarScanActivity implements View.OnClickListen
 
     private static final int PIC_COMPRESS = 1;
     private static final int UPC_COMPRESS = 2;
+
+    // 压缩完图片后 重新刷新
+    private static final int COMPRESS_REFLASH = 1001;
+
     private Handler handler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
@@ -120,6 +124,13 @@ public class PhotoActivity extends BarScanActivity implements View.OnClickListen
                     MyTask task = new MyTask();
                     task.execute();
                     break;
+
+                case COMPRESS_REFLASH:
+                    // 压缩完图片后 重新刷新
+                    PhotoGVAdapter adapter = new PhotoGVAdapter(getApplication(), pathList);
+                    gv.setAdapter(adapter);
+                    break;
+
                 case UPC_COMPRESS:
                     // 执行 upc 及 图片urls 上传
                     TelephonyManager TelephonyMgr = (TelephonyManager) getSystemService(TELEPHONY_SERVICE);
@@ -406,8 +417,8 @@ public class PhotoActivity extends BarScanActivity implements View.OnClickListen
                     pathList.add(filePath);
                     MyTask1 myTask1 = new MyTask1();
                     myTask1.execute(filePath);
-                    PhotoGVAdapter adapter = new PhotoGVAdapter(getApplication(), pathList);
-                    gv.setAdapter(adapter);
+//                    PhotoGVAdapter adapter = new PhotoGVAdapter(getApplication(), pathList);
+//                    gv.setAdapter(adapter);
                 }
                 break;
 
@@ -507,6 +518,7 @@ public class PhotoActivity extends BarScanActivity implements View.OnClickListen
         @Override
         protected Void doInBackground(String... params) {
 
+            photoUrl.clear();
             sucCounts = 0;
 
 //            path = params[0];
@@ -543,6 +555,15 @@ public class PhotoActivity extends BarScanActivity implements View.OnClickListen
 //            saveBitmapFile(bt, picPath);
             compress(picPath);
             return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+
+            Message msg = Message.obtain();
+            msg.what = COMPRESS_REFLASH;
+            handler.sendMessage(msg);
         }
     }
 

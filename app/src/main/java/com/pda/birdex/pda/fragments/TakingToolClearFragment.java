@@ -427,6 +427,7 @@ public class TakingToolClearFragment extends BarScanBaseFragment implements View
         @Override
         protected Void doInBackground(String... params) {
 
+            photoUrl.clear();
             sucCounts = 0;
 
 //            path = params[0];
