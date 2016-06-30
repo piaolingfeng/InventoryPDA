@@ -31,6 +31,7 @@ import com.pda.birdex.pda.widget.TitleView;
 import com.zhy.android.percent.support.PercentLinearLayout;
 
 import org.json.JSONObject;
+import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -54,6 +55,8 @@ public class CountMissionClearNumActivity extends BarScanActivity implements OnT
     TextView tv_count_num;//单号
     @Bind(R.id.tv_operate_vessl)
     TextView tv_operate_vessl;//容器
+    @Bind(R.id.tv_title_last_time)
+    TextView tv_title_last_time;
     //tab
     @Bind(R.id.tv_status)
     TextView tv_status;
@@ -142,7 +145,7 @@ public class CountMissionClearNumActivity extends BarScanActivity implements OnT
 
     //处理
     private void dealDetail() {
-        tv_last_time.setText(orderNoInfoEntity.getDetail().getBaseInfo().getBaseInfo().getDeadLine());
+        tv_title_last_time.setText(orderNoInfoEntity.getDetail().getBaseInfo().getBaseInfo().getDeadLine());
         tv_operate_vessl.setText(orderNoInfoEntity.getDetail().getContainerList().size() + "");
         list = orderNoInfoEntity.getDetail().getContainerList();
         unassignedList = new ArrayList<>();

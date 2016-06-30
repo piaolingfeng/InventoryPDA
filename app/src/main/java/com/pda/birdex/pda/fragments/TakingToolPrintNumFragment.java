@@ -63,7 +63,9 @@ public class TakingToolPrintNumFragment extends BarScanBaseFragment implements V
 
     @Override
     public void ClearEditTextCallBack(String code) {
+        if(this.isVisible()) {
 
+        }
     }
 
     @OnClick(R.id.btn_commit)

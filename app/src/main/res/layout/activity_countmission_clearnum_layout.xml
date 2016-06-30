@@ -61,7 +61,7 @@
                         app:layout_textSizePercent="@string/size_6w" />
 
                     <TextView
-                        android:id="@+id/tv_last_time"
+                        android:id="@+id/tv_title_last_time"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         app:layout_textSizePercent="@string/size_5w" />

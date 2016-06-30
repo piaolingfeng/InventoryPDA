@@ -142,6 +142,11 @@ public class BirdApi {
         getRequest(context, callBackInterface, "user/login/" + params, tag, showDialog);
     }
 
+    //通过容器号获取区域信息
+    public static void getArea(Context context, String params, RequestCallBackInterface callBackInterface, String tag, boolean showDialog) {
+        getRequest(context, callBackInterface, "code/info/" + params, tag, showDialog);
+    }
+
     // 揽收：绑定区域
     public static void takingBind(Context context, RequestParams params, RequestCallBackInterface callBackInterface, String tag, boolean showDialog) {
         postRequest(context, params, callBackInterface, "taking/lock", tag, showDialog);
