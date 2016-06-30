@@ -17,7 +17,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:layout_textSizePercent="@string/size_6w"
-            android:textColor="@color/context_2"
+            android:textColor="@color/context_1"
             android:text="@string/taking_predictcode"/>
         <com.zhy.android.percent.support.PercentRelativeLayout
             android:layout_width="match_parent"

@@ -18,6 +18,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/count_bussiness_input"
+            android:textColor="@color/context_1"
             app:layout_textSizePercent="@string/size_6w"/>
         <com.pda.birdex.pda.widget.ClearEditText
             android:id="@+id/edt_input_business"

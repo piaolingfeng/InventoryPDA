@@ -30,18 +30,22 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
-                    app:layout_paddingPercent="@string/margin_5w">
+                    app:layout_paddingTopPercent="@string/margin_5w"
+                    app:layout_paddingRightPercent="@string/margin_5w"
+                    app:layout_paddingLeftPercent="@string/margin_5w">
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/tv_bussiness"
+                        android:textColor="@color/context_1"
                         app:layout_textSizePercent="@string/size_6w" />
 
                     <TextView
                         android:id="@+id/tv_business"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:textColor="@color/context_1"
                         app:layout_marginLeftPercent="@string/margin_2w"
                         app:layout_textSizePercent="@string/size_6w" />
                 </com.zhy.android.percent.support.PercentLinearLayout>
@@ -64,6 +68,7 @@
                             android:gravity="bottom"
                             android:layout_centerVertical="true"
                             android:text="@string/tv_count_mission"
+                            android:textColor="@color/context_1"
                             app:layout_textSizePercent="@string/size_6w"/>
 
                         <TextView

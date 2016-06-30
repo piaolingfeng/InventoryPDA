@@ -39,6 +39,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/count_num"
+                        android:textColor="@color/context_1"
                         app:layout_textSizePercent="@string/size_6w" />
 
                     <TextView
@@ -58,6 +59,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/last_time"
+                        android:textColor="@color/context_1"
                         app:layout_textSizePercent="@string/size_6w" />
 
                     <TextView
@@ -79,6 +81,7 @@
                         android:layout_height="wrap_content"
                         android:layout_centerVertical="true"
                         android:gravity="center"
+                        android:textColor="@color/context_1"
                         android:text="@string/operate_vessl"
                         app:layout_textSizePercent="@string/size_6w" />
 
