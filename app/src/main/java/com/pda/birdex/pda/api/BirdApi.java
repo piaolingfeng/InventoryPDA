@@ -217,6 +217,7 @@ public class BirdApi {
                                 callBackInterface.successCallBack(response);
                             } else {
                                 T.showShort(mContext, response.getString("errMsg"));
+                                callBackInterface.errorCallBack(response);
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();

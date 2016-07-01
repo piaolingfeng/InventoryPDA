@@ -138,7 +138,7 @@ public class TakingToolClearFragment extends BarScanBaseFragment implements View
                         myparams.put("file", file);
                     } catch (FileNotFoundException e) {
                         e.printStackTrace();
-                        mProgress.dismiss();
+                        dismissDialog();
                     }
 
                     BirdApi.uploadPic(MyApplication.getInstans(), myparams, new JsonHttpResponseHandler() {
@@ -148,7 +148,7 @@ public class TakingToolClearFragment extends BarScanBaseFragment implements View
                             try {
                                 if ("false".equals(response.getString("ret"))) {
                                     T.showShort(MyApplication.getInstans(), "上传失败");
-                                    mProgress.dismiss();
+                                    dismissDialog();
                                 }
                             } catch (JSONException e) {
                                 e.printStackTrace();
@@ -158,11 +158,13 @@ public class TakingToolClearFragment extends BarScanBaseFragment implements View
                         @Override
                         public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
                             super.onSuccess(statusCode, headers, response);
+                            dismissDialog();
                         }
 
                         @Override
                         public void onSuccess(int statusCode, Header[] headers, String responseString) {
                             super.onSuccess(statusCode, headers, responseString);
+                            dismissDialog();
                         }
 
                         @Override
@@ -186,11 +188,11 @@ public class TakingToolClearFragment extends BarScanBaseFragment implements View
                                     }
                                 } else {
                                     T.showShort(MyApplication.getInstans(), "上传失败");
-                                    mProgress.dismiss();
+                                    dismissDialog();
                                 }
                             } else {
                                 T.showShort(MyApplication.getInstans(), "上传失败");
-                                mProgress.dismiss();
+                                dismissDialog();
                             }
                         }
 
@@ -198,14 +200,14 @@ public class TakingToolClearFragment extends BarScanBaseFragment implements View
                         public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
                             super.onFailure(statusCode, headers, throwable, errorResponse);
                             T.showShort(MyApplication.getInstans(), "上传失败");
-                            mProgress.dismiss();
+                            dismissDialog();
                         }
 
                         @Override
                         public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONArray errorResponse) {
                             super.onFailure(statusCode, headers, throwable, errorResponse);
                             T.showShort(MyApplication.getInstans(), "上传失败");
-                            mProgress.dismiss();
+                            dismissDialog();
                         }
 
                         @Override
@@ -370,13 +372,15 @@ public class TakingToolClearFragment extends BarScanBaseFragment implements View
         RequestParams params = new RequestParams();
         if ("1".equals(from)) {
             params.put("tid",takingOrder.getBaseInfo().getTid());
+            params.put("owner", takingOrder.getPerson().getCo());
         }else if("2".equals(from)){
             params.put("tid",orderNoInfoEntity.getDetail().getBaseInfo().getBaseInfo().getTid());
+            params.put("owner", orderNoInfoEntity.getDetail().getBaseInfo().getPerson().getCo());
         }
 //        params.put("takingOrderNo", tv_taking_num.getText() + "");
-        List containerList = new ArrayList();
-        containerList.add(edt_taking_num.getText() + "");
-        params.put("containerNo", containerList);
+//        List containerList = new ArrayList();
+//        containerList.add(edt_taking_num.getText() + "");
+        params.put("containerNo", edt_taking_num.getText() + "");
         params.put("count", edt_box_size.getText() + "");
         params.put("photoUrl", photoUrl);
 
@@ -393,17 +397,23 @@ public class TakingToolClearFragment extends BarScanBaseFragment implements View
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-                mProgress.dismiss();
+                dismissDialog();
             }
 
             @Override
             public void errorCallBack(JSONObject object) {
                 T.showShort(getContext(),getString(R.string.taking_upload_fal));
-                mProgress.dismiss();
+                dismissDialog();
             }
         } ,tag,true);
     }
 
+    // 关闭 上传进度条
+    private void dismissDialog(){
+        if(mProgress != null && mProgress.isShowing()){
+            mProgress.dismiss();
+        }
+    }
 
     // 上传图片
     private void uploadPic() {

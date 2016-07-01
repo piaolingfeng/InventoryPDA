@@ -135,7 +135,7 @@ public class TakingToolPhotoFragment extends BarScanBaseFragment implements View
                         myparams.put("file", file);
                     } catch (FileNotFoundException e) {
                         e.printStackTrace();
-                        mProgress.dismiss();
+                        dismissDialog();
                     }
 
                     BirdApi.uploadPic(MyApplication.getInstans(), myparams, new JsonHttpResponseHandler() {
@@ -145,7 +145,7 @@ public class TakingToolPhotoFragment extends BarScanBaseFragment implements View
                             try {
                                 if("false".equals(response.getString("ret"))){
                                     T.showShort(MyApplication.getInstans(), "上传失败");
-                                    mProgress.dismiss();
+                                    dismissDialog();
                                 }
                             } catch (JSONException e) {
                                 e.printStackTrace();
@@ -197,24 +197,24 @@ public class TakingToolPhotoFragment extends BarScanBaseFragment implements View
                                                 } catch (JSONException e) {
                                                     e.printStackTrace();
                                                 }
-                                                mProgress.dismiss();
+                                                dismissDialog();
 
                                             }
 
                                             @Override
                                             public void errorCallBack(JSONObject object) {
                                                 T.showShort(getContext(),getString(R.string.taking_upload_fal));
-                                                mProgress.dismiss();
+                                                dismissDialog();
                                             }
                                         },tag,true);
                                     }
                                 } else {
                                     T.showShort(MyApplication.getInstans(), "上传失败");
-                                    mProgress.dismiss();
+                                    dismissDialog();
                                 }
                             } else {
                                 T.showShort(MyApplication.getInstans(), "上传失败");
-                                mProgress.dismiss();
+                                dismissDialog();
                             }
                         }
 
@@ -222,14 +222,14 @@ public class TakingToolPhotoFragment extends BarScanBaseFragment implements View
                         public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
                             super.onFailure(statusCode, headers, throwable, errorResponse);
                             T.showShort(MyApplication.getInstans(), "上传失败");
-                            mProgress.dismiss();
+                            dismissDialog();
                         }
 
                         @Override
                         public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONArray errorResponse) {
                             super.onFailure(statusCode, headers, throwable, errorResponse);
                             T.showShort(MyApplication.getInstans(), "上传失败");
-                            mProgress.dismiss();
+                            dismissDialog();
                         }
 
                         @Override
@@ -409,6 +409,14 @@ public class TakingToolPhotoFragment extends BarScanBaseFragment implements View
     }
 
 
+    // 关闭 上传进度条
+    private void dismissDialog(){
+        if(mProgress != null && mProgress.isShowing()){
+            mProgress.dismiss();
+        }
+    }
+
+
     class MyTask extends AsyncTask<String, Integer, Void> {
         String path;
 
@@ -541,7 +549,7 @@ public class TakingToolPhotoFragment extends BarScanBaseFragment implements View
 
     @Override
     public ClearEditText getClearEditText() {
-        return null;
+        return edt_taking_num;
     }
 
     // 通过用户编码+容器号 获取区域信息
