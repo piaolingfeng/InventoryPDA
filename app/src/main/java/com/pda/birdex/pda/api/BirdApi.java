@@ -142,7 +142,10 @@ public class BirdApi {
     public static void postTakingCreat(Context context, RequestParams params, RequestCallBackInterface callBackInterface, String tag, boolean showDialog) {
         postRequest(context, params, callBackInterface, "taking/create", tag, showDialog);
     }
-
+    //打印
+    public static void postCodePrint(Context context, RequestParams params, RequestCallBackInterface callBackInterface, String tag, boolean showDialog) {
+        postRequest(context, params, callBackInterface, "code/print", tag, showDialog);
+    }
 
     //登录
     public static void login(Context context, String params, RequestCallBackInterface callBackInterface, String tag, boolean showDialog) {

@@ -111,7 +111,6 @@
                     android:imeOptions="actionSearch"
                     android:singleLine="true"
                     android:hint="@string/co_hint"
-                    android:inputType="number"
                     android:textColor="@color/context_2" />
             </com.zhy.android.percent.support.PercentLinearLayout>
 

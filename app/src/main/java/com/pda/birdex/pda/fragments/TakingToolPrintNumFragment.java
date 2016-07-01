@@ -1,15 +1,21 @@
 package com.pda.birdex.pda.fragments;
 
-import android.content.Intent;
 import android.view.View;
 import android.widget.TextView;
 
+import com.loopj.android.http.RequestParams;
 import com.pda.birdex.pda.R;
-import com.pda.birdex.pda.activity.PrintActivity;
+import com.pda.birdex.pda.api.BirdApi;
 import com.pda.birdex.pda.entity.ContainerInfo;
 import com.pda.birdex.pda.entity.TakingOrder;
+import com.pda.birdex.pda.interfaces.RequestCallBackInterface;
 import com.pda.birdex.pda.response.TakingOrderNoInfoEntity;
 import com.pda.birdex.pda.widget.ClearEditText;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.List;
 
 import butterknife.Bind;
 import butterknife.OnClick;
@@ -27,12 +33,13 @@ public class TakingToolPrintNumFragment extends BarScanBaseFragment implements V
     @Bind(R.id.tv_print_num)
     TextView tv_print_num;
     @Bind(R.id.edt_print_num)
-    TextView edt_print_num;
+    ClearEditText edt_print_num;
     @Bind(R.id.tv_taking_container)
     TextView tv_taking_container;
     TakingOrder takingOrder;//位置1进来传来的实体
     TakingOrderNoInfoEntity orderNoInfoEntity;//位置2进来传来的实体
     ContainerInfo containerInfo;
+
     @Override
     public int getbarContentLayoutResId() {
         return R.layout.fragment_taking_tool_print_layout;
@@ -63,7 +70,7 @@ public class TakingToolPrintNumFragment extends BarScanBaseFragment implements V
 
     @Override
     public void ClearEditTextCallBack(String code) {
-        if(this.isVisible()) {
+        if (this.isVisible()) {
 
         }
     }
@@ -71,6 +78,34 @@ public class TakingToolPrintNumFragment extends BarScanBaseFragment implements V
     @OnClick(R.id.btn_commit)
     @Override
     public void onClick(View v) {
-        startActivity(new Intent(getActivity(), PrintActivity.class));
+//        startActivity(new Intent(getActivity(), PrintActivity.class));
+        RequestParams params = new RequestParams();
+        if (getActivity().getIntent().getExtras().getString("location").equals("1")) {//打印数量
+            params.put("count", Integer.parseInt(edt_print_num.getText().toString()));
+            params.put("owner", takingOrder.getPerson().getCo());
+            params.put("tkNo", takingOrder.getBaseInfo().getTakingOrderNo());
+        } else {
+            params.put("count", 1);
+            params.put("owner", orderNoInfoEntity.getDetail().getBaseInfo().getPerson().getCo());
+            params.put("tkNo", orderNoInfoEntity.getDetail().getBaseInfo().getBaseInfo().getTakingOrderNo());
+        }
+        BirdApi.postCodePrint(getActivity(), params, new RequestCallBackInterface() {
+            @Override
+            public void successCallBack(JSONObject object) {
+                List<String> list = null;
+                try {
+                    list = (List<String>) object.get("list");
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                bus.post(list);
+            }
+
+            @Override
+            public void errorCallBack(JSONObject object) {
+
+            }
+        },tag,true);
+
     }
 }

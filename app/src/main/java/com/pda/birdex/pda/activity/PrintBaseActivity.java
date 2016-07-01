@@ -39,7 +39,7 @@ public abstract class PrintBaseActivity extends BaseActivity {
     public static final String TOAST = "toast";
 
     // Intent request codes
-    private static final int REQUEST_CONNECT_DEVICE = 1;
+    public static final int REQUEST_CONNECT_DEVICE = 1;
     private static final int REQUEST_ENABLE_BT = 2;
 
     // Name of the connected device
@@ -173,7 +173,7 @@ public abstract class PrintBaseActivity extends BaseActivity {
      * @param message  A string of text to send.
      *
      */
-    private void sendMessage(String message){
+    public void sendMessage(String message){
         // Check that we're actually connected before trying anything
         if (mService.getState() != BluetoothService.STATE_CONNECTED) {
             Toast.makeText(this, R.string.not_connected, Toast.LENGTH_SHORT).show();

@@ -21,6 +21,7 @@
     <string name="notempty">用户名或密码不能为空</string>
     <string name="submit">提\t交</string>
     <string name="photo">拍照</string>
+    <string name="index">首页</string>
 
     <string name="head">这里是HeadView</string>
     <string name="pull_to_refresh">下拉刷新</string>

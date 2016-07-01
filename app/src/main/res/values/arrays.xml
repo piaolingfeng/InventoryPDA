@@ -22,8 +22,13 @@
         <item>清点</item>
         <item>出库</item>
         <item>仓库</item>
+        <item>设置</item>
     </string-array>
 
+    <string-array name="setting_list">
+        <item>连接到打印机</item>
+        <item>退出登录</item>
+    </string-array>
     <string-array name="taking_list">
         <item>揽收</item>
         <item>揽收任务</item>

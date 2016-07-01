@@ -50,7 +50,7 @@ public class MainActivity extends BaseActivity {
         takinglists = getResources().getStringArray(R.array.taking_list);
         countToLists = getResources().getStringArray(R.array.count_list);
         title.setBackIvVisble(false);
-        title.setTitle("首页");
+        title.setTitle(getString(R.string.index));
         for (int i = 0; i < lists.length; i++) {
             CommonItemEntity entity = new CommonItemEntity();
             entity.setName(lists[i]);
@@ -63,6 +63,7 @@ public class MainActivity extends BaseActivity {
             public void onItemClick(int position) {
                 Intent intent = new Intent(MainActivity.this, SecondIndexActivity.class);
                 Bundle b = new Bundle();
+                b.putString("name", indexList.get(position).getName());
                 switch (position) {
                     case 0:
                         b.putStringArray("list", takinglists);
@@ -73,11 +74,11 @@ public class MainActivity extends BaseActivity {
                     case 2:
                         break;
                     case 3:
-
-
+                        break;
+                    case 4:
+                        intent.setClass(MainActivity.this,SettingActivity.class);
                         break;
                 }
-                b.putString("name", indexList.get(position).getName());
                 intent.putExtras(b);
                 startActivity(intent);
             }

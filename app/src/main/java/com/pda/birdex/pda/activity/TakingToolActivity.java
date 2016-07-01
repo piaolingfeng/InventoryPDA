@@ -18,6 +18,8 @@ import com.pda.birdex.pda.interfaces.BackHandledInterface;
 import com.pda.birdex.pda.interfaces.OnRecycleViewItemClickListener;
 import com.pda.birdex.pda.widget.TitleView;
 
+import org.greenrobot.eventbus.Subscribe;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,7 +28,7 @@ import butterknife.Bind;
 /**
  * Created by chuming.zhuang on 2016/6/25.
  */
-public class TakingToolActivity extends BaseActivity implements OnRecycleViewItemClickListener, BaseFragment.OnFragmentInteractionListener, BackHandledInterface {
+public class TakingToolActivity extends PrintBaseActivity implements OnRecycleViewItemClickListener, BaseFragment.OnFragmentInteractionListener, BackHandledInterface {
     String tag = "TakingToolActivity";
     @Bind(R.id.title)
     TitleView title;
@@ -52,7 +54,7 @@ public class TakingToolActivity extends BaseActivity implements OnRecycleViewIte
     }
 
     @Override
-    public int getContentLayoutResId() {
+    public int printContentLayoutResId() {
         return R.layout.activity_tool_layout;
     }
 
@@ -62,8 +64,9 @@ public class TakingToolActivity extends BaseActivity implements OnRecycleViewIte
     }
 
     @Override
-    public void initializeContentViews() {
+    public void printInitializeContentViews() {
 //        获取传递过来的数据案例
+//        EventBus.getDefault().register(this);
         if(getIntent().getExtras()!=null){
 //            orderInfo = (TakingOrder) getIntent().getExtras().get("takingOrder");
             location = getIntent().getStringExtra("location");
@@ -92,6 +95,12 @@ public class TakingToolActivity extends BaseActivity implements OnRecycleViewIte
         }
         addFragment(currentPosition, false);//初始默认第一个fragment
 //        getTakingOrderNoInfo();
+    }
+
+
+    @Override
+    public TitleView printTitleView() {
+        return title;
     }
 
 //    //通过揽收单详情
@@ -202,4 +211,14 @@ public class TakingToolActivity extends BaseActivity implements OnRecycleViewIte
             addFragment(position, true);
         }
     }
+
+    @Subscribe
+    public void onEvent(List<String> list){
+        if(list!=null){//发送给打印机
+            for (String i:list){
+                sendMessage(i);
+            }
+        }
+    }
+
 }
