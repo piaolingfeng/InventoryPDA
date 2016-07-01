@@ -174,7 +174,8 @@ public class BirdApi {
         postRequest(context, params, callBackInterface, "code/bindOrder", tag, showDialog);
     }
 
-    public static final String UPLOADIP = "http://192.168.1.223:4869/";
+    //拍照上传地址
+    public static final String UPLOADIP = "http://192.168.1.225:4869/";
 
     // 上传图片
     public static void uploadPic(Context context, RequestParams params, JsonHttpResponseHandler jsonHttpResponseHandler) {
