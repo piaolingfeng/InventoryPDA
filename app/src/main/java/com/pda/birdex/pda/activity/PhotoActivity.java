@@ -148,7 +148,7 @@ public class PhotoActivity extends BarScanActivity implements View.OnClickListen
                             try {
                                 if (response.getString("code").equals("0")) {
                                     T.showShort(MyApplication.getInstans(), "条形码上传成功");
-                                    mProgress.dismiss();
+                                    dismissDialog();
                                     clearList();
                                 } else {
                                     T.showShort(PhotoActivity.this, response.getString("message"));
@@ -162,21 +162,21 @@ public class PhotoActivity extends BarScanActivity implements View.OnClickListen
                         public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
                             super.onFailure(statusCode, headers, responseString, throwable);
                             T.showShort(MyApplication.getInstans(), "条形码上传失败");
-                            mProgress.dismiss();
+                            dismissDialog();
                         }
 
                         @Override
                         public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONArray errorResponse) {
                             super.onFailure(statusCode, headers, throwable, errorResponse);
                             T.showShort(MyApplication.getInstans(), "条形码上传失败");
-                            mProgress.dismiss();
+                            dismissDialog();
                         }
 
                         @Override
                         public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
                             super.onFailure(statusCode, headers, throwable, errorResponse);
                             T.showShort(MyApplication.getInstans(), "条形码上传失败");
-                            mProgress.dismiss();
+                            dismissDialog();
                         }
                     });
                     break;
@@ -192,7 +192,7 @@ public class PhotoActivity extends BarScanActivity implements View.OnClickListen
                         myparams.put("file", file);
                     } catch (FileNotFoundException e) {
                         e.printStackTrace();
-                        mProgress.dismiss();
+                        dismissDialog();
                     }
 
                     BirdApi.uploadPic(MyApplication.getInstans(), myparams, new JsonHttpResponseHandler() {
@@ -202,7 +202,7 @@ public class PhotoActivity extends BarScanActivity implements View.OnClickListen
                             try {
                                 if("false".equals(response.getString("ret"))){
                                     T.showShort(MyApplication.getInstans(), "上传失败");
-                                    mProgress.dismiss();
+                                    dismissDialog();
                                 }
                             } catch (JSONException e) {
                                 e.printStackTrace();
@@ -254,24 +254,24 @@ public class PhotoActivity extends BarScanActivity implements View.OnClickListen
                                                 } catch (JSONException e) {
                                                     e.printStackTrace();
                                                 }
-                                                mProgress.dismiss();
+                                                dismissDialog();
 
                                             }
 
                                             @Override
                                             public void errorCallBack(JSONObject object) {
                                                 T.showShort(PhotoActivity.this,getString(R.string.taking_upload_fal));
-                                                mProgress.dismiss();
+                                                dismissDialog();
                                             }
                                         },TAG,true);
                                     }
                                 } else {
                                     T.showShort(MyApplication.getInstans(), "上传失败");
-                                    mProgress.dismiss();
+                                    dismissDialog();
                                 }
                             } else {
                                 T.showShort(MyApplication.getInstans(), "上传失败");
-                                mProgress.dismiss();
+                                dismissDialog();
                             }
                         }
 
@@ -279,14 +279,14 @@ public class PhotoActivity extends BarScanActivity implements View.OnClickListen
                         public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
                             super.onFailure(statusCode, headers, throwable, errorResponse);
                             T.showShort(MyApplication.getInstans(), "上传失败");
-                            mProgress.dismiss();
+                            dismissDialog();
                         }
 
                         @Override
                         public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONArray errorResponse) {
                             super.onFailure(statusCode, headers, throwable, errorResponse);
                             T.showShort(MyApplication.getInstans(), "上传失败");
-                            mProgress.dismiss();
+                            dismissDialog();
                         }
 
                         @Override
@@ -510,6 +510,14 @@ public class PhotoActivity extends BarScanActivity implements View.OnClickListen
         mProgress.setCancelable(false);
         mProgress.setMax(pathList.size());
         mProgress.show();
+    }
+
+
+    // 关闭 上传进度条
+    private void dismissDialog(){
+        if(mProgress != null && mProgress.isShowing()){
+            mProgress.dismiss();
+        }
     }
 
     class MyTask extends AsyncTask<String, Integer, Void> {
