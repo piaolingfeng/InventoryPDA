@@ -10,6 +10,7 @@ import android.widget.TextView;
 import com.pda.birdex.pda.R;
 import com.pda.birdex.pda.entity.TakingOrder;
 import com.pda.birdex.pda.interfaces.OnRecycleViewItemClickListener;
+import com.pda.birdex.pda.utils.TimeUtil;
 import com.zhy.android.percent.support.PercentLinearLayout;
 
 import java.util.List;
@@ -48,10 +49,26 @@ public class CountMissionClearAdapter extends RecyclerView.Adapter<CountMissionC
     @Override
     public void onBindViewHolder(CountMissionClearAdapterHolder holder, int position) {
         holder.position = position;
+
         holder.pll_item.setBackgroundColor(mContext.getResources().getColor(R.color.white));
         holder.tv_clear_num.setText(takingOrders.get(position).getBaseInfo().getTakingOrderNo());
-        holder.tv_last_time.setText(takingOrders.get(position).getBaseInfo().getDeadLine());
-        holder.tv_status.setText(takingOrders.get(position).getBaseInfo().getTakingStatus());
+        String time = TimeUtil.long2Date(Long.parseLong(takingOrders.get(position).getBaseInfo().getDeadLine()));
+        holder.tv_last_time.setText(time);
+        switch (takingOrders.get(position).getBaseInfo().getTakingStatus()){
+            case 1://未开始
+                holder.tv_status.setText(mContext.getString(R.string.mission_assign));
+                holder.pll_item.setBackgroundColor(mContext.getResources().getColor(R.color.white));
+                break;
+            case 2:
+            case 3:
+                holder.tv_status.setText(mContext.getString(R.string.mission_excute));
+                holder.pll_item.setBackgroundColor(mContext.getResources().getColor(R.color.green));
+                break;
+            case 4:
+                holder.tv_status.setText(mContext.getString(R.string.mission_close));
+                holder.pll_item.setBackgroundColor(mContext.getResources().getColor(R.color.yellow));
+                break;
+        }
     }
 
     @Override

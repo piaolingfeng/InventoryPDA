@@ -16,8 +16,12 @@ import com.pda.birdex.pda.entity.Merchant;
 import com.pda.birdex.pda.interfaces.RequestCallBackInterface;
 import com.pda.birdex.pda.response.TakingOrderNoInfoEntity;
 import com.pda.birdex.pda.utils.GsonHelper;
+import com.pda.birdex.pda.utils.StringUtils;
+import com.pda.birdex.pda.utils.T;
+import com.pda.birdex.pda.widget.ClearEditText;
 import com.pda.birdex.pda.widget.TitleView;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.List;
@@ -34,9 +38,15 @@ public class TakingSelectBussinessActivity extends BaseActivity implements OnCli
     TitleView title;
     @Bind(R.id.spin_bussiness)
     AppCompatSpinner spin_bussiness;
+    @Bind(R.id.edt_co)
+    ClearEditText edt_co;
+    @Bind(R.id.edt_recivier)
+    ClearEditText edt_recivier;
+
     SpinnerDropAdapter adapter;
     List<Merchant> list;
-    String merchantName="";
+    String merchantId = "";//商家编号
+
     @Override
     public int getContentLayoutResId() {
         return R.layout.activity_select_layout;
@@ -45,15 +55,15 @@ public class TakingSelectBussinessActivity extends BaseActivity implements OnCli
     @Override
     public void initializeContentViews() {
         title.setTitle(getString(R.string.select_bussiness));
-        if(MyApplication.merchantList!=null){
+        if (MyApplication.merchantList != null) {
             list = MyApplication.merchantList.getList();
         }
-        adapter = new SpinnerDropAdapter(list,this);
+        adapter = new SpinnerDropAdapter(list, this);
         spin_bussiness.setAdapter(adapter);
         spin_bussiness.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                merchantName = list.get(position).getMerchantName();
+                merchantId = list.get(position).getMerchantId();
             }
 
             @Override
@@ -70,32 +80,44 @@ public class TakingSelectBussinessActivity extends BaseActivity implements OnCli
     }
 
     //创建无预报揽收
-    private void createTaking(){
+    private void createTaking() {
+        if(StringUtils.isEmpty(edt_co.getText().toString())||StringUtils.isEmpty(edt_recivier.getText().toString())){
+            T.showShort(this,getString(R.string.co_recivier_not));
+            return;
+        }
         RequestParams params = new RequestParams();
-        params.put("createOrderData",merchantName);
+        params.put("expressNo", getIntent().getStringExtra("expressNo"));//快递号
+        params.put("merchant", merchantId);
+        params.put("name", edt_recivier.getText().toString());//收件人姓名
+        params.put("co", edt_co.getText().toString());//用户编号
         BirdApi.postTakingCreat(this, params, new RequestCallBackInterface() {
             @Override
             public void successCallBack(JSONObject object) {
-
+                try {
+                    String tid = object.getString("tid");
+                    getMerchant(tid);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
             }
 
             @Override
             public void errorCallBack(JSONObject object) {
 
             }
-        },tag,true);
+        }, tag, true);
     }
 
-    private void getMerchant(String takingOrderNo){
-        BirdApi.takingOrderNoInfo(this, takingOrderNo, new RequestCallBackInterface() {
+    private void getMerchant(String tid) {
+        BirdApi.takingOrderNoInfo(this, tid, new RequestCallBackInterface() {
             @Override
             public void successCallBack(JSONObject object) {
                 TakingOrderNoInfoEntity entity;
                 entity = GsonHelper.getPerson(object.toString(), TakingOrderNoInfoEntity.class);
-                if(entity!=null){
-                    Intent intent = new Intent(TakingSelectBussinessActivity.this,TakingToolActivity.class);
+                if (entity != null) {
+                    Intent intent = new Intent(TakingSelectBussinessActivity.this, TakingToolActivity.class);
                     Bundle b = new Bundle();
-                    b.putString("location_position","1");
+                    b.putString("location_position", "1");
                     b.putSerializable("takingOrder", entity.getDetail().getBaseInfo());
                     intent.putExtras(b);
                     startActivity(intent);
@@ -107,7 +129,7 @@ public class TakingSelectBussinessActivity extends BaseActivity implements OnCli
             public void errorCallBack(JSONObject object) {
 
             }
-        },tag,true);
+        }, tag, true);
     }
 
     @Override

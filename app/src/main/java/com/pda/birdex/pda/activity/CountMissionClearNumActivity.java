@@ -19,6 +19,7 @@ import com.loopj.android.http.RequestParams;
 import com.pda.birdex.pda.R;
 import com.pda.birdex.pda.adapter.CountMissionClearNumAdapter;
 import com.pda.birdex.pda.api.BirdApi;
+import com.pda.birdex.pda.entity.BaseInfo;
 import com.pda.birdex.pda.entity.ContainerInfo;
 import com.pda.birdex.pda.interfaces.OnRecycleViewItemClickListener;
 import com.pda.birdex.pda.interfaces.RequestCallBackInterface;
@@ -26,12 +27,12 @@ import com.pda.birdex.pda.response.TakingOrderNoInfoEntity;
 import com.pda.birdex.pda.utils.GsonHelper;
 import com.pda.birdex.pda.utils.StringUtils;
 import com.pda.birdex.pda.utils.T;
+import com.pda.birdex.pda.utils.TimeUtil;
 import com.pda.birdex.pda.widget.ClearEditText;
 import com.pda.birdex.pda.widget.TitleView;
 import com.zhy.android.percent.support.PercentLinearLayout;
 
 import org.json.JSONObject;
-import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -84,7 +85,9 @@ public class CountMissionClearNumActivity extends BarScanActivity implements OnT
     List<ContainerInfo> doneList;//已完成列表
 
     String HeadName = "";
+    BaseInfo baseInfo ;
     String takingOrderNum = "";
+
     //    public String []tabList = {getString(R.string.not_start),getString(R.string.has_classified),
 //            getString(R.string.has_counted),getString(R.string.has_transfer)};
 
@@ -97,8 +100,11 @@ public class CountMissionClearNumActivity extends BarScanActivity implements OnT
     public void barInitializeContentViews() {
         title.setTitle(getString(R.string.count_task));
         HeadName = getIntent().getStringExtra("HeadName");
-        takingOrderNum = getIntent().getStringExtra("OrderNum");
-        tv_count_num.setText(takingOrderNum);//揽收单号/清点单号
+        baseInfo = (BaseInfo) getIntent().getExtras().get("baseInfo");
+        if(baseInfo!=null) {
+            takingOrderNum =baseInfo.getTakingOrderNo();
+            tv_count_num.setText(takingOrderNum);//揽收单号/清点单号
+        }
         if (getResources().getString(R.string.taking).equals(HeadName)) {//揽收
             tv_name_count_num.setText(getString(R.string.tv_taking_num));
             btn_count_print_no.setText(getString(R.string.taking_print_no));
@@ -145,7 +151,8 @@ public class CountMissionClearNumActivity extends BarScanActivity implements OnT
 
     //处理
     private void dealDetail() {
-        tv_title_last_time.setText(orderNoInfoEntity.getDetail().getBaseInfo().getBaseInfo().getDeadLine());
+        String time = TimeUtil.long2Date(Long.parseLong(orderNoInfoEntity.getDetail().getBaseInfo().getBaseInfo().getDeadLine()));
+        tv_title_last_time.setText(time);
         tv_operate_vessl.setText(orderNoInfoEntity.getDetail().getContainerList().size() + "");
         list = orderNoInfoEntity.getDetail().getContainerList();
         unassignedList = new ArrayList<>();
@@ -178,7 +185,7 @@ public class CountMissionClearNumActivity extends BarScanActivity implements OnT
 
     //通过揽收单号获取揽收单详情
     private void getTakingOrderDetail() {
-        BirdApi.takingOrderNoInfo(this, takingOrderNum, new RequestCallBackInterface() {
+        BirdApi.takingOrderNoInfo(this, baseInfo.getTid(), new RequestCallBackInterface() {
             @Override
             public void successCallBack(JSONObject object) {
                 xrcy.refreshComplete();

@@ -10,7 +10,7 @@ public class OperationLog implements Serializable{
     String operation = "";//": "string",动作
     String operator = "";//": "string",操作员
     String comment = "";//": "string"备注
-
+    String count ="";//(integer, optional): 数量
     public String getOpterateTime() {
         return opterateTime;
     }
@@ -25,5 +25,9 @@ public class OperationLog implements Serializable{
 
     public String getComment() {
         return comment;
+    }
+
+    public String getCount() {
+        return count;
     }
 }

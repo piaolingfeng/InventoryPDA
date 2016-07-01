@@ -16,6 +16,7 @@
     //下拉背景颜色
     <color name="black">#b0000000</color>
     <color name="green">#33FF33</color>
+    <color name="yellow">#FFFF00</color>
     <color name="red">#FF0000</color>
     <color name="gray">#C0C0C0</color>
 

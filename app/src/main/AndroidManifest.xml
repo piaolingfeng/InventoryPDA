@@ -113,7 +113,7 @@
             android:windowSoftInputMode="adjustUnspecified|stateHidden"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".activity.CountBussinessActivity"
+            android:name=".activity.CountMissionMerchantActivity"
             android:windowSoftInputMode="adjustUnspecified|stateHidden"
             android:screenOrientation="portrait" />
         <activity

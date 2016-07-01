@@ -46,7 +46,8 @@
                         android:id="@+id/tv_count_num"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        app:layout_textSizePercent="@string/size_6w" />
+                        android:singleLine="true"
+                        app:layout_textSizePercent="@string/size_5w_h" />
                 </com.zhy.android.percent.support.PercentLinearLayout>
 
                 <com.zhy.android.percent.support.PercentLinearLayout
@@ -66,7 +67,8 @@
                         android:id="@+id/tv_title_last_time"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        app:layout_textSizePercent="@string/size_5w" />
+                        android:singleLine="true"
+                        app:layout_textSizePercent="@string/size_5w_h" />
                 </com.zhy.android.percent.support.PercentLinearLayout>
 
                 <com.zhy.android.percent.support.PercentRelativeLayout

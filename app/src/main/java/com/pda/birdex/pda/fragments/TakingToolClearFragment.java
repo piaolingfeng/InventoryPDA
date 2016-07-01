@@ -28,7 +28,6 @@ import com.pda.birdex.pda.adapter.PhotoGVAdapter;
 import com.pda.birdex.pda.api.BirdApi;
 import com.pda.birdex.pda.entity.ContainerInfo;
 import com.pda.birdex.pda.entity.TakingOrder;
-import com.pda.birdex.pda.entity.ContainerInfo;
 import com.pda.birdex.pda.interfaces.RequestCallBackInterface;
 import com.pda.birdex.pda.response.TakingOrderNoInfoEntity;
 import com.pda.birdex.pda.utils.T;
@@ -369,7 +368,12 @@ public class TakingToolClearFragment extends BarScanBaseFragment implements View
     // 调用数据提交接口
     private void dataSubmit() {
         RequestParams params = new RequestParams();
-        params.put("takingOrderNo", tv_taking_num.getText() + "");
+        if ("1".equals(from)) {
+            params.put("tid",takingOrder.getBaseInfo().getTid());
+        }else if("2".equals(from)){
+            params.put("tid",orderNoInfoEntity.getDetail().getBaseInfo().getBaseInfo().getTid());
+        }
+//        params.put("takingOrderNo", tv_taking_num.getText() + "");
         List containerList = new ArrayList();
         containerList.add(edt_taking_num.getText() + "");
         params.put("containerNo", containerList);

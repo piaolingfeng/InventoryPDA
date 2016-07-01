@@ -49,9 +49,9 @@ public class MerchantOtherAdapter extends RecyclerView.Adapter<MerchantOtherAdap
         holder.position = position;
         holder.tv_title.setText(list.get(position).getMerchantName());
         if (list.get(position).getCount() != 0) {
+            holder.badge_count.setVisibility(View.VISIBLE);
             if (list.get(position).getCount() > 99) {
                 holder.badge_count.setText("99+");
-                holder.badge_count.setVisibility(View.VISIBLE);
             } else {
                 holder.badge_count.setText(list.get(position).getCount()+"");
             }

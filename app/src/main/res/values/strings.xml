@@ -6,7 +6,7 @@
     <string name="size_5w_h">5.5%w</string>
     <string name="size_10w_h">8.5%w</string>
 
-    <string name="size_6w">7.3%w</string>
+    <string name="size_6w">6.6%w</string>
     <string name="size_5w">4.5%w</string>
     <string name="title_menu_height_percent">12%w</string>
 
@@ -110,6 +110,15 @@
     <string name="operation_history">最近操作纪录：</string>
     <string name="operation_man">操作人：</string>
     <string name="time">时 间：</string>
+    <string name="last_page">已经是最后一页了!</string>
+    <string name="mission_assign">未开始</string>
+    <string name="mission_excute">进行中</string>
+    <string name="mission_close">已完成</string>
+    <string name="recivier">收件人:</string>
+    <string name="recivier_hint">请输入收件人姓名</string>
+    <string name="co">用户编码：</string>
+    <string name="co_hint">请输入用户编码</string>
+    <string name="co_recivier_not">用户编码和收件人不能为空</string>
 
     <!-- 清点 -->
     <string name="count_task">清点任务</string>

@@ -23,6 +23,9 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
+
 /**
  * Created by chuming.zhuang on 2016/3/18.
  * 请求接口
@@ -283,6 +286,13 @@ public class BirdApi {
                                   String url, String tag, final boolean showDialog) {
         if (showDialog)
             showLoading(mContext);
+        String encodedUR="";
+        try {
+            String query = URLEncoder.encode(url, "utf-8");
+            encodedUR = query;
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
         JsonHttpResponseHandler jsonHttpResponseHandler = new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
@@ -333,6 +343,6 @@ public class BirdApi {
             }
         };
         jsonHttpResponseHandler.setTag(tag);
-        get(mContext, url, jsonHttpResponseHandler);
+        get(mContext, encodedUR, jsonHttpResponseHandler);
     }
 }

@@ -42,9 +42,9 @@
 
     <string-array name="merchant_index">
         <item>格格家</item>
-        <item>美囤</item>
-        <item>网易惠惠</item>
-        <item>懂球帝</item>
+        <item>美囤妈妈</item>
+        <item>淘世界</item>
+        <item>笨鸟转运</item>
     </string-array>
 
     <string-array name="tab_list">
@@ -58,4 +58,5 @@
         <item>区域</item>
         <item>数量</item>
     </string-array>
+
 </resources>

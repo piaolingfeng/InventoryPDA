@@ -52,11 +52,12 @@ public class IndexAdapter extends RecyclerView.Adapter<IndexAdapter.IndexAdapter
         holder.position = position;
         holder.item_context.setText(list.get(position).getName());
         if (list.get(position).getCount() != "") {
+            holder.item_bv.setVisibility(View.VISIBLE);
             if (Integer.parseInt(list.get(position).getCount()) > 99) {
                 holder.item_bv.setText("99+");
-                holder.item_bv.setVisibility(View.VISIBLE);
-            } else
+            } else {
                 holder.item_bv.setText(list.get(position).getCount());
+            }
         } else {
             holder.item_bv.setVisibility(View.GONE);
         }

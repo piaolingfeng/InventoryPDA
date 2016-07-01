@@ -52,9 +52,9 @@ public class MerchantAdapter extends RecyclerView.Adapter<MerchantAdapter.Mercha
         holder.position = position;
         holder.item_context.setText(list.get(position).getMerchantName());
         if (list.get(position).getCount() != 0) {
+            holder.item_bv.setVisibility(View.VISIBLE);
             if (list.get(position).getCount() > 99) {
                 holder.item_bv.setText("99+");
-                holder.item_bv.setVisibility(View.VISIBLE);
             } else
                 holder.item_bv.setText(list.get(position).getCount()+"");
         } else {

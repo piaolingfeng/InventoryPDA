@@ -10,6 +10,11 @@ import java.util.List;
  */
 public class MerchantDetailEntity extends BaseEntity {
     List<TakingOrder> takingList = new ArrayList<>();
+    int count=0;
+
+    public int getCount() {
+        return count;
+    }
 
     public List<TakingOrder> getTakingList() {
         return takingList;

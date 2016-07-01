@@ -10,6 +10,8 @@ import java.util.List;
 public class ContainerInfo implements Serializable{
     String containerId = "";//": "string"箱号 ,
     String status = "";//": "string",状态 ,
+    String owner ="";//(string, optional): 容器属主 ,
+    String areaCode ="";//(string, optional): 区域码 ,
     String area = "";//": "string",
     int count=0;// (integer, optional): 箱号 ,
     List<String> photoUrl = new ArrayList<>();//": [
@@ -32,5 +34,13 @@ public class ContainerInfo implements Serializable{
 
     public int getCount() {
         return count;
+    }
+
+    public String getOwner() {
+        return owner;
+    }
+
+    public String getAreaCode() {
+        return areaCode;
     }
 }

@@ -76,7 +76,6 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_alignParentRight="true"
-                            android:text="99"
                             android:textColor="@color/red"
                             app:layout_marginLeftPercent="@string/margin_2w"
                             app:layout_textSizePercent="14%w" />
