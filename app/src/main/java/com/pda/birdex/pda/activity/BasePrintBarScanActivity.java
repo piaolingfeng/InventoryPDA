@@ -52,7 +52,7 @@ public abstract class BasePrintBarScanActivity extends BarScanActivity {
     // Local Bluetooth adapter
     private BluetoothAdapter mBluetoothAdapter = null;
     // Member object for the services
-    private static BluetoothService mService;
+    public static BluetoothService mService;
 
     EventBus bus;
     private TitleView titleView;
