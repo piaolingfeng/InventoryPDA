@@ -89,7 +89,7 @@
         </activity>
 
         <activity
-            android:name=".activity.TakingPrintActivity"
+            android:name=".activity.TakingPrintBarScanActivity"
             android:windowSoftInputMode="adjustUnspecified|stateHidden"
             android:screenOrientation="portrait" />
 
@@ -135,7 +135,7 @@
 
         <activity
             android:name=".activity.TakingToolActivity"
-            android:windowSoftInputMode="adjustPan|stateHidden"
+            android:windowSoftInputMode="adjustPan|stateVisible"
             android:screenOrientation="portrait" />
         <activity
             android:name=".activity.TakingCheckActivity"
@@ -146,7 +146,7 @@
             android:windowSoftInputMode="adjustPan|stateHidden"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".activity.SettingActivity"
+            android:name=".activity.SettingBarScanActivity"
             android:windowSoftInputMode="adjustResize|stateHidden"
             android:screenOrientation="portrait" />
     </application>

@@ -67,6 +67,8 @@ public class TakingToolBindNumFragment extends BarScanBaseFragment implements Vi
 
     @Override
     public void barInitializeContentViews() {
+
+        if (getActivity().getIntent().getExtras().getString("location_position").equals("1")) {
         from = getActivity().getIntent().getExtras().getString("location");
         if ("1".equals(from)) {
             takingOrder = (TakingOrder) getActivity().getIntent().getExtras().get("takingOrder");

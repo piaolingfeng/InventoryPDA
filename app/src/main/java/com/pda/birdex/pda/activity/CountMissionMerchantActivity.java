@@ -66,7 +66,7 @@ public class CountMissionMerchantActivity extends BaseActivity {
 
         if (getResources().getString(R.string.taking).equals(HeadName)) {//揽收清点
             tv_name_count_mission.setText(getResources().getString(R.string.tv_taking_mission));
-            tv_clear_num.setText(getResources().getString(R.string.tv_taking_num));
+            tv_clear_num.setText(getResources().getString(R.string.tv_taking_num_1));
             getBussinessMission("unTaking");
         } else {
 //            getBussinessMission("count");
@@ -112,7 +112,7 @@ public class CountMissionMerchantActivity extends BaseActivity {
         if (takingList != null) {
             offset = takingList.size();
         }
-        final int count = 5;//默认5条数据
+        final int count = 10;//默认5条数据
         BirdApi.getMerchant(this, merchantId + "/" + listType + "/" + offset + "/" + count, new RequestCallBackInterface() {
             @Override
             public void successCallBack(JSONObject object) {

@@ -52,7 +52,7 @@ public class BluetoothService {
 
     // Member fields
     private final BluetoothAdapter mAdapter;
-    private final Handler mHandler;
+    private Handler mHandler;
     private AcceptThread mAcceptThread;
     private ConnectThread mConnectThread;
     private ConnectedThread mConnectedThread;
@@ -72,6 +72,13 @@ public class BluetoothService {
     public BluetoothService(Context context, Handler handler) {
         mAdapter = BluetoothAdapter.getDefaultAdapter();
         mState = STATE_NONE;
+        mHandler = handler;
+    }
+
+    /**
+     *
+     */
+    public void setmHandler(Handler handler){
         mHandler = handler;
     }
 

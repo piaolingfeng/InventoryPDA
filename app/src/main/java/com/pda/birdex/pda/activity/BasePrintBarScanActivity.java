@@ -15,14 +15,17 @@ import android.widget.Toast;
 
 import com.pda.birdex.pda.R;
 import com.pda.birdex.pda.services.BluetoothService;
+import com.pda.birdex.pda.widget.ClearEditText;
 import com.pda.birdex.pda.widget.TitleView;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.io.UnsupportedEncodingException;
 
 /**
  * Created by chuming.zhuang on 2016/6/30.
  */
-public abstract class PrintBaseActivity extends BaseActivity {
+public abstract class BasePrintBarScanActivity extends BarScanActivity {
     // Debugging
     private static final String TAG = "BTPrinter";
     private static final boolean D = true;
@@ -51,14 +54,15 @@ public abstract class PrintBaseActivity extends BaseActivity {
     // Member object for the services
     private static BluetoothService mService;
 
+    EventBus bus;
     private TitleView titleView;
     @Override
-    public int getContentLayoutResId() {
-        return printContentLayoutResId();
+    public int getbarContentLayoutResId() {
+        return getPrintContentLayoutResId();
     }
 
     @Override
-    public void initializeContentViews() {
+    public void barInitializeContentViews() {
         mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
         titleView = printTitleView();
 //        title.setTitle(getString(R.string.print_title));
@@ -69,6 +73,7 @@ public abstract class PrintBaseActivity extends BaseActivity {
             finish();
             return;
         }
+        bus = EventBus.getDefault();
         printInitializeContentViews();
     }
 
@@ -127,7 +132,7 @@ public abstract class PrintBaseActivity extends BaseActivity {
 //                if(mPrintButton.getText().equals("连接"))
 //                {
 //                    // Launch the DeviceListActivity to see devices and do scan
-//                    Intent serverIntent = new Intent(PrintBaseActivity.this, DeviceListActivity.class);
+//                    Intent serverIntent = new Intent(BasePrintBarScanActivity.this, DeviceListActivity.class);
 //                    startActivityForResult(serverIntent, REQUEST_CONNECT_DEVICE);
 //                }
 //                else
@@ -140,9 +145,25 @@ public abstract class PrintBaseActivity extends BaseActivity {
         // Initialize the BluetoothService to perform bluetooth connections
         if(mService==null)//让服务只作用一次
             mService = new BluetoothService(this, mHandler);
-//        else{
-//            title.setSaveText(getString(R.string.title_connected_to) + mConnectedDeviceName);
-//        }
+        else{
+            if(titleView!=null) {
+                mService.setmHandler(mHandler);//重新赋予mHandler地址，activity已经被销毁，handler被重新new过
+                switch (mService.getState()) {
+                    case BluetoothService.STATE_NONE:
+                    case BluetoothService.STATE_LISTEN:
+                        titleView.setSaveText(getString(R.string.title_not_connected));
+                        break;
+                    case BluetoothService.STATE_CONNECTING:
+                        titleView.setSaveText(getString(R.string.title_connecting));
+                        break;
+                    case BluetoothService.STATE_CONNECTED:
+                        titleView.setSaveText(getString(R.string.title_connected_to) + mConnectedDeviceName);
+                        break;
+                }
+            }
+//            if(titleView!=null)
+//            titleView.setSaveText(getString(R.string.title_connected_to) + mConnectedDeviceName);
+        }
 
         // Initialize the buffer for outgoing messages
         mOutStringBuffer = new StringBuffer("");
@@ -209,17 +230,20 @@ public abstract class PrintBaseActivity extends BaseActivity {
                     if(D) Log.i(TAG, "MESSAGE_STATE_CHANGE: " + msg.arg1);
                     switch (msg.arg1) {
                         case BluetoothService.STATE_CONNECTED:
+                            if(titleView!=null)
                             titleView.setSaveText(getString(R.string.title_connected_to) + mConnectedDeviceName);
 //                            mTitle.append(mConnectedDeviceName);
 //                            mPrintButton.setText(R.string.Print1);
                             break;
                         case BluetoothService.STATE_CONNECTING:
 //                            mTitle.setText(R.string.title_connecting);
+                            if(titleView!=null)
                             titleView.setSaveText(getString(R.string.title_connecting));
                             break;
                         case BluetoothService.STATE_LISTEN:
                         case BluetoothService.STATE_NONE:
 //                            mTitle.setText(R.string.title_not_connected);
+                            if(titleView!=null)
                             titleView.setSaveText(getString(R.string.title_not_connected));
 //                            mPrintButton.setText(R.string.Print);
                             break;
@@ -312,9 +336,17 @@ public abstract class PrintBaseActivity extends BaseActivity {
     }
 
     //设置布局
-    public abstract int printContentLayoutResId();
+    public abstract int getPrintContentLayoutResId();
 
     public abstract void printInitializeContentViews();
 
+    //设置布局
+
     public abstract TitleView printTitleView();
+
+    //获取界面的clearedit
+    public abstract ClearEditText getClearEditText();
+
+    //扫描回调接口
+    public abstract void ClearEditTextCallBack(String code);
 }

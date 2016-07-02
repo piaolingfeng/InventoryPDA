@@ -13,6 +13,7 @@ import android.view.inputmethod.EditorInfo;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.TextView;
+import android.widget.TextView.OnEditorActionListener;
 
 import com.pda.birdex.pda.R;
 import com.pda.birdex.pda.adapter.CommonSimpleAdapter;
@@ -21,6 +22,7 @@ import com.pda.birdex.pda.interfaces.OnRecycleViewItemClickListener;
 import com.pda.birdex.pda.interfaces.RequestCallBackInterface;
 import com.pda.birdex.pda.response.CheckResultEntity;
 import com.pda.birdex.pda.utils.GsonHelper;
+import com.pda.birdex.pda.utils.T;
 import com.pda.birdex.pda.widget.ClearEditText;
 import com.pda.birdex.pda.widget.TitleView;
 
@@ -35,7 +37,7 @@ import butterknife.OnClick;
 /**
  * Created by chuming.zhuang on 2016/6/17.
  */
-public class TakingScanActivity extends BarScanActivity implements View.OnClickListener {
+public class TakingScanActivity extends BarScanActivity implements View.OnClickListener,OnEditorActionListener {
     String tag = "TakingScanActivity";
     @Bind(R.id.title)
     TitleView title;
@@ -50,17 +52,7 @@ public class TakingScanActivity extends BarScanActivity implements View.OnClickL
     @Override
     public void barInitializeContentViews() {
         title.setTitle(getString(R.string.scan_logistics));
-        edt_input.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-            @Override
-            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-
-                if (actionId == EditorInfo.IME_ACTION_SEARCH) {
-                    String string = v.getText().toString();
-                    ClearEditTextCallBack(string);
-                }
-                return false;
-            }
-        });
+        edt_input.setOnEditorActionListener(this);
     }
 
     //获取暂存列表
@@ -85,7 +77,7 @@ public class TakingScanActivity extends BarScanActivity implements View.OnClickL
 
                     Bundle b = new Bundle();
                     b.putSerializable("takingOrder", entity.getOrderInfo());
-                    b.putString("location","1");
+                    b.putString("location_position","1");
                     intent.putExtras(b);
                     startActivity(intent);
                 } else {
@@ -163,4 +155,13 @@ public class TakingScanActivity extends BarScanActivity implements View.OnClickL
         showPopupWindow(viewID, adapter);
     }
 
+    @Override
+    public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+        if (actionId == EditorInfo.IME_ACTION_SEARCH ) {
+            String string = v.getText().toString();
+            ClearEditTextCallBack(string);
+        }
+        T.showShort(this,"actionId"+actionId);
+        return false;
+    }
 }
