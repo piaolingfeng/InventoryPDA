@@ -132,6 +132,7 @@ public class MyApplication extends Application {
         ahc = new AsyncHttpClient();//获取网络连接超时
         ahc.setTimeout(8 * 1000);//设置30秒超时
         ahc.setConnectTimeout(4 * 1000);//设置30秒超时
+        ahc.setResponseTimeout(8 * 1000);
         ahc.setMaxConnections(5);
         ahc.addHeader("DEVICE-TOKEN", device_token);
         ahc.addHeader("APP-VERSION", app_version);

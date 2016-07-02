@@ -68,8 +68,7 @@ public class TakingToolBindNumFragment extends BarScanBaseFragment implements Vi
     @Override
     public void barInitializeContentViews() {
 
-        if (getActivity().getIntent().getExtras().getString("location_position").equals("1")) {
-        from = getActivity().getIntent().getExtras().getString("location");
+        from = getActivity().getIntent().getExtras().getString("location_position");
         if ("1".equals(from)) {
             takingOrder = (TakingOrder) getActivity().getIntent().getExtras().get("takingOrder");
             tv_taking_num.setText(takingOrder.getBaseInfo().getTakingOrderNo());
@@ -169,7 +168,7 @@ public class TakingToolBindNumFragment extends BarScanBaseFragment implements Vi
 //                    } else {
 //                        params.put("tid", orderNoInfoEntity.getDetail().getBaseInfo().getBaseInfo().getTid());
 //                    }
-                    params.put("tid", "MET:TK-160630000003");
+//                    params.put("tid", "MET:TK-160630000003");
 
                     JSONObject jsonObject = new JSONObject();
                     try {

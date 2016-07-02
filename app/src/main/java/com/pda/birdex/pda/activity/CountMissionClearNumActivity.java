@@ -20,6 +20,7 @@ import com.pda.birdex.pda.R;
 import com.pda.birdex.pda.adapter.CountMissionClearNumAdapter;
 import com.pda.birdex.pda.api.BirdApi;
 import com.pda.birdex.pda.entity.BaseInfo;
+import com.pda.birdex.pda.entity.BindOrder;
 import com.pda.birdex.pda.entity.ContainerInfo;
 import com.pda.birdex.pda.interfaces.OnRecycleViewItemClickListener;
 import com.pda.birdex.pda.interfaces.RequestCallBackInterface;
@@ -31,10 +32,12 @@ import com.pda.birdex.pda.widget.ClearEditText;
 import com.pda.birdex.pda.widget.TitleView;
 import com.zhy.android.percent.support.PercentLinearLayout;
 
+import org.apache.http.entity.StringEntity;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -209,6 +212,43 @@ public class CountMissionClearNumActivity extends BarScanActivity implements OnT
     @Override
     public void ClearEditTextCallBack(String code) {
         //扫描回调
+        if (code != null && orderNoInfoEntity != null) {
+            List<BindOrder> containerConfig = new ArrayList<>();
+            BindOrder bo = new BindOrder();
+            bo.setCode(code);
+            bo.setOwner(orderNoInfoEntity.getDetail().getBaseInfo().getPerson().getCo());
+            containerConfig.add(bo);
+            JSONObject jsonObject = new JSONObject();
+            try {
+                String str = GsonHelper.createJsonString(containerConfig);
+//                        jsonObject.put("containerConfig",str);
+
+                JSONArray object = new JSONArray(str);
+                jsonObject.put("containerConfig", object);
+                jsonObject.put("tid", orderNoInfoEntity.getDetail().getBaseInfo().getBaseInfo().getTid());
+//                        jsonObject.put("tid", "MET:TK-160630000003");
+                StringEntity stringEntity = new StringEntity(jsonObject.toString());
+//                        stringEntity.setContentType("application/json");
+
+                BirdApi.jsonTakingBindorderSubmit(this, jsonObject, new RequestCallBackInterface() {
+
+                    @Override
+                    public void successCallBack(JSONObject object) {
+                        T.showShort(CountMissionClearNumActivity.this, getString(R.string.taking_submit_suc));
+                    }
+
+                    @Override
+                    public void errorCallBack(JSONObject object) {
+                        T.showShort(CountMissionClearNumActivity.this, getString(R.string.taking_submit_fal));
+                    }
+                }, tag, true);
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            } catch (UnsupportedEncodingException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
 
@@ -307,7 +347,7 @@ public class CountMissionClearNumActivity extends BarScanActivity implements OnT
             jsonObject.put("takingOrderNo", takingOrderNum);
             jsonObject.put("containerNo", jsonArray);
             jsonObject.put("count", count);
-            BirdApi.jsonPostTakingOrderNum(this, jsonObject, new RequestCallBackInterface() {
+            BirdApi.postTakingOrderNum(this, jsonObject, new RequestCallBackInterface() {
                 @Override
                 public void successCallBack(JSONObject object) {
                     T.showShort(CountMissionClearNumActivity.this, getString(R.string.commit_success));
