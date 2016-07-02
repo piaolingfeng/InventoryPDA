@@ -2,9 +2,9 @@ package com.pda.birdex.pda.activity;
 
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.PersistableBundle;
 import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
+import android.view.KeyEvent;
 
 import com.pda.birdex.pda.R;
 import com.pda.birdex.pda.entity.TakingOrder;
@@ -16,6 +16,7 @@ import com.pda.birdex.pda.fragments.TakingToolPhotoFragment;
 import com.pda.birdex.pda.fragments.TakingToolPrintNumFragment;
 import com.pda.birdex.pda.interfaces.BackHandledInterface;
 import com.pda.birdex.pda.interfaces.OnRecycleViewItemClickListener;
+import com.pda.birdex.pda.widget.ClearEditText;
 import com.pda.birdex.pda.widget.TitleView;
 
 import org.greenrobot.eventbus.Subscribe;
@@ -28,7 +29,7 @@ import butterknife.Bind;
 /**
  * Created by chuming.zhuang on 2016/6/25.
  */
-public class TakingToolActivity extends PrintBaseActivity implements OnRecycleViewItemClickListener, BaseFragment.OnFragmentInteractionListener, BackHandledInterface {
+public class TakingToolActivity extends BasePrintBarScanActivity implements OnRecycleViewItemClickListener, BaseFragment.OnFragmentInteractionListener, BackHandledInterface {
     String tag = "TakingToolActivity";
     @Bind(R.id.title)
     TitleView title;
@@ -43,30 +44,25 @@ public class TakingToolActivity extends PrintBaseActivity implements OnRecycleVi
     private TakingToolBindNumFragment bindNumFragment = null;
     private TakingToolPhotoFragment photoFragment = null;
     private FragmentTransaction transaction;
-
+    private BaseFragment baseFragment=null;
 
     public TakingOrder orderInfo;
     String location = "1";
 
     @Override
     public void setSelectedFragment(BaseFragment selectedFragment) {
-
+        this.baseFragment = selectedFragment;
     }
 
     @Override
-    public int printContentLayoutResId() {
+    public int getPrintContentLayoutResId() {
         return R.layout.activity_tool_layout;
-    }
-
-    @Override
-    public void onSaveInstanceState(Bundle outState, PersistableBundle outPersistentState) {
-        super.onSaveInstanceState(outState, outPersistentState);
     }
 
     @Override
     public void printInitializeContentViews() {
 //        获取传递过来的数据案例
-//        EventBus.getDefault().register(this);
+        bus.register(this);
         if(getIntent().getExtras()!=null){
 //            orderInfo = (TakingOrder) getIntent().getExtras().get("takingOrder");
             location = getIntent().getStringExtra("location");
@@ -94,13 +90,22 @@ public class TakingToolActivity extends PrintBaseActivity implements OnRecycleVi
             currentPosition = getIntent().getExtras().getInt("location_position");
         }
         addFragment(currentPosition, false);//初始默认第一个fragment
-//        getTakingOrderNoInfo();
     }
 
 
     @Override
     public TitleView printTitleView() {
-        return title;
+        return null;
+    }
+
+    @Override
+    public ClearEditText getClearEditText() {
+        return null;
+    }
+
+    @Override
+    public void ClearEditTextCallBack(String code) {
+
     }
 
 //    //通过揽收单详情
@@ -183,6 +188,11 @@ public class TakingToolActivity extends PrintBaseActivity implements OnRecycleVi
         transaction.commit();
     }
 
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        baseFragment.onKeyDown(keyCode,event);
+        return super.onKeyDown(keyCode, event);
+    }
 
     //隐藏所有fragment
     private void hideFragment() {
@@ -219,6 +229,12 @@ public class TakingToolActivity extends PrintBaseActivity implements OnRecycleVi
                 sendMessage(i);
             }
         }
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        bus.unregister(this);
     }
 
 }

@@ -42,7 +42,7 @@ public class TakingToolBindAreaFragment extends BarScanBaseFragment implements V
     @Override
     public void barInitializeContentViews() {
 
-        if (getActivity().getIntent().getExtras().getString("location").equals("1")) {
+        if (getActivity().getIntent().getExtras().getString("location_position").equals("1")) {
             takingOrder = (TakingOrder) getActivity().getIntent().getExtras().get("takingOrder");
             tv_taking_num.setText(takingOrder.getBaseInfo().getTakingOrderNo());
         } else {//打印数量

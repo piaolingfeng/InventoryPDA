@@ -251,7 +251,7 @@ public class TakingToolPhotoFragment extends BarScanBaseFragment implements View
     @Override
     public void barInitializeContentViews() {
 
-        from = getActivity().getIntent().getExtras().getString("location");
+        from = getActivity().getIntent().getExtras().getString("location_position");
 
         if ("1".equals(from)) {
             takingOrder = (TakingOrder) getActivity().getIntent().getExtras().get("takingOrder");

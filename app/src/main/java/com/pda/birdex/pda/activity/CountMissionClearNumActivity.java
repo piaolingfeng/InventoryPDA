@@ -27,7 +27,6 @@ import com.pda.birdex.pda.response.TakingOrderNoInfoEntity;
 import com.pda.birdex.pda.utils.GsonHelper;
 import com.pda.birdex.pda.utils.StringUtils;
 import com.pda.birdex.pda.utils.T;
-import com.pda.birdex.pda.utils.TimeUtil;
 import com.pda.birdex.pda.widget.ClearEditText;
 import com.pda.birdex.pda.widget.TitleView;
 import com.zhy.android.percent.support.PercentLinearLayout;
@@ -151,8 +150,8 @@ public class CountMissionClearNumActivity extends BarScanActivity implements OnT
 
     //处理
     private void dealDetail() {
-        String time = TimeUtil.long2Date(Long.parseLong(orderNoInfoEntity.getDetail().getBaseInfo().getBaseInfo().getDeadLine()));
-        tv_title_last_time.setText(time);
+//        String time = TimeUtil.long2Date(Long.parseLong(orderNoInfoEntity.getDetail().getBaseInfo().getBaseInfo().getDeadLine()));
+        tv_title_last_time.setText(orderNoInfoEntity.getDetail().getBaseInfo().getBaseInfo().getDeadLine());
         tv_operate_vessl.setText(orderNoInfoEntity.getDetail().getContainerList().size() + "");
         list = orderNoInfoEntity.getDetail().getContainerList();
         unassignedList = new ArrayList<>();

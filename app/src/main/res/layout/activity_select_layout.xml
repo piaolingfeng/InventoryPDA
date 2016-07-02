@@ -70,7 +70,7 @@
                     android:id="@+id/edt_recivier"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:imeOptions="actionSearch"
+                    android:imeOptions="actionNext"
                     android:hint="@string/recivier_hint"
                     android:singleLine="true"
                     android:textColor="@color/context_2" />

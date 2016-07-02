@@ -1,7 +1,10 @@
 package com.pda.birdex.pda.fragments;
 
+import android.view.KeyEvent;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.widget.TextView;
+import android.widget.TextView.OnEditorActionListener;
 
 import com.loopj.android.http.RequestParams;
 import com.pda.birdex.pda.R;
@@ -9,13 +12,13 @@ import com.pda.birdex.pda.api.BirdApi;
 import com.pda.birdex.pda.entity.ContainerInfo;
 import com.pda.birdex.pda.entity.TakingOrder;
 import com.pda.birdex.pda.interfaces.RequestCallBackInterface;
+import com.pda.birdex.pda.response.PrintEntity;
 import com.pda.birdex.pda.response.TakingOrderNoInfoEntity;
+import com.pda.birdex.pda.utils.GsonHelper;
+import com.pda.birdex.pda.utils.StringUtils;
 import com.pda.birdex.pda.widget.ClearEditText;
 
-import org.json.JSONException;
 import org.json.JSONObject;
-
-import java.util.List;
 
 import butterknife.Bind;
 import butterknife.OnClick;
@@ -23,7 +26,7 @@ import butterknife.OnClick;
 /**
  * Created by chuming.zhuang on 2016/6/25.
  */
-public class TakingToolPrintNumFragment extends BarScanBaseFragment implements View.OnClickListener {
+public class TakingToolPrintNumFragment extends BarScanBaseFragment implements View.OnClickListener,OnEditorActionListener {
     String tag = "TakingToolPrintNumFragment";
 
     @Bind(R.id.tv_bussiness)
@@ -48,10 +51,11 @@ public class TakingToolPrintNumFragment extends BarScanBaseFragment implements V
     @Override
     public void barInitializeContentViews() {
 
-        if (getActivity().getIntent().getExtras().getString("location").equals("1")) {//打印数量
+        if (getActivity().getIntent().getExtras().getString("location_position").equals("1")) {//打印数量
             takingOrder = (TakingOrder) getActivity().getIntent().getExtras().get("takingOrder");
             tv_taking_num.setText(takingOrder.getBaseInfo().getTakingOrderNo());
             tv_bussiness.setText(takingOrder.getPerson().getName());
+            edt_print_num.setOnEditorActionListener(this);
         } else {
             edt_print_num.setVisibility(View.GONE);
             tv_taking_container.setVisibility(View.VISIBLE);
@@ -79,9 +83,17 @@ public class TakingToolPrintNumFragment extends BarScanBaseFragment implements V
     @Override
     public void onClick(View v) {
 //        startActivity(new Intent(getActivity(), PrintActivity.class));
+        print();
+    }
+
+    private void print(){
         RequestParams params = new RequestParams();
-        if (getActivity().getIntent().getExtras().getString("location").equals("1")) {//打印数量
-            params.put("count", Integer.parseInt(edt_print_num.getText().toString()));
+        if (getActivity().getIntent().getExtras().getString("location_position").equals("1")) {//打印数量
+            int count = 1;
+            if(!StringUtils.isEmpty(edt_print_num.getText().toString())){
+                count = Integer.parseInt(edt_print_num.getText().toString());
+            }
+            params.put("count", count);
             params.put("owner", takingOrder.getPerson().getCo());
             params.put("tkNo", takingOrder.getBaseInfo().getTakingOrderNo());
         } else {
@@ -92,20 +104,37 @@ public class TakingToolPrintNumFragment extends BarScanBaseFragment implements V
         BirdApi.postCodePrint(getActivity(), params, new RequestCallBackInterface() {
             @Override
             public void successCallBack(JSONObject object) {
-                List<String> list = null;
-                try {
-                    list = (List<String>) object.get("list");
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-                bus.post(list);
+                PrintEntity entity = GsonHelper.getPerson(object.toString(), PrintEntity.class);
+                bus.post(entity.getData());
             }
 
             @Override
             public void errorCallBack(JSONObject object) {
 
             }
-        },tag,true);
-
+        }, tag, true);
     }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        BirdApi.cancelRequestWithTag(tag);
+    }
+
+    @Override
+    public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+        if(EditorInfo.IME_ACTION_UNSPECIFIED == actionId){
+            print();
+        }
+        return false;
+    }
+
+//    @Override
+//    public void onKeyDown(int keyCode, KeyEvent event) {
+////        T.showShort(getActivity(), "keyCode" + keyCode);
+//        if(keyCode == KeyEvent.KEYCODE_ENTER){
+//            print();
+//        }
+//        super.onKeyDown(keyCode, event);
+//    }
 }

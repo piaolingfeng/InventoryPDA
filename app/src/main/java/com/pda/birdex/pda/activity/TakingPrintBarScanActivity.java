@@ -11,7 +11,17 @@ import android.view.animation.TranslateAnimation;
 import android.widget.TextView;
 
 import com.pda.birdex.pda.R;
+import com.pda.birdex.pda.api.BirdApi;
+import com.pda.birdex.pda.interfaces.RequestCallBackInterface;
+import com.pda.birdex.pda.response.PrintEntity;
+import com.pda.birdex.pda.utils.GsonHelper;
+import com.pda.birdex.pda.utils.HideSoftKeyboardUtil;
 import com.pda.birdex.pda.widget.ClearEditText;
+import com.pda.birdex.pda.widget.TitleView;
+
+import org.json.JSONObject;
+
+import java.util.List;
 
 import butterknife.Bind;
 import butterknife.OnClick;
@@ -19,10 +29,12 @@ import butterknife.OnClick;
 /**
  * Created by hyj on 2016/6/17.
  */
-public class TakingPrintActivity extends BarScanActivity implements View.OnClickListener {
+public class TakingPrintBarScanActivity extends BasePrintBarScanActivity implements View.OnClickListener,RequestCallBackInterface {
+
+    String tag = "TakingPrintBarScanActivity";
 
     @Bind(R.id.titleView)
-    com.pda.birdex.pda.widget.TitleView titleView;
+    com.pda.birdex.pda.widget.TitleView title;
 
     @Bind(R.id.code_et)
     com.pda.birdex.pda.widget.ClearEditText codeEt;
@@ -37,16 +49,16 @@ public class TakingPrintActivity extends BarScanActivity implements View.OnClick
     com.zhy.android.percent.support.PercentRelativeLayout main;
 
     @Override
-    public int getbarContentLayoutResId() {
+    public int getPrintContentLayoutResId() {
         return R.layout.activity_lanshouprint;
     }
 
     @Override
-    public void barInitializeContentViews() {
-        String title = getIntent().getExtras().getString("title");
+    public void printInitializeContentViews() {
+        String titleText = getIntent().getExtras().getString("title");
         String name = getIntent().getExtras().getString("inputname");
-        if(!TextUtils.isEmpty(title)) {
-            titleView.setTitle(title);
+        if(!TextUtils.isEmpty(titleText)) {
+            title.setTitle(titleText);
         }
         if(!TextUtils.isEmpty(name)){
             no_tv.setText(name);
@@ -105,6 +117,7 @@ public class TakingPrintActivity extends BarScanActivity implements View.OnClick
 
     @Override
     public void ClearEditTextCallBack(String code) {
+        HideSoftKeyboardUtil.hideSoftKeyboard(this);
         if(!TextUtils.isEmpty(code)){
             visible();
         }
@@ -136,11 +149,48 @@ public class TakingPrintActivity extends BarScanActivity implements View.OnClick
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.printsame:
-
+                printSame();
                 break;
             case R.id.printnew:
 
                 break;
         }
+    }
+
+    //打印相同箱单
+    private void printSame(){
+        BirdApi.postCodeSamePrint(this,codeEt.getText().toString(),this,tag,true);
+    }
+
+    //打印相同箱单
+    private void printNew(){
+//        RequestParams params = new RequestParams();
+//        params.put("count", 1);
+//            params.put("owner", takingOrder.getPerson().getCo());
+//            params.put("tkNo", takingOrder.getBaseInfo().getTakingOrderNo());
+//        } else {
+//        BirdApi.postCodePrint(this,);
+    }
+
+    @Override
+    public TitleView printTitleView() {
+        return title;
+    }
+
+    @Override
+    public void successCallBack(JSONObject object) {
+        PrintEntity entity = GsonHelper.getPerson(object.toString(), PrintEntity.class);
+        print(entity.getData());
+    }
+
+    private void print(List<String> list){
+        for (String s : list){
+            sendMessage(s);
+        }
+    }
+
+    @Override
+    public void errorCallBack(JSONObject object) {
+
     }
 }

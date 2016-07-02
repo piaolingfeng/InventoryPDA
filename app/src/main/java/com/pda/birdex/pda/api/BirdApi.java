@@ -146,6 +146,10 @@ public class BirdApi {
     public static void postCodePrint(Context context, RequestParams params, RequestCallBackInterface callBackInterface, String tag, boolean showDialog) {
         postRequest(context, params, callBackInterface, "code/print", tag, showDialog);
     }
+    //打印相同
+    public static void postCodeSamePrint(Context context, String containerNo, RequestCallBackInterface callBackInterface, String tag, boolean showDialog) {
+        postRequest(context, new RequestParams(), callBackInterface, "code/printSame/"+containerNo, tag, showDialog);
+    }
 
     //登录
     public static void login(Context context, String params, RequestCallBackInterface callBackInterface, String tag, boolean showDialog) {

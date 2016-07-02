@@ -51,23 +51,27 @@ public abstract class BarScanActivity extends BaseActivity {
 
         @Override
         public void onReceive(Context context, Intent intent) {
-            // TODO Auto-generated method stub
-            isScaning = false;
+                    // TODO Auto-generated method stub
+                    isScaning = false;
+                    if(intent.getAction().equals("urovo.rcv.message")) {
 //            soundpool.play(soundid, 1, 1, 0, 0, 1);
-            if (edt_input != null)
-                edt_input.setText("");
-            mVibrator.vibrate(100);
+                        if (edt_input != null) {
+                            edt_input.setText("");
+                            if (mVibrator != null)
+                                mVibrator.vibrate(100);
 
-            byte[] barcode = intent.getByteArrayExtra("barocode");
-            //byte[] barcode = intent.getByteArrayExtra("barcode");
-            int barocodelen = intent.getIntExtra("length", 0);
-            byte temp = intent.getByteExtra("barcodeType", (byte) 0);
-            android.util.Log.i("debug", "----codetype--" + temp);
-            barcodeStr = new String(barcode, 0, barocodelen);
+                            byte[] barcode = intent.getByteArrayExtra("barocode");
+                            //byte[] barcode = intent.getByteArrayExtra("barcode");
+                            int barocodelen = intent.getIntExtra("length", 0);
+                            byte temp = intent.getByteExtra("barcodeType", (byte) 0);
+                            android.util.Log.i("debug", "----codetype--" + temp);
+                            barcodeStr = new String(barcode, 0, barocodelen);
 
-            if (edt_input != null)
-                edt_input.setText(barcodeStr);
-            ClearEditTextCallBack(barcodeStr);
+                            if (edt_input != null)
+                                edt_input.setText(barcodeStr);
+                    ClearEditTextCallBack(barcodeStr);
+                }
+            }
         }
 
     };

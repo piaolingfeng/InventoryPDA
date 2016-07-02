@@ -2,6 +2,7 @@ package com.pda.birdex.pda.widget;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
@@ -18,10 +19,13 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.pda.birdex.pda.R;
+import com.pda.birdex.pda.activity.LoginActivity;
 import com.pda.birdex.pda.adapter.CommonSimpleAdapter;
 import com.pda.birdex.pda.interfaces.OnRecycleViewItemClickListener;
 import com.pda.birdex.pda.interfaces.TitleBarBackInterface;
 import com.pda.birdex.pda.utils.Constant;
+import com.pda.birdex.pda.utils.PreferenceUtils;
+import com.pda.birdex.pda.utils.StringUtils;
 import com.zhy.android.percent.support.PercentRelativeLayout;
 
 import java.util.ArrayList;
@@ -39,7 +43,7 @@ public class TitleView extends RelativeLayout implements View.OnClickListener {
     ImageView back_iv;
     List<String> menuList;//menu菜单list
     PercentRelativeLayout prl_title;
-
+    TextView tv_user;
     OnRecycleViewItemClickListener onSaveItemClickListener;
     List<String> saveList;
 
@@ -95,6 +99,11 @@ public class TitleView extends RelativeLayout implements View.OnClickListener {
                     saveList = new ArrayList<>();
                 showMenuWindow(v,saveList);
                 break;
+            case R.id.tv_user:
+                Intent intent = new Intent(mContext, LoginActivity.class);
+                intent.putExtra("jump_to_activity", true);
+                mContext.startActivity(intent);
+                break;
         }
     }
 
@@ -109,6 +118,14 @@ public class TitleView extends RelativeLayout implements View.OnClickListener {
         back_iv.setOnClickListener(this);
         save = (TextView) view.findViewById(R.id.save);
         prl_title = (PercentRelativeLayout) view.findViewById(R.id.prl_title);
+        tv_user = (TextView) view.findViewById(R.id.tv_user);
+        String userName = PreferenceUtils.getPrefString(mContext,"username","");
+        if(StringUtils.isEmpty(userName)){
+            tv_user.setText(mContext.getString(R.string.no_user));
+            tv_user.setOnClickListener(this);
+        }else {
+            tv_user.setText(userName);
+        }
 //        save.setOnClickListener(this);
         menu.setOnClickListener(this);
         LayoutParams params = new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);

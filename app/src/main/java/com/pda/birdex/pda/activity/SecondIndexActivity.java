@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.KeyEvent;
 
 import com.pda.birdex.pda.R;
 import com.pda.birdex.pda.adapter.IndexAdapter;
@@ -25,7 +26,7 @@ import butterknife.Bind;
 /**
  * Created by chuming.zhuang on 2016/6/17.
  */
-public class SecondIndexActivity extends BaseActivity {
+public class SecondIndexActivity extends BaseActivity implements OnRecycleViewItemClickListener {
     String tag = "SecondIndexActivity";
     @Bind(R.id.rcy)
     RecyclerView rcy;
@@ -66,60 +67,7 @@ public class SecondIndexActivity extends BaseActivity {
         adapter.setOnRecycleViewItemClickListener(new OnRecycleViewItemClickListener() {
             @Override
             public void onItemClick(int position) {
-                Intent intent = new Intent();
-                intent.putExtra("HeadName", titleStr);
-                //揽收
-                if(getString(R.string.taking).equals(titleStr)){
-                    switch (position){
-                        case 0:
-                            intent.setClass(SecondIndexActivity.this, TakingScanActivity.class);
-                            break;
-                        case 1:
-                            intent.setClass(SecondIndexActivity.this,CountMissionActivity.class);//揽收任务，跟清点任务页面相同
-                            break;
-                        case 2:
-                            intent.setClass(SecondIndexActivity.this, PhotoActivity.class);
-                            break;
-                        case 3:
-                            Bundle b = new Bundle();
-                            b.putString("title", getString(R.string.printlanshou));
-                            b.putString("inputname", getString(R.string.lanshouno));
-                            intent.putExtras(b);
-                            //打印揽收单
-                            intent.setClass(SecondIndexActivity.this, TakingPrintActivity.class);
-                            break;
-                        case 4:
-                            intent.setClass(SecondIndexActivity.this, TakingBindActivity.class);
-                            break;
-                    }
-                }
-                //清点
-                if(getString(R.string.count).equals(titleStr)){
-                    switch (position){
-                        case 0:
-                            intent.setClass(SecondIndexActivity.this,CountMissionActivity.class);
-                            break;
-                        case 1:
-                            intent.setClass(SecondIndexActivity.this, CountBindActivity.class);
-                            break;
-                        case 2:
-                            Bundle b = new Bundle();
-                            b.putString("title",getString(R.string.count_print_no));
-                            b.putString("inputname",getString(R.string.count_box_no));
-                            intent.putExtras(b);
-                            // 打印清点单
-                            intent.setClass(SecondIndexActivity.this, TakingPrintActivity.class);
-                            startActivity(intent);
-                            break;
-                        case 3:
-                            intent.setClass(SecondIndexActivity.this, TakingBindActivity.class);
-                            break;
-                        case 4:
-                            intent.setClass(SecondIndexActivity.this, CountPhotoActivity.class);
-                            break;
-                    }
-                }
-                startActivity(intent);
+
             }
         });
         GridLayoutManager myGLManager = new GridLayoutManager(this,2);
@@ -163,4 +111,69 @@ public class SecondIndexActivity extends BaseActivity {
         }, tag, false);
     }
 
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        onItemClick(keyCode - 8);
+        return super.onKeyDown(keyCode, event);
+    }
+
+    @Override
+    public void onItemClick(int position) {
+        if(position>=0&&position<adapter.getItemCount()) {
+            Intent intent = new Intent();
+            intent.putExtra("HeadName", titleStr);
+            //揽收
+            if (getString(R.string.taking).equals(titleStr)) {
+                switch (position) {
+                    case 0:
+                        intent.setClass(SecondIndexActivity.this, TakingScanActivity.class);
+                        break;
+                    case 1:
+                        intent.setClass(SecondIndexActivity.this, CountMissionActivity.class);//揽收任务，跟清点任务页面相同
+                        break;
+                    case 2:
+                        intent.setClass(SecondIndexActivity.this, PhotoActivity.class);
+                        break;
+                    case 3:
+                        Bundle b = new Bundle();
+                        b.putString("title", getString(R.string.printlanshou));
+                        b.putString("inputname", getString(R.string.lanshouno));
+                        intent.putExtras(b);
+                        //打印揽收单
+                        intent.setClass(SecondIndexActivity.this, TakingPrintBarScanActivity.class);
+                        break;
+                    case 4:
+                        intent.setClass(SecondIndexActivity.this, TakingBindActivity.class);
+                        break;
+                }
+            }
+            //清点
+            if (getString(R.string.count).equals(titleStr)) {
+                switch (position) {
+                    case 0:
+                        intent.setClass(SecondIndexActivity.this, CountMissionActivity.class);
+                        break;
+                    case 1:
+                        intent.setClass(SecondIndexActivity.this, CountBindActivity.class);
+                        break;
+                    case 2:
+                        Bundle b = new Bundle();
+                        b.putString("title", getString(R.string.count_print_no));
+                        b.putString("inputname", getString(R.string.count_box_no));
+                        intent.putExtras(b);
+                        // 打印清点单
+                        intent.setClass(SecondIndexActivity.this, TakingPrintBarScanActivity.class);
+                        startActivity(intent);
+                        break;
+                    case 3:
+                        intent.setClass(SecondIndexActivity.this, TakingBindActivity.class);
+                        break;
+                    case 4:
+                        intent.setClass(SecondIndexActivity.this, CountPhotoActivity.class);
+                        break;
+                }
+            }
+            startActivity(intent);
+        }
+    }
 }

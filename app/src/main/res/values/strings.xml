@@ -19,10 +19,11 @@
     <string name="password_hint">输入密码</string>
     <string name="login">登  录</string>
     <string name="notempty">用户名或密码不能为空</string>
+    <string name="keyCode_back">再按一次退出程序</string>
     <string name="submit">提\t交</string>
     <string name="photo">拍照</string>
     <string name="index">首页</string>
-
+    <string name="setting">设置</string>
     <string name="head">这里是HeadView</string>
     <string name="pull_to_refresh">下拉刷新</string>
     <string name="release_to_refresh">释放立即刷新</string>
@@ -34,7 +35,7 @@
     <string name="loading">正在加载...</string>
     <string name="load_succeed">加载成功</string>
     <string name="load_fail">加载失败</string>
-
+    <string name="no_user">请登录</string>
     <!-- 绑定区域 -->
     <string name="areabind">绑定区域</string>
     <string name="bind">绑定</string>
@@ -97,6 +98,7 @@
     <string name="taking_task">揽收任务</string>
     <string name="tv_taking_mission">待揽收任务：</string>
     <string name="tv_taking_num">揽收单号：</string>
+    <string name="tv_taking_num_1">揽收单号</string>
     <string name="taking_print_no">打印揽收单</string>
     <string name="taking_scan_no">扫描容器号(绑定订单/搜索)</string>
     <string name="box_size">箱 数：</string>

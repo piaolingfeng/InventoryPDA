@@ -1,10 +1,8 @@
 package com.pda.birdex.pda.activity;
 
 import android.Manifest;
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
@@ -171,7 +169,6 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
         params.put("account", username.getText().toString());
         params.put("password", password.getText().toString());
 
-
         BirdApi.login(this, username.getText().toString() + "/" + password.getText().toString(), new RequestCallBackInterface() {
 
             @Override
@@ -180,9 +177,13 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                     String token = object.getString("token");
                     MyApplication.ahc.addHeader("x-access-token", token);
                     PreferenceUtils.setPrefString(MyApplication.getInstans(), "token", token);
-                    Intent intent = new Intent(MyApplication.getInstans(), MainActivity.class);
-                    startActivity(intent);
-                    finish();
+                    if(getIntent().getBooleanExtra("jump_to_activity",false)){
+                        LoginActivity.this.finish();
+                    }else {
+                        Intent intent = new Intent(MyApplication.getInstans(), MainActivity.class);
+                        startActivity(intent);
+                        finish();
+                    }
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }

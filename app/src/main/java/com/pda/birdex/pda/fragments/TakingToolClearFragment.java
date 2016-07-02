@@ -224,7 +224,7 @@ public class TakingToolClearFragment extends BarScanBaseFragment implements View
     @Override
     public void barInitializeContentViews() {
 
-        from = getActivity().getIntent().getExtras().getString("location");
+        from = getActivity().getIntent().getExtras().getString("location_position");
 
         if (from.equals("1")) {
             // 从揽收进入的
