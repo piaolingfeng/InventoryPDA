@@ -10,6 +10,7 @@ import com.pda.birdex.pda.interfaces.RequestCallBackInterface;
 import com.pda.birdex.pda.utils.T;
 import com.pda.birdex.pda.widget.ClearEditText;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import butterknife.Bind;
@@ -87,22 +88,30 @@ public class TakingBindActivity extends BarScanActivity implements View.OnClickL
                     return;
                 }
 
-                // 调用绑定接口
-                RequestParams params = new RequestParams();
-                params.add("containerNo", noEt.getText() + "");
-                params.add("areaCode", codeEt.getText() + "");
-                BirdApi.takingBind(this, params, new RequestCallBackInterface() {
+                JSONObject jsonObject = new JSONObject();
+                try {
 
-                    @Override
-                    public void successCallBack(JSONObject object) {
-                        T.showShort(TakingBindActivity.this,getString(R.string.taking_bind_suc));
-                    }
 
-                    @Override
-                    public void errorCallBack(JSONObject object) {
-                        T.showShort(TakingBindActivity.this,getString(R.string.taking_bind_fal));
-                    }
-                }, TAG, true);
+                    // 调用绑定接口
+//                    RequestParams params = new RequestParams();
+                    jsonObject.put("containerNo", noEt.getText() + "");
+                    jsonObject.put("areaCode", codeEt.getText() + "");
+                    BirdApi.takingBind(this, jsonObject, new RequestCallBackInterface() {
+
+                        @Override
+                        public void successCallBack(JSONObject object) {
+                            T.showShort(TakingBindActivity.this, getString(R.string.taking_bind_suc));
+                        }
+
+                        @Override
+                        public void errorCallBack(JSONObject object) {
+                            T.showShort(TakingBindActivity.this, getString(R.string.taking_bind_fal));
+                        }
+                    }, TAG, true);
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
 
                 break;
         }

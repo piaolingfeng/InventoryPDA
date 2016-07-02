@@ -19,11 +19,16 @@ import com.pda.birdex.pda.utils.T;
 import com.pda.birdex.pda.widget.RotateLoading;
 
 import org.apache.http.Header;
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
+import org.apache.http.entity.StringEntity;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.net.URI;
 import java.net.URLEncoder;
 
 /**
@@ -67,6 +72,9 @@ public class BirdApi {
             loadingDialog.dismiss();
     }
 
+    public static void jsonPost(Context context, String url,HttpEntity entity, ResponseHandlerInterface responseHandlerInterface){
+        MyApplication.ahc.post(context, BASE_URL + "/" + url, entity, "application/json", responseHandlerInterface);
+    }
 
     /**
      * @param context
@@ -135,20 +143,32 @@ public class BirdApi {
         getRequest(context, callBackInterface, "taking/list/count/" + params, tag, showDialog);
     }
     //合并结果
-    public static void postTakingOrderNum(Context context, RequestParams params, RequestCallBackInterface callBackInterface, String tag, boolean showDialog) {
-        postRequest(context, params, callBackInterface, "taking/merge", tag, showDialog);
+//    public static void postTakingOrderNum(Context context, RequestParams params, RequestCallBackInterface callBackInterface, String tag, boolean showDialog) {
+//        postRequest(context, params, callBackInterface, "taking/merge", tag, showDialog);
+//    }
+    //合并结果
+    public static void postTakingOrderNum(Context context, JSONObject jsonObject, RequestCallBackInterface callBackInterface, String tag, boolean showDialog) {
+        jsonPostRequest(context, jsonObject, callBackInterface, "taking/merge", tag, showDialog);
     }
     //创建无预报揽收
-    public static void postTakingCreat(Context context, RequestParams params, RequestCallBackInterface callBackInterface, String tag, boolean showDialog) {
-        postRequest(context, params, callBackInterface, "taking/create", tag, showDialog);
+//    public static void postTakingCreat(Context context, RequestParams params, RequestCallBackInterface callBackInterface, String tag, boolean showDialog) {
+//        postRequest(context, params, callBackInterface, "taking/create", tag, showDialog);
+//    }
+    //创建无预报揽收
+    public static void postTakingCreat(Context context, JSONObject jsonObject, RequestCallBackInterface callBackInterface, String tag, boolean showDialog) {
+        jsonPostRequest(context, jsonObject, callBackInterface, "taking/create", tag, showDialog);
     }
     //打印
-    public static void postCodePrint(Context context, RequestParams params, RequestCallBackInterface callBackInterface, String tag, boolean showDialog) {
-        postRequest(context, params, callBackInterface, "code/print", tag, showDialog);
+//    public static void postCodePrint(Context context, RequestParams params, RequestCallBackInterface callBackInterface, String tag, boolean showDialog) {
+//        postRequest(context, params, callBackInterface, "code/print", tag, showDialog);
+//    }
+    //打印
+    public static void postCodePrint(Context context, JSONObject jsonObject, RequestCallBackInterface callBackInterface, String tag, boolean showDialog) {
+        jsonPostRequest(context, jsonObject, callBackInterface, "code/print", tag, showDialog);
     }
     //打印相同
     public static void postCodeSamePrint(Context context, String containerNo, RequestCallBackInterface callBackInterface, String tag, boolean showDialog) {
-        postRequest(context, new RequestParams(), callBackInterface, "code/printSame/"+containerNo, tag, showDialog);
+        postRequest(context, new RequestParams(), callBackInterface, "code/printSame/" + containerNo, tag, showDialog);
     }
 
     //登录
@@ -162,23 +182,36 @@ public class BirdApi {
     }
 
     // 揽收：绑定区域
-    public static void takingBind(Context context, RequestParams params, RequestCallBackInterface callBackInterface, String tag, boolean showDialog) {
-        postRequest(context, params, callBackInterface, "taking/lock", tag, showDialog);
+//    public static void takingBind(Context context, RequestParams params, RequestCallBackInterface callBackInterface, String tag, boolean showDialog) {
+//        postRequest(context, params, callBackInterface, "code/bindArea", tag, showDialog);
+//    }
+    // 揽收：绑定区域
+    public static void takingBind(Context context, JSONObject jsonObject, RequestCallBackInterface callBackInterface, String tag, boolean showDialog) {
+        jsonPostRequest(context, jsonObject, callBackInterface, "code/bindArea", tag, showDialog);
     }
 
     // 揽收：打印揽收单
-    public static void takingPrint(Context context, RequestParams params, RequestCallBackInterface callBackInterface, String tag, boolean showDialog) {
-        postRequest(context, params, callBackInterface, "taking/code/print", tag, showDialog);
-    }
+//    public static void takingPrint(Context context, RequestParams params, RequestCallBackInterface callBackInterface, String tag, boolean showDialog) {
+//        postRequest(context, params, callBackInterface, "taking/code/print", tag, showDialog);
+//    }
 
     // 揽收：揽收清点提交
-    public static void takingSubmit(Context context,RequestParams params, RequestCallBackInterface callBackInterface, String tag, boolean showDialog) {
-        postRequest(context, params, callBackInterface, "taking/submit", tag, showDialog);
+//    public static void takingSubmit(Context context,RequestParams params, RequestCallBackInterface callBackInterface, String tag, boolean showDialog) {
+//        postRequest(context, params, callBackInterface, "taking/submit", tag, showDialog);
+//    }
+    // 揽收：揽收清点提交
+    public static void takingSubmit(Context context,JSONObject jsonObject, RequestCallBackInterface callBackInterface, String tag, boolean showDialog) {
+        jsonPostRequest(context, jsonObject, callBackInterface, "taking/submit", tag, showDialog);
     }
 
     // 揽收：绑单提交
-    public static void takingBindorderSubmit(Context context,RequestParams params, RequestCallBackInterface callBackInterface, String tag, boolean showDialog) {
-        postRequest(context, params, callBackInterface, "code/bindOrder", tag, showDialog);
+//    public static void takingBindorderSubmit(Context context,RequestParams params, RequestCallBackInterface callBackInterface, String tag, boolean showDialog) {
+//        postRequest(context, params, callBackInterface, "code/bindOrder", tag, showDialog);
+//    }
+
+    // 揽收：绑单提交
+    public static void jsonTakingBindorderSubmit(Context context,JSONObject jsonObject, RequestCallBackInterface callBackInterface, String tag, boolean showDialog) {
+        jsonPostRequest(context, jsonObject, callBackInterface, "code/bindOrder", tag, showDialog);
     }
 
     //拍照上传地址
@@ -277,6 +310,81 @@ public class BirdApi {
     }
 
 
+    public static void jsonPostRequest(final Context mContext, JSONObject jsonObject, final RequestCallBackInterface callBackInterface,
+                                   String url, String tag, final boolean showDialog) {
+        if(showDialog)
+            showLoading(mContext);
+        JsonHttpResponseHandler jsonHttpResponseHandler = new JsonHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                super.onSuccess(statusCode, headers, response);
+                if (callBackInterface != null) {
+                    if (response != null) {
+                        try {
+                            if ("success".equals(response.getString("result"))) {
+                                callBackInterface.successCallBack(response);
+                            } else {
+                                T.showShort(mContext, response.getString("errMsg"));
+                                callBackInterface.errorCallBack(response);
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    } else {
+                        T.showShort(mContext, mContext.getString(R.string.successCallBack_error));
+                    }
+                } else {
+                    T.showShort(mContext, mContext.getString(R.string.callBack_error));
+                }
+            }
+
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
+                super.onSuccess(statusCode, headers, response);
+
+            }
+
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, String responseString) {
+                super.onSuccess(statusCode, headers, responseString);
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+                super.onFailure(statusCode, headers, responseString, throwable);
+                T.showShort(mContext, mContext.getString(R.string.request_error));
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+                super.onFailure(statusCode, headers, throwable, errorResponse);
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONArray errorResponse) {
+                super.onFailure(statusCode, headers, throwable, errorResponse);
+            }
+
+            @Override
+            public void onFinish() {
+                super.onFinish();
+                if (showDialog)
+                    hideLoading();
+            }
+
+        };
+        jsonHttpResponseHandler.setTag(tag);
+        try {
+            StringEntity stringEntity = new StringEntity(jsonObject.toString());
+            jsonPost(mContext, url, stringEntity, jsonHttpResponseHandler);
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+
+//        post(mContext, url, params, jsonHttpResponseHandler);
+    }
+
+
     // 上传 upc 图片 url
     public static void upLoadUpc(Context context, RequestParams params, JsonHttpResponseHandler jsonHttpResponseHandler) {
 //        MyApplication.ahc.post(context, "http://192.168.1.215:8012/bs-product/productUpc/newByApp", params, jsonHttpResponseHandler);
@@ -330,10 +438,10 @@ public class BirdApi {
             }
 
             @Override
-            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
                 if (showDialog)
                     hideLoading();
-                super.onFailure(statusCode, headers, responseString, throwable);
+                super.onFailure(statusCode, headers, throwable, errorResponse);
                 T.showShort(mContext, mContext.getString(R.string.request_error));
             }
 

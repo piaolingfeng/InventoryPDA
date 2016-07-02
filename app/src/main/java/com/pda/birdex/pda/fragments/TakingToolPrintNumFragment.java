@@ -18,6 +18,7 @@ import com.pda.birdex.pda.utils.GsonHelper;
 import com.pda.birdex.pda.utils.StringUtils;
 import com.pda.birdex.pda.widget.ClearEditText;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import butterknife.Bind;
@@ -26,7 +27,7 @@ import butterknife.OnClick;
 /**
  * Created by chuming.zhuang on 2016/6/25.
  */
-public class TakingToolPrintNumFragment extends BarScanBaseFragment implements View.OnClickListener,OnEditorActionListener {
+public class TakingToolPrintNumFragment extends BarScanBaseFragment implements View.OnClickListener, OnEditorActionListener {
     String tag = "TakingToolPrintNumFragment";
 
     @Bind(R.id.tv_bussiness)
@@ -86,33 +87,38 @@ public class TakingToolPrintNumFragment extends BarScanBaseFragment implements V
         print();
     }
 
-    private void print(){
-        RequestParams params = new RequestParams();
-        if (getActivity().getIntent().getExtras().getString("location_position").equals("1")) {//打印数量
-            int count = 1;
-            if(!StringUtils.isEmpty(edt_print_num.getText().toString())){
-                count = Integer.parseInt(edt_print_num.getText().toString());
+    private void print() {
+//        RequestParams params = new RequestParams();
+        JSONObject jsonObject = new JSONObject();
+        try {
+            if (getActivity().getIntent().getExtras().getString("location_position").equals("1")) {//打印数量
+                int count = 1;
+                if (!StringUtils.isEmpty(edt_print_num.getText().toString())) {
+                    count = Integer.parseInt(edt_print_num.getText().toString());
+                }
+                jsonObject.put("count", count);
+                jsonObject.put("owner", takingOrder.getPerson().getCo());
+                jsonObject.put("tkNo", takingOrder.getBaseInfo().getTakingOrderNo());
+            } else {
+                jsonObject.put("count", 1);
+                jsonObject.put("owner", orderNoInfoEntity.getDetail().getBaseInfo().getPerson().getCo());
+                jsonObject.put("tkNo", orderNoInfoEntity.getDetail().getBaseInfo().getBaseInfo().getTakingOrderNo());
             }
-            params.put("count", count);
-            params.put("owner", takingOrder.getPerson().getCo());
-            params.put("tkNo", takingOrder.getBaseInfo().getTakingOrderNo());
-        } else {
-            params.put("count", 1);
-            params.put("owner", orderNoInfoEntity.getDetail().getBaseInfo().getPerson().getCo());
-            params.put("tkNo", orderNoInfoEntity.getDetail().getBaseInfo().getBaseInfo().getTakingOrderNo());
+            BirdApi.postCodePrint(getActivity(), jsonObject, new RequestCallBackInterface() {
+                @Override
+                public void successCallBack(JSONObject object) {
+                    PrintEntity entity = GsonHelper.getPerson(object.toString(), PrintEntity.class);
+                    bus.post(entity.getData());
+                }
+
+                @Override
+                public void errorCallBack(JSONObject object) {
+
+                }
+            }, tag, true);
+        } catch (JSONException e) {
+            e.printStackTrace();
         }
-        BirdApi.postCodePrint(getActivity(), params, new RequestCallBackInterface() {
-            @Override
-            public void successCallBack(JSONObject object) {
-                PrintEntity entity = GsonHelper.getPerson(object.toString(), PrintEntity.class);
-                bus.post(entity.getData());
-            }
-
-            @Override
-            public void errorCallBack(JSONObject object) {
-
-            }
-        }, tag, true);
     }
 
     @Override
@@ -123,7 +129,7 @@ public class TakingToolPrintNumFragment extends BarScanBaseFragment implements V
 
     @Override
     public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-        if(EditorInfo.IME_ACTION_UNSPECIFIED == actionId){
+        if (EditorInfo.IME_ACTION_UNSPECIFIED == actionId) {
             print();
         }
         return false;

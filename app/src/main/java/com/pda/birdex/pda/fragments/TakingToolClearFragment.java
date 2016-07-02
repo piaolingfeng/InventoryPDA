@@ -30,6 +30,7 @@ import com.pda.birdex.pda.entity.ContainerInfo;
 import com.pda.birdex.pda.entity.TakingOrder;
 import com.pda.birdex.pda.interfaces.RequestCallBackInterface;
 import com.pda.birdex.pda.response.TakingOrderNoInfoEntity;
+import com.pda.birdex.pda.utils.GsonHelper;
 import com.pda.birdex.pda.utils.T;
 import com.pda.birdex.pda.widget.ClearEditText;
 
@@ -93,6 +94,7 @@ public class TakingToolClearFragment extends BarScanBaseFragment implements View
     TakingOrder takingOrder;//位置1进来传来的实体
     TakingOrderNoInfoEntity orderNoInfoEntity;//位置2进来传来的实体
     ContainerInfo containerInfo;//位置2进来时传进来的item
+
     @Override
     public int getbarContentLayoutResId() {
         return R.layout.fragment_taking_tool_clear_layout;
@@ -233,7 +235,7 @@ public class TakingToolClearFragment extends BarScanBaseFragment implements View
             edt_taking_num.setOnFocusChangeListener(new View.OnFocusChangeListener() {
                 @Override
                 public void onFocusChange(View v, boolean hasFocus) {
-                    if(!hasFocus){
+                    if (!hasFocus) {
                         getAreaMes(edt_taking_num.getText() + "");
                     }
                 }
@@ -369,48 +371,58 @@ public class TakingToolClearFragment extends BarScanBaseFragment implements View
 
     // 调用数据提交接口
     private void dataSubmit() {
-        RequestParams params = new RequestParams();
-        if ("1".equals(from)) {
-            params.put("tid",takingOrder.getBaseInfo().getTid());
-            params.put("owner", takingOrder.getPerson().getCo());
-        }else if("2".equals(from)){
-            params.put("tid",orderNoInfoEntity.getDetail().getBaseInfo().getBaseInfo().getTid());
-            params.put("owner", orderNoInfoEntity.getDetail().getBaseInfo().getPerson().getCo());
-        }
+        JSONObject jsonObject = new JSONObject();
+        try {
+
+//            RequestParams params = new RequestParams();
+            if ("1".equals(from)) {
+                jsonObject.put("tid", takingOrder.getBaseInfo().getTid());
+                jsonObject.put("owner", takingOrder.getPerson().getCo());
+            } else if ("2".equals(from)) {
+                jsonObject.put("tid", orderNoInfoEntity.getDetail().getBaseInfo().getBaseInfo().getTid());
+                jsonObject.put("owner", orderNoInfoEntity.getDetail().getBaseInfo().getPerson().getCo());
+            }
 //        params.put("takingOrderNo", tv_taking_num.getText() + "");
 //        List containerList = new ArrayList();
 //        containerList.add(edt_taking_num.getText() + "");
-        params.put("containerNo", edt_taking_num.getText() + "");
-        params.put("count", edt_box_size.getText() + "");
-        params.put("photoUrl", photoUrl);
+            jsonObject.put("containerNo", edt_taking_num.getText() + "");
+            jsonObject.put("count", edt_box_size.getText() + "");
 
-        BirdApi.takingSubmit(getActivity(),params,new RequestCallBackInterface(){
+            String str = GsonHelper.createJsonString(photoUrl);
+            JSONArray jsonArray = new JSONArray(str);
+            jsonObject.put("photoUrl", jsonArray);
 
-            @Override
-            public void successCallBack(JSONObject object) {
-                try {
-                    if("success".equals(object.getString("result"))){
-                        T.showShort(getContext(),getString(R.string.taking_upload_suc));
-                    } else {
-                        T.showShort(getContext(),getString(R.string.taking_upload_fal));
+            BirdApi.takingSubmit(getActivity(), jsonObject, new RequestCallBackInterface() {
+
+                @Override
+                public void successCallBack(JSONObject object) {
+                    try {
+                        if ("success".equals(object.getString("result"))) {
+                            T.showShort(getContext(), getString(R.string.taking_upload_suc));
+                        } else {
+                            T.showShort(getContext(), getString(R.string.taking_upload_fal));
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
                     }
-                } catch (JSONException e) {
-                    e.printStackTrace();
+                    dismissDialog();
                 }
-                dismissDialog();
-            }
 
-            @Override
-            public void errorCallBack(JSONObject object) {
-                T.showShort(getContext(),getString(R.string.taking_upload_fal));
-                dismissDialog();
-            }
-        } ,tag,true);
+                @Override
+                public void errorCallBack(JSONObject object) {
+                    T.showShort(getContext(), getString(R.string.taking_upload_fal));
+                    dismissDialog();
+                }
+            }, tag, true);
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 
     // 关闭 上传进度条
-    private void dismissDialog(){
-        if(mProgress != null && mProgress.isShowing()){
+    private void dismissDialog() {
+        if (mProgress != null && mProgress.isShowing()) {
             mProgress.dismiss();
         }
     }
@@ -572,16 +584,16 @@ public class TakingToolClearFragment extends BarScanBaseFragment implements View
 
 
     // 通过用户编码+容器号 获取区域信息
-    private void getAreaMes(String code){
+    private void getAreaMes(String code) {
         String owner = takingOrder.getPerson().getCo();
-        if(!(TextUtils.isEmpty(code)||TextUtils.isEmpty(owner))) {
+        if (!(TextUtils.isEmpty(code) || TextUtils.isEmpty(owner))) {
             // CT-160629000001 测试
-            BirdApi.getArea(getContext(), owner + "/" + code ,new RequestCallBackInterface(){
+            BirdApi.getArea(getContext(), owner + "/" + code, new RequestCallBackInterface() {
 
                 @Override
                 public void successCallBack(JSONObject object) {
                     try {
-                        if("success".equals(object.getString("result"))){
+                        if ("success".equals(object.getString("result"))) {
                             tv_area.setText(object.getString("area"));
                         }
                     } catch (JSONException e) {
@@ -593,14 +605,14 @@ public class TakingToolClearFragment extends BarScanBaseFragment implements View
                 public void errorCallBack(JSONObject object) {
 
                 }
-            } ,tag, true);
+            }, tag, true);
         }
     }
 
 
     @Override
     public void ClearEditTextCallBack(String code) {
-        if(this.isVisible()) {
+        if (this.isVisible()) {
             if ("1".equals(from)) {
                 // 说明是从揽收进入的 需要通过容器号 调用接口  获取区域信息
                 getAreaMes(code);

@@ -14,6 +14,7 @@ import com.pda.birdex.pda.response.TakingOrderNoInfoEntity;
 import com.pda.birdex.pda.utils.T;
 import com.pda.birdex.pda.widget.ClearEditText;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import butterknife.Bind;
@@ -22,8 +23,8 @@ import butterknife.OnClick;
 /**
  * Created by chuming.zhuang on 2016/6/25.
  */
-public class TakingToolBindAreaFragment extends BarScanBaseFragment implements View.OnClickListener{
-    String tag="TakingToolBindAreaFragment";
+public class TakingToolBindAreaFragment extends BarScanBaseFragment implements View.OnClickListener {
+    String tag = "TakingToolBindAreaFragment";
 
     @Bind(R.id.edt_taking_num)
     com.pda.birdex.pda.widget.ClearEditText edt_taking_num;
@@ -34,6 +35,9 @@ public class TakingToolBindAreaFragment extends BarScanBaseFragment implements V
     TakingOrder takingOrder;//位置1进来传来的实体
     TakingOrderNoInfoEntity orderNoInfoEntity;//位置2进来传来的实体
     ContainerInfo containerInfo;//位置2进来时传进来的item
+
+    private String from;
+
     @Override
     public int getbarContentLayoutResId() {
         return R.layout.fragment_taking_tool_bindarea_layout;
@@ -42,7 +46,8 @@ public class TakingToolBindAreaFragment extends BarScanBaseFragment implements V
     @Override
     public void barInitializeContentViews() {
 
-        if (getActivity().getIntent().getExtras().getString("location_position").equals("1")) {
+        from = getActivity().getIntent().getExtras().getString("location_position");
+        if ("1".equals(from)) {
             takingOrder = (TakingOrder) getActivity().getIntent().getExtras().get("takingOrder");
             tv_taking_num.setText(takingOrder.getBaseInfo().getTakingOrderNo());
         } else {//打印数量
@@ -78,7 +83,7 @@ public class TakingToolBindAreaFragment extends BarScanBaseFragment implements V
 
     @Override
     public void ClearEditTextCallBack(String code) {
-        if(this.isVisible()) {
+        if (this.isVisible()) {
 
         }
     }
@@ -86,7 +91,7 @@ public class TakingToolBindAreaFragment extends BarScanBaseFragment implements V
     @OnClick(R.id.btn_commit)
     @Override
     public void onClick(View v) {
-        switch (v.getId()){
+        switch (v.getId()) {
             case R.id.btn_commit:
                 // 点击提交
                 // 先判断是否为空
@@ -99,22 +104,37 @@ public class TakingToolBindAreaFragment extends BarScanBaseFragment implements V
                     return;
                 }
 
-                // 调用绑定接口
-                RequestParams params = new RequestParams();
-                params.add("containerNo", edt_taking_num.getText() + "");
-                params.add("areaCode", edt_area.getText() + "");
-                BirdApi.takingBind(getContext(), params, new RequestCallBackInterface() {
+                JSONObject jsonObject = new JSONObject();
 
-                    @Override
-                    public void successCallBack(JSONObject object) {
-                        T.showShort(getActivity(), getString(R.string.taking_bind_suc));
+                try {
+
+
+                    // 调用绑定接口
+//                    RequestParams params = new RequestParams();
+                    jsonObject.put("containerNo", edt_taking_num.getText() + "");
+                    jsonObject.put("areaCode", edt_area.getText() + "");
+                    if ("1".equals(from)) {
+                        jsonObject.put("owner", takingOrder.getPerson().getCo());
+                    } else {
+                        jsonObject.put("owner", orderNoInfoEntity.getDetail().getBaseInfo().getPerson().getCo());
                     }
 
-                    @Override
-                    public void errorCallBack(JSONObject object) {
-                        T.showShort(getActivity(), getString(R.string.taking_bind_fal));
-                    }
-                }, tag, true);
+                    BirdApi.takingBind(getContext(), jsonObject, new RequestCallBackInterface() {
+
+                        @Override
+                        public void successCallBack(JSONObject object) {
+                            T.showShort(getActivity(), getString(R.string.taking_bind_suc));
+                        }
+
+                        @Override
+                        public void errorCallBack(JSONObject object) {
+                            T.showShort(getActivity(), getString(R.string.taking_bind_fal));
+                        }
+                    }, tag, true);
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
                 break;
         }
     }
