@@ -15,7 +15,9 @@ import com.pda.birdex.pda.interfaces.OnRecycleViewItemClickListener;
 import com.pda.birdex.pda.interfaces.RequestCallBackInterface;
 import com.pda.birdex.pda.response.CommonItemEntity;
 import com.pda.birdex.pda.response.MerchantEntity;
+import com.pda.birdex.pda.services.BluetoothService;
 import com.pda.birdex.pda.utils.GsonHelper;
+import com.pda.birdex.pda.utils.T;
 import com.pda.birdex.pda.widget.TitleView;
 
 import org.json.JSONObject;
@@ -74,16 +76,22 @@ public class MainActivity extends BaseActivity implements OnRecycleViewItemClick
 
             }
         }, tag, true);
+        if (BasePrintBarScanActivity.mService != null) {
+            if (BasePrintBarScanActivity.mService.getState() != BluetoothService.STATE_CONNECTED) {
+                T.showLong(this, getString(R.string.print_hint));
+            }
+        }else{
+            T.showLong(this, getString(R.string.print_hint));
+        }
     }
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
-//        T.showShort(this, "keyCode" + keyCode);
+        T.showShort(this, "keyCode" + keyCode);
         if (keyCode == KeyEvent.KEYCODE_BACK) {
             exit();
             return false;
-        }
-        else{
+        } else {
             onItemClick(keyCode - 8);
         }
         return super.onKeyDown(keyCode, event);

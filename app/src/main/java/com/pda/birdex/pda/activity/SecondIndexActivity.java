@@ -33,7 +33,7 @@ public class SecondIndexActivity extends BaseActivity implements OnRecycleViewIt
     @Bind(R.id.title)
     TitleView title;
     IndexAdapter adapter;
-    String []lists={""};
+    String[] lists = {""};
     List<CommonItemEntity> indexList = new ArrayList<>();
 
     // 传过来的 title
@@ -46,11 +46,11 @@ public class SecondIndexActivity extends BaseActivity implements OnRecycleViewIt
 
     @Override
     public void initializeContentViews() {
-        if(getIntent().getExtras()!=null) {
+        if (getIntent().getExtras() != null) {
             titleStr = getIntent().getStringExtra("name");
             lists = getIntent().getStringArrayExtra("list");
-            if(lists==null){
-                lists=new String[]{};
+            if (lists == null) {
+                lists = new String[]{};
             }
         }
         title.setTitle(titleStr);
@@ -60,19 +60,14 @@ public class SecondIndexActivity extends BaseActivity implements OnRecycleViewIt
             entity.setCount("");
             indexList.add(entity);
         }
-        if(getString(R.string.taking).equals(titleStr)) {//揽收需要统计揽收任务总数
+        if (getString(R.string.taking).equals(titleStr)) {//揽收需要统计揽收任务总数
             getAllMission();
         }
-        adapter = new IndexAdapter(this,indexList);
-        adapter.setOnRecycleViewItemClickListener(new OnRecycleViewItemClickListener() {
-            @Override
-            public void onItemClick(int position) {
-
-            }
-        });
-        GridLayoutManager myGLManager = new GridLayoutManager(this,2);
+        adapter = new IndexAdapter(this, indexList);
+        adapter.setOnRecycleViewItemClickListener(this);
+        GridLayoutManager myGLManager = new GridLayoutManager(this, 2);
         // 如果是清点任务，第一行 需要跨列 2行
-        if(lists.length > 0) {
+        if (lists.length > 0) {
             if (getString(R.string.count_task).equals(lists[0])) {
                 myGLManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
 
@@ -92,12 +87,12 @@ public class SecondIndexActivity extends BaseActivity implements OnRecycleViewIt
         rcy.setAdapter(adapter);
     }
 
-    public void getAllMission(){
+    public void getAllMission() {
         BirdApi.getTakingListCountMerchant(this, "null/null", new RequestCallBackInterface() {
             @Override
             public void successCallBack(JSONObject object) {
                 try {
-                    indexList.get(1).setCount(object.get("count")+"");
+                    indexList.get(1).setCount(object.get("count") + "");
                     adapter.notifyDataSetChanged();
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -119,7 +114,7 @@ public class SecondIndexActivity extends BaseActivity implements OnRecycleViewIt
 
     @Override
     public void onItemClick(int position) {
-        if(position>=0&&position<adapter.getItemCount()) {
+        if (position >= 0 && position < adapter.getItemCount()) {
             Intent intent = new Intent();
             intent.putExtra("HeadName", titleStr);
             //揽收

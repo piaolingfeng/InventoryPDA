@@ -144,9 +144,9 @@
     <string name="upc_code">UPC：</string>
     <string name="bussiness">商 家：</string>
 
+    <string name="print_hint">请到设置中连接打印接再使用打印功能.</string>
     //打印
     <string name="print_title">BTPrinter</string>
-
     <!--BTPrinterDemo-->
     <string name="send">Send</string>
     <string name="Print">Print</string>
