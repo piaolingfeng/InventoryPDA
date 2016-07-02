@@ -144,7 +144,7 @@ public class TakingToolPhotoFragment extends BarScanBaseFragment implements View
                             super.onSuccess(statusCode, headers, response);
                             try {
                                 if("false".equals(response.getString("ret"))){
-                                    T.showShort(MyApplication.getInstans(), "上传失败");
+                                    T.showShort(MyApplication.getInstans(), getString(R.string.taking_upload_fal));
                                     dismissDialog();
                                 }
                             } catch (JSONException e) {
@@ -209,11 +209,11 @@ public class TakingToolPhotoFragment extends BarScanBaseFragment implements View
                                         },tag,true);
                                     }
                                 } else {
-                                    T.showShort(MyApplication.getInstans(), "上传失败");
+                                    T.showShort(MyApplication.getInstans(), getString(R.string.taking_upload_fal));
                                     dismissDialog();
                                 }
                             } else {
-                                T.showShort(MyApplication.getInstans(), "上传失败");
+                                T.showShort(MyApplication.getInstans(), getString(R.string.taking_upload_fal));
                                 dismissDialog();
                             }
                         }
@@ -221,14 +221,14 @@ public class TakingToolPhotoFragment extends BarScanBaseFragment implements View
                         @Override
                         public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
                             super.onFailure(statusCode, headers, throwable, errorResponse);
-                            T.showShort(MyApplication.getInstans(), "上传失败");
+                            T.showShort(MyApplication.getInstans(), getString(R.string.taking_upload_fal));
                             dismissDialog();
                         }
 
                         @Override
                         public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONArray errorResponse) {
                             super.onFailure(statusCode, headers, throwable, errorResponse);
-                            T.showShort(MyApplication.getInstans(), "上传失败");
+                            T.showShort(MyApplication.getInstans(), getString(R.string.taking_upload_fal));
                             dismissDialog();
                         }
 
