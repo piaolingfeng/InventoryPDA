@@ -32,6 +32,8 @@ import com.pda.birdex.pda.widget.ClearEditText;
 import com.pda.birdex.pda.widget.TitleView;
 import com.zhy.android.percent.support.PercentLinearLayout;
 
+import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
@@ -85,7 +87,7 @@ public class CountMissionClearNumActivity extends BarScanActivity implements OnT
     List<ContainerInfo> doneList;//已完成列表
 
     String HeadName = "";
-    BaseInfo baseInfo ;
+    BaseInfo baseInfo;
     String takingOrderNum = "";
 
     //    public String []tabList = {getString(R.string.not_start),getString(R.string.has_classified),
@@ -101,8 +103,8 @@ public class CountMissionClearNumActivity extends BarScanActivity implements OnT
         title.setTitle(getString(R.string.count_task));
         HeadName = getIntent().getStringExtra("HeadName");
         baseInfo = (BaseInfo) getIntent().getExtras().get("baseInfo");
-        if(baseInfo!=null) {
-            takingOrderNum =baseInfo.getTakingOrderNo();
+        if (baseInfo != null) {
+            takingOrderNum = baseInfo.getTakingOrderNo();
             tv_count_num.setText(takingOrderNum);//揽收单号/清点单号
         }
         if (getResources().getString(R.string.taking).equals(HeadName)) {//揽收
@@ -254,8 +256,8 @@ public class CountMissionClearNumActivity extends BarScanActivity implements OnT
             Intent intent = new Intent(this, TakingCheckActivity.class);
             intent.putExtra("location", "2");//揽收任务
             Bundle b = new Bundle();
-            b.putSerializable("orderNoInfoEntity",orderNoInfoEntity);
-            switch (tablayout.getSelectedTabPosition()){
+            b.putSerializable("orderNoInfoEntity", orderNoInfoEntity);
+            switch (tablayout.getSelectedTabPosition()) {
                 case 0:
                     b.putSerializable("containerInfo", unassignedList.get(position));
                     intent.putExtras(b);
@@ -298,17 +300,40 @@ public class CountMissionClearNumActivity extends BarScanActivity implements OnT
         params.put("takingOrderNo", takingOrderNum);
         params.put("containerNo", containerId);
         params.put("count", count);
-        BirdApi.postTakingOrderNum(this, params, new RequestCallBackInterface() {
-            @Override
-            public void successCallBack(JSONObject object) {
-                T.showShort(CountMissionClearNumActivity.this, getString(R.string.commit_success));
-            }
 
-            @Override
-            public void errorCallBack(JSONObject object) {
+        JSONObject jsonObject = new JSONObject();
+        String str = GsonHelper.createJsonString(containerId);
+        try {
+            JSONArray jsonArray = new JSONArray(str);
+            jsonObject.put("takingOrderNo", takingOrderNum);
+            jsonObject.put("containerNo", jsonArray);
+            jsonObject.put("count", count);
+            BirdApi.jsonPostTakingOrderNum(this, jsonObject, new RequestCallBackInterface() {
+                @Override
+                public void successCallBack(JSONObject object) {
+                    T.showShort(CountMissionClearNumActivity.this, getString(R.string.commit_success));
+                }
 
-            }
-        }, tag, true);
+                @Override
+                public void errorCallBack(JSONObject object) {
+
+                }
+            }, tag, true);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+//        BirdApi.postTakingOrderNum(this, params, new RequestCallBackInterface() {
+//            @Override
+//            public void successCallBack(JSONObject object) {
+//                T.showShort(CountMissionClearNumActivity.this, getString(R.string.commit_success));
+//            }
+//
+//            @Override
+//            public void errorCallBack(JSONObject object) {
+//
+//            }
+//        }, tag, true);
     }
 
     @OnClick(R.id.btn_commit)

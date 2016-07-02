@@ -259,6 +259,7 @@ public abstract class PrintBaseActivity extends BaseActivity {
     };
 
     @SuppressLint("NewApi") public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
         if(D) Log.d(TAG, "onActivityResult " + resultCode);
         switch (requestCode) {
             case REQUEST_CONNECT_DEVICE:

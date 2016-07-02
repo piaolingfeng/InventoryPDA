@@ -34,6 +34,8 @@ public class TakingToolBindAreaFragment extends BarScanBaseFragment implements V
     TakingOrder takingOrder;//位置1进来传来的实体
     TakingOrderNoInfoEntity orderNoInfoEntity;//位置2进来传来的实体
     ContainerInfo containerInfo;//位置2进来时传进来的item
+
+    private String from;
     @Override
     public int getbarContentLayoutResId() {
         return R.layout.fragment_taking_tool_bindarea_layout;
@@ -41,8 +43,8 @@ public class TakingToolBindAreaFragment extends BarScanBaseFragment implements V
 
     @Override
     public void barInitializeContentViews() {
-
-        if (getActivity().getIntent().getExtras().getString("location").equals("1")) {
+        from = getActivity().getIntent().getExtras().getString("location");
+        if ("1".equals(from)) {
             takingOrder = (TakingOrder) getActivity().getIntent().getExtras().get("takingOrder");
             tv_taking_num.setText(takingOrder.getBaseInfo().getTakingOrderNo());
         } else {//打印数量
@@ -103,6 +105,12 @@ public class TakingToolBindAreaFragment extends BarScanBaseFragment implements V
                 RequestParams params = new RequestParams();
                 params.add("containerNo", edt_taking_num.getText() + "");
                 params.add("areaCode", edt_area.getText() + "");
+                if("1".equals(from)){
+                    params.add("owner", takingOrder.getPerson().getCo());
+                }else{
+                    params.add("owner", orderNoInfoEntity.getDetail().getBaseInfo().getPerson().getCo());
+                }
+
                 BirdApi.takingBind(getContext(), params, new RequestCallBackInterface() {
 
                     @Override

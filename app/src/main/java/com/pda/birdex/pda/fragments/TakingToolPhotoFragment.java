@@ -313,7 +313,7 @@ public class TakingToolPhotoFragment extends BarScanBaseFragment implements View
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
+//        super.onActivityResult(requestCode, resultCode, data);
         switch (requestCode) {
             case PHOTO_GREQUEST_CODE:
                 if (resultCode == Activity.RESULT_OK) {

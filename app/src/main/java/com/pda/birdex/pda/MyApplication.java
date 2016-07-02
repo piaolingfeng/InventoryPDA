@@ -135,6 +135,7 @@ public class MyApplication extends Application {
         ahc.setMaxConnections(5);
         ahc.addHeader("DEVICE-TOKEN", device_token);
         ahc.addHeader("APP-VERSION", app_version);
+//        ahc.addHeader("Content-Type", "application/json");
     }
 
 }

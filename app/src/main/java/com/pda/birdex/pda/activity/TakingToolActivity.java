@@ -59,11 +59,6 @@ public class TakingToolActivity extends PrintBaseActivity implements OnRecycleVi
     }
 
     @Override
-    public void onSaveInstanceState(Bundle outState, PersistableBundle outPersistentState) {
-        super.onSaveInstanceState(outState, outPersistentState);
-    }
-
-    @Override
     public void printInitializeContentViews() {
 //        获取传递过来的数据案例
 //        EventBus.getDefault().register(this);
