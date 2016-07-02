@@ -195,10 +195,10 @@ public class CountMissionClearNumActivity extends BasePrintBarScanActivity imple
             public void successCallBack(JSONObject object) {
                 xrcy.refreshComplete();
                 orderNoInfoEntity = GsonHelper.getPerson(object.toString(), TakingOrderNoInfoEntity.class);
-                if(orderNoInfoEntity!=null)
+                if (orderNoInfoEntity != null)
                     dealDetail();
-                else{
-                    T.showShort(CountMissionClearNumActivity.this,getString(R.string.parse_error));
+                else {
+                    T.showShort(CountMissionClearNumActivity.this, getString(R.string.parse_error));
                 }
             }
 
@@ -388,26 +388,30 @@ public class CountMissionClearNumActivity extends BasePrintBarScanActivity imple
 
     private void print() {
         if (orderNoInfoEntity != null) {
-            RequestParams params = new RequestParams();
-            params.put("count", 1);
-            params.put("owner", orderNoInfoEntity.getDetail().getBaseInfo().getPerson().getCo());
-            params.put("tkNo", orderNoInfoEntity.getDetail().getBaseInfo().getBaseInfo().getTakingOrderNo());
-            BirdApi.postCodePrint(this, params, new RequestCallBackInterface() {
-                @Override
-                public void successCallBack(JSONObject object) {
-                    PrintEntity entity = GsonHelper.getPerson(object.toString(), PrintEntity.class);
-                    if(entity!=null && entity.getData()!=null){//发送给打印机
-                        for (String i:entity.getData()){
-                            sendMessage(i);
+            JSONObject jsonObject = new JSONObject();
+            try {
+                jsonObject.put("count", 1);
+                jsonObject.put("owner", orderNoInfoEntity.getDetail().getBaseInfo().getPerson().getCo());
+                jsonObject.put("tkNo", orderNoInfoEntity.getDetail().getBaseInfo().getBaseInfo().getTakingOrderNo());
+                BirdApi.postCodePrint(this, jsonObject, new RequestCallBackInterface() {
+                    @Override
+                    public void successCallBack(JSONObject object) {
+                        PrintEntity entity = GsonHelper.getPerson(object.toString(), PrintEntity.class);
+                        if (entity != null && entity.getData() != null) {//发送给打印机
+                            for (String i : entity.getData()) {
+                                sendMessage(i);
+                            }
                         }
                     }
-                }
 
-                @Override
-                public void errorCallBack(JSONObject object) {
+                    @Override
+                    public void errorCallBack(JSONObject object) {
 
-                }
-            }, tag, true);
+                    }
+                }, tag, true);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
         }
     }
 
