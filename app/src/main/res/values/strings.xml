@@ -20,6 +20,7 @@
     <string name="login">登  录</string>
     <string name="notempty">用户名或密码不能为空</string>
     <string name="keyCode_back">再按一次退出程序</string>
+    <string name="parse_error">获取数据有误请与技术联系。</string>
     <string name="submit">提\t交</string>
     <string name="photo">拍照</string>
     <string name="index">首页</string>
@@ -144,7 +145,7 @@
     <string name="upc_code">UPC：</string>
     <string name="bussiness">商 家：</string>
 
-    <string name="print_hint">请到设置中连接打印接再使用打印功能.</string>
+    <string name="print_hint">请到设置中连接打印机.</string>
     //打印
     <string name="print_title">BTPrinter</string>
     <!--BTPrinterDemo-->

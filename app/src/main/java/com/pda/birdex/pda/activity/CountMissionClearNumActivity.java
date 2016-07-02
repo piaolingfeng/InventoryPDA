@@ -23,6 +23,7 @@ import com.pda.birdex.pda.entity.BaseInfo;
 import com.pda.birdex.pda.entity.ContainerInfo;
 import com.pda.birdex.pda.interfaces.OnRecycleViewItemClickListener;
 import com.pda.birdex.pda.interfaces.RequestCallBackInterface;
+import com.pda.birdex.pda.response.PrintEntity;
 import com.pda.birdex.pda.response.TakingOrderNoInfoEntity;
 import com.pda.birdex.pda.utils.GsonHelper;
 import com.pda.birdex.pda.utils.StringUtils;
@@ -42,7 +43,7 @@ import butterknife.OnClick;
 /**
  * Created by chuming.zhuang on 2016/6/23.
  */
-public class CountMissionClearNumActivity extends BarScanActivity implements OnTabSelectedListener, LoadingListener, OnRecycleViewItemClickListener, View.OnClickListener {
+public class CountMissionClearNumActivity extends BasePrintBarScanActivity implements OnTabSelectedListener, LoadingListener, OnRecycleViewItemClickListener, View.OnClickListener {
     String tag = "CountMissionClearNumActivity";
     @Bind(R.id.tablayout)
     TabLayout tablayout;
@@ -84,24 +85,24 @@ public class CountMissionClearNumActivity extends BarScanActivity implements OnT
     List<ContainerInfo> doneList;//已完成列表
 
     String HeadName = "";
-    BaseInfo baseInfo ;
+    BaseInfo baseInfo;
     String takingOrderNum = "";
 
     //    public String []tabList = {getString(R.string.not_start),getString(R.string.has_classified),
 //            getString(R.string.has_counted),getString(R.string.has_transfer)};
 
     @Override
-    public int getbarContentLayoutResId() {
+    public int getPrintContentLayoutResId() {
         return R.layout.activity_countmission_clearnum_layout;
     }
 
     @Override
-    public void barInitializeContentViews() {
+    public void printInitializeContentViews() {
         title.setTitle(getString(R.string.count_task));
         HeadName = getIntent().getStringExtra("HeadName");
         baseInfo = (BaseInfo) getIntent().getExtras().get("baseInfo");
-        if(baseInfo!=null) {
-            takingOrderNum =baseInfo.getTakingOrderNo();
+        if (baseInfo != null) {
+            takingOrderNum = baseInfo.getTakingOrderNo();
             tv_count_num.setText(takingOrderNum);//揽收单号/清点单号
         }
         if (getResources().getString(R.string.taking).equals(HeadName)) {//揽收
@@ -189,7 +190,11 @@ public class CountMissionClearNumActivity extends BarScanActivity implements OnT
             public void successCallBack(JSONObject object) {
                 xrcy.refreshComplete();
                 orderNoInfoEntity = GsonHelper.getPerson(object.toString(), TakingOrderNoInfoEntity.class);
-                dealDetail();
+                if(orderNoInfoEntity!=null)
+                    dealDetail();
+                else{
+                    T.showShort(CountMissionClearNumActivity.this,getString(R.string.parse_error));
+                }
             }
 
             @Override
@@ -253,8 +258,8 @@ public class CountMissionClearNumActivity extends BarScanActivity implements OnT
             Intent intent = new Intent(this, TakingCheckActivity.class);
             intent.putExtra("location", "2");//揽收任务
             Bundle b = new Bundle();
-            b.putSerializable("orderNoInfoEntity",orderNoInfoEntity);
-            switch (tablayout.getSelectedTabPosition()){
+            b.putSerializable("orderNoInfoEntity", orderNoInfoEntity);
+            switch (tablayout.getSelectedTabPosition()) {
                 case 0:
                     b.putSerializable("containerInfo", unassignedList.get(position));
                     intent.putExtras(b);
@@ -279,9 +284,15 @@ public class CountMissionClearNumActivity extends BarScanActivity implements OnT
     }
 
     @Override
-    protected void onDestroy() {
+    public void onDestroy() {
         BirdApi.cancelRequestWithTag(tag);
         super.onDestroy();
+    }
+
+
+    @Override
+    public TitleView printTitleView() {
+        return title;
     }
 
     private void commit() {
@@ -310,9 +321,41 @@ public class CountMissionClearNumActivity extends BarScanActivity implements OnT
         }, tag, true);
     }
 
-    @OnClick(R.id.btn_commit)
+    private void print() {
+        if (orderNoInfoEntity != null) {
+            RequestParams params = new RequestParams();
+            params.put("count", 1);
+            params.put("owner", orderNoInfoEntity.getDetail().getBaseInfo().getPerson().getCo());
+            params.put("tkNo", orderNoInfoEntity.getDetail().getBaseInfo().getBaseInfo().getTakingOrderNo());
+            BirdApi.postCodePrint(this, params, new RequestCallBackInterface() {
+                @Override
+                public void successCallBack(JSONObject object) {
+                    PrintEntity entity = GsonHelper.getPerson(object.toString(), PrintEntity.class);
+                    if(entity!=null && entity.getData()!=null){//发送给打印机
+                        for (String i:entity.getData()){
+                            sendMessage(i);
+                        }
+                    }
+                }
+
+                @Override
+                public void errorCallBack(JSONObject object) {
+
+                }
+            }, tag, true);
+        }
+    }
+
+    @OnClick({R.id.btn_commit, R.id.btn_count_print_no})
     @Override
     public void onClick(View v) {
-        commit();
+        switch (v.getId()) {
+            case R.id.btn_commit:
+                commit();
+                break;
+            case R.id.btn_count_print_no:
+                print();
+                break;
+        }
     }
 }
