@@ -15,7 +15,10 @@ import com.pda.birdex.pda.fragments.CountToolTrackFragment;
 import com.pda.birdex.pda.fragments.CountToolUnbindFragment;
 import com.pda.birdex.pda.interfaces.BackHandledInterface;
 import com.pda.birdex.pda.interfaces.OnRecycleViewItemClickListener;
+import com.pda.birdex.pda.widget.ClearEditText;
 import com.pda.birdex.pda.widget.TitleView;
+
+import org.greenrobot.eventbus.Subscribe;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,7 +28,7 @@ import butterknife.Bind;
 /**
  * Created by chuming.zhuang on 2016/6/24.
  */
-public class CountToolActivity extends BaseActivity implements OnRecycleViewItemClickListener, BaseFragment.OnFragmentInteractionListener, BackHandledInterface {
+public class CountToolActivity extends BasePrintBarScanActivity implements OnRecycleViewItemClickListener, BaseFragment.OnFragmentInteractionListener, BackHandledInterface {
     @Bind(R.id.title)
     TitleView title;
 
@@ -43,12 +46,13 @@ public class CountToolActivity extends BaseActivity implements OnRecycleViewItem
     private FragmentTransaction transaction;
 
     @Override
-    public int getContentLayoutResId() {
+    public int getPrintContentLayoutResId() {
         return R.layout.activity_tool_layout;
     }
 
     @Override
-    public void initializeContentViews() {
+    public void printInitializeContentViews() {
+        bus.register(this);
         if (countToolUnbindFragment == null)
             countToolUnbindFragment = new CountToolUnbindFragment();
         if (countToolPrintNumFragment == null)
@@ -203,6 +207,21 @@ public class CountToolActivity extends BaseActivity implements OnRecycleViewItem
             transaction.hide(countToolBindAreaFragment);
     }
 
+    @Subscribe
+    public void onEvent(List<String> list){
+        if(list!=null){//发送给打印机
+            for (String i:list){
+                sendMessage(i);
+            }
+        }
+    }
+
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        bus.unregister(this);
+    }
 
     @Override
     public void setSelectedFragment(BaseFragment selectedFragment) {
@@ -214,4 +233,18 @@ public class CountToolActivity extends BaseActivity implements OnRecycleViewItem
 
     }
 
+    @Override
+    public TitleView printTitleView() {
+        return null;
+    }
+
+    @Override
+    public ClearEditText getClearEditText() {
+        return null;
+    }
+
+    @Override
+    public void ClearEditTextCallBack(String code) {
+
+    }
 }

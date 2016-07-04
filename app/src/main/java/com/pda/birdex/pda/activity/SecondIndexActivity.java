@@ -61,7 +61,9 @@ public class SecondIndexActivity extends BaseActivity implements OnRecycleViewIt
             indexList.add(entity);
         }
         if (getString(R.string.taking).equals(titleStr)) {//揽收需要统计揽收任务总数
-            getAllMission();
+            getAllTakingMission();
+        }else{
+            getAllCountingMission();
         }
         adapter = new IndexAdapter(this, indexList);
         adapter.setOnRecycleViewItemClickListener(this);
@@ -87,7 +89,8 @@ public class SecondIndexActivity extends BaseActivity implements OnRecycleViewIt
         rcy.setAdapter(adapter);
     }
 
-    public void getAllMission() {
+    //获取所有的揽收任务
+    public void getAllTakingMission() {
         BirdApi.getTakingListCountMerchant(this, "null/null", new RequestCallBackInterface() {
             @Override
             public void successCallBack(JSONObject object) {
@@ -103,7 +106,33 @@ public class SecondIndexActivity extends BaseActivity implements OnRecycleViewIt
             public void errorCallBack(JSONObject object) {
 
             }
-        }, tag, false);
+        }, tag, true);
+    }
+
+    //获取所有清点任务
+    private void getAllCountingMission(){
+        BirdApi.getCountingListCountMerchant(this, "all/unCounting", new RequestCallBackInterface() {
+            @Override
+            public void successCallBack(JSONObject object) {
+                try {
+                    indexList.get(0).setCount(object.get("count") + "");
+                    adapter.notifyDataSetChanged();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void errorCallBack(JSONObject object) {
+
+            }
+        },tag,true);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        BirdApi.cancelRequestWithTag(tag);
     }
 
     @Override

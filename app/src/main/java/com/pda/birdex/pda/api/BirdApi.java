@@ -364,6 +364,31 @@ public class BirdApi {
         MyApplication.ahc.post(context, "http://bs-product.apiv2.birdex.cn/productUpc/newByApp", params, jsonHttpResponseHandler);
     }
 
+    //清点接口
+    //统计某商家某类型订单的数量,merchant=all listType=unCounting时统计待清点任务总数,
+    // merchant=each listType=unCounting时统计每一个商家的未清点订单数以List 返回，
+    // merchant=meitun listType=unTaking时统计美囤的未清点数
+    public static void getCountingListCountMerchant(Context context, String params, RequestCallBackInterface callBackInterface, String tag, boolean showDialog) {
+        getRequest(context, callBackInterface, "counting/list/count/" + params, tag, showDialog);
+    }
+
+    //查询商家揽收单列表
+    public static void getCountingMerchant(Context context, String params, RequestCallBackInterface callBackInterface, String tag, boolean showDialog) {
+        getRequest(context, callBackInterface, "counting/list/" + params, tag, showDialog);
+    }
+
+    //清点单详情
+    public static void getCountingOrderNoInfo(Context context, String orderNo, RequestCallBackInterface callBackInterface, String tag, boolean showDialog) {
+        getRequest(context, callBackInterface, "counting/info/" + orderNo, tag, showDialog);
+    }
+    //清点合并结果
+    public static void postCountingOrderNum(Context context, JSONObject jsonObject, RequestCallBackInterface callBackInterface, String tag, boolean showDialog) {
+        jsonPostRequest(context, jsonObject, callBackInterface, "counting/merge", tag, showDialog);
+    }
+    //清点打印
+    public static void postCountingCodePrint(Context context, JSONObject jsonObject, RequestCallBackInterface callBackInterface, String tag, boolean showDialog) {
+        jsonPostRequest(context, jsonObject, callBackInterface, "counting/code/print", tag, showDialog);
+    }
     /**
      * mContext 上下文对象
      * callBackInterface 请求成功回调

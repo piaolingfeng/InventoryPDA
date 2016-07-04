@@ -143,8 +143,12 @@ public abstract class BasePrintBarScanActivity extends BarScanActivity {
 //        });
 
         // Initialize the BluetoothService to perform bluetooth connections
-        if(mService==null)//让服务只作用一次
-            mService = new BluetoothService(this, mHandler);
+        if(mService==null) {//让服务只作用一次
+//            mService = (BluetoothService) SavaObjectUtil.readObject(this,"mService");
+//            if(mService==null){
+                mService = new BluetoothService(this, mHandler);
+//            }
+        }
         else{
             if(titleView!=null) {
                 mService.setmHandler(mHandler);//重新赋予mHandler地址，activity已经被销毁，handler被重新new过
@@ -228,6 +232,7 @@ public abstract class BasePrintBarScanActivity extends BarScanActivity {
             switch (msg.what) {
                 case MESSAGE_STATE_CHANGE:
                     if(D) Log.i(TAG, "MESSAGE_STATE_CHANGE: " + msg.arg1);
+//                    SavaObjectUtil.saveObject(BasePrintBarScanActivity.this,"mService",mService);
                     switch (msg.arg1) {
                         case BluetoothService.STATE_CONNECTED:
                             if(titleView!=null)

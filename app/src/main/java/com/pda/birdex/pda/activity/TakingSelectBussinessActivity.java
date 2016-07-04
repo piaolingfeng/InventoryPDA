@@ -6,8 +6,8 @@ import android.support.v7.widget.AppCompatSpinner;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.AdapterView;
+import android.widget.TextView;
 
-import com.loopj.android.http.RequestParams;
 import com.pda.birdex.pda.MyApplication;
 import com.pda.birdex.pda.R;
 import com.pda.birdex.pda.adapter.SpinnerDropAdapter;
@@ -46,6 +46,7 @@ public class TakingSelectBussinessActivity extends BaseActivity implements OnCli
     SpinnerDropAdapter adapter;
     List<Merchant> list;
     String merchantId = "";//商家编号
+    boolean isSpinnerFirst = true;
 
     @Override
     public int getContentLayoutResId() {
@@ -63,7 +64,15 @@ public class TakingSelectBussinessActivity extends BaseActivity implements OnCli
         spin_bussiness.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                merchantId = list.get(position).getMerchantId();
+                if (isSpinnerFirst) {
+//第一次初始化spinner时，不显示默认被选择的第一项即可
+//                    view.setVisibility(View.INVISIBLE);
+                    TextView textView = (TextView) view.findViewById(R.id.tv_context);
+                    textView.setText(getString(R.string.select_merchant));
+                } else {
+                    isSpinnerFirst = false;
+                    merchantId = list.get(position).getMerchantId();
+                }
             }
 
             @Override
@@ -81,8 +90,8 @@ public class TakingSelectBussinessActivity extends BaseActivity implements OnCli
 
     //创建无预报揽收
     private void createTaking() {
-        if(StringUtils.isEmpty(edt_co.getText().toString())||StringUtils.isEmpty(edt_recivier.getText().toString())){
-            T.showShort(this,getString(R.string.co_recivier_not));
+        if (StringUtils.isEmpty(edt_co.getText().toString()) || StringUtils.isEmpty(edt_recivier.getText().toString())) {
+            T.showShort(this, getString(R.string.co_recivier_not));
             return;
         }
 //        RequestParams params = new RequestParams();
@@ -110,7 +119,10 @@ public class TakingSelectBussinessActivity extends BaseActivity implements OnCli
         JSONObject jsonObject = new JSONObject();
         try {
             jsonObject.put("expressNo", getIntent().getStringExtra("expressNo"));
-            jsonObject.put("merchant", merchantId);
+            if (StringUtils.isEmpty(merchantId)) {
+                T.showShort(this, getString(R.string.select_merchant));
+            } else
+                jsonObject.put("merchant", merchantId);
             jsonObject.put("name", edt_recivier.getText().toString());
             jsonObject.put("co", edt_co.getText().toString());
 

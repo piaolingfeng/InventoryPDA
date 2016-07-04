@@ -103,7 +103,6 @@ public class CountMissionClearNumActivity extends BasePrintBarScanActivity imple
 
     @Override
     public void printInitializeContentViews() {
-        title.setTitle(getString(R.string.count_task));
         HeadName = getIntent().getStringExtra("HeadName");
         baseInfo = (BaseInfo) getIntent().getExtras().get("baseInfo");
         if (baseInfo != null) {
@@ -114,6 +113,9 @@ public class CountMissionClearNumActivity extends BasePrintBarScanActivity imple
             tv_name_count_num.setText(getString(R.string.tv_taking_num));
             btn_count_print_no.setText(getString(R.string.taking_print_no));
             pll_taking_scan_no.setVisibility(View.VISIBLE);
+            title.setTitle(getString(R.string.taking_task));
+        }else{
+            title.setTitle(getString(R.string.count_task));
         }
         edt_taking_scan_no.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
@@ -151,10 +153,14 @@ public class CountMissionClearNumActivity extends BasePrintBarScanActivity imple
         }
         //分类切换监听器
         tablayout.setOnTabSelectedListener(this);
-        getTakingOrderDetail();//通过揽收单号获取揽收单详情
+        if (getResources().getString(R.string.taking).equals(HeadName)) {//揽收
+            getTakingOrderDetail();//通过揽收单号获取揽收单详情
+        }else{
+            getCountingOrderDetail();//获取清点单详情
+        }
     }
 
-    //处理
+    //处理揽收单
     private void dealDetail() {
 //        String time = TimeUtil.long2Date(Long.parseLong(orderNoInfoEntity.getDetail().getBaseInfo().getBaseInfo().getDeadLine()));
         tv_title_last_time.setText(orderNoInfoEntity.getDetail().getBaseInfo().getBaseInfo().getDeadLine());
@@ -191,6 +197,27 @@ public class CountMissionClearNumActivity extends BasePrintBarScanActivity imple
     //通过揽收单号获取揽收单详情
     private void getTakingOrderDetail() {
         BirdApi.takingOrderNoInfo(this, baseInfo.getTid(), new RequestCallBackInterface() {
+            @Override
+            public void successCallBack(JSONObject object) {
+                xrcy.refreshComplete();
+                orderNoInfoEntity = GsonHelper.getPerson(object.toString(), TakingOrderNoInfoEntity.class);
+                if (orderNoInfoEntity != null)
+                    dealDetail();
+                else {
+                    T.showShort(CountMissionClearNumActivity.this, getString(R.string.parse_error));
+                }
+            }
+
+            @Override
+            public void errorCallBack(JSONObject object) {
+                xrcy.refreshComplete();
+            }
+        }, tag, true);
+    }
+
+    //通过清点单号获取清点单详情
+    private void getCountingOrderDetail(){
+        BirdApi.getCountingOrderNoInfo(this, baseInfo.getTid(), new RequestCallBackInterface() {
             @Override
             public void successCallBack(JSONObject object) {
                 xrcy.refreshComplete();
@@ -296,29 +323,30 @@ public class CountMissionClearNumActivity extends BasePrintBarScanActivity imple
 
     @Override
     public void onItemClick(int position) {
+        Intent intent = new Intent();
+        Bundle b = new Bundle();
+        b.putSerializable("orderNoInfoEntity", orderNoInfoEntity);
+        switch (tablayout.getSelectedTabPosition()) {
+            case 0:
+                b.putSerializable("containerInfo", unassignedList.get(position));
+                intent.putExtras(b);
+                break;
+            case 1:
+                b.putSerializable("containerInfo", assignedList.get(position));
+                intent.putExtras(b);
+                break;
+            case 2:
+                b.putSerializable("containerInfo", doneList.get(position));
+                intent.putExtras(b);
+                break;
+        }
         if (getResources().getString(R.string.taking).equals(HeadName)) {//揽收
-            Intent intent = new Intent(this, TakingCheckActivity.class);
+            intent.setClass(this, TakingCheckActivity.class);
             intent.putExtra("location", "2");//揽收任务
-            Bundle b = new Bundle();
-            b.putSerializable("orderNoInfoEntity", orderNoInfoEntity);
-            switch (tablayout.getSelectedTabPosition()) {
-                case 0:
-                    b.putSerializable("containerInfo", unassignedList.get(position));
-                    intent.putExtras(b);
-                    break;
-                case 1:
-                    b.putSerializable("containerInfo", assignedList.get(position));
-                    intent.putExtras(b);
-                    break;
-                case 2:
-                    b.putSerializable("containerInfo", doneList.get(position));
-                    intent.putExtras(b);
-                    break;
-            }
             startActivity(intent);
         } else {
             if (tablayout.getSelectedTabPosition() != 2) {
-                Intent intent = new Intent(this, CountToolActivity.class);
+                intent.setClass(this, CountToolActivity.class);
                 intent.putExtra("statusPosition", tablayout.getSelectedTabPosition());
                 startActivity(intent);
             }

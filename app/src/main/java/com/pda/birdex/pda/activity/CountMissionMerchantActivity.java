@@ -56,7 +56,7 @@ public class CountMissionMerchantActivity extends BaseActivity {
 
     @Override
     public void initializeContentViews() {
-        title.setTitle(getString(R.string.count_task));
+
         if (getIntent().getExtras() != null) {
             merchantId = getIntent().getStringExtra("MerchantId");
             HeadName = getIntent().getStringExtra("HeadName");
@@ -65,11 +65,13 @@ public class CountMissionMerchantActivity extends BaseActivity {
         tv_business.setText(merchantName);
 
         if (getResources().getString(R.string.taking).equals(HeadName)) {//揽收清点
+            title.setTitle(getString(R.string.taking_task));
             tv_name_count_mission.setText(getResources().getString(R.string.tv_taking_mission));
             tv_clear_num.setText(getResources().getString(R.string.tv_taking_num_1));
-            getBussinessMission("unTaking");
+            getTakingMerchantMission("unTaking");
         } else {
-//            getBussinessMission("count");
+            title.setTitle(getString(R.string.count_task));
+            getCountingMerchantMission("unCounting");//默认为清点
         }
         xrcy.setLoadingMoreProgressStyle(ProgressStyle.SquareSpin);
         xrcy.setLoadingMoreEnabled(true);
@@ -83,9 +85,9 @@ public class CountMissionMerchantActivity extends BaseActivity {
             public void onLoadMore() {
 //xrcy.loadMoreComplete();
                 if (getResources().getString(R.string.taking).equals(HeadName)) {//揽收清点
-                    getBussinessMission("unTaking");
+                    getTakingMerchantMission("unTaking");
                 } else {
-//            getBussinessMission("count");
+                    getCountingMerchantMission("unCounting");
                 }
             }
         });
@@ -107,13 +109,43 @@ public class CountMissionMerchantActivity extends BaseActivity {
     }
 
     //通过网络请求获取商家待清点任务列表
-    private void getBussinessMission(String listType) {
+    private void getTakingMerchantMission(String listType) {
         int offset = 0;
         if (takingList != null) {
             offset = takingList.size();
         }
         final int count = 10;//默认5条数据
         BirdApi.getMerchant(this, merchantId + "/" + listType + "/" + offset + "/" + count, new RequestCallBackInterface() {
+            @Override
+            public void successCallBack(JSONObject object) {
+                if (xrcy != null)
+                    xrcy.loadMoreComplete();
+                entity = GsonHelper.getPerson(object.toString(), MerchantDetailEntity.class);
+                if (entity.getTakingList().size() < count) {
+                    T.showShort(CountMissionMerchantActivity.this, getString(R.string.last_page));
+                }
+                takingList.addAll(entity.getTakingList());
+                tv_count_mission.setText(entity.getCount() + "");
+//                adapter.setTakingOrders(takingList);
+                adapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void errorCallBack(JSONObject object) {
+                if (xrcy != null)
+                    xrcy.loadMoreComplete();
+            }
+        }, tag, true);
+    }
+
+    //通过网络请求获取商家待清点任务列表
+    private void getCountingMerchantMission(String listType) {
+        int offset = 0;
+        if (takingList != null) {
+            offset = takingList.size();
+        }
+        final int count = 10;//默认5条数据
+        BirdApi.getCountingMerchant(this, merchantId + "/" + listType + "/" + offset + "/" + count, new RequestCallBackInterface() {
             @Override
             public void successCallBack(JSONObject object) {
                 if (xrcy != null)
@@ -135,6 +167,7 @@ public class CountMissionMerchantActivity extends BaseActivity {
             }
         }, tag, true);
     }
+
 
     @Override
     protected void onDestroy() {

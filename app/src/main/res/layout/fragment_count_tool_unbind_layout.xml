@@ -15,16 +15,19 @@
             android:layout_height="wrap_content"
             android:text="@string/count_num"
             android:textColor="@color/context_1"
-            app:layout_paddingPercent="@string/item_padding_3w"
+            app:layout_paddingLeftPercent="@string/item_padding_3w"
+            app:layout_paddingRightPercent="@string/item_padding_3w"
+            app:layout_paddingTopPercent="@string/item_padding_3w"
             app:layout_textSizePercent="@string/size_6w" />
 
         <TextView
             android:id="@+id/tv_count_num"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="dfafdsf"
-            android:textColor="@color/context_1"
-            app:layout_paddingPercent="@string/item_padding_3w"
+            android:textColor="@color/context_2"
+            app:layout_paddingLeftPercent="@string/item_padding_3w"
+            app:layout_paddingRightPercent="@string/item_padding_3w"
+            app:layout_paddingTopPercent="@string/item_padding_3w"
             app:layout_textSizePercent="@string/size_6w" />
     </com.zhy.android.percent.support.PercentLinearLayout>
 
@@ -32,7 +35,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        app:layout_marginTopPercent="@string/margin_5w">
+        app:layout_marginTopPercent="@string/item_padding_3w">
 
         <com.zhy.android.percent.support.PercentRelativeLayout
             android:layout_width="match_parent"
@@ -44,7 +47,9 @@
                 android:layout_centerVertical="true"
                 android:text="@string/area"
                 android:textColor="@color/context_1"
-                app:layout_paddingPercent="@string/item_padding_3w"
+                app:layout_paddingLeftPercent="@string/item_padding_3w"
+                app:layout_paddingRightPercent="@string/item_padding_3w"
+                app:layout_paddingTopPercent="@string/item_padding_3w"
                 app:layout_textSizePercent="@string/size_6w" />
 
             <Button
@@ -64,39 +69,27 @@
             android:id="@+id/tv_area"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="dfafdsf"
-            android:textColor="@color/context_1"
-            app:layout_paddingPercent="@string/item_padding_3w"
+            android:textColor="@color/context_2"
+            app:layout_paddingLeftPercent="@string/item_padding_3w"
+            app:layout_paddingRightPercent="@string/item_padding_3w"
+            app:layout_paddingTopPercent="@string/item_padding_3w"
             app:layout_textSizePercent="@string/size_6w" />
     </com.zhy.android.percent.support.PercentLinearLayout>
 
     <com.zhy.android.percent.support.PercentLinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        app:layout_marginTopPercent="@string/item_padding_3w">
 
-        <com.zhy.android.percent.support.PercentLinearLayout
-            android:layout_width="match_parent"
+        <TextView
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            app:layout_marginTopPercent="@string/margin_5w">
+            android:text="@string/taking_num"
+            android:textColor="@color/context_1"
+            app:layout_paddingPercent="@string/item_padding_3w"
+            app:layout_textSizePercent="@string/size_6w" />
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/taking_num"
-                android:textColor="@color/context_1"
-                app:layout_paddingPercent="@string/item_padding_3w"
-                app:layout_textSizePercent="@string/size_6w" />
-
-            <TextView
-                android:id="@+id/tv_taking_num"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="dfafdsf"
-                android:textColor="@color/context_1"
-                app:layout_textSizePercent="@string/size_6w" />
-        </com.zhy.android.percent.support.PercentLinearLayout>
 
         <com.zhy.android.percent.support.PercentLinearLayout
             android:layout_width="match_parent"

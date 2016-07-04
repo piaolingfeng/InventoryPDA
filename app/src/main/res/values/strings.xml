@@ -94,7 +94,7 @@
     <string name="taking_upload_empty">揽收箱号不能为空</string>
     <string name="taking_upload_empty_p">照片不能为空</string>
     <string name="taking_upload_photo_count">照片不能超过10张</string>
-
+    <string name="select_merchant">请选择商家：</string>
     <!-- 揽收 -->
     <string name="taking_task">揽收任务</string>
     <string name="tv_taking_mission">待揽收任务：</string>

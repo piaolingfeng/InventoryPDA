@@ -54,10 +54,11 @@ public class CountMissionActivity extends BarScanActivity implements BaseFragmen
         EventBus.getDefault().register(this);
         if(getResources().getString(R.string.taking).equals(getIntent().getStringExtra("HeadName"))){//揽收
             title.setTitle(getString(R.string.taking_task));
+            getAllTakingMerchant();//获取揽收商家列表
         }else {
             title.setTitle(getString(R.string.count_task));
+            getAllCountingMerchant();
         }
-        getAllMerchant();//获取商家列表
         title.setBackInterface(new TitleBarBackInterface() {//
             @Override
             public void onBackClick() {
@@ -97,15 +98,36 @@ public class CountMissionActivity extends BarScanActivity implements BaseFragmen
 
     }
 
-    //获取所有商家的任务数量
-    public void getAllMerchant(){
+    //获取揽收所有商家的任务数量
+    public void getAllTakingMerchant(){
         BirdApi.getTakingListCountMerchant(this, "all/unTaking", new RequestCallBackInterface() {
             @Override
             public void successCallBack(JSONObject object) {
                 try {
                     merchantListEntity = GsonHelper.getPerson(object.toString(),MerchantListEntity.class);
                     dealMerchant(merchantListEntity);
-                    Bundle b = new Bundle();
+                    otherFragment.getUIArguments().putSerializable("merchantList", (Serializable) merchantListEntity.getMerchantCounts());
+                    bussniessFragment.getUIArguments().putSerializable("merchantList", (Serializable) merchantListEntity.getMerchantCounts());
+                    EventBus.getDefault().post(merchantListEntity.getMerchantCounts());
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+            @Override
+            public void errorCallBack(JSONObject object) {
+
+            }
+        }, tag, false);
+    }
+
+    //获取清点所有商家的任务数量
+    public void getAllCountingMerchant(){
+        BirdApi.getCountingListCountMerchant(this, "each/unCounting", new RequestCallBackInterface() {
+            @Override
+            public void successCallBack(JSONObject object) {
+                try {
+                    merchantListEntity = GsonHelper.getPerson(object.toString(), MerchantListEntity.class);
+                    dealMerchant(merchantListEntity);
                     otherFragment.getUIArguments().putSerializable("merchantList", (Serializable) merchantListEntity.getMerchantCounts());
                     bussniessFragment.getUIArguments().putSerializable("merchantList", (Serializable) merchantListEntity.getMerchantCounts());
                     EventBus.getDefault().post(merchantListEntity.getMerchantCounts());

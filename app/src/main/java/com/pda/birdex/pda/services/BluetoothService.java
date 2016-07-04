@@ -31,6 +31,7 @@ import com.pda.birdex.pda.activity.PrintActivity;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.io.Serializable;
 import java.util.UUID;
 
 /**
@@ -39,7 +40,7 @@ import java.util.UUID;
  * incoming connections, a thread for connecting with a device, and a
  * thread for performing data transmissions when connected.
  */
-public class BluetoothService {
+public class BluetoothService implements Serializable {
     // Debugging
     private static final String TAG = "BluetoothService";
     private static final boolean D = true;
