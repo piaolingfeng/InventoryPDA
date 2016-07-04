@@ -31,6 +31,7 @@ import com.pda.birdex.pda.R;
 import com.pda.birdex.pda.adapter.PhotoGVAdapter;
 import com.pda.birdex.pda.api.BirdApi;
 import com.pda.birdex.pda.interfaces.RequestCallBackInterface;
+import com.pda.birdex.pda.utils.GsonHelper;
 import com.pda.birdex.pda.utils.T;
 import com.pda.birdex.pda.widget.ClearEditText;
 
@@ -188,6 +189,7 @@ public class PhotoActivity extends BarScanActivity implements View.OnClickListen
                     File file = new File(path1);
 //                    File file = new File("/storage/sdcard0/logs/recovery/20150430_104402.log");
 
+
                     try {
                         myparams.put("file", file);
                     } catch (FileNotFoundException e) {
@@ -200,7 +202,7 @@ public class PhotoActivity extends BarScanActivity implements View.OnClickListen
                         public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                             super.onSuccess(statusCode, headers, response);
                             try {
-                                if("false".equals(response.getString("ret"))){
+                                if ("false".equals(response.getString("ret"))) {
                                     T.showShort(MyApplication.getInstans(), "上传失败");
                                     dismissDialog();
                                 }
@@ -235,35 +237,42 @@ public class PhotoActivity extends BarScanActivity implements View.OnClickListen
                                     mProgress.setProgress(progress);
                                     sucCounts++;
                                     if (sucCounts == pathList.size()) {
-                                        // 调用提交上传图片接口
-                                        RequestParams params = new RequestParams();
-                                        params.put("containerNo", lanshouno_et.getText() + "");
-                                        params.put("isException", exception_cb.isChecked());
-                                        params.put("photoUrl", photoUrl);
+                                        JSONObject jsonObject = new JSONObject();
+                                        try {
 
-                                        BirdApi.uploadPicSubmit(PhotoActivity.this,params,new RequestCallBackInterface(){
+                                            // 调用提交上传图片接口
+                                            jsonObject.put("containerNo", lanshouno_et.getText() + "");
+                                            jsonObject.put("isException", exception_cb.isChecked());
+                                            String urlsStr = GsonHelper.createJsonString(photoUrl);
+                                            JSONArray array = new JSONArray(urlsStr);
+                                            jsonObject.put("photoIds", array);
 
-                                            @Override
-                                            public void successCallBack(JSONObject object) {
-                                                try {
-                                                    if("success".equals(object.getString("result"))){
-                                                        T.showShort(PhotoActivity.this,getString(R.string.taking_upload_suc));
-                                                    } else {
-                                                        T.showShort(PhotoActivity.this,getString(R.string.taking_upload_fal));
+                                            BirdApi.uploadPicSubmit(PhotoActivity.this, jsonObject, new RequestCallBackInterface() {
+
+                                                @Override
+                                                public void successCallBack(JSONObject object) {
+                                                    try {
+                                                        if ("success".equals(object.getString("result"))) {
+                                                            T.showShort(PhotoActivity.this, getString(R.string.taking_upload_suc));
+                                                        } else {
+                                                            T.showShort(PhotoActivity.this, getString(R.string.taking_upload_fal));
+                                                        }
+                                                    } catch (JSONException e) {
+                                                        e.printStackTrace();
                                                     }
-                                                } catch (JSONException e) {
-                                                    e.printStackTrace();
+                                                    dismissDialog();
+
                                                 }
-                                                dismissDialog();
 
-                                            }
-
-                                            @Override
-                                            public void errorCallBack(JSONObject object) {
-                                                T.showShort(PhotoActivity.this,getString(R.string.taking_upload_fal));
-                                                dismissDialog();
-                                            }
-                                        },TAG,true);
+                                                @Override
+                                                public void errorCallBack(JSONObject object) {
+                                                    T.showShort(PhotoActivity.this, getString(R.string.taking_upload_fal));
+                                                    dismissDialog();
+                                                }
+                                            }, TAG, true);
+                                        } catch (JSONException e) {
+                                            e.printStackTrace();
+                                        }
                                     }
                                 } else {
                                     T.showShort(MyApplication.getInstans(), "上传失败");
@@ -514,8 +523,8 @@ public class PhotoActivity extends BarScanActivity implements View.OnClickListen
 
 
     // 关闭 上传进度条
-    private void dismissDialog(){
-        if(mProgress != null && mProgress.isShowing()){
+    private void dismissDialog() {
+        if (mProgress != null && mProgress.isShowing()) {
             mProgress.dismiss();
         }
     }
