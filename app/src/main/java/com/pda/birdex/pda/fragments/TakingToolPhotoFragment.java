@@ -32,6 +32,7 @@ import com.pda.birdex.pda.entity.ContainerInfo;
 import com.pda.birdex.pda.entity.TakingOrder;
 import com.pda.birdex.pda.interfaces.RequestCallBackInterface;
 import com.pda.birdex.pda.response.TakingOrderNoInfoEntity;
+import com.pda.birdex.pda.utils.GsonHelper;
 import com.pda.birdex.pda.utils.T;
 import com.pda.birdex.pda.widget.ClearEditText;
 
@@ -56,8 +57,8 @@ import butterknife.OnClick;
 /**
  * Created by chuming.zhuang on 2016/6/25.
  */
-public class TakingToolPhotoFragment extends BarScanBaseFragment implements View.OnClickListener{
-    String tag="TakingToolPhotoFragment";
+public class TakingToolPhotoFragment extends BarScanBaseFragment implements View.OnClickListener {
+    String tag = "TakingToolPhotoFragment";
 
     @Bind(R.id.edt_taking_num)
     com.pda.birdex.pda.widget.ClearEditText edt_taking_num;
@@ -143,8 +144,8 @@ public class TakingToolPhotoFragment extends BarScanBaseFragment implements View
                         public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                             super.onSuccess(statusCode, headers, response);
                             try {
-                                if("false".equals(response.getString("ret"))){
-                                    T.showShort(MyApplication.getInstans(), "上传失败");
+                                if ("false".equals(response.getString("ret"))) {
+                                    T.showShort(MyApplication.getInstans(), getString(R.string.taking_upload_fal));
                                     dismissDialog();
                                 }
                             } catch (JSONException e) {
@@ -178,42 +179,49 @@ public class TakingToolPhotoFragment extends BarScanBaseFragment implements View
                                     mProgress.setProgress(progress);
                                     sucCounts++;
                                     if (sucCounts == pathList.size()) {
-                                        // 调用提交上传图片接口
-                                        RequestParams params = new RequestParams();
-                                        params.put("containerNo", edt_taking_num.getText() + "");
-                                        params.put("isException", exception_cb.isChecked());
-                                        params.put("photoUrl", photoUrl);
+                                        JSONObject jsonObject = new JSONObject();
+                                        try {
 
-                                        BirdApi.uploadPicSubmit(getContext(),params,new RequestCallBackInterface(){
+                                            // 调用提交上传图片接口
+                                            jsonObject.put("containerNo", edt_taking_num.getText() + "");
+                                            jsonObject.put("isException", exception_cb.isChecked());
+                                            String urlsStr = GsonHelper.createJsonString(photoUrl);
+                                            JSONArray array = new JSONArray(urlsStr);
+                                            jsonObject.put("photoIds", array);
 
-                                            @Override
-                                            public void successCallBack(JSONObject object) {
-                                                try {
-                                                    if("success".equals(object.getString("result"))){
-                                                        T.showShort(getContext(),getString(R.string.taking_upload_suc));
-                                                    } else {
-                                                        T.showShort(getContext(),getString(R.string.taking_upload_fal));
+                                            BirdApi.uploadPicSubmit(getContext(), jsonObject, new RequestCallBackInterface() {
+
+                                                @Override
+                                                public void successCallBack(JSONObject object) {
+                                                    try {
+                                                        if ("success".equals(object.getString("result"))) {
+                                                            T.showShort(getContext(), getString(R.string.taking_upload_suc));
+                                                        } else {
+                                                            T.showShort(getContext(), getString(R.string.taking_upload_fal));
+                                                        }
+                                                    } catch (JSONException e) {
+                                                        e.printStackTrace();
                                                     }
-                                                } catch (JSONException e) {
-                                                    e.printStackTrace();
+                                                    dismissDialog();
+
                                                 }
-                                                dismissDialog();
 
-                                            }
-
-                                            @Override
-                                            public void errorCallBack(JSONObject object) {
-                                                T.showShort(getContext(),getString(R.string.taking_upload_fal));
-                                                dismissDialog();
-                                            }
-                                        },tag,true);
+                                                @Override
+                                                public void errorCallBack(JSONObject object) {
+                                                    T.showShort(getContext(), getString(R.string.taking_upload_fal));
+                                                    dismissDialog();
+                                                }
+                                            }, tag, true);
+                                        } catch (JSONException e) {
+                                            e.printStackTrace();
+                                        }
                                     }
                                 } else {
-                                    T.showShort(MyApplication.getInstans(), "上传失败");
+                                    T.showShort(MyApplication.getInstans(), getString(R.string.taking_upload_fal));
                                     dismissDialog();
                                 }
                             } else {
-                                T.showShort(MyApplication.getInstans(), "上传失败");
+                                T.showShort(MyApplication.getInstans(), getString(R.string.taking_upload_fal));
                                 dismissDialog();
                             }
                         }
@@ -221,14 +229,14 @@ public class TakingToolPhotoFragment extends BarScanBaseFragment implements View
                         @Override
                         public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
                             super.onFailure(statusCode, headers, throwable, errorResponse);
-                            T.showShort(MyApplication.getInstans(), "上传失败");
+                            T.showShort(MyApplication.getInstans(), getString(R.string.taking_upload_fal));
                             dismissDialog();
                         }
 
                         @Override
                         public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONArray errorResponse) {
                             super.onFailure(statusCode, headers, throwable, errorResponse);
-                            T.showShort(MyApplication.getInstans(), "上传失败");
+                            T.showShort(MyApplication.getInstans(), getString(R.string.taking_upload_fal));
                             dismissDialog();
                         }
 
@@ -349,7 +357,7 @@ public class TakingToolPhotoFragment extends BarScanBaseFragment implements View
     @OnClick({R.id.btn_commit})
     @Override
     public void onClick(View v) {
-        switch (v.getId()){
+        switch (v.getId()) {
             case R.id.btn_commit:
                 // 如果 upc 为空，照片 list 也为空， 不进行上传操作
                 if (TextUtils.isEmpty(edt_taking_num.getText())) {
@@ -395,6 +403,7 @@ public class TakingToolPhotoFragment extends BarScanBaseFragment implements View
     private ProgressDialog mProgress;
 
     private int progress = 0;
+
     /**
      * 进度条Dialog
      */
@@ -410,8 +419,8 @@ public class TakingToolPhotoFragment extends BarScanBaseFragment implements View
 
 
     // 关闭 上传进度条
-    private void dismissDialog(){
-        if(mProgress != null && mProgress.isShowing()){
+    private void dismissDialog() {
+        if (mProgress != null && mProgress.isShowing()) {
             mProgress.dismiss();
         }
     }
@@ -553,15 +562,15 @@ public class TakingToolPhotoFragment extends BarScanBaseFragment implements View
     }
 
     // 通过用户编码+容器号 获取区域信息
-    private void getAreaMes(String code){
+    private void getAreaMes(String code) {
         String owner = takingOrder.getPerson().getCo();
-        if(!(TextUtils.isEmpty(code)||TextUtils.isEmpty(owner))) {
-            BirdApi.getArea(getContext(), owner + "/" + code ,new RequestCallBackInterface(){
+        if (!(TextUtils.isEmpty(code) || TextUtils.isEmpty(owner))) {
+            BirdApi.getArea(getContext(), owner + "/" + code, new RequestCallBackInterface() {
 
                 @Override
                 public void successCallBack(JSONObject object) {
                     try {
-                        if("success".equals(object.getString("result"))){
+                        if ("success".equals(object.getString("result"))) {
                             tv_area.setText(object.getString("area"));
                         }
                     } catch (JSONException e) {
@@ -573,13 +582,13 @@ public class TakingToolPhotoFragment extends BarScanBaseFragment implements View
                 public void errorCallBack(JSONObject object) {
 
                 }
-            } ,tag, true);
+            }, tag, true);
         }
     }
 
     @Override
     public void ClearEditTextCallBack(String code) {
-        if(this.isVisible()) {
+        if (this.isVisible()) {
             if ("1".equals(from)) {
                 // 说明是从揽收进入的 需要通过容器号 调用接口  获取区域信息
                 getAreaMes(code);

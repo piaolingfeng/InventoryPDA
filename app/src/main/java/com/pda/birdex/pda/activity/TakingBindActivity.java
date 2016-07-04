@@ -106,6 +106,15 @@ public class TakingBindActivity extends BarScanActivity implements View.OnClickL
                         @Override
                         public void errorCallBack(JSONObject object) {
                             T.showShort(TakingBindActivity.this, getString(R.string.taking_bind_fal));
+                            if (object != null) {
+                                try {
+                                    String errMsg = object.getString("errMsg");
+                                    if (!TextUtils.isEmpty(errMsg))
+                                        T.showShort(TakingBindActivity.this, errMsg);
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+                            }
                         }
                     }, TAG, true);
 

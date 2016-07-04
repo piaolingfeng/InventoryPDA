@@ -227,9 +227,13 @@ public class BirdApi {
         ahc.post(context, UPLOADIP + "upload", params, jsonHttpResponseHandler);
     }
 
+//    // 提交上传图片
+//    public static void uploadPicSubmit(Context context, RequestParams params, RequestCallBackInterface callBackInterface, String tag, boolean showDialog) {
+//        postRequest(context, params, callBackInterface, "photo", tag, showDialog);
+//    }
     // 提交上传图片
-    public static void uploadPicSubmit(Context context, RequestParams params, RequestCallBackInterface callBackInterface, String tag, boolean showDialog) {
-        postRequest(context, params, callBackInterface, "photo", tag, showDialog);
+    public static void uploadPicSubmit(Context context, JSONObject jsonObject, RequestCallBackInterface callBackInterface, String tag, boolean showDialog) {
+        jsonPostRequest(context, jsonObject, callBackInterface, "photo", tag, showDialog);
     }
 
     /**
