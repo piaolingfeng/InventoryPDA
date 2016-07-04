@@ -103,7 +103,7 @@ public class CountMissionClearNumActivity extends BasePrintBarScanActivity imple
 
     @Override
     public void printInitializeContentViews() {
-        title.setTitle(getString(R.string.count_task));
+        title.setTitle(getString(R.string.taking_task));
         HeadName = getIntent().getStringExtra("HeadName");
         baseInfo = (BaseInfo) getIntent().getExtras().get("baseInfo");
         if (baseInfo != null) {

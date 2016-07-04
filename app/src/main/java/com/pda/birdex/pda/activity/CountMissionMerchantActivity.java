@@ -56,7 +56,7 @@ public class CountMissionMerchantActivity extends BaseActivity {
 
     @Override
     public void initializeContentViews() {
-        title.setTitle(getString(R.string.count_task));
+        title.setTitle(getString(R.string.taking_task));
         if (getIntent().getExtras() != null) {
             merchantId = getIntent().getStringExtra("MerchantId");
             HeadName = getIntent().getStringExtra("HeadName");

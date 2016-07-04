@@ -31,13 +31,27 @@
                     app:layout_paddingLeftPercent="@string/item_padding_3w"
                     app:layout_textSizePercent="@string/size_6w" />
 
-                <TextView
-                    android:id="@+id/tv_taking_num"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textColor="@color/context_1"
-                    app:layout_paddingPercent="@string/item_padding_3w"
-                    app:layout_textSizePercent="@string/size_6w" />
+                <com.zhy.android.percent.support.PercentRelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <TextView
+                        android:id="@+id/tv_taking_num"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/context_1"
+                        app:layout_paddingPercent="@string/item_padding_3w"
+                        app:layout_textSizePercent="@string/size_6w" />
+
+                    <com.pda.birdex.pda.widget.ClearEditText
+                        android:id="@+id/edt_taking_num"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:imeOptions="actionDone"
+                        android:visibility="gone"
+                        android:singleLine="true"
+                        android:textColor="@color/context_2" />
+                </com.zhy.android.percent.support.PercentRelativeLayout>
+
             </com.zhy.android.percent.support.PercentLinearLayout>
 
             <com.zhy.android.percent.support.PercentLinearLayout
@@ -69,7 +83,7 @@
                     app:layout_paddingPercent="@string/item_padding_3w">
 
                     <com.pda.birdex.pda.widget.ClearEditText
-                        android:id="@+id/edt_taking_num"
+                        android:id="@+id/edt_taking_container"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:imeOptions="actionDone"

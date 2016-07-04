@@ -149,6 +149,10 @@
             android:name=".activity.SettingBarScanActivity"
             android:windowSoftInputMode="adjustResize|stateHidden"
             android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.TakingBindOrderActivity"
+            android:windowSoftInputMode="adjustResize|stateHidden"
+            android:screenOrientation="portrait" />
     </application>
 
 </manifest>

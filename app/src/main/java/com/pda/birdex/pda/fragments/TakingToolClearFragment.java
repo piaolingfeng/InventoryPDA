@@ -384,7 +384,7 @@ public class TakingToolClearFragment extends BarScanBaseFragment implements View
             }
 //        params.put("takingOrderNo", tv_taking_num.getText() + "");
 //        List containerList = new ArrayList();
-//        containerList.add(edt_taking_num.getText() + "");
+//        containerList.add(edt_taking_container.getText() + "");
             jsonObject.put("containerNo", edt_taking_num.getText() + "");
             jsonObject.put("count", edt_box_size.getText() + "");
 
