@@ -87,7 +87,7 @@ public class MainActivity extends BaseActivity implements OnRecycleViewItemClick
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
-        T.showShort(this, "keyCode" + keyCode);
+//        T.showShort(this, "keyCode" + keyCode);
         if (keyCode == KeyEvent.KEYCODE_BACK) {
             exit();
             return false;

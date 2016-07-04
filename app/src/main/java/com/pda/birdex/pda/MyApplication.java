@@ -98,7 +98,7 @@ public class MyApplication extends Application {
         instants = this;
         sp = getSharedPreferences("login", Activity.MODE_PRIVATE);
         initFile();
-        iniCrash();
+//        iniCrash();
         app_version = getVersionLocal();
         initAsyncHttpClient();
     }

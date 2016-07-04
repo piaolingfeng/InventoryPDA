@@ -14,21 +14,19 @@ import com.loopj.android.http.TextHttpResponseHandler;
 import com.pda.birdex.pda.MyApplication;
 import com.pda.birdex.pda.R;
 import com.pda.birdex.pda.interfaces.RequestCallBackInterface;
+import com.pda.birdex.pda.utils.PreferenceUtils;
 import com.pda.birdex.pda.utils.SafeProgressDialog;
 import com.pda.birdex.pda.utils.T;
 import com.pda.birdex.pda.widget.RotateLoading;
 
 import org.apache.http.Header;
 import org.apache.http.HttpEntity;
-import org.apache.http.HttpResponse;
 import org.apache.http.entity.StringEntity;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.IOException;
 import java.io.UnsupportedEncodingException;
-import java.net.URI;
 import java.net.URLEncoder;
 
 /**
@@ -271,30 +269,12 @@ public class BirdApi {
             }
 
             @Override
-            public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
-                super.onSuccess(statusCode, headers, response);
-
-            }
-
-            @Override
-            public void onSuccess(int statusCode, Header[] headers, String responseString) {
-                super.onSuccess(statusCode, headers, responseString);
-            }
-
-            @Override
             public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
                 super.onFailure(statusCode, headers, responseString, throwable);
+                if (MyApplication.ahc != null){
+                    MyApplication.ahc.addHeader("x-access-token", PreferenceUtils.getPrefString(mContext,"token",""));
+                }
                 T.showShort(mContext, mContext.getString(R.string.request_error));
-            }
-
-            @Override
-            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
-                super.onFailure(statusCode, headers, throwable, errorResponse);
-            }
-
-            @Override
-            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONArray errorResponse) {
-                super.onFailure(statusCode, headers, throwable, errorResponse);
             }
 
             @Override
@@ -345,24 +325,12 @@ public class BirdApi {
             }
 
             @Override
-            public void onSuccess(int statusCode, Header[] headers, String responseString) {
-                super.onSuccess(statusCode, headers, responseString);
-            }
-
-            @Override
             public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
                 super.onFailure(statusCode, headers, responseString, throwable);
+                if (headers == null){
+                    MyApplication.ahc.addHeader("x-access-token", PreferenceUtils.getPrefString(mContext,"token",""));
+                }
                 T.showShort(mContext, mContext.getString(R.string.request_error));
-            }
-
-            @Override
-            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
-                super.onFailure(statusCode, headers, throwable, errorResponse);
-            }
-
-            @Override
-            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONArray errorResponse) {
-                super.onFailure(statusCode, headers, throwable, errorResponse);
             }
 
             @Override
@@ -422,7 +390,12 @@ public class BirdApi {
                             if ("success".equals(response.getString("result"))) {
                                 callBackInterface.successCallBack(response);
                             } else {
-                                T.showShort(mContext, response.getString("errMsg"));
+                                try {
+
+                                    T.showShort(mContext, response.getString("errMsg"));
+                                }catch (JSONException e){
+                                    e.printStackTrace();
+                                }
                                 callBackInterface.errorCallBack(response);
                             }
                         } catch (JSONException e) {
@@ -442,6 +415,9 @@ public class BirdApi {
                 if (showDialog)
                     hideLoading();
                 super.onFailure(statusCode, headers, throwable, errorResponse);
+                if (MyApplication.ahc != null) {
+                    MyApplication.ahc.addHeader("x-access-token", PreferenceUtils.getPrefString(mContext, "token", ""));
+                }
                 T.showShort(mContext, mContext.getString(R.string.request_error));
             }
 

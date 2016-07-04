@@ -16,6 +16,7 @@ import com.pda.birdex.pda.interfaces.RequestCallBackInterface;
 import com.pda.birdex.pda.response.PrintEntity;
 import com.pda.birdex.pda.utils.GsonHelper;
 import com.pda.birdex.pda.utils.HideSoftKeyboardUtil;
+import com.pda.birdex.pda.utils.T;
 import com.pda.birdex.pda.widget.ClearEditText;
 import com.pda.birdex.pda.widget.TitleView;
 
@@ -180,7 +181,11 @@ public class TakingPrintBarScanActivity extends BasePrintBarScanActivity impleme
     @Override
     public void successCallBack(JSONObject object) {
         PrintEntity entity = GsonHelper.getPerson(object.toString(), PrintEntity.class);
-        print(entity.getData());
+        if(entity!=null) {
+            print(entity.getData());
+        }else{
+            T.showLong(this,getString(R.string.parse_error));
+        }
     }
 
     private void print(List<String> list){
