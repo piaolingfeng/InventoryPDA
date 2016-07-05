@@ -8,7 +8,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.pda.birdex.pda.R;
-import com.pda.birdex.pda.entity.TakingOrder;
+import com.pda.birdex.pda.entity.CountingOrder;
 import com.pda.birdex.pda.interfaces.OnRecycleViewItemClickListener;
 import com.zhy.android.percent.support.PercentLinearLayout;
 
@@ -18,42 +18,42 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 
 /**
- * Created by chuming.zhuang on 2016/6/22.
+ * Created by chuming.zhuang on 2016/7/5.
  */
-public class CountMissionClearAdapter extends RecyclerView.Adapter<CountMissionClearAdapter.CountMissionClearAdapterHolder> {
+public class CountingMissonClearAdapter extends RecyclerView.Adapter<CountingMissonClearAdapter.CountingMissionClearAdapterHolder> {
 
     Context mContext;
-    List<TakingOrder> takingOrders;
-
+    List<CountingOrder> countingOrderList;
     OnRecycleViewItemClickListener onRecycleViewItemClickListener;
 
     public void setOnRecycleViewItemClickListener(OnRecycleViewItemClickListener onRecycleViewItemClickListener) {
         this.onRecycleViewItemClickListener = onRecycleViewItemClickListener;
     }
 
-    public void setTakingOrders(List<TakingOrder> takingOrders) {
-        this.takingOrders = takingOrders;
+
+    public void setCountingOrderList(List<CountingOrder> countingOrderList) {
+        this.countingOrderList = countingOrderList;
     }
 
-    public CountMissionClearAdapter(Context mContext, List<TakingOrder> takingOrders) {
+    public CountingMissonClearAdapter(Context mContext, List<CountingOrder> countingOrderList) {
         this.mContext = mContext;
-        this.takingOrders = takingOrders;
+        this.countingOrderList = countingOrderList;
     }
 
     @Override
-    public CountMissionClearAdapterHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        return new CountMissionClearAdapterHolder(LayoutInflater.from(mContext).inflate(R.layout.item_countbussiness_layout, null));
+    public CountingMissionClearAdapterHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        return new CountingMissionClearAdapterHolder(LayoutInflater.from(mContext).inflate(R.layout.item_countbussiness_layout, null));
     }
 
     @Override
-    public void onBindViewHolder(CountMissionClearAdapterHolder holder, int position) {
+    public void onBindViewHolder(CountingMissionClearAdapterHolder holder, int position) {
         holder.position = position;
 
         holder.pll_item.setBackgroundColor(mContext.getResources().getColor(R.color.white));
-        holder.tv_clear_num.setText(takingOrders.get(position).getBaseInfo().getTakingOrderNo());
+        holder.tv_clear_num.setText(countingOrderList.get(position).getBaseInfo().getOrderNo());
 //        String time = TimeUtil.long2Date(Long.parseLong(takingOrders.get(position).getBaseInfo().getDeadLine()));
-        holder.tv_last_time.setText(takingOrders.get(position).getBaseInfo().getDeadLine());
-        switch (takingOrders.get(position).getBaseInfo().getTakingStatus()){
+        holder.tv_last_time.setText(countingOrderList.get(position).getBaseInfo().getDeadline());
+        switch (countingOrderList.get(position).getBaseInfo().getStatus()){
             case 1://未开始
                 holder.tv_status.setText(mContext.getString(R.string.mission_assign));
                 holder.pll_item.setBackgroundColor(mContext.getResources().getColor(R.color.white));
@@ -73,12 +73,12 @@ public class CountMissionClearAdapter extends RecyclerView.Adapter<CountMissionC
     @Override
     public int getItemCount() {
         int size = 0;
-        if (takingOrders != null)
-            size = takingOrders.size();
+        if (countingOrderList != null)
+            size = countingOrderList.size();
         return size;
     }
 
-    public class CountMissionClearAdapterHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    public class CountingMissionClearAdapterHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         @Bind(R.id.tv_clear_num)
         TextView tv_clear_num;
@@ -90,7 +90,7 @@ public class CountMissionClearAdapter extends RecyclerView.Adapter<CountMissionC
         PercentLinearLayout pll_item;
         int position = 0;
 
-        public CountMissionClearAdapterHolder(View itemView) {
+        public CountingMissionClearAdapterHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
             itemView.setOnClickListener(this);

@@ -16,14 +16,14 @@
             android:id="@+id/tv_clear_num"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
+            android:layout_weight="1.7"
             android:gravity="center"
             android:text="@string/tv_count_num"
             android:singleLine="true"
             android:textColor="@color/context_2"
             app:layout_paddingTopPercent="@string/item_padding_3w"
             app:layout_paddingBottomPercent="@string/item_padding_3w"
-            app:layout_textSizePercent="@string/size_5w" />
+            app:layout_textSizePercent="@string/size_4w" />
 
         <TextView
             android:id="@+id/tv_last_time"
@@ -36,32 +36,20 @@
             android:textColor="@color/context_2"
             app:layout_paddingTopPercent="@string/item_padding_3w"
             app:layout_paddingBottomPercent="@string/item_padding_3w"
-            app:layout_textSizePercent="@string/size_5w" />
+            app:layout_textSizePercent="@string/size_4w" />
 
         <TextView
             android:id="@+id/tv_status"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
+            android:layout_weight="0.6"
             android:gravity="center"
             android:singleLine="true"
             android:text="@string/tv_status"
             android:textColor="@color/context_2"
             app:layout_paddingTopPercent="@string/item_padding_3w"
             app:layout_paddingBottomPercent="@string/item_padding_3w"
-            app:layout_textSizePercent="@string/size_5w" />
-        <TextView
-            android:id="@+id/tv_status_1"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:singleLine="true"
-            android:text="@string/tv_status"
-            android:textColor="@color/context_2"
-            app:layout_paddingPercent="@string/item_padding_3w"
-            android:visibility="gone"
-            app:layout_textSizePercent="@string/size_5w" />
+            app:layout_textSizePercent="@string/size_4w" />
     </com.zhy.android.percent.support.PercentLinearLayout>
 
 

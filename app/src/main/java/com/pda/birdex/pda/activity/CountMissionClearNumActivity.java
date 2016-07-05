@@ -22,6 +22,7 @@ import com.pda.birdex.pda.api.BirdApi;
 import com.pda.birdex.pda.entity.BaseInfo;
 import com.pda.birdex.pda.entity.BindOrder;
 import com.pda.birdex.pda.entity.ContainerInfo;
+import com.pda.birdex.pda.entity.CountingBaseInfo;
 import com.pda.birdex.pda.interfaces.OnRecycleViewItemClickListener;
 import com.pda.birdex.pda.interfaces.RequestCallBackInterface;
 import com.pda.birdex.pda.response.PrintEntity;
@@ -91,6 +92,7 @@ public class CountMissionClearNumActivity extends BasePrintBarScanActivity imple
 
     String HeadName = "";
     BaseInfo baseInfo;
+    CountingBaseInfo countingBaseInfo;
     String takingOrderNum = "";
 
     //    public String []tabList = {getString(R.string.not_start),getString(R.string.has_classified),
@@ -104,18 +106,24 @@ public class CountMissionClearNumActivity extends BasePrintBarScanActivity imple
     @Override
     public void printInitializeContentViews() {
         HeadName = getIntent().getStringExtra("HeadName");
-        baseInfo = (BaseInfo) getIntent().getExtras().get("baseInfo");
-        if (baseInfo != null) {
-            takingOrderNum = baseInfo.getTakingOrderNo();
-            tv_count_num.setText(takingOrderNum);//揽收单号/清点单号
-        }
+
         if (getResources().getString(R.string.taking).equals(HeadName)) {//揽收
             tv_name_count_num.setText(getString(R.string.tv_taking_num));
             btn_count_print_no.setText(getString(R.string.taking_print_no));
             pll_taking_scan_no.setVisibility(View.VISIBLE);
+            baseInfo = (BaseInfo) getIntent().getExtras().get("baseInfo");
+            if (baseInfo != null) {
+                takingOrderNum = baseInfo.getTakingOrderNo();
+                tv_count_num.setText(takingOrderNum);//揽收单号
+            }
             title.setTitle(getString(R.string.taking_task));
         }else{
             title.setTitle(getString(R.string.count_task));
+            countingBaseInfo = (CountingBaseInfo) getIntent().getExtras().get("baseInfo");
+            if (countingBaseInfo != null) {
+                takingOrderNum = countingBaseInfo.getOrderNo();//清点单号
+                tv_count_num.setText(takingOrderNum);
+            }
         }
         edt_taking_scan_no.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
@@ -143,6 +151,7 @@ public class CountMissionClearNumActivity extends BasePrintBarScanActivity imple
         tv_clear_num.setText(tabTitle[0]);
         tv_last_time.setText(tabTitle[1]);
         tv_status.setText(tabTitle[2]);
+        tv_status.setVisibility(View.GONE);//不需要数量这块
         String[] tabList = getResources().getStringArray(R.array.tab_list);
         //添加3种分类
         for (int i = 0; i < tabList.length; i++) {
@@ -153,6 +162,11 @@ public class CountMissionClearNumActivity extends BasePrintBarScanActivity imple
         }
         //分类切换监听器
         tablayout.setOnTabSelectedListener(this);
+    }
+
+    @Override
+    public synchronized void onResume() {
+        super.onResume();
         if (getResources().getString(R.string.taking).equals(HeadName)) {//揽收
             getTakingOrderDetail();//通过揽收单号获取揽收单详情
         }else{
@@ -217,7 +231,7 @@ public class CountMissionClearNumActivity extends BasePrintBarScanActivity imple
 
     //通过清点单号获取清点单详情
     private void getCountingOrderDetail(){
-        BirdApi.getCountingOrderNoInfo(this, baseInfo.getTid(), new RequestCallBackInterface() {
+        BirdApi.getCountingOrderNoInfo(this, countingBaseInfo.getTid(), new RequestCallBackInterface() {
             @Override
             public void successCallBack(JSONObject object) {
                 xrcy.refreshComplete();
@@ -448,7 +462,7 @@ public class CountMissionClearNumActivity extends BasePrintBarScanActivity imple
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btn_commit:
-                commit();
+//                commit();
                 break;
             case R.id.btn_count_print_no:
                 print();

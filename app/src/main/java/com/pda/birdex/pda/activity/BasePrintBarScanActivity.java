@@ -49,7 +49,7 @@ public abstract class BasePrintBarScanActivity extends BarScanActivity {
     private static String mConnectedDeviceName ;
     // String buffer for outgoing messages
     private StringBuffer mOutStringBuffer;
-    // Local Bluetooth adapter
+    // Local Bluetooth takingAdapter
     private BluetoothAdapter mBluetoothAdapter = null;
     // Member object for the services
     public static BluetoothService mService;
@@ -67,7 +67,7 @@ public abstract class BasePrintBarScanActivity extends BarScanActivity {
         titleView = printTitleView();
 //        title.setTitle(getString(R.string.print_title));
 
-        // If the adapter is null, then Bluetooth is not supported
+        // If the takingAdapter is null, then Bluetooth is not supported
         if (mBluetoothAdapter == null) {
             Toast.makeText(this, "Bluetooth is not available", Toast.LENGTH_LONG).show();
             finish();

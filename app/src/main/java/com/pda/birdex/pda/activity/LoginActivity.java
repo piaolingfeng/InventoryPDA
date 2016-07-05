@@ -175,8 +175,12 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
             public void successCallBack(JSONObject object) {
                 try {
                     String token = object.getString("token");
+                    String userId = object.getString("useId");
+                    String user_name = object.getString("username");
                     MyApplication.ahc.addHeader("x-access-token", token);
                     PreferenceUtils.setPrefString(MyApplication.getInstans(), "token", token);
+                    PreferenceUtils.setPrefString(MyApplication.getInstans(), "user_name", user_name);
+                    PreferenceUtils.setPrefString(MyApplication.getInstans(), "userId", userId);
                     if(getIntent().getBooleanExtra("jump_to_activity",false)){
                         LoginActivity.this.finish();
                     }else {

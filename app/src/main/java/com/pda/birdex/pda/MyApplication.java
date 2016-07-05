@@ -10,6 +10,7 @@ import com.loopj.android.http.AsyncHttpClient;
 import com.pda.birdex.pda.response.MerchantEntity;
 import com.pda.birdex.pda.utils.Constant;
 import com.pda.birdex.pda.utils.CrashHandler;
+import com.pda.birdex.pda.utils.LoggingUpload;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -42,6 +43,8 @@ public class MyApplication extends Application {
     // 登录的相关信息 user
 //    public static User user;
     public static MerchantEntity merchantList;//所有商家
+
+    public static LoggingUpload loggingUpload;
 
     // 清除 activity 栈
     public void clearActivities() {
@@ -97,12 +100,18 @@ public class MyApplication extends Application {
         super.onCreate();
         instants = this;
         sp = getSharedPreferences("login", Activity.MODE_PRIVATE);
+
+        loggingUploadInit();
         initFile();
 //        iniCrash();
         app_version = getVersionLocal();
         initAsyncHttpClient();
     }
 
+    private void loggingUploadInit(){
+        loggingUpload = new LoggingUpload();
+        loggingUpload.init(this);
+    }
 
     private void initFile() {
         File file = new File(Constant.BASEPATH);

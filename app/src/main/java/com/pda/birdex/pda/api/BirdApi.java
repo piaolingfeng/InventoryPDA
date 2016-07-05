@@ -37,6 +37,7 @@ public class BirdApi {
     public static String SERVER_ADDRESS = "192.168.1.224";
     public static String PORT = "3000";//8002
     public static String BASE_URL = "http://" + SERVER_ADDRESS + ":" + PORT;//
+    public static String Logging_BASE_URL = "http://192.168.1.222:3020/api/v1/oplog";
     private static Dialog loadingDialog;
 
     private static AsyncHttpClient ahc;
@@ -292,6 +293,8 @@ public class BirdApi {
         jsonHttpResponseHandler.setTag(tag);
         post(mContext, url, params, jsonHttpResponseHandler);
     }
+
+
 
 
     public static void jsonPostRequest(final Context mContext, JSONObject jsonObject, final RequestCallBackInterface callBackInterface,

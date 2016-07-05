@@ -22,7 +22,6 @@ import com.pda.birdex.pda.interfaces.OnRecycleViewItemClickListener;
 import com.pda.birdex.pda.interfaces.RequestCallBackInterface;
 import com.pda.birdex.pda.response.CheckResultEntity;
 import com.pda.birdex.pda.utils.GsonHelper;
-import com.pda.birdex.pda.utils.T;
 import com.pda.birdex.pda.widget.ClearEditText;
 import com.pda.birdex.pda.widget.TitleView;
 
@@ -161,7 +160,7 @@ public class TakingScanActivity extends BarScanActivity implements View.OnClickL
             String string = v.getText().toString();
             ClearEditTextCallBack(string);
         }
-        T.showShort(this,"actionId"+actionId);
+//        T.showShort(this,"actionId"+actionId);
         return false;
     }
 }

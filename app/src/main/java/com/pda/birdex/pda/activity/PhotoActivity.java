@@ -426,8 +426,8 @@ public class PhotoActivity extends BarScanActivity implements View.OnClickListen
                     pathList.add(filePath);
                     MyTask1 myTask1 = new MyTask1();
                     myTask1.execute(filePath);
-//                    PhotoGVAdapter adapter = new PhotoGVAdapter(getApplication(), pathList);
-//                    gv.setAdapter(adapter);
+//                    PhotoGVAdapter takingAdapter = new PhotoGVAdapter(getApplication(), pathList);
+//                    gv.setAdapter(takingAdapter);
                 }
                 break;
 

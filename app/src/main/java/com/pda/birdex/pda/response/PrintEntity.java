@@ -8,7 +8,8 @@ import java.util.List;
  */
 public class PrintEntity extends BaseEntity {
     List<String> data = new ArrayList<>();
-
+    String tid = "";//只在打印相同箱号时返回
+//    String
     public List<String> getData() {
         return data;
     }
