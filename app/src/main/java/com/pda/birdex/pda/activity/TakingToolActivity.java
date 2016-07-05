@@ -40,7 +40,7 @@ public class TakingToolActivity extends BasePrintBarScanActivity implements OnRe
 
     private TakingToolPrintNumFragment printNumFragment;
     private TakingToolClearFragment clearFragment;
-    private TakingToolBindAreaFragment bindAreaFragment;
+//    private TakingToolBindAreaFragment bindAreaFragment;
     private TakingToolBindNumFragment bindNumFragment = null;
     private TakingToolPhotoFragment photoFragment = null;
     private FragmentTransaction transaction;
@@ -71,8 +71,8 @@ public class TakingToolActivity extends BasePrintBarScanActivity implements OnRe
             printNumFragment = new TakingToolPrintNumFragment();
         if (photoFragment == null)
             photoFragment = new TakingToolPhotoFragment();
-        if (bindAreaFragment == null)
-            bindAreaFragment = new TakingToolBindAreaFragment();
+//        if (bindAreaFragment == null)
+//            bindAreaFragment = new TakingToolBindAreaFragment();
         if (bindNumFragment == null)
             bindNumFragment = new TakingToolBindNumFragment();
         if (clearFragment == null)
@@ -166,13 +166,13 @@ public class TakingToolActivity extends BasePrintBarScanActivity implements OnRe
             case 1:
                 baseFragment = bindNumFragment;
                 break;
+//            case 2:
+//                baseFragment = bindAreaFragment;
+//                break;
             case 2:
-                baseFragment = bindAreaFragment;
-                break;
-            case 3:
                 baseFragment = clearFragment;
                 break;
-            case 4:
+            case 3:
                 baseFragment = photoFragment;
                 break;
             default:
@@ -200,8 +200,8 @@ public class TakingToolActivity extends BasePrintBarScanActivity implements OnRe
             transaction.hide(printNumFragment);
         if (bindNumFragment != null)
             transaction.hide(bindNumFragment);
-        if (bindAreaFragment != null)
-            transaction.hide(bindAreaFragment);
+//        if (bindAreaFragment != null)
+//            transaction.hide(bindAreaFragment);
         if (photoFragment != null)
             transaction.hide(photoFragment);
         if (clearFragment != null)
