@@ -167,7 +167,7 @@ public class SecondIndexActivity extends BaseActivity implements OnRecycleViewIt
                         intent.setClass(SecondIndexActivity.this, TakingPrintBarScanActivity.class);
                         break;
                     case 4:
-                        intent.setClass(SecondIndexActivity.this, TakingBindActivity.class);
+                        intent.setClass(SecondIndexActivity.this, TakingBindOrderActivity.class);
                         break;
                 }
             }

@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.KeyEvent;
+import android.view.View;
 import android.widget.Toast;
 
 import com.pda.birdex.pda.MyApplication;
@@ -18,6 +19,7 @@ import com.pda.birdex.pda.response.MerchantEntity;
 import com.pda.birdex.pda.services.BluetoothService;
 import com.pda.birdex.pda.utils.GsonHelper;
 import com.pda.birdex.pda.utils.T;
+import com.pda.birdex.pda.widget.ClearEditText;
 import com.pda.birdex.pda.widget.TitleView;
 
 import org.json.JSONObject;
@@ -30,12 +32,14 @@ import butterknife.Bind;
 /**
  * Created by chuming.zhuang on 2016/6/15.
  */
-public class MainActivity extends BaseActivity implements OnRecycleViewItemClickListener {
+public class MainActivity extends BarScanActivity implements OnRecycleViewItemClickListener {
     String tag = "MainActivity";
     @Bind(R.id.rcy)
     RecyclerView rcy;
     @Bind(R.id.title)
     TitleView title;
+    @Bind(R.id.edt_search)
+    ClearEditText edt_search;
     IndexAdapter adapter;
     String[] lists;
     String[] takinglists;//收货
@@ -44,12 +48,12 @@ public class MainActivity extends BaseActivity implements OnRecycleViewItemClick
     List<CommonItemEntity> indexList = new ArrayList<>();
 
     @Override
-    public int getContentLayoutResId() {
+    public int getbarContentLayoutResId() {
         return R.layout.activity_main;
     }
 
     @Override
-    public void initializeContentViews() {
+    public void barInitializeContentViews() {
         lists = getResources().getStringArray(R.array.index_list);
         takinglists = getResources().getStringArray(R.array.taking_list);
         countToLists = getResources().getStringArray(R.array.count_list);
@@ -83,6 +87,8 @@ public class MainActivity extends BaseActivity implements OnRecycleViewItemClick
         }else{
             T.showLong(this, getString(R.string.print_hint));
         }
+
+        edt_search.setVisibility(View.VISIBLE);
     }
 
     @Override
@@ -116,6 +122,16 @@ public class MainActivity extends BaseActivity implements OnRecycleViewItemClick
     }
 
     @Override
+    public ClearEditText getClearEditText() {
+        return edt_search;
+    }
+
+    @Override
+    public void ClearEditTextCallBack(String code) {
+
+    }
+
+    @Override
     public void onItemClick(int position) {
         if (position >= 0 && position < adapter.getItemCount()) {
             Intent intent = new Intent(MainActivity.this, SecondIndexActivity.class);
@@ -129,11 +145,11 @@ public class MainActivity extends BaseActivity implements OnRecycleViewItemClick
                     b.putStringArray("list", countToLists);
                     break;
                 case 2:
+                    intent.setClass(MainActivity.this, SettingBarScanActivity.class);
                     break;
                 case 3:
                     break;
                 case 4:
-                    intent.setClass(MainActivity.this, SettingBarScanActivity.class);
                     break;
             }
             intent.putExtras(b);

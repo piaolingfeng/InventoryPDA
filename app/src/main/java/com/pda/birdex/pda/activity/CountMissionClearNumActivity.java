@@ -151,7 +151,7 @@ public class CountMissionClearNumActivity extends BasePrintBarScanActivity imple
         tv_clear_num.setText(tabTitle[0]);
         tv_last_time.setText(tabTitle[1]);
         tv_status.setText(tabTitle[2]);
-        tv_status.setVisibility(View.GONE);//不需要数量这块
+        tv_last_time.setVisibility(View.GONE);//不需要数量这块
         String[] tabList = getResources().getStringArray(R.array.tab_list);
         //添加3种分类
         for (int i = 0; i < tabList.length; i++) {
