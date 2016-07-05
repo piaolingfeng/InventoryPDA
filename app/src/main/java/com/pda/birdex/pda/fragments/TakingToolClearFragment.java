@@ -71,10 +71,6 @@ public class TakingToolClearFragment extends BarScanBaseFragment implements View
     @Bind(R.id.tv_taking_num)
     TextView tv_taking_num;
 
-    //区域
-    @Bind(R.id.tv_area)
-    TextView tv_area;
-
 
     // 存储照片路径的 list
     private ArrayList<String> pathList = new ArrayList<String>();
@@ -232,20 +228,20 @@ public class TakingToolClearFragment extends BarScanBaseFragment implements View
             // 从揽收进入的
             takingOrder = (TakingOrder) getActivity().getIntent().getExtras().get("takingOrder");
             tv_taking_num.setText(takingOrder.getBaseInfo().getTakingOrderNo());
-            edt_taking_num.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-                @Override
-                public void onFocusChange(View v, boolean hasFocus) {
-                    if (!hasFocus) {
-                        getAreaMes(edt_taking_num.getText() + "");
-                    }
-                }
-            });
+//            edt_taking_num.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+//                @Override
+//                public void onFocusChange(View v, boolean hasFocus) {
+//                    if (!hasFocus) {
+//                        getAreaMes(edt_taking_num.getText() + "");
+//                    }
+//                }
+//            });
         } else {//打印数量
             // 从揽收任务进入的
             orderNoInfoEntity = (TakingOrderNoInfoEntity) getActivity().getIntent().getExtras().get("orderNoInfoEntity");
             containerInfo = (ContainerInfo) getActivity().getIntent().getExtras().get("containerInfo");
             tv_taking_num.setText(orderNoInfoEntity.getDetail().getBaseInfo().getBaseInfo().getTakingOrderNo());
-            tv_area.setText(containerInfo.getArea());
+//            tv_area.setText(containerInfo.getArea());
         }
 
         gv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -584,39 +580,39 @@ public class TakingToolClearFragment extends BarScanBaseFragment implements View
 
 
     // 通过用户编码+容器号 获取区域信息
-    private void getAreaMes(String code) {
-        String owner = takingOrder.getPerson().getCo();
-        if (!(TextUtils.isEmpty(code) || TextUtils.isEmpty(owner))) {
-            // CT-160629000001 测试
-            BirdApi.getArea(getContext(), owner + "/" + code, new RequestCallBackInterface() {
-
-                @Override
-                public void successCallBack(JSONObject object) {
-                    try {
-                        if ("success".equals(object.getString("result"))) {
-                            tv_area.setText(object.getString("area"));
-                        }
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                }
-
-                @Override
-                public void errorCallBack(JSONObject object) {
-
-                }
-            }, tag, true);
-        }
-    }
+//    private void getAreaMes(String code) {
+//        String owner = takingOrder.getPerson().getCo();
+//        if (!(TextUtils.isEmpty(code) || TextUtils.isEmpty(owner))) {
+//            // CT-160629000001 测试
+//            BirdApi.getArea(getContext(), owner + "/" + code, new RequestCallBackInterface() {
+//
+//                @Override
+//                public void successCallBack(JSONObject object) {
+//                    try {
+//                        if ("success".equals(object.getString("result"))) {
+//                            tv_area.setText(object.getString("area"));
+//                        }
+//                    } catch (JSONException e) {
+//                        e.printStackTrace();
+//                    }
+//                }
+//
+//                @Override
+//                public void errorCallBack(JSONObject object) {
+//
+//                }
+//            }, tag, true);
+//        }
+//    }
 
 
     @Override
     public void ClearEditTextCallBack(String code) {
-        if (this.isVisible()) {
-            if ("1".equals(from)) {
-                // 说明是从揽收进入的 需要通过容器号 调用接口  获取区域信息
-                getAreaMes(code);
-            }
-        }
+//        if (this.isVisible()) {
+//            if ("1".equals(from)) {
+//                // 说明是从揽收进入的 需要通过容器号 调用接口  获取区域信息
+//                getAreaMes(code);
+//            }
+//        }
     }
 }

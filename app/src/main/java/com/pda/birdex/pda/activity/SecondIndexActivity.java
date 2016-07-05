@@ -62,7 +62,7 @@ public class SecondIndexActivity extends BaseActivity implements OnRecycleViewIt
         }
         if (getString(R.string.taking).equals(titleStr)) {//揽收需要统计揽收任务总数
             getAllTakingMission();
-        }else{
+        } else if (getString(R.string.count).equals(titleStr)) {
             getAllCountingMission();
         }
         adapter = new IndexAdapter(this, indexList);
@@ -110,7 +110,7 @@ public class SecondIndexActivity extends BaseActivity implements OnRecycleViewIt
     }
 
     //获取所有清点任务
-    private void getAllCountingMission(){
+    private void getAllCountingMission() {
         BirdApi.getCountingListCountMerchant(this, "all/unCounting", new RequestCallBackInterface() {
             @Override
             public void successCallBack(JSONObject object) {
@@ -126,7 +126,7 @@ public class SecondIndexActivity extends BaseActivity implements OnRecycleViewIt
             public void errorCallBack(JSONObject object) {
 
             }
-        },tag,true);
+        }, tag, true);
     }
 
     @Override
