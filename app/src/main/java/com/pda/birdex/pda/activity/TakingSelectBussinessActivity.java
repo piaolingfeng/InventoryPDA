@@ -69,8 +69,9 @@ public class TakingSelectBussinessActivity extends BaseActivity implements OnCli
 //                    view.setVisibility(View.INVISIBLE);
                     TextView textView = (TextView) view.findViewById(R.id.tv_context);
                     textView.setText(getString(R.string.select_merchant));
-                } else {
                     isSpinnerFirst = false;
+                } else {
+//                    isSpinnerFirst = false;
                     merchantId = list.get(position).getMerchantId();
                 }
             }
