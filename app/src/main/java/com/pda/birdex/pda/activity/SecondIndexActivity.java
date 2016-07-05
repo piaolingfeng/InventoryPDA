@@ -187,10 +187,9 @@ public class SecondIndexActivity extends BaseActivity implements OnRecycleViewIt
                         intent.putExtras(b);
                         // 打印清点单
                         intent.setClass(SecondIndexActivity.this, TakingPrintBarScanActivity.class);
-                        startActivity(intent);
                         break;
                     case 3:
-                        intent.setClass(SecondIndexActivity.this, TakingBindActivity.class);
+                        intent.setClass(SecondIndexActivity.this, CountTrackActivity.class);
                         break;
                     case 4:
                         intent.setClass(SecondIndexActivity.this, CountPhotoActivity.class);

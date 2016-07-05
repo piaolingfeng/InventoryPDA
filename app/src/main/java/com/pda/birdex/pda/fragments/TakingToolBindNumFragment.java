@@ -7,7 +7,6 @@ import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.TextView;
 
-import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 import com.pda.birdex.pda.R;
 import com.pda.birdex.pda.adapter.BindNumAdapter;
@@ -22,7 +21,6 @@ import com.pda.birdex.pda.utils.GsonHelper;
 import com.pda.birdex.pda.utils.T;
 import com.pda.birdex.pda.widget.ClearEditText;
 
-import org.apache.http.Header;
 import org.apache.http.entity.StringEntity;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -45,6 +43,9 @@ public class TakingToolBindNumFragment extends BarScanBaseFragment implements Vi
 
     @Bind(R.id.xrcy)
     com.jcodecraeer.xrecyclerview.XRecyclerView xrcy;
+
+    @Bind(R.id.edt_taking_container)
+    com.pda.birdex.pda.widget.ClearEditText edt_taking_container;
 
     @Bind(R.id.edt_taking_num)
     com.pda.birdex.pda.widget.ClearEditText edt_taking_num;
@@ -94,12 +95,12 @@ public class TakingToolBindNumFragment extends BarScanBaseFragment implements Vi
             }
         });
 
-        edt_taking_num.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+        edt_taking_container.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 if (actionId == EditorInfo.IME_ACTION_DONE) {
-                    if (!TextUtils.isEmpty(edt_taking_num.getText())) {
-                        String input = edt_taking_num.getText() + "";
+                    if (!TextUtils.isEmpty(edt_taking_container.getText())) {
+                        String input = edt_taking_container.getText() + "";
                         inputEntry(input);
                     }
                 }
@@ -107,11 +108,11 @@ public class TakingToolBindNumFragment extends BarScanBaseFragment implements Vi
             }
         });
 
-        edt_taking_num.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+        edt_taking_container.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
                 if (!hasFocus) {
-                    inputEntry(edt_taking_num.getText() + "");
+                    inputEntry(edt_taking_container.getText() + "");
                 }
             }
         });
@@ -126,7 +127,7 @@ public class TakingToolBindNumFragment extends BarScanBaseFragment implements Vi
 
     @Override
     public ClearEditText getClearEditText() {
-        return edt_taking_num;
+        return edt_taking_container;
     }
 
     @Override
@@ -154,21 +155,6 @@ public class TakingToolBindNumFragment extends BarScanBaseFragment implements Vi
                         bo.setOwner(owner);
                         containerConfig.add(bo);
                     }
-//                    BindOrder bo = new BindOrder();
-////                        bo.setCode(code);
-////                        bo.setOwner(owner);
-//                    bo.setOwner("MET");
-//                    bo.setCode("CT-160630000010");
-//                    containerConfig.add(bo);
-
-//                    String t = GsonHelper.createJsonString(containerConfig);
-//                    params.put("containerConfig", containerConfig);
-//                    if ("1".equals(from)) {
-//                        params.put("tid", takingOrder.getBaseInfo().getTid());
-//                    } else {
-//                        params.put("tid", orderNoInfoEntity.getDetail().getBaseInfo().getBaseInfo().getTid());
-//                    }
-//                    params.put("tid", "MET:TK-160630000003");
 
                     JSONObject jsonObject = new JSONObject();
                     try {
@@ -199,77 +185,16 @@ public class TakingToolBindNumFragment extends BarScanBaseFragment implements Vi
                             }
                         },tag, true);
 
-//                        BirdApi.jsonPost(getContext(),"code/bindOrder",stringEntity, new JsonHttpResponseHandler(){
-//
-//                            @Override
-//                            public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
-//                                super.onSuccess(statusCode, headers, response);
-//                            }
-//
-//                            @Override
-//                            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-//                                super.onSuccess(statusCode, headers, response);
-//                            }
-//
-//                            @Override
-//                            public void onSuccess(int statusCode, Header[] headers, String responseString) {
-//                                super.onSuccess(statusCode, headers, responseString);
-//                            }
-//
-//                            @Override
-//                            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
-//                                super.onFailure(statusCode, headers, responseString, throwable);
-//                            }
-//
-//                            @Override
-//                            public void onFinish() {
-//                                super.onFinish();
-//                            }
-//
-//                            @Override
-//                            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
-//                                super.onFailure(statusCode, headers, throwable, errorResponse);
-//                            }
-//
-//                            @Override
-//                            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONArray errorResponse) {
-//                                super.onFailure(statusCode, headers, throwable, errorResponse);
-//                            }
-//                        });
                     } catch (JSONException e) {
                         e.printStackTrace();
                     } catch (UnsupportedEncodingException e) {
                         e.printStackTrace();
                     }
-
-
-
-
-
-//                    BirdApi.takingBindorderSubmit(getContext(), params, new RequestCallBackInterface() {
-//
-//                        @Override
-//                        public void successCallBack(JSONObject object) {
-//                            try {
-//                                if ("success".equals(object.getString("result"))) {
-//                                    T.showShort(getContext(), getString(R.string.taking_submit_suc));
-//                                } else {
-//                                    T.showShort(getContext(), getString(R.string.taking_submit_fal));
-//                                }
-//                            } catch (JSONException e) {
-//                                e.printStackTrace();
-//                            }
-//                        }
-//
-//                        @Override
-//                        public void errorCallBack(JSONObject object) {
-//                            T.showShort(getContext(), getString(R.string.taking_submit_fal));
-//                        }
-//                    }, tag, true);
                 } else {
                     T.showShort(getContext(), getString(R.string.taking_bind_no));
                 }
                 break;
         }
     }
+
 }

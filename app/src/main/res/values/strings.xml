@@ -43,7 +43,7 @@
     <string name="bind">绑定</string>
     <string name="lanshouno">揽收单号/揽收箱号：</string>
     <string name="areacode">区域条码：</string>
-
+    <string name="bind_order">绑定揽收单</string>
     <string name="taking">收货</string>
     <string name="count">清点</string>
 
@@ -137,6 +137,9 @@
     <string name="count_box_no">清点箱号：</string>
     <string name="upc">UPC：</string>
     <string name="amount">数量：</string>
+    <string name="sign_exception">标记异常</string>
+    <string name="count_vessel_empty">容器号不能为空</string>
+    <string name="count_upc_empty">upc不能为空</string>
 
     <string name="taking_num">揽收容器号：</string>
     <string name="taking_num_toast">揽收容器号不能为空</string>

@@ -11,8 +11,8 @@
 
     <string-array name="taking_tool_menu">
         <item>打印揽收单</item>
-        <item>绑单</item>
-        <item>绑区</item>
+        <item>绑定揽收单</item>
+        <item>绑定区域</item>
         <item>揽收清点</item>
         <item>拍照</item>
     </string-array>
