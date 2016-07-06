@@ -9,8 +9,7 @@ import android.view.KeyEvent;
 import com.pda.birdex.pda.R;
 import com.pda.birdex.pda.entity.TakingOrder;
 import com.pda.birdex.pda.fragments.BaseFragment;
-import com.pda.birdex.pda.fragments.TakingToolBindAreaFragment;
-import com.pda.birdex.pda.fragments.TakingToolBindNumFragment;
+import com.pda.birdex.pda.fragments.TakingToolBindOrderFragment;
 import com.pda.birdex.pda.fragments.TakingToolClearFragment;
 import com.pda.birdex.pda.fragments.TakingToolPhotoFragment;
 import com.pda.birdex.pda.fragments.TakingToolPrintNumFragment;
@@ -41,7 +40,7 @@ public class TakingToolActivity extends BasePrintBarScanActivity implements OnRe
     private TakingToolPrintNumFragment printNumFragment;
     private TakingToolClearFragment clearFragment;
 //    private TakingToolBindAreaFragment bindAreaFragment;
-    private TakingToolBindNumFragment bindNumFragment = null;
+    private TakingToolBindOrderFragment bindNumFragment = null;
     private TakingToolPhotoFragment photoFragment = null;
     private FragmentTransaction transaction;
     private BaseFragment baseFragment=null;
@@ -65,7 +64,7 @@ public class TakingToolActivity extends BasePrintBarScanActivity implements OnRe
         bus.register(this);
         if(getIntent().getExtras()!=null){
 //            orderInfo = (TakingOrder) getIntent().getExtras().get("takingOrder");
-            location = getIntent().getStringExtra("location");
+            location = getIntent().getStringExtra("location_position");
         }
         if (printNumFragment == null)
             printNumFragment = new TakingToolPrintNumFragment();
@@ -74,7 +73,7 @@ public class TakingToolActivity extends BasePrintBarScanActivity implements OnRe
 //        if (bindAreaFragment == null)
 //            bindAreaFragment = new TakingToolBindAreaFragment();
         if (bindNumFragment == null)
-            bindNumFragment = new TakingToolBindNumFragment();
+            bindNumFragment = new TakingToolBindOrderFragment();
         if (clearFragment == null)
             clearFragment = new TakingToolClearFragment();
 
@@ -87,7 +86,7 @@ public class TakingToolActivity extends BasePrintBarScanActivity implements OnRe
         title.setOnSaveItemClickListener(this);//saveMenu clicklistener
         title.setSaveList(currentMenuList);
         if("2".equals(location)){//位置2进来的话会传首先显示的fragment的位置
-            currentPosition = getIntent().getExtras().getInt("location_position");
+            currentPosition = getIntent().getExtras().getInt("position");
         }
         addFragment(currentPosition, false);//初始默认第一个fragment
     }

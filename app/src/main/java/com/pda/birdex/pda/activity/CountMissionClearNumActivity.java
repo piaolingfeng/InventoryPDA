@@ -28,7 +28,6 @@ import com.pda.birdex.pda.interfaces.RequestCallBackInterface;
 import com.pda.birdex.pda.response.PrintEntity;
 import com.pda.birdex.pda.response.TakingOrderNoInfoEntity;
 import com.pda.birdex.pda.utils.GsonHelper;
-import com.pda.birdex.pda.utils.StringUtils;
 import com.pda.birdex.pda.utils.T;
 import com.pda.birdex.pda.widget.ClearEditText;
 import com.pda.birdex.pda.widget.TitleView;
@@ -86,9 +85,9 @@ public class CountMissionClearNumActivity extends BasePrintBarScanActivity imple
     CountMissionClearNumAdapter adapter;
     TakingOrderNoInfoEntity orderNoInfoEntity;
     List<ContainerInfo> list;
-    List<ContainerInfo> assignedList;//进行中列表
-    List<ContainerInfo> unassignedList;//未开始列表
-    List<ContainerInfo> doneList;//已完成列表
+//    List<ContainerInfo> assignedList;//进行中列表
+//    List<ContainerInfo> unassignedList;//未开始列表
+//    List<ContainerInfo> doneList;//已完成列表
 
     String HeadName = "";
     BaseInfo baseInfo;
@@ -117,7 +116,7 @@ public class CountMissionClearNumActivity extends BasePrintBarScanActivity imple
                 tv_count_num.setText(takingOrderNum);//揽收单号
             }
             title.setTitle(getString(R.string.taking_task));
-        }else{
+        } else {
             title.setTitle(getString(R.string.count_task));
             countingBaseInfo = (CountingBaseInfo) getIntent().getExtras().get("baseInfo");
             if (countingBaseInfo != null) {
@@ -162,6 +161,7 @@ public class CountMissionClearNumActivity extends BasePrintBarScanActivity imple
         }
         //分类切换监听器
         tablayout.setOnTabSelectedListener(this);
+        tablayout.setVisibility(View.GONE);
     }
 
     @Override
@@ -169,42 +169,43 @@ public class CountMissionClearNumActivity extends BasePrintBarScanActivity imple
         super.onResume();
         if (getResources().getString(R.string.taking).equals(HeadName)) {//揽收
             getTakingOrderDetail();//通过揽收单号获取揽收单详情
-        }else{
+        } else {
             getCountingOrderDetail();//获取清点单详情
         }
     }
 
     //处理揽收单
     private void dealDetail() {
-//        String time = TimeUtil.long2Date(Long.parseLong(orderNoInfoEntity.getDetail().getBaseInfo().getBaseInfo().getDeadLine()));
+//       String time = TimeUtil.long2Date(Long.parseLong(orderNoInfoEntity.getDetail().getBaseInfo().getBaseInfo().getDeadLine()));
         tv_title_last_time.setText(orderNoInfoEntity.getDetail().getBaseInfo().getBaseInfo().getDeadLine());
         tv_operate_vessl.setText(orderNoInfoEntity.getDetail().getContainerList().size() + "");
         list = orderNoInfoEntity.getDetail().getContainerList();
-        unassignedList = new ArrayList<>();
-        doneList = new ArrayList<>();
-        assignedList = new ArrayList<>();
-        for (int i = 0; i < list.size(); i++) {
-            if (!StringUtils.isEmpty(list.get(i).getArea()) && list.get(i).getCount() > 0) {//已完成
-                doneList.add(list.get(i));
-            } else {
-                if (!StringUtils.isEmpty(list.get(i).getArea())) {//进行中
-                    assignedList.add(list.get(i));
-                } else {//未开始
-                    unassignedList.add(list.get(i));
-                }
-            }
-        }
-        switch (tablayout.getSelectedTabPosition()) {
-            case 0:
-                adapter.setList(unassignedList);
-                break;
-            case 1:
-                adapter.setList(assignedList);
-                break;
-            case 2:
-                adapter.setList(doneList);
-                break;
-        }
+//        unassignedList = new ArrayList<>();
+//        doneList = new ArrayList<>();
+//        assignedList = new ArrayList<>();
+//        for (int i = 0; i < list.size(); i++) {
+//            if (list.get(i).getStatus().equals("")) {//已完成
+//                doneList.add(list.get(i));
+//            } else {
+//                if (list.get(i).getStatus().equals("")) {//进行中
+//                    assignedList.add(list.get(i));
+//                } else {//未开始
+//                    unassignedList.add(list.get(i));
+//                }
+//            }
+//        }
+//        switch (tablayout.getSelectedTabPosition()) {
+//            case 0:
+//                adapter.setList(unassignedList);
+//                break;
+//            case 1:
+//                adapter.setList(assignedList);
+//                break;
+//            case 2:
+//                adapter.setList(doneList);
+//                break;
+//        }
+        adapter.setList(list);
         adapter.notifyDataSetChanged();
     }
 
@@ -230,7 +231,7 @@ public class CountMissionClearNumActivity extends BasePrintBarScanActivity imple
     }
 
     //通过清点单号获取清点单详情
-    private void getCountingOrderDetail(){
+    private void getCountingOrderDetail() {
         BirdApi.getCountingOrderNoInfo(this, countingBaseInfo.getTid(), new RequestCallBackInterface() {
             @Override
             public void successCallBack(JSONObject object) {
@@ -252,12 +253,24 @@ public class CountMissionClearNumActivity extends BasePrintBarScanActivity imple
 
     @Override
     public ClearEditText getClearEditText() {
-        return edt_taking_scan_no;
+        if (getResources().getString(R.string.taking).equals(HeadName)) {//揽收
+            return edt_taking_scan_no;
+        }else
+            return null;
     }
 
     @Override
-    public void ClearEditTextCallBack(String code) {
+    public void ClearEditTextCallBack(final String code) {
         //扫描回调
+        if (code != null) {//这里一定是揽收的揽收任务页面
+//            List<ContainerInfo> d = new ArrayList<>();
+            for (int i = 0; i < list.size(); i++) {//如果已经绑定就跳转到详情，否则先绑定，后进入详情
+                if (list.get(i).getContainerId().equals(code)) {
+                    enterToTakingActivity(i);
+                    return;
+                }
+            }
+        }
         if (code != null && orderNoInfoEntity != null) {
             List<BindOrder> containerConfig = new ArrayList<>();
             BindOrder bo = new BindOrder();
@@ -280,12 +293,17 @@ public class CountMissionClearNumActivity extends BasePrintBarScanActivity imple
 
                     @Override
                     public void successCallBack(JSONObject object) {
-                        T.showShort(CountMissionClearNumActivity.this, getString(R.string.taking_submit_suc));
+                        T.showShort(CountMissionClearNumActivity.this, getString(R.string.taking_bind_suc));
+                        ContainerInfo info = new ContainerInfo();
+                        info.setContainerId(code);
+                        orderNoInfoEntity.getDetail().getContainerList().add(info);
+                        dealDetail();//重新分配list给三种不同状态
+                        enterToTakingActivity(list.size()-1);//从list的最后一个进入activity
                     }
 
                     @Override
                     public void errorCallBack(JSONObject object) {
-                        T.showShort(CountMissionClearNumActivity.this, getString(R.string.taking_submit_fal));
+                        T.showShort(CountMissionClearNumActivity.this, getString(R.string.taking_bind_fal));
                     }
                 }, tag, true);
 
@@ -301,18 +319,18 @@ public class CountMissionClearNumActivity extends BasePrintBarScanActivity imple
     @Override
     public void onTabSelected(TabLayout.Tab tab) {
 //        T.showShort(CountMissionClearNumActivity.this, "");
-        switch (tab.getPosition()) {
-            case 0:
-                adapter.setList(unassignedList);
-                break;
-            case 1:
-                adapter.setList(assignedList);
-                break;
-            case 2:
-                adapter.setList(doneList);
-                break;
-        }
-        adapter.notifyDataSetChanged();
+//        switch (tab.getPosition()) {
+//            case 0:
+//                adapter.setList(unassignedList);
+//                break;
+//            case 1:
+//                adapter.setList(assignedList);
+//                break;
+//            case 2:
+//                adapter.setList(doneList);
+//                break;
+//        }
+//        adapter.notifyDataSetChanged();
     }
 
     @Override
@@ -335,28 +353,40 @@ public class CountMissionClearNumActivity extends BasePrintBarScanActivity imple
 //        xrcy.loadMoreComplete();
     }
 
+    private void enterToTakingActivity(int position) {
+        Intent intent = new Intent();
+        Bundle b = new Bundle();
+        b.putSerializable("orderNoInfoEntity", orderNoInfoEntity);
+        b.putSerializable("containerInfo", list.get(position));
+        intent.setClass(this, TakingCheckActivity.class);
+        intent.putExtra("location_position", "2");//揽收任务进入
+        startActivity(intent);
+    }
+
     @Override
     public void onItemClick(int position) {
         Intent intent = new Intent();
         Bundle b = new Bundle();
         b.putSerializable("orderNoInfoEntity", orderNoInfoEntity);
-        switch (tablayout.getSelectedTabPosition()) {
-            case 0:
-                b.putSerializable("containerInfo", unassignedList.get(position));
-                intent.putExtras(b);
-                break;
-            case 1:
-                b.putSerializable("containerInfo", assignedList.get(position));
-                intent.putExtras(b);
-                break;
-            case 2:
-                b.putSerializable("containerInfo", doneList.get(position));
-                intent.putExtras(b);
-                break;
-        }
+//        switch (tablayout.getSelectedTabPosition()) {
+//            case 0:
+//                b.putSerializable("containerInfo", unassignedList.get(position));
+//                intent.putExtras(b);
+//                break;
+//            case 1:
+//                b.putSerializable("containerInfo", assignedList.get(position));
+//                intent.putExtras(b);
+//                break;
+//            case 2:
+//                b.putSerializable("containerInfo", doneList.get(position));
+//                intent.putExtras(b);
+//                break;
+//        }
+        b.putSerializable("containerInfo", list.get(position));
+        intent.putExtras(b);
         if (getResources().getString(R.string.taking).equals(HeadName)) {//揽收
             intent.setClass(this, TakingCheckActivity.class);
-            intent.putExtra("location", "2");//揽收任务
+            intent.putExtra("location_position", "2");//揽收任务进入
             startActivity(intent);
         } else {
             if (tablayout.getSelectedTabPosition() != 2) {
@@ -379,16 +409,19 @@ public class CountMissionClearNumActivity extends BasePrintBarScanActivity imple
         return title;
     }
 
+    /**
+     * 此功能已取消
+     * */
     private void commit() {
         RequestParams params = new RequestParams();
         List containerId = new ArrayList();
         int count = 0;
-        if (doneList != null) {
-            for (ContainerInfo info : doneList) {
-                containerId.add(info.getContainerId());
-                count += info.getCount();
-            }
-        }
+//        if (doneList != null) {
+//            for (ContainerInfo info : doneList) {
+//                containerId.add(info.getContainerId());
+//                count += info.getCount();
+//            }
+//        }
         params.put("takingOrderNo", takingOrderNum);
         params.put("containerNo", containerId);
         params.put("count", count);

@@ -73,7 +73,7 @@ public class TakingCheckActivity extends  BaseActivity {
             @Override
             public void onItemClick(int position) {
                 Intent intent = new Intent(TakingCheckActivity.this,TakingToolActivity.class);
-                getIntent().getExtras().putInt("location_position", position);//把加载fragment的位置传递给takingtool
+                getIntent().getExtras().putInt("position", position);//把加载fragment的位置传递给takingtool
                 intent.putExtras(getIntent().getExtras());
                 startActivity(intent);
             }

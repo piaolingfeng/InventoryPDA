@@ -232,6 +232,19 @@ public class BirdApi {
         ahc.post(context, UPLOADIP + "upload", params, jsonHttpResponseHandler);
     }
 
+    // 上传图片
+    static AsyncHttpClient asyncHttpClient=null;
+    private static void uploadLogging(Context context, String url, HttpEntity entity, ResponseHandlerInterface responseHandlerInterface) {
+        if (asyncHttpClient == null) {
+            asyncHttpClient = new AsyncHttpClient();//获取网络连接超时
+            asyncHttpClient.setTimeout(8 * 1000);//设置30秒超时
+            asyncHttpClient.setConnectTimeout(4 * 1000);//设置30秒超时
+            asyncHttpClient.setMaxConnections(5);
+            asyncHttpClient.addHeader("X-Access-Token",PreferenceUtils.getPrefString(context,"token",""));
+            asyncHttpClient.addHeader("X-User-Id",PreferenceUtils.getPrefString(context,"userId",""));
+        }
+        asyncHttpClient.post(context, url, entity,"application/json", responseHandlerInterface);
+    }
     //    // 提交上传图片
 //    public static void uploadPicSubmit(Context context, RequestParams params, RequestCallBackInterface callBackInterface, String tag, boolean showDialog) {
 //        postRequest(context, params, callBackInterface, "photo", tag, showDialog);
@@ -303,6 +316,78 @@ public class BirdApi {
         post(mContext, url, params, jsonHttpResponseHandler);
     }
 
+    public static void jsonPostLoggingRequest(final Context mContext, JSONObject jsonObject, final RequestCallBackInterface callBackInterface,
+                                        String tag, final boolean showDialog) {
+        if (showDialog)
+            showLoading(mContext);
+        JsonHttpResponseHandler jsonHttpResponseHandler = new JsonHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                super.onSuccess(statusCode, headers, response);
+                if (callBackInterface != null) {
+                    if (response != null) {
+                        try {
+                            if ("success".equals(response.getString("result"))) {
+                                callBackInterface.successCallBack(response);
+                            } else {
+                                T.showShort(mContext, response.getString("errMsg"));
+                                callBackInterface.errorCallBack(response);
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    } else {
+                        T.showShort(mContext, mContext.getString(R.string.successCallBack_error));
+                    }
+                } else {
+                    T.showShort(mContext, mContext.getString(R.string.callBack_error));
+                }
+            }
+
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
+                super.onSuccess(statusCode, headers, response);
+
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+                super.onFailure(statusCode, headers, responseString, throwable);
+                if (headers == null) {
+                    MyApplication.ahc.addHeader("x-access-token", PreferenceUtils.getPrefString(mContext, "token", ""));
+                }
+                T.showShort(mContext, mContext.getString(R.string.request_error));
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+                super.onFailure(statusCode, headers, throwable, errorResponse);
+                callBackInterface.errorCallBack(errorResponse);
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONArray errorResponse) {
+                super.onFailure(statusCode, headers, throwable, errorResponse);
+            }
+
+            @Override
+            public void onFinish() {
+                super.onFinish();
+                if (showDialog)
+                    hideLoading();
+            }
+
+        };
+        jsonHttpResponseHandler.setTag(tag);
+        try {
+            StringEntity stringEntity = new StringEntity(jsonObject.toString());
+            uploadLogging(mContext, Logging_BASE_URL, stringEntity, jsonHttpResponseHandler);
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+
+//        post(mContext, url, params, jsonHttpResponseHandler);
+    }
 
 
 

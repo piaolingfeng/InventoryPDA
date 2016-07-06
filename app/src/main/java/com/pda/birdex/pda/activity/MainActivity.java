@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.KeyEvent;
-import android.view.View;
 import android.widget.Toast;
 
 import com.pda.birdex.pda.MyApplication;
@@ -32,7 +31,7 @@ import butterknife.Bind;
 /**
  * Created by chuming.zhuang on 2016/6/15.
  */
-public class MainActivity extends BarScanActivity implements OnRecycleViewItemClickListener {
+public class MainActivity extends BaseActivity implements OnRecycleViewItemClickListener {
     String tag = "MainActivity";
     @Bind(R.id.rcy)
     RecyclerView rcy;
@@ -48,12 +47,12 @@ public class MainActivity extends BarScanActivity implements OnRecycleViewItemCl
     List<CommonItemEntity> indexList = new ArrayList<>();
 
     @Override
-    public int getbarContentLayoutResId() {
+    public int getContentLayoutResId() {
         return R.layout.activity_main;
     }
 
     @Override
-    public void barInitializeContentViews() {
+    public void initializeContentViews() {
         lists = getResources().getStringArray(R.array.index_list);
         takinglists = getResources().getStringArray(R.array.taking_list);
         countToLists = getResources().getStringArray(R.array.count_list);
@@ -87,8 +86,6 @@ public class MainActivity extends BarScanActivity implements OnRecycleViewItemCl
         }else{
             T.showLong(this, getString(R.string.print_hint));
         }
-
-        edt_search.setVisibility(View.VISIBLE);
     }
 
     @Override
@@ -119,16 +116,6 @@ public class MainActivity extends BarScanActivity implements OnRecycleViewItemCl
     protected void onDestroy() {
         BirdApi.cancelRequestWithTag(tag);
         super.onDestroy();
-    }
-
-    @Override
-    public ClearEditText getClearEditText() {
-        return edt_search;
-    }
-
-    @Override
-    public void ClearEditTextCallBack(String code) {
-
     }
 
     @Override

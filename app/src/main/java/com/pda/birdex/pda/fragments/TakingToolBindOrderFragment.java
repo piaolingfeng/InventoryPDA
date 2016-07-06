@@ -8,6 +8,7 @@ import android.view.inputmethod.EditorInfo;
 import android.widget.TextView;
 
 import com.loopj.android.http.RequestParams;
+import com.pda.birdex.pda.MyApplication;
 import com.pda.birdex.pda.R;
 import com.pda.birdex.pda.adapter.BindNumAdapter;
 import com.pda.birdex.pda.api.BirdApi;
@@ -18,6 +19,7 @@ import com.pda.birdex.pda.interfaces.OnRecycleViewItemClickListener;
 import com.pda.birdex.pda.interfaces.RequestCallBackInterface;
 import com.pda.birdex.pda.response.TakingOrderNoInfoEntity;
 import com.pda.birdex.pda.utils.GsonHelper;
+import com.pda.birdex.pda.utils.StringUtils;
 import com.pda.birdex.pda.utils.T;
 import com.pda.birdex.pda.widget.ClearEditText;
 
@@ -36,8 +38,8 @@ import butterknife.OnClick;
 /**
  * Created by chuming.zhuang on 2016/6/25.
  */
-public class TakingToolBindNumFragment extends BarScanBaseFragment implements View.OnClickListener {
-    String tag = "TakingToolBindNumFragment";
+public class TakingToolBindOrderFragment extends BarScanBaseFragment implements View.OnClickListener {
+    String tag = "TakingToolBindOrderFragment";
 
     private BindNumAdapter adapter;
 
@@ -55,6 +57,7 @@ public class TakingToolBindNumFragment extends BarScanBaseFragment implements Vi
     TakingOrder takingOrder;//位置1进来传来的实体
     TakingOrderNoInfoEntity orderNoInfoEntity;//位置2进来传来的实体
     ContainerInfo containerInfo;//位置2进来时传进来的item
+    String tid ="";
     // 容器 list
     private List<String> containerList = new ArrayList<>();
 
@@ -75,10 +78,15 @@ public class TakingToolBindNumFragment extends BarScanBaseFragment implements Vi
             tv_taking_num.setText(takingOrder.getBaseInfo().getTakingOrderNo());
             owner = takingOrder.getPerson().getCo();
         } else {//打印数量
-            orderNoInfoEntity = (TakingOrderNoInfoEntity) getActivity().getIntent().getExtras().get("orderNoInfoEntity");
-            containerInfo = (ContainerInfo) getActivity().getIntent().getExtras().get("containerInfo");
-            tv_taking_num.setText(orderNoInfoEntity.getDetail().getBaseInfo().getBaseInfo().getTakingOrderNo());
-            owner = orderNoInfoEntity.getDetail().getBaseInfo().getPerson().getCo();
+            if ("2".equals(from)) {
+                orderNoInfoEntity = (TakingOrderNoInfoEntity) getActivity().getIntent().getExtras().get("orderNoInfoEntity");
+                containerInfo = (ContainerInfo) getActivity().getIntent().getExtras().get("containerInfo");
+                tv_taking_num.setText(orderNoInfoEntity.getDetail().getBaseInfo().getBaseInfo().getTakingOrderNo());
+                owner = orderNoInfoEntity.getDetail().getBaseInfo().getPerson().getCo();
+            } else {
+                edt_taking_num.setVisibility(View.VISIBLE);
+                tv_taking_num.setVisibility(View.GONE);
+            }
         }
 
         xrcy.setLayoutManager(new LinearLayoutManager(getContext()));
@@ -113,6 +121,19 @@ public class TakingToolBindNumFragment extends BarScanBaseFragment implements Vi
             public void onFocusChange(View v, boolean hasFocus) {
                 if (!hasFocus) {
                     inputEntry(edt_taking_container.getText() + "");
+                } else {
+                    edt_taking_container.overrideOnFocusChange(hasFocus);
+                    setEdt_input(edt_taking_container);
+                }
+            }
+        });
+
+        edt_taking_num.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                edt_taking_num.overrideOnFocusChange(hasFocus);
+                if (hasFocus) {
+                    setEdt_input(edt_taking_num);
                 }
             }
         });
@@ -149,7 +170,7 @@ public class TakingToolBindNumFragment extends BarScanBaseFragment implements Vi
 //                    params.put("tkNo", tv_taking_num.getText() + "");
 //                    params.put("code", containerList);
                     List<BindOrder> containerConfig = new ArrayList<>();
-                    for(String code: containerList){
+                    for (String code : containerList) {
                         BindOrder bo = new BindOrder();
                         bo.setCode(code);
                         bo.setOwner(owner);
@@ -162,28 +183,32 @@ public class TakingToolBindNumFragment extends BarScanBaseFragment implements Vi
 //                        jsonObject.put("containerConfig",str);
 
                         JSONArray object = new JSONArray(str);
-                        jsonObject.put("containerConfig",object);
+                        jsonObject.put("containerConfig", object);
                         if ("1".equals(from)) {
-                            jsonObject.put("tid", takingOrder.getBaseInfo().getTid());
+                            tid = takingOrder.getBaseInfo().getTid();
+                            jsonObject.put("tid", tid);
+                        } else if ("2".equals(from)) {
+                            tid  = orderNoInfoEntity.getDetail().getBaseInfo().getBaseInfo().getTid();
+                            jsonObject.put("tid", tid);
                         } else {
-                            jsonObject.put("tid", orderNoInfoEntity.getDetail().getBaseInfo().getBaseInfo().getTid());
+                            /**
+                             * 首页有个绑定揽收单，这里是该页面tid入口
+                             * */
+                            if (StringUtils.isEmpty(edt_taking_num.getText().toString())) {
+                                T.showShort(getActivity(), getString(R.string.tv_taking_num_1) + getString(R.string.not_null));
+                                return;
+                            }
+                            jsonObject.put("tid", edt_taking_num.getText().toString());
                         }
 //                        jsonObject.put("tid", "MET:TK-160630000003");
                         StringEntity stringEntity = new StringEntity(jsonObject.toString());
 //                        stringEntity.setContentType("application/json");
 
-                        BirdApi.jsonTakingBindorderSubmit(getContext(), jsonObject,new RequestCallBackInterface(){
+                        if ("1".equals(from) || "2".equals(from))
+                            BirdApi.jsonTakingBindorderSubmit(getContext(), jsonObject, callBackInterface, tag, true);
+                        else {
 
-                            @Override
-                            public void successCallBack(JSONObject object) {
-                                T.showShort(getContext(), getString(R.string.taking_submit_suc));
-                            }
-
-                            @Override
-                            public void errorCallBack(JSONObject object) {
-                                T.showShort(getContext(), getString(R.string.taking_submit_fal));
-                            }
-                        },tag, true);
+                        }
 
                     } catch (JSONException e) {
                         e.printStackTrace();
@@ -197,4 +222,24 @@ public class TakingToolBindNumFragment extends BarScanBaseFragment implements Vi
         }
     }
 
+    RequestCallBackInterface callBackInterface = new RequestCallBackInterface() {
+
+        @Override
+        public void successCallBack(JSONObject object) {
+            T.showShort(getContext(), getString(R.string.taking_submit_suc));
+            //上报日志,
+            String orderId = tv_taking_num.getText().toString();
+            try {
+                tid = object.getString("tid");//收货的绑定揽收单，获取到接口时会返回tid
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            MyApplication.loggingUpload.bindOrder(getActivity(), tag,orderId,tid, containerList);
+        }
+
+        @Override
+        public void errorCallBack(JSONObject object) {
+            T.showShort(getContext(), getString(R.string.taking_submit_fal));
+        }
+    };
 }

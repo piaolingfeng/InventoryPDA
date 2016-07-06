@@ -93,7 +93,6 @@ public class CountMissionMerchantActivity extends BaseActivity {
             title.setTitle(getString(R.string.taking_task));
             tv_name_count_mission.setText(getResources().getString(R.string.tv_taking_mission));
             tv_clear_num.setText(getResources().getString(R.string.tv_taking_num_1));
-            getTakingMerchantMission("unTaking");
             takingAdapter = new TakingMissionClearAdapter(this, takingList);
             takingAdapter.setOnRecycleViewItemClickListener(new OnRecycleViewItemClickListener() {
                 @Override
@@ -107,7 +106,6 @@ public class CountMissionMerchantActivity extends BaseActivity {
             xrcy.setAdapter(takingAdapter);
         } else {
             title.setTitle(getString(R.string.count_task));
-            getCountingMerchantMission("unCounting");//默认为清点
             countingAdapter = new CountingMissonClearAdapter(this,countingOrderList);
             countingAdapter.setOnRecycleViewItemClickListener(new OnRecycleViewItemClickListener() {
                 @Override
@@ -120,7 +118,16 @@ public class CountMissionMerchantActivity extends BaseActivity {
             });
             xrcy.setAdapter(countingAdapter);
         }
+    }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (getResources().getString(R.string.taking).equals(HeadName)) {//揽收清点
+            getTakingMerchantMission("unTaking");
+        } else {
+            getCountingMerchantMission("unCounting");
+        }
     }
 
     //通过网络请求获取商家待清点任务列表
@@ -170,7 +177,7 @@ public class CountMissionMerchantActivity extends BaseActivity {
                     T.showShort(CountMissionMerchantActivity.this, getString(R.string.last_page));
                 }
                 countingOrderList.addAll(countingListResultEntity.getList());
-                tv_count_mission.setText(countingListResultEntity.getCount()+"");
+                tv_count_mission.setText(countingListResultEntity.getCount() + "");
                 countingAdapter.notifyDataSetChanged();
             }
 

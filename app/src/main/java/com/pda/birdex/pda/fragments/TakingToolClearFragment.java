@@ -369,13 +369,16 @@ public class TakingToolClearFragment extends BarScanBaseFragment implements View
     private void dataSubmit() {
         JSONObject jsonObject = new JSONObject();
         try {
-
+            String orderId = tv_taking_num.getText().toString(); //日志上报
+            String tid = null;
 //            RequestParams params = new RequestParams();
             if ("1".equals(from)) {
-                jsonObject.put("tid", takingOrder.getBaseInfo().getTid());
+                tid = takingOrder.getBaseInfo().getTid();
+                jsonObject.put("tid", tid);
                 jsonObject.put("owner", takingOrder.getPerson().getCo());
             } else if ("2".equals(from)) {
-                jsonObject.put("tid", orderNoInfoEntity.getDetail().getBaseInfo().getBaseInfo().getTid());
+                tid = orderNoInfoEntity.getDetail().getBaseInfo().getBaseInfo().getTid();
+                jsonObject.put("tid",tid );
                 jsonObject.put("owner", orderNoInfoEntity.getDetail().getBaseInfo().getPerson().getCo());
             }
 //        params.put("takingOrderNo", tv_taking_num.getText() + "");
@@ -387,6 +390,11 @@ public class TakingToolClearFragment extends BarScanBaseFragment implements View
             String str = GsonHelper.createJsonString(photoUrl);
             JSONArray jsonArray = new JSONArray(str);
             jsonObject.put("photoUrl", jsonArray);
+
+            //日志上报
+            String ctNo = edt_taking_num.getText().toString();
+            int count = Integer.parseInt(edt_box_size.getText().toString());
+            MyApplication.loggingUpload.takingClear(getActivity(),tag,orderId,tid,ctNo,count);
 
             BirdApi.takingSubmit(getActivity(), jsonObject, new RequestCallBackInterface() {
 

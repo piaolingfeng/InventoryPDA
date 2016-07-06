@@ -56,7 +56,10 @@ public class BindNumAdapter extends RecyclerView.Adapter<BindNumAdapter.ViewHold
 
     @Override
     public int getItemCount() {
-        return list.size();
+        int size = 0;
+        if(list!=null)
+            size = list.size();
+        return size;
     }
 
     class ViewHolder extends RecyclerView.ViewHolder {

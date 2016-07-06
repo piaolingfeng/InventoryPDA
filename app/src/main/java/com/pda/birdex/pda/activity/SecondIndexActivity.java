@@ -13,6 +13,7 @@ import com.pda.birdex.pda.api.BirdApi;
 import com.pda.birdex.pda.interfaces.OnRecycleViewItemClickListener;
 import com.pda.birdex.pda.interfaces.RequestCallBackInterface;
 import com.pda.birdex.pda.response.CommonItemEntity;
+import com.pda.birdex.pda.widget.ClearEditText;
 import com.pda.birdex.pda.widget.TitleView;
 
 import org.json.JSONException;
@@ -26,12 +27,14 @@ import butterknife.Bind;
 /**
  * Created by chuming.zhuang on 2016/6/17.
  */
-public class SecondIndexActivity extends BaseActivity implements OnRecycleViewItemClickListener {
+public class SecondIndexActivity extends BarScanActivity implements OnRecycleViewItemClickListener {
     String tag = "SecondIndexActivity";
     @Bind(R.id.rcy)
     RecyclerView rcy;
     @Bind(R.id.title)
     TitleView title;
+    @Bind(R.id.edt_search)
+    ClearEditText edt_search;
     IndexAdapter adapter;
     String[] lists = {""};
     List<CommonItemEntity> indexList = new ArrayList<>();
@@ -40,12 +43,12 @@ public class SecondIndexActivity extends BaseActivity implements OnRecycleViewIt
     private String titleStr;
 
     @Override
-    public int getContentLayoutResId() {
+    public int getbarContentLayoutResId() {
         return R.layout.activity_main;
     }
 
     @Override
-    public void initializeContentViews() {
+    public void barInitializeContentViews() {
         if (getIntent().getExtras() != null) {
             titleStr = getIntent().getStringExtra("name");
             lists = getIntent().getStringArrayExtra("list");
@@ -59,11 +62,6 @@ public class SecondIndexActivity extends BaseActivity implements OnRecycleViewIt
             entity.setName(lists[i]);
             entity.setCount("");
             indexList.add(entity);
-        }
-        if (getString(R.string.taking).equals(titleStr)) {//揽收需要统计揽收任务总数
-            getAllTakingMission();
-        } else if (getString(R.string.count).equals(titleStr)) {
-            getAllCountingMission();
         }
         adapter = new IndexAdapter(this, indexList);
         adapter.setOnRecycleViewItemClickListener(this);
@@ -87,6 +85,17 @@ public class SecondIndexActivity extends BaseActivity implements OnRecycleViewIt
         }
         rcy.setLayoutManager(myGLManager);
         rcy.setAdapter(adapter);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (getString(R.string.taking).equals(titleStr)) {//揽收需要统计揽收任务总数
+            getAllTakingMission();
+//            edt_search.setVisibility(View.VISIBLE);
+        } else if (getString(R.string.count).equals(titleStr)) {
+            getAllCountingMission();
+        }
     }
 
     //获取所有的揽收任务
@@ -133,6 +142,16 @@ public class SecondIndexActivity extends BaseActivity implements OnRecycleViewIt
     protected void onDestroy() {
         super.onDestroy();
         BirdApi.cancelRequestWithTag(tag);
+    }
+
+    @Override
+    public ClearEditText getClearEditText() {
+        return edt_search;
+    }
+
+    @Override
+    public void ClearEditTextCallBack(String code) {
+
     }
 
     @Override

@@ -54,10 +54,10 @@ public class CountMissionActivity extends BarScanActivity implements BaseFragmen
         EventBus.getDefault().register(this);
         if(getResources().getString(R.string.taking).equals(getIntent().getStringExtra("HeadName"))){//揽收
             title.setTitle(getString(R.string.taking_task));
-            getAllTakingMerchant();//获取揽收商家列表
+//            getAllTakingMerchant();//获取揽收商家列表
         }else {
             title.setTitle(getString(R.string.count_task));
-            getAllCountingMerchant();
+//            getAllCountingMerchant();
         }
         title.setBackInterface(new TitleBarBackInterface() {//
             @Override
@@ -96,6 +96,16 @@ public class CountMissionActivity extends BarScanActivity implements BaseFragmen
         bussniessFragment.setUIArguments(b);
         getSupportFragmentManager().beginTransaction().replace(R.id.framelayout, bussniessFragment).commit();
 
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if(getResources().getString(R.string.taking).equals(getIntent().getStringExtra("HeadName"))){//揽收
+            getAllTakingMerchant();//获取揽收商家列表
+        }else {
+            getAllCountingMerchant();
+        }
     }
 
     //获取揽收所有商家的任务数量
