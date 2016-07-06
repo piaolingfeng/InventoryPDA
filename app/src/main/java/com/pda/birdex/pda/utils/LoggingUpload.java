@@ -78,7 +78,7 @@ public class LoggingUpload {
     public RequestCallBackInterface backInterface = new RequestCallBackInterface() {
         @Override
         public void successCallBack(JSONObject object) {
-            L.e("Logging_Report_success",object.toString());
+            L.e("Logging_Report_success", object.toString());
         }
 
         @Override
@@ -106,6 +106,7 @@ public class LoggingUpload {
             params.put("trkNo",trkNo);//"物流单号"
             params.put("matched",match);
             object.put("params", params);
+            L.e(object.toString());
             BirdApi.jsonPostLoggingRequest(mContext,object,backInterface,tag,false);
         } catch (JSONException e) {
             e.printStackTrace();
@@ -141,6 +142,7 @@ public class LoggingUpload {
             JSONArray array = new JSONArray(ctNos);
             params.put("ctNos",array);//"物流单号"
             object.put("params", params);
+            L.e(object.toString());
             BirdApi.jsonPostLoggingRequest(mContext,object,backInterface,tag,false);
         } catch (JSONException e) {
             e.printStackTrace();
@@ -167,6 +169,7 @@ public class LoggingUpload {
             params.put("ctNo",ctNo);//"物流单号"
             params.put("count",count);
             object.put("params", params);
+            L.e(object.toString());
             BirdApi.jsonPostLoggingRequest(mContext,object,backInterface,tag,false);
         } catch (JSONException e) {
             e.printStackTrace();
@@ -193,6 +196,7 @@ public class LoggingUpload {
             JSONArray array = new JSONArray(ctNos);
             params.put("ctNos",array);//""容器号1", "容器号2", ..."
             object.put("params", params);
+            L.e(object.toString());
             BirdApi.jsonPostLoggingRequest(mContext,object,backInterface,tag,false);
         } catch (JSONException e) {
             e.printStackTrace();
@@ -228,6 +232,7 @@ public class LoggingUpload {
             params.put("photoNum",photoNum);//"物流单号""photoNum": number, /* 提交照片张数 */
             params.put("tagError",tagError);//"tagError": true/false /* 是否标记异常 */
             object.put("params", params);
+            L.e(object.toString());
             BirdApi.jsonPostLoggingRequest(mContext,object,backInterface,tag,false);
         } catch (JSONException e) {
             e.printStackTrace();
@@ -253,6 +258,7 @@ public class LoggingUpload {
             JSONObject params = new JSONObject();
             params.put("owner",owner);//"物流单号""photoNum": number, /* 提交照片张数 */
             object.put("params", params);
+            L.e(object.toString());
             BirdApi.jsonPostLoggingRequest(mContext,object,backInterface,tag,false);
         } catch (JSONException e) {
             e.printStackTrace();

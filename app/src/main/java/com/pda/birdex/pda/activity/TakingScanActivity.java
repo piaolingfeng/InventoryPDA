@@ -86,7 +86,7 @@ public class TakingScanActivity extends BarScanActivity implements View.OnClickL
 
                 } else {
 //                    T.showShort(TakingScanActivity.this, getString(R.string.taking_isExist));
-                    Intent i = new Intent(TakingScanActivity.this,TakingSelectBussinessActivity.class);
+                    Intent i = new Intent(TakingScanActivity.this,TakingSelectMerchantActivity.class);
                     i.putExtra("expressNo",code);
                     startActivity(i);
                 }

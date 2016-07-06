@@ -231,7 +231,9 @@ public class TakingToolClearFragment extends BarScanBaseFragment implements View
         if (from.equals("1")) {
             // 从揽收进入的
             takingOrder = (TakingOrder) getActivity().getIntent().getExtras().get("takingOrder");
-            tv_taking_num.setText(takingOrder.getBaseInfo().getTakingOrderNo());
+            if(takingOrder!=null) {
+                tv_taking_num.setText(takingOrder.getBaseInfo().getTakingOrderNo());
+            }
 //            edt_taking_num.setOnFocusChangeListener(new View.OnFocusChangeListener() {
 //                @Override
 //                public void onFocusChange(View v, boolean hasFocus) {
@@ -243,8 +245,10 @@ public class TakingToolClearFragment extends BarScanBaseFragment implements View
         } else {//打印数量
             // 从揽收任务进入的
             orderNoInfoEntity = (TakingOrderNoInfoEntity) getActivity().getIntent().getExtras().get("orderNoInfoEntity");
-            containerInfo = (ContainerInfo) getActivity().getIntent().getExtras().get("containerInfo");
-            tv_taking_num.setText(orderNoInfoEntity.getDetail().getBaseInfo().getBaseInfo().getTakingOrderNo());
+            if(orderNoInfoEntity!=null) {
+                containerInfo = (ContainerInfo) getActivity().getIntent().getExtras().get("containerInfo");
+                tv_taking_num.setText(orderNoInfoEntity.getDetail().getBaseInfo().getBaseInfo().getTakingOrderNo());
+            }
 //            tv_area.setText(containerInfo.getArea());
         }
 

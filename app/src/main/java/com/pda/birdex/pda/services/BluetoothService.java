@@ -26,7 +26,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
 
-import com.pda.birdex.pda.activity.PrintActivity;
+import com.pda.birdex.pda.activity.BasePrintBarScanActivity;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -92,7 +92,7 @@ public class BluetoothService implements Serializable {
         mState = state;
 
         // Give the new state to the Handler so the UI Activity can update
-        mHandler.obtainMessage(PrintActivity.MESSAGE_STATE_CHANGE, state, -1).sendToTarget();
+        mHandler.obtainMessage(BasePrintBarScanActivity.MESSAGE_STATE_CHANGE, state, -1).sendToTarget();
     }
 
     /**
@@ -164,9 +164,9 @@ public class BluetoothService implements Serializable {
         mConnectedThread.start();
 
         // Send the name of the connected device back to the UI Activity
-        Message msg = mHandler.obtainMessage(PrintActivity.MESSAGE_DEVICE_NAME);
+        Message msg = mHandler.obtainMessage(BasePrintBarScanActivity.MESSAGE_DEVICE_NAME);
         Bundle bundle = new Bundle();
-        bundle.putString(PrintActivity.DEVICE_NAME, device.getName());
+        bundle.putString(BasePrintBarScanActivity.DEVICE_NAME, device.getName());
         msg.setData(bundle);
         mHandler.sendMessage(msg);
 
@@ -208,9 +208,9 @@ public class BluetoothService implements Serializable {
         setState(STATE_LISTEN);
         
         // Send a failure message back to the Activity
-        Message msg = mHandler.obtainMessage(PrintActivity.MESSAGE_TOAST);
+        Message msg = mHandler.obtainMessage(BasePrintBarScanActivity.MESSAGE_TOAST);
         Bundle bundle = new Bundle();
-        bundle.putString(PrintActivity.TOAST, "Unable to connect device");
+        bundle.putString(BasePrintBarScanActivity.TOAST, "Unable to connect device");
         msg.setData(bundle);
         mHandler.sendMessage(msg);
     }
@@ -222,9 +222,9 @@ public class BluetoothService implements Serializable {
         //setState(STATE_LISTEN);
  
         // Send a failure message back to the Activity
-        Message msg = mHandler.obtainMessage(PrintActivity.MESSAGE_TOAST);
+        Message msg = mHandler.obtainMessage(BasePrintBarScanActivity.MESSAGE_TOAST);
         Bundle bundle = new Bundle();
-        bundle.putString(PrintActivity.TOAST, "Device connection was lost");
+        bundle.putString(BasePrintBarScanActivity.TOAST, "Device connection was lost");
         msg.setData(bundle);
         mHandler.sendMessage(msg);
     }
@@ -408,7 +408,7 @@ public class BluetoothService implements Serializable {
                     if(bytes>0)
                     {
 	                    // Send the obtained bytes to the UI Activity
-	                    mHandler.obtainMessage(PrintActivity.MESSAGE_READ, bytes, -1, buffer)
+	                    mHandler.obtainMessage(BasePrintBarScanActivity.MESSAGE_READ, bytes, -1, buffer)
 	                            .sendToTarget();
                     }
                     else
@@ -449,7 +449,7 @@ public class BluetoothService implements Serializable {
                 mmOutStream.write(buffer);
 
                 // Share the sent message back to the UI Activity
-                mHandler.obtainMessage(PrintActivity.MESSAGE_WRITE, -1, -1, buffer)
+                mHandler.obtainMessage(BasePrintBarScanActivity.MESSAGE_WRITE, -1, -1, buffer)
                         .sendToTarget();
             } catch (IOException e) {
                 Log.e(TAG, "Exception during write", e);

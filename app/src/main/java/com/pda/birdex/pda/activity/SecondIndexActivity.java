@@ -180,7 +180,7 @@ public class SecondIndexActivity extends BarScanActivity implements OnRecycleVie
                     case 3:
                         Bundle b = new Bundle();
                         b.putString("title", getString(R.string.printlanshou));
-                        b.putString("inputname", getString(R.string.lanshouno));
+                        b.putString("inputname", getString(R.string.taking_num));
                         intent.putExtras(b);
                         //打印揽收单
                         intent.setClass(SecondIndexActivity.this, TakingPrintBarScanActivity.class);

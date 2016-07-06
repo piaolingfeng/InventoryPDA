@@ -25,6 +25,7 @@ import com.pda.birdex.pda.entity.ContainerInfo;
 import com.pda.birdex.pda.entity.CountingBaseInfo;
 import com.pda.birdex.pda.interfaces.OnRecycleViewItemClickListener;
 import com.pda.birdex.pda.interfaces.RequestCallBackInterface;
+import com.pda.birdex.pda.response.CountingOrderNoInfoEntity;
 import com.pda.birdex.pda.response.PrintEntity;
 import com.pda.birdex.pda.response.TakingOrderNoInfoEntity;
 import com.pda.birdex.pda.utils.GsonHelper;
@@ -83,7 +84,8 @@ public class CountMissionClearNumActivity extends BasePrintBarScanActivity imple
 
 
     CountMissionClearNumAdapter adapter;
-    TakingOrderNoInfoEntity orderNoInfoEntity;
+    TakingOrderNoInfoEntity takingOrderNoInfoEntity;//揽收任务详情
+    CountingOrderNoInfoEntity countingOrderNoInfoEntity;//清点任务详情
     List<ContainerInfo> list;
 //    List<ContainerInfo> assignedList;//进行中列表
 //    List<ContainerInfo> unassignedList;//未开始列表
@@ -175,11 +177,11 @@ public class CountMissionClearNumActivity extends BasePrintBarScanActivity imple
     }
 
     //处理揽收单
-    private void dealDetail() {
-//       String time = TimeUtil.long2Date(Long.parseLong(orderNoInfoEntity.getDetail().getBaseInfo().getBaseInfo().getDeadLine()));
-        tv_title_last_time.setText(orderNoInfoEntity.getDetail().getBaseInfo().getBaseInfo().getDeadLine());
-        tv_operate_vessl.setText(orderNoInfoEntity.getDetail().getContainerList().size() + "");
-        list = orderNoInfoEntity.getDetail().getContainerList();
+    private void dealTakingDetail() {
+//       String time = TimeUtil.long2Date(Long.parseLong(takingOrderNoInfoEntity.getDetail().getBaseInfo().getBaseInfo().getDeadLine()));
+        tv_title_last_time.setText(takingOrderNoInfoEntity.getDetail().getBaseInfo().getBaseInfo().getDeadLine());
+        tv_operate_vessl.setText(takingOrderNoInfoEntity.getDetail().getContainerList().size() + "");
+        list = takingOrderNoInfoEntity.getDetail().getContainerList();
 //        unassignedList = new ArrayList<>();
 //        doneList = new ArrayList<>();
 //        assignedList = new ArrayList<>();
@@ -209,15 +211,24 @@ public class CountMissionClearNumActivity extends BasePrintBarScanActivity imple
         adapter.notifyDataSetChanged();
     }
 
+    //处理清点单
+    private void dealCountDetail(){
+        tv_title_last_time.setText(countingOrderNoInfoEntity.getDetail().getBaseInfo().getBaseInfo().getDeadline());
+        tv_operate_vessl.setText(countingOrderNoInfoEntity.getDetail().getContainerList().size() + "");
+        list = countingOrderNoInfoEntity.getDetail().getContainerList();
+        adapter.setList(list);
+        adapter.notifyDataSetChanged();
+    }
+
     //通过揽收单号获取揽收单详情
     private void getTakingOrderDetail() {
         BirdApi.takingOrderNoInfo(this, baseInfo.getTid(), new RequestCallBackInterface() {
             @Override
             public void successCallBack(JSONObject object) {
                 xrcy.refreshComplete();
-                orderNoInfoEntity = GsonHelper.getPerson(object.toString(), TakingOrderNoInfoEntity.class);
-                if (orderNoInfoEntity != null)
-                    dealDetail();
+                takingOrderNoInfoEntity = GsonHelper.getPerson(object.toString(), TakingOrderNoInfoEntity.class);
+                if (takingOrderNoInfoEntity != null)
+                    dealTakingDetail();
                 else {
                     T.showShort(CountMissionClearNumActivity.this, getString(R.string.parse_error));
                 }
@@ -236,9 +247,9 @@ public class CountMissionClearNumActivity extends BasePrintBarScanActivity imple
             @Override
             public void successCallBack(JSONObject object) {
                 xrcy.refreshComplete();
-                orderNoInfoEntity = GsonHelper.getPerson(object.toString(), TakingOrderNoInfoEntity.class);
-                if (orderNoInfoEntity != null)
-                    dealDetail();
+                countingOrderNoInfoEntity = GsonHelper.getPerson(object.toString(), CountingOrderNoInfoEntity.class);
+                if (countingOrderNoInfoEntity != null)
+                    dealTakingDetail();
                 else {
                     T.showShort(CountMissionClearNumActivity.this, getString(R.string.parse_error));
                 }
@@ -271,11 +282,11 @@ public class CountMissionClearNumActivity extends BasePrintBarScanActivity imple
                 }
             }
         }
-        if (code != null && orderNoInfoEntity != null) {
+        if (code != null && takingOrderNoInfoEntity != null) {
             List<BindOrder> containerConfig = new ArrayList<>();
             BindOrder bo = new BindOrder();
             bo.setCode(code);
-            bo.setOwner(orderNoInfoEntity.getDetail().getBaseInfo().getPerson().getCo());
+            bo.setOwner(takingOrderNoInfoEntity.getDetail().getBaseInfo().getPerson().getCo());
             containerConfig.add(bo);
             JSONObject jsonObject = new JSONObject();
             try {
@@ -284,7 +295,7 @@ public class CountMissionClearNumActivity extends BasePrintBarScanActivity imple
 
                 JSONArray object = new JSONArray(str);
                 jsonObject.put("containerConfig", object);
-                jsonObject.put("tid", orderNoInfoEntity.getDetail().getBaseInfo().getBaseInfo().getTid());
+                jsonObject.put("tid", takingOrderNoInfoEntity.getDetail().getBaseInfo().getBaseInfo().getTid());
 //                        jsonObject.put("tid", "MET:TK-160630000003");
                 StringEntity stringEntity = new StringEntity(jsonObject.toString());
 //                        stringEntity.setContentType("application/json");
@@ -296,8 +307,8 @@ public class CountMissionClearNumActivity extends BasePrintBarScanActivity imple
                         T.showShort(CountMissionClearNumActivity.this, getString(R.string.taking_bind_suc));
                         ContainerInfo info = new ContainerInfo();
                         info.setContainerId(code);
-                        orderNoInfoEntity.getDetail().getContainerList().add(info);
-                        dealDetail();//重新分配list给三种不同状态
+                        takingOrderNoInfoEntity.getDetail().getContainerList().add(info);
+                        dealTakingDetail();//重新分配list给三种不同状态
                         enterToTakingActivity(list.size()-1);//从list的最后一个进入activity
                     }
 
@@ -353,13 +364,17 @@ public class CountMissionClearNumActivity extends BasePrintBarScanActivity imple
 //        xrcy.loadMoreComplete();
     }
 
+    /**
+     * 搜索后进入揽收查看器,仅仅是揽收功能有
+     * */
     private void enterToTakingActivity(int position) {
         Intent intent = new Intent();
         Bundle b = new Bundle();
-        b.putSerializable("orderNoInfoEntity", orderNoInfoEntity);
+        b.putSerializable("takingOrderNoInfoEntity", takingOrderNoInfoEntity);
         b.putSerializable("containerInfo", list.get(position));
         intent.setClass(this, TakingCheckActivity.class);
-        intent.putExtra("location_position", "2");//揽收任务进入
+        b.putString("location_position", "2");//揽收任务进入
+        intent.putExtras(b);
         startActivity(intent);
     }
 
@@ -367,7 +382,6 @@ public class CountMissionClearNumActivity extends BasePrintBarScanActivity imple
     public void onItemClick(int position) {
         Intent intent = new Intent();
         Bundle b = new Bundle();
-        b.putSerializable("orderNoInfoEntity", orderNoInfoEntity);
 //        switch (tablayout.getSelectedTabPosition()) {
 //            case 0:
 //                b.putSerializable("containerInfo", unassignedList.get(position));
@@ -382,19 +396,16 @@ public class CountMissionClearNumActivity extends BasePrintBarScanActivity imple
 //                intent.putExtras(b);
 //                break;
 //        }
+        if (getResources().getString(R.string.taking).equals(HeadName)) {//揽收
+            b.putSerializable("takingOrderNoInfoEntity", takingOrderNoInfoEntity);
+            intent.putExtra("location_position", "2");//揽收任务进入
+        } else {
+            b.putSerializable("countingOrderNoInfoEntity", countingOrderNoInfoEntity);
+        }
+        intent.setClass(this, TakingCheckActivity.class);
         b.putSerializable("containerInfo", list.get(position));
         intent.putExtras(b);
-        if (getResources().getString(R.string.taking).equals(HeadName)) {//揽收
-            intent.setClass(this, TakingCheckActivity.class);
-            intent.putExtra("location_position", "2");//揽收任务进入
-            startActivity(intent);
-        } else {
-            if (tablayout.getSelectedTabPosition() != 2) {
-                intent.setClass(this, CountToolActivity.class);
-                intent.putExtra("statusPosition", tablayout.getSelectedTabPosition());
-                startActivity(intent);
-            }
-        }
+        startActivity(intent);
     }
 
     @Override
@@ -462,12 +473,12 @@ public class CountMissionClearNumActivity extends BasePrintBarScanActivity imple
     }
 
     private void print() {
-        if (orderNoInfoEntity != null) {
+        if (takingOrderNoInfoEntity != null) {
             JSONObject jsonObject = new JSONObject();
             try {
                 jsonObject.put("count", 1);
-                jsonObject.put("owner", orderNoInfoEntity.getDetail().getBaseInfo().getPerson().getCo());
-                jsonObject.put("tkNo", orderNoInfoEntity.getDetail().getBaseInfo().getBaseInfo().getTakingOrderNo());
+                jsonObject.put("owner", takingOrderNoInfoEntity.getDetail().getBaseInfo().getPerson().getCo());
+                jsonObject.put("tkNo", takingOrderNoInfoEntity.getDetail().getBaseInfo().getBaseInfo().getTakingOrderNo());
                 BirdApi.postCodePrint(this, jsonObject, new RequestCallBackInterface() {
                     @Override
                     public void successCallBack(JSONObject object) {

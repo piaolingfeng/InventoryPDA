@@ -81,13 +81,13 @@ public class TakingToolActivity extends BasePrintBarScanActivity implements OnRe
         for (String title : toolMenu) {
             currentMenuList.add(title);
         }
-        dealToolMenuList();//处理数据后获取默认首页的位置
         title.setMenuVisble(true);
         title.setOnSaveItemClickListener(this);//saveMenu clicklistener
         title.setSaveList(currentMenuList);
         if("2".equals(location)){//位置2进来的话会传首先显示的fragment的位置
             currentPosition = getIntent().getExtras().getInt("position");
         }
+        dealToolMenuList();//处理数据后获取默认首页的位置
         addFragment(currentPosition, false);//初始默认第一个fragment
     }
 

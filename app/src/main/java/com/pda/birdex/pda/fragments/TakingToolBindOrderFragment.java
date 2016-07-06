@@ -7,7 +7,6 @@ import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.TextView;
 
-import com.loopj.android.http.RequestParams;
 import com.pda.birdex.pda.MyApplication;
 import com.pda.birdex.pda.R;
 import com.pda.birdex.pda.adapter.BindNumAdapter;
@@ -23,12 +22,10 @@ import com.pda.birdex.pda.utils.StringUtils;
 import com.pda.birdex.pda.utils.T;
 import com.pda.birdex.pda.widget.ClearEditText;
 
-import org.apache.http.entity.StringEntity;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -57,7 +54,7 @@ public class TakingToolBindOrderFragment extends BarScanBaseFragment implements 
     TakingOrder takingOrder;//位置1进来传来的实体
     TakingOrderNoInfoEntity orderNoInfoEntity;//位置2进来传来的实体
     ContainerInfo containerInfo;//位置2进来时传进来的item
-    String tid ="";
+    String tid = "";
     // 容器 list
     private List<String> containerList = new ArrayList<>();
 
@@ -75,14 +72,18 @@ public class TakingToolBindOrderFragment extends BarScanBaseFragment implements 
         from = getActivity().getIntent().getExtras().getString("location_position");
         if ("1".equals(from)) {
             takingOrder = (TakingOrder) getActivity().getIntent().getExtras().get("takingOrder");
-            tv_taking_num.setText(takingOrder.getBaseInfo().getTakingOrderNo());
-            owner = takingOrder.getPerson().getCo();
+            if (takingOrder != null) {
+                tv_taking_num.setText(takingOrder.getBaseInfo().getTakingOrderNo());
+                owner = takingOrder.getPerson().getCo();
+            }
         } else {//打印数量
             if ("2".equals(from)) {
-                orderNoInfoEntity = (TakingOrderNoInfoEntity) getActivity().getIntent().getExtras().get("orderNoInfoEntity");
                 containerInfo = (ContainerInfo) getActivity().getIntent().getExtras().get("containerInfo");
-                tv_taking_num.setText(orderNoInfoEntity.getDetail().getBaseInfo().getBaseInfo().getTakingOrderNo());
-                owner = orderNoInfoEntity.getDetail().getBaseInfo().getPerson().getCo();
+                orderNoInfoEntity = (TakingOrderNoInfoEntity) getActivity().getIntent().getExtras().get("orderNoInfoEntity");
+                if (orderNoInfoEntity != null) {
+                    tv_taking_num.setText(orderNoInfoEntity.getDetail().getBaseInfo().getBaseInfo().getTakingOrderNo());
+                    owner = orderNoInfoEntity.getDetail().getBaseInfo().getPerson().getCo();
+                }
             } else {
                 edt_taking_num.setVisibility(View.VISIBLE);
                 tv_taking_num.setVisibility(View.GONE);
@@ -165,60 +166,58 @@ public class TakingToolBindOrderFragment extends BarScanBaseFragment implements 
         switch (v.getId()) {
             // 点击提交
             case R.id.btn_commit:
-                if (containerList.size() > 0) {
-                    RequestParams params = new RequestParams();
-//                    params.put("tkNo", tv_taking_num.getText() + "");
-//                    params.put("code", containerList);
-                    List<BindOrder> containerConfig = new ArrayList<>();
-                    for (String code : containerList) {
-                        BindOrder bo = new BindOrder();
-                        bo.setCode(code);
-                        bo.setOwner(owner);
-                        containerConfig.add(bo);
-                    }
-
-                    JSONObject jsonObject = new JSONObject();
-                    try {
-                        String str = GsonHelper.createJsonString(containerConfig);
-//                        jsonObject.put("containerConfig",str);
-
-                        JSONArray object = new JSONArray(str);
-                        jsonObject.put("containerConfig", object);
-                        if ("1".equals(from)) {
-                            tid = takingOrder.getBaseInfo().getTid();
-                            jsonObject.put("tid", tid);
-                        } else if ("2".equals(from)) {
-                            tid  = orderNoInfoEntity.getDetail().getBaseInfo().getBaseInfo().getTid();
-                            jsonObject.put("tid", tid);
-                        } else {
-                            /**
-                             * 首页有个绑定揽收单，这里是该页面tid入口
-                             * */
-                            if (StringUtils.isEmpty(edt_taking_num.getText().toString())) {
-                                T.showShort(getActivity(), getString(R.string.tv_taking_num_1) + getString(R.string.not_null));
-                                return;
-                            }
-                            jsonObject.put("tid", edt_taking_num.getText().toString());
-                        }
-//                        jsonObject.put("tid", "MET:TK-160630000003");
-                        StringEntity stringEntity = new StringEntity(jsonObject.toString());
-//                        stringEntity.setContentType("application/json");
-
-                        if ("1".equals(from) || "2".equals(from))
-                            BirdApi.jsonTakingBindorderSubmit(getContext(), jsonObject, callBackInterface, tag, true);
-                        else {
-
-                        }
-
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    } catch (UnsupportedEncodingException e) {
-                        e.printStackTrace();
-                    }
-                } else {
-                    T.showShort(getContext(), getString(R.string.taking_bind_no));
-                }
+                commitBindOrder();
                 break;
+        }
+    }
+
+    private void commitBindOrder() {
+        if (containerList.size() > 0) {
+            List<BindOrder> containerConfig = new ArrayList<>();
+            for (String code : containerList) {
+                BindOrder bo = new BindOrder();
+                bo.setCode(code);
+                bo.setOwner(owner);
+                containerConfig.add(bo);
+            }
+            JSONObject jsonObject = new JSONObject();
+
+            try {
+                String str = GsonHelper.createJsonString(containerConfig);
+                JSONArray jsonArray = new JSONArray(str);
+                jsonObject.put("containerConfig", jsonArray);
+                if ("1".equals(from)) {
+                    tid = takingOrder.getBaseInfo().getTid();
+                    jsonObject.put("tid", tid);
+                } else if ("2".equals(from)) {
+                    tid = orderNoInfoEntity.getDetail().getBaseInfo().getBaseInfo().getTid();
+                    jsonObject.put("tid", tid);
+                } else {
+                    /**
+                     * 首页有个绑定揽收单，这里是该页面tid入口
+                     * */
+
+                    if (StringUtils.isEmpty(edt_taking_num.getText().toString())) {
+                        T.showShort(getActivity(), getString(R.string.tv_taking_num_1) + getString(R.string.not_null));
+                        return;
+                    }
+                    jsonObject = new JSONObject();
+                    String orderId = edt_taking_num.getText().toString();//揽收单号
+                    jsonObject.put("orderNO",orderId);
+                    jsonArray = new JSONArray(containerList);
+                    jsonObject.put("containers",jsonArray);
+                }
+                if ("1".equals(from) || "2".equals(from))
+                    BirdApi.jsonTakingBindorderSubmit(getContext(), jsonObject, callBackInterface, tag, true);
+                else {
+                    BirdApi.jsonTakingBindorderBatSubmit(getContext(), jsonObject, callBackInterface, tag, true);
+                }
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        } else {
+            T.showShort(getContext(), getString(R.string.taking_bind_no));
         }
     }
 
@@ -234,7 +233,7 @@ public class TakingToolBindOrderFragment extends BarScanBaseFragment implements 
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-            MyApplication.loggingUpload.bindOrder(getActivity(), tag,orderId,tid, containerList);
+            MyApplication.loggingUpload.bindOrder(getActivity(), tag, orderId, tid, containerList);
         }
 
         @Override

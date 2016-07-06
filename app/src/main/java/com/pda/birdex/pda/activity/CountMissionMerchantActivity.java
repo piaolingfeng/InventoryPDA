@@ -80,9 +80,9 @@ public class CountMissionMerchantActivity extends BaseActivity {
             public void onLoadMore() {
 //xrcy.loadMoreComplete();
                 if (getResources().getString(R.string.taking).equals(HeadName)) {//揽收清点
-                    getTakingMerchantMission("unTaking");
+                    getTakingMerchantMission("null");
                 } else {
-                    getCountingMerchantMission("unCounting");
+                    getCountingMerchantMission("null");
                 }
             }
         });
@@ -124,9 +124,9 @@ public class CountMissionMerchantActivity extends BaseActivity {
     protected void onResume() {
         super.onResume();
         if (getResources().getString(R.string.taking).equals(HeadName)) {//揽收清点
-            getTakingMerchantMission("unTaking");
+            getTakingMerchantMission("null");
         } else {
-            getCountingMerchantMission("unCounting");
+            getCountingMerchantMission("null");
         }
     }
 

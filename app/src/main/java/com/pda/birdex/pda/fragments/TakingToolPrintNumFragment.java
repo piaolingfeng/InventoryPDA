@@ -54,8 +54,10 @@ public class TakingToolPrintNumFragment extends BarScanBaseFragment implements V
 
         if (getActivity().getIntent().getExtras().getString("location_position").equals("1")) {//打印数量
             takingOrder = (TakingOrder) getActivity().getIntent().getExtras().get("takingOrder");
-            tv_taking_num.setText(takingOrder.getBaseInfo().getTakingOrderNo());
-            tv_bussiness.setText(takingOrder.getPerson().getName());
+            if (takingOrder != null) {
+                tv_taking_num.setText(takingOrder.getBaseInfo().getTakingOrderNo());
+                tv_bussiness.setText(takingOrder.getPerson().getName());
+            }
             edt_print_num.setOnEditorActionListener(this);
         } else {
             edt_print_num.setVisibility(View.GONE);
@@ -63,8 +65,12 @@ public class TakingToolPrintNumFragment extends BarScanBaseFragment implements V
             tv_print_num.setText(getString(R.string.taking_num));
             orderNoInfoEntity = (TakingOrderNoInfoEntity) getActivity().getIntent().getExtras().get("orderNoInfoEntity");
             containerInfo = (ContainerInfo) getActivity().getIntent().getExtras().get("containerInfo");
-            tv_taking_num.setText(orderNoInfoEntity.getDetail().getBaseInfo().getBaseInfo().getTakingOrderNo());
-            tv_bussiness.setText(orderNoInfoEntity.getDetail().getBaseInfo().getPerson().getName());
+            if (containerInfo != null)
+                tv_taking_container.setText(containerInfo.getContainerId());
+            if (orderNoInfoEntity != null) {
+                tv_taking_num.setText(orderNoInfoEntity.getDetail().getBaseInfo().getBaseInfo().getTakingOrderNo());
+                tv_bussiness.setText(orderNoInfoEntity.getDetail().getBaseInfo().getPerson().getName());
+            }
         }
     }
 
@@ -91,7 +97,7 @@ public class TakingToolPrintNumFragment extends BarScanBaseFragment implements V
 //        RequestParams params = new RequestParams();
         JSONObject jsonObject = new JSONObject();
         try {
-            final String tid ;
+            final String tid;
             final String orderId;
             if (getActivity().getIntent().getExtras().getString("location_position").equals("1")) {//打印数量
                 int count = 1;
@@ -114,7 +120,7 @@ public class TakingToolPrintNumFragment extends BarScanBaseFragment implements V
                 @Override
                 public void successCallBack(JSONObject object) {
                     PrintEntity entity = GsonHelper.getPerson(object.toString(), PrintEntity.class);
-                    MyApplication.loggingUpload.PrintTag(getActivity(),tag,orderId,tid,entity.getContainerNos());
+                    MyApplication.loggingUpload.PrintTag(getActivity(), tag, orderId, tid, entity.getContainerNos());
                     bus.post(entity.getData());
                 }
 

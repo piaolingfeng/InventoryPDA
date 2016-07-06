@@ -10,6 +10,7 @@ public class PrintEntity extends BaseEntity {
     List<String> data = new ArrayList<>();
     List<String> containerNos = new ArrayList<>();
     String tid = "";//只在打印相同箱号时返回
+    String orderNo="";//
 //    String
     public List<String> getData() {
         return data;
@@ -21,5 +22,9 @@ public class PrintEntity extends BaseEntity {
 
     public String getTid() {
         return tid;
+    }
+
+    public String getOrderNo() {
+        return orderNo;
     }
 }

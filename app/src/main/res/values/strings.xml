@@ -1,5 +1,7 @@
 <resources>
     <string name="app_name">库内PDA</string>
+    <string name="request401">用户认证错误,请重新登录后重试。</string>
+    <string name="request404">访问错误。</string>
 
     <string name="size_25p">25%w</string>
     <string name="size_50p">50%w</string>
@@ -114,6 +116,7 @@
     <string name="more">更多</string>
     <string name="commit_success">提交成功</string>
     <string name="check_taking_info">查看揽收容器信息</string>
+    <string name="check_counting_info">查看清点容器信息</string>
     <string name="operation_history">最近操作纪录：</string>
     <string name="operation_man">操作人：</string>
     <string name="time">时 间：</string>
@@ -126,6 +129,8 @@
     <string name="co">用户编码：</string>
     <string name="co_hint">请输入用户编码</string>
     <string name="co_recivier_not">用户编码和收件人不能为空</string>
+
+
 
     <!-- 清点 -->
     <string name="count_task">清点任务</string>

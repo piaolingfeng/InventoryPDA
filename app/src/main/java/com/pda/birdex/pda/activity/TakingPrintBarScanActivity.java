@@ -10,6 +10,7 @@ import android.view.animation.Animation;
 import android.view.animation.TranslateAnimation;
 import android.widget.TextView;
 
+import com.pda.birdex.pda.MyApplication;
 import com.pda.birdex.pda.R;
 import com.pda.birdex.pda.api.BirdApi;
 import com.pda.birdex.pda.interfaces.RequestCallBackInterface;
@@ -153,7 +154,7 @@ public class TakingPrintBarScanActivity extends BasePrintBarScanActivity impleme
                 printSame();
                 break;
             case R.id.printnew:
-
+                printNew();
                 break;
         }
     }
@@ -165,12 +166,7 @@ public class TakingPrintBarScanActivity extends BasePrintBarScanActivity impleme
 
     //打印相同箱单
     private void printNew(){
-//        RequestParams params = new RequestParams();
-//        params.put("count", 1);
-//            params.put("owner", takingOrder.getPerson().getCo());
-//            params.put("tkNo", takingOrder.getBaseInfo().getTakingOrderNo());
-//        } else {
-//        BirdApi.postCodePrint(this,);
+        BirdApi.postCodeNewPrint(this, codeEt.getText().toString(), this, tag,true);
     }
 
     @Override
@@ -181,6 +177,10 @@ public class TakingPrintBarScanActivity extends BasePrintBarScanActivity impleme
     @Override
     public void successCallBack(JSONObject object) {
         PrintEntity entity = GsonHelper.getPerson(object.toString(), PrintEntity.class);
+        //日志上报
+        String orderId = entity.getOrderNo();
+        String tid = entity.getTid();
+        MyApplication.loggingUpload.PrintTag(this,tag,orderId,tid,entity.getContainerNos());
         if(entity!=null) {
             print(entity.getData());
         }else{
@@ -197,5 +197,11 @@ public class TakingPrintBarScanActivity extends BasePrintBarScanActivity impleme
     @Override
     public void errorCallBack(JSONObject object) {
 
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        BirdApi.cancelRequestWithTag(tag);
     }
 }
