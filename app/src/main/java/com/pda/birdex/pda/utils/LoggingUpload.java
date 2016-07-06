@@ -86,28 +86,39 @@ public class LoggingUpload {
             L.e("Logging_Report_error",object.toString());
         }
     };
+
     //揽收部分上传
-    //扫描物流号
-    public  void scanUpload(Context mContext,String tag,String orderId,String tid ,String trkNo,boolean match){
+
+    private JSONObject createTakingJson(String orderId, String tid){
         JSONObject object = new JSONObject();
         try {
             object.put("task","take");
             object.put("source","PDA");
             object.put("time",getLocalTime());
-            object.put("userId",PreferenceUtils.getPrefString(MyApplication.getInstans(), "userId", ""));
-            object.put("userName",PreferenceUtils.getPrefString(MyApplication.getInstans(), "user_name", ""));
-
-            object.put("taskId",tid);
+            object.put("userId", PreferenceUtils.getPrefString(MyApplication.getInstans(), "username", ""));
+            object.put("userName", PreferenceUtils.getPrefString(MyApplication.getInstans(), "user_name", ""));
+            object.put("taskId", tid);
+            object.put("orderId", orderId);//"匹配的揽收单号; 若无匹配，返回空"
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return object;
+    }
+    //扫描物流号
+//    "trkNo": "物流单号",
+//            "matched": true/false   /* 是否匹配到揽收单号 */
+    public  void takeScan(Context mContext, String tag, String orderId, String tid, String trkNo, boolean match){
+        JSONObject object =createTakingJson(orderId,tid);
+        try {
             object.put("job", "scan");
             object.put("logLevel", "info");
-            object.put( "orderId",orderId);//"匹配的揽收单号; 若无匹配，返回空"
             object.put("event", "commit");
             JSONObject params = new JSONObject();
             params.put("trkNo",trkNo);//"物流单号"
             params.put("matched",match);
             object.put("params", params);
             L.e(object.toString());
-            BirdApi.jsonPostLoggingRequest(mContext,object,backInterface,tag,false);
+            BirdApi.jsonPostLoggingRequest(mContext, object, backInterface, tag, false);
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -123,21 +134,12 @@ public class LoggingUpload {
 //            "params": {
 //        "ctNos": ["容器号1", "容器号2", ...]
 //    }
-    public  void PrintTag(Context mContext,String tag,String orderId,String tid,List<String> ctNos){
-        JSONObject object = new JSONObject();
+    public  void takePrint(Context mContext, String tag, String orderId, String tid, List<String> ctNos){
+        JSONObject object =createTakingJson(orderId,tid);
         try {
-            object.put("task","take");
-            object.put("source","PDA");
-            object.put("time",getLocalTime());
-            object.put("userId",PreferenceUtils.getPrefString(MyApplication.getInstans(), "username", ""));
-            object.put("userName",PreferenceUtils.getPrefString(MyApplication.getInstans(), "user_name", ""));
-
-            object.put("taskId",tid);
             object.put("job", "tag_print");
             object.put("logLevel", "trace");
-            object.put( "orderId",orderId);//"匹配的揽收单号; 若无匹配，返回空"
             object.put("event", "commit");
-
             JSONObject params = new JSONObject();
             JSONArray array = new JSONArray(ctNos);
             params.put("ctNos",array);//"物流单号"
@@ -150,19 +152,11 @@ public class LoggingUpload {
     }
 
     //揽收清点
-    public  void takingClear(Context mContext,String tag,String orderId,String tid,String ctNo,int count){
-        JSONObject object = new JSONObject();
+    public  void takeTakeClear(Context mContext, String tag, String orderId, String tid, String ctNo, int count){
+        JSONObject object =createTakingJson(orderId,tid);
         try {
-            object.put("task","take");
-            object.put("source","PDA");
-            object.put("time",getLocalTime());
-            object.put("userId",PreferenceUtils.getPrefString(MyApplication.getInstans(), "username", ""));
-            object.put("userName",PreferenceUtils.getPrefString(MyApplication.getInstans(), "user_name", ""));
-
-            object.put("taskId",tid);
             object.put("job", "submit");
             object.put("logLevel", "info");
-            object.put( "orderId",orderId);//"匹配的揽收单号; 若无匹配，返回空"
             object.put("event", "commit");
 
             JSONObject params = new JSONObject();
@@ -177,21 +171,12 @@ public class LoggingUpload {
     }
 
     //绑单
-    public  void bindOrder(Context mContext,String tag,String orderId,String tid,List<String> ctNos){
-        JSONObject object = new JSONObject();
+    public  void takeBindOrder(Context mContext, String tag, String orderId, String tid, List<String> ctNos){
+        JSONObject object =createTakingJson(orderId,tid);
         try {
-            object.put("task","take");
-            object.put("source","PDA");
-            object.put("time",getLocalTime());
-            object.put("userId",PreferenceUtils.getPrefString(MyApplication.getInstans(), "username", ""));
-            object.put("userName",PreferenceUtils.getPrefString(MyApplication.getInstans(), "user_name", ""));
-
-            object.put("taskId",tid);
             object.put("job", "bind_ct");
             object.put("logLevel", "info");
-            object.put( "orderId",orderId);//"匹配的揽收单号; 若无匹配，返回空"
             object.put("event", "commit");
-
             JSONObject params = new JSONObject();
             JSONArray array = new JSONArray(ctNos);
             params.put("ctNos",array);//""容器号1", "容器号2", ..."
@@ -203,6 +188,25 @@ public class LoggingUpload {
         }
     }
 
+    //绑区
+//    ctNo": "容器号",
+//            "rgNo": "区域号"
+    public void takeBindArea(Context mContext, String tag, String orderId, String tid,String ctNo,String rgNo){
+        JSONObject object =createTakingJson(orderId,tid);
+        try {
+            object.put("job", "bind_rg");
+            object.put("logLevel", "info");
+            object.put("event", "commit");
+            JSONObject params = new JSONObject();
+            params.put("ctNo",ctNo);//""容器号1", "容器号2", ..."
+            params.put("rgNo",rgNo);
+            object.put("params", params);
+            L.e(object.toString());
+            BirdApi.jsonPostLoggingRequest(mContext,object,backInterface,tag,false);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
 //    拍照
 //    {
 //        ...
@@ -213,21 +217,12 @@ public class LoggingUpload {
 //        "photoNum": number, /* 提交照片张数 */
 //                "tagError": true/false /* 是否标记异常 */
 //    }
-    public  void takePhoto(Context mContext,String tag,String orderId,String tid,int photoNum,boolean tagError){
-        JSONObject object = new JSONObject();
+    public  void takeTakePhoto(Context mContext, String tag, String orderId, String tid, int photoNum, boolean tagError){
+        JSONObject object =createTakingJson(orderId,tid);
         try {
-            object.put("task","take");
-            object.put("source","PDA");
-            object.put("time",getLocalTime());
-            object.put("userId",PreferenceUtils.getPrefString(MyApplication.getInstans(), "username", ""));
-            object.put("userName",PreferenceUtils.getPrefString(MyApplication.getInstans(), "user_name", ""));
-
-            object.put("taskId",tid);
             object.put("job", "photo");
             object.put("logLevel", "info");
-            object.put( "orderId",orderId);//"匹配的揽收单号; 若无匹配，返回空"
             object.put("event", "commit");
-
             JSONObject params = new JSONObject();
             params.put("photoNum",photoNum);//"物流单号""photoNum": number, /* 提交照片张数 */
             params.put("tagError",tagError);//"tagError": true/false /* 是否标记异常 */
@@ -240,19 +235,11 @@ public class LoggingUpload {
     }
 
     //选择商家
-    public  void selectMerchant(Context mContext,String tag,String orderId,String tid,String owner){
-        JSONObject object = new JSONObject();
+    public  void takeSelectMerchant(Context mContext, String tag, String orderId, String tid, String owner){
+        JSONObject object =createTakingJson(orderId,tid);
         try {
-            object.put("task","take");
-            object.put("source","PDA");
-            object.put("time",getLocalTime());
-            object.put("userId",PreferenceUtils.getPrefString(MyApplication.getInstans(), "username", ""));
-            object.put("userName",PreferenceUtils.getPrefString(MyApplication.getInstans(), "user_name", ""));
-
-            object.put("taskId",tid);
             object.put("job", "man_create");
             object.put("logLevel", "info");
-            object.put( "orderId",orderId);//"匹配的揽收单号; 若无匹配，返回空"
             object.put("event", "commit");
 
             JSONObject params = new JSONObject();
@@ -266,6 +253,161 @@ public class LoggingUpload {
     }
 
 
+    /**
+     *
+     *          清点日志上报
+     *
+     */
 
+    private JSONObject creatCountJsonObject(String orderId,String tid){
+        JSONObject object = new JSONObject();
+        try {
+            object.put("task","count");
+            object.put("source","PDA");
+            object.put("time",getLocalTime());
+            object.put("userId", PreferenceUtils.getPrefString(MyApplication.getInstans(), "username", ""));
+            object.put("userName", PreferenceUtils.getPrefString(MyApplication.getInstans(), "user_name", ""));
+            object.put("taskId", tid);
+            object.put("orderId", orderId);//"匹配的揽收单号; 若无匹配，返回空"
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return object;
+    }
 
+    //解绑
+    public void countUnBind(Context mContext,String tag,String orderId,String tid,String ctNo){
+        JSONObject object = creatCountJsonObject(orderId,tid);
+        try {
+            object.put("job", "unbind_rg");
+            object.put("logLevel", "info");
+            object.put("event", "commit");
+            JSONObject params = new JSONObject();
+            params.put("ctNo",ctNo);
+            object.put("params",params);
+            L.e(object.toString());
+            BirdApi.jsonPostLoggingRequest(mContext, object, backInterface, tag, false);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+    //打印
+    public void countPrint(Context mContext,String tag,String orderId,String tid,List<String> ctNos){
+        JSONObject object = creatCountJsonObject(orderId,tid);
+        try {
+            object.put("job", "tag_print");
+            object.put("logLevel", "info");
+            object.put("event", "commit");
+            JSONObject params = new JSONObject();
+            JSONArray jsonArray = new JSONArray(ctNos);
+            params.put("ctNo",jsonArray);
+            object.put("params",params);
+            L.e(object.toString());
+            BirdApi.jsonPostLoggingRequest(mContext, object, backInterface, tag, false);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+    //绑单
+    public void countBindOrder(Context mContext,String tag,String orderId,String tid,String ctNo){
+        JSONObject object = creatCountJsonObject(orderId,tid);
+        try {
+            object.put("job", "bind_ct");
+            object.put("logLevel", "info");
+            object.put("event", "commit");
+            JSONObject params = new JSONObject();
+            params.put("ctNo",ctNo);
+            object.put("params",params);
+            L.e(object.toString());
+            BirdApi.jsonPostLoggingRequest(mContext, object, backInterface, tag, false);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+    //绑区
+//    "ctNo": "容器号",
+//    "rgNo": "区域号"
+    public void countBindArea(Context mContext,String tag,String orderId,String tid,String ctNo,String rgNo){
+        JSONObject object = creatCountJsonObject(orderId,tid);
+        try {
+            object.put("job", "bind_rg");
+            object.put("logLevel", "info");
+            object.put("event", "commit");
+            JSONObject params = new JSONObject();
+            params.put("ctNo",ctNo);
+            params.put("rgNo",rgNo);
+            object.put("params",params);
+            L.e(object.toString());
+            BirdApi.jsonPostLoggingRequest(mContext, object, backInterface, tag, false);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+    //拍照
+//    photoNum": number,   /* 照片数量 */
+//            "tagError": true/false,   /* 标记异常 */
+//            "upc": "UPC号"
+    public void countTakePhoto(Context mContext,String tag,String orderId,String tid,int photoNum,boolean tagError,String upc){
+        JSONObject object = creatCountJsonObject(orderId,tid);
+        try {
+            object.put("job", "photo");
+            object.put("logLevel", "info");
+            object.put("event", "commit");
+            JSONObject params = new JSONObject();
+            params.put("photoNum",photoNum);
+            params.put("tagError",tagError);
+            params.put("upc",upc);
+            object.put("params",params);
+            L.e(object.toString());
+            BirdApi.jsonPostLoggingRequest(mContext, object, backInterface, tag, false);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+    //追踪
+//    "sourceCtNo": "原容器号",
+//            "destCtNo": "现容器号"
+    public void countTrack(Context mContext,String tag,String orderId,String tid,String sourceCtNo,String destCtNo){
+        JSONObject object = creatCountJsonObject(orderId,tid);
+        try {
+            object.put("job", "track");
+            object.put("logLevel", "info");
+            object.put("event", "commit");
+            JSONObject params = new JSONObject();
+            params.put("sourceCtNo",sourceCtNo);
+            params.put("destCtNo", destCtNo);
+            object.put("params",params);
+            L.e(object.toString());
+            BirdApi.jsonPostLoggingRequest(mContext, object, backInterface, tag, false);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+    //清点提交
+//    "upc": "UPC",
+//            "ctNo": "容器号",
+//            "count": number
+    public void countClearCommit(Context mContext,String tag,String orderId,String tid,String upc,String ctNo,int count){
+        JSONObject object = creatCountJsonObject(orderId,tid);
+        try {
+            object.put("job", "submit");
+            object.put("logLevel", "info");
+            object.put("event", "commit");
+            JSONObject params = new JSONObject();
+            params.put("upc",upc);
+            params.put("ctNo", ctNo);
+            params.put("count",count);
+            object.put("params",params);
+            L.e(object.toString());
+            BirdApi.jsonPostLoggingRequest(mContext, object, backInterface, tag, false);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
 }

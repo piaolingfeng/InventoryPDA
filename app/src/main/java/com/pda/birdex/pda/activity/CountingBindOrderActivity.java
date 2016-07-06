@@ -5,19 +5,24 @@ import android.os.Bundle;
 
 import com.pda.birdex.pda.R;
 import com.pda.birdex.pda.fragments.BaseFragment;
-import com.pda.birdex.pda.fragments.TakingToolBindOrderFragment;
+import com.pda.birdex.pda.fragments.CountToolBindOrderFragment;
 import com.pda.birdex.pda.interfaces.BackHandledInterface;
 import com.pda.birdex.pda.widget.TitleView;
 
 import butterknife.Bind;
 
 /**
- * Created by hyj on 2016/7/4.
+ * Created by chuming.zhuang on 2016/7/6.
  */
-public class TakingBindOrderActivity extends BaseActivity implements  BaseFragment.OnFragmentInteractionListener, BackHandledInterface {
+public class CountingBindOrderActivity extends BaseActivity implements  BaseFragment.OnFragmentInteractionListener, BackHandledInterface {
     @Bind(R.id.title)
     TitleView title;
-    private TakingToolBindOrderFragment bindNumFragment;
+    private CountToolBindOrderFragment bindOrderFragment;
+    @Override
+    public void setSelectedFragment(BaseFragment selectedFragment) {
+
+    }
+
     @Override
     public int getContentLayoutResId() {
         return R.layout.activity_taking_bindorder_layout;
@@ -26,17 +31,12 @@ public class TakingBindOrderActivity extends BaseActivity implements  BaseFragme
     @Override
     public void initializeContentViews() {
         title.setTitle(getString(R.string.bind_order));
-        if (bindNumFragment == null){
-            bindNumFragment = new TakingToolBindOrderFragment();
+        if (bindOrderFragment == null){
+            bindOrderFragment = new CountToolBindOrderFragment();
         }
         Bundle b = new Bundle();
         b .putString("location_position","SecondIndex");
-        getSupportFragmentManager().beginTransaction().replace(R.id.framelayout,bindNumFragment).commit();
-    }
-
-    @Override
-    public void setSelectedFragment(BaseFragment selectedFragment) {
-
+        getSupportFragmentManager().beginTransaction().replace(R.id.framelayout,bindOrderFragment).commit();
     }
 
     @Override

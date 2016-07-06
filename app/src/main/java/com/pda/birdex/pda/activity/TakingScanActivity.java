@@ -75,7 +75,7 @@ public class TakingScanActivity extends BarScanActivity implements View.OnClickL
                 String tid = entity.getOrderInfo().getBaseInfo().getTid();
                 String orderId = entity.getOrderInfo().getBaseInfo().getTakingOrderNo();
                 boolean match =entity.isExist();
-                MyApplication.loggingUpload.scanUpload(TakingScanActivity.this, tag,orderId ,tid,code,match);//上报日志
+                MyApplication.loggingUpload.takeScan(TakingScanActivity.this, tag, orderId, tid, code, match);//上报日志
                 if (entity.isExist()) {
                     Intent intent = new Intent(TakingScanActivity.this, TakingToolActivity.class);
                     Bundle b = new Bundle();
@@ -94,7 +94,7 @@ public class TakingScanActivity extends BarScanActivity implements View.OnClickL
 
             @Override
             public void errorCallBack(JSONObject object) {
-//                MyApplication.loggingUpload.scanUpload(TakingScanActivity.this, tag,"" ,"",code,false);//上报日志
+//                MyApplication.loggingUpload.takeScan(TakingScanActivity.this, tag,"" ,"",code,false);//上报日志
             }
 
         }, tag, true);

@@ -190,7 +190,7 @@ public class TakingToolPhotoFragment extends BarScanBaseFragment implements View
                                             jsonObject.put("photoIds", array);
                                             //上传日志
                                             String orderId = tv_taking_num.getText().toString();
-                                            MyApplication.loggingUpload.takePhoto(getActivity(),tag,orderId,tid,sucCounts,exception_cb.isChecked());
+                                            MyApplication.loggingUpload.takeTakePhoto(getActivity(), tag, orderId, tid, sucCounts, exception_cb.isChecked());
                                             BirdApi.uploadPicSubmit(getContext(), jsonObject, new RequestCallBackInterface() {
 
                                                 @Override

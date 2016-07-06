@@ -479,7 +479,7 @@ public class MissionClearNumActivity extends BasePrintBarScanActivity implements
                 jsonObject.put("count", 1);
                 jsonObject.put("owner", takingOrderNoInfoEntity.getDetail().getBaseInfo().getPerson().getCo());
                 jsonObject.put("tkNo", takingOrderNoInfoEntity.getDetail().getBaseInfo().getBaseInfo().getTakingOrderNo());
-                BirdApi.postCodePrint(this, jsonObject, new RequestCallBackInterface() {
+                BirdApi.postTakingCodePrint(this, jsonObject, new RequestCallBackInterface() {
                     @Override
                     public void successCallBack(JSONObject object) {
                         PrintEntity entity = GsonHelper.getPerson(object.toString(), PrintEntity.class);

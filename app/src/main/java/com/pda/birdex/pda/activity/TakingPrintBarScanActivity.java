@@ -161,12 +161,12 @@ public class TakingPrintBarScanActivity extends BasePrintBarScanActivity impleme
 
     //打印相同箱单
     private void printSame(){
-        BirdApi.postCodeSamePrint(this,codeEt.getText().toString(),this,tag,true);
+        BirdApi.postTakingCodeSamePrint(this, codeEt.getText().toString(), this, tag, true);
     }
 
     //打印相同箱单
     private void printNew(){
-        BirdApi.postCodeNewPrint(this, codeEt.getText().toString(), this, tag,true);
+        BirdApi.postTakingCodeNewPrint(this, codeEt.getText().toString(), this, tag, true);
     }
 
     @Override
@@ -180,7 +180,7 @@ public class TakingPrintBarScanActivity extends BasePrintBarScanActivity impleme
         //日志上报
         String orderId = entity.getOrderNo();
         String tid = entity.getTid();
-        MyApplication.loggingUpload.PrintTag(this,tag,orderId,tid,entity.getContainerNos());
+        MyApplication.loggingUpload.takePrint(this, tag, orderId, tid, entity.getContainerNos());
         if(entity!=null) {
             print(entity.getData());
         }else{

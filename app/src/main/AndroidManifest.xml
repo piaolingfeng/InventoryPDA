@@ -120,7 +120,7 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".activity.CountToolActivity"
-            android:windowSoftInputMode="adjustUnspecified|stateHidden"
+            android:windowSoftInputMode="adjustResize|stateHidden"
             android:screenOrientation="portrait" />
         <activity
             android:name=".activity.CountToolMapActivity"
@@ -145,6 +145,10 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".activity.TakingBindOrderActivity"
+            android:windowSoftInputMode="adjustResize|stateHidden"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.CountingBindOrderActivity"
             android:windowSoftInputMode="adjustResize|stateHidden"
             android:screenOrientation="portrait" />
     </application>
