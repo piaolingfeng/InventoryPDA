@@ -151,12 +151,15 @@
     <string name="taking_num">揽收容器号：</string>
     <string name="taking_num_toast">揽收容器号不能为空</string>
     <string name="count_num_toast">清点容器号不能为空</string>
+    <string name="count_order_toast">清点单号不能为空</string>
     <string name="count_upc_toast">UPC不能为空</string>
     <string name="count_container_no">清点容器号：</string>
     <string name="unbind">解 绑</string>
     <string name="count_length">数 量：</string>
     <string name="upc_code">UPC：</string>
+    <string name="upc_empty">UPC不能为空</string>
     <string name="bussiness">商 家：</string>
+    <string name="count_bind">绑定清点单</string>
     <string name="count_bind_count">待绑定清点单的容器号</string>
 
     <string name="print_hint">请到设置中连接打印机.</string>

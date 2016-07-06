@@ -221,10 +221,6 @@ public class BirdApi {
     public static void jsonTakingBindorderSubmit(Context context, JSONObject jsonObject, RequestCallBackInterface callBackInterface, String tag, boolean showDialog) {
         jsonPostRequest(context, jsonObject, callBackInterface, "code/bindOrder", tag, showDialog);
     }
-    // 清点：绑单提交
-    public static void jsonCountBindorderSubmit(Context context, JSONObject jsonObject, RequestCallBackInterface callBackInterface, String tag, boolean showDialog) {
-        jsonPostRequest(context, jsonObject, callBackInterface, "counting/code/bindOrderBat", tag, showDialog);
-    }
 
     // 揽收：收货页面的绑定揽收单，绑单提交
     public static void jsonTakingBindorderBatSubmit(Context context, JSONObject jsonObject, RequestCallBackInterface callBackInterface, String tag, boolean showDialog) {
@@ -267,9 +263,32 @@ public class BirdApi {
         jsonPostRequest(context, jsonObject, callBackInterface, "photo", tag, showDialog);
     }
 
+
+
+
+
+
+    /**
+     *  清点
+     * @param context
+     * @param jsonObject
+     * @param callBackInterface
+     * @param tag
+     * @param showDialog
+     */
+    // 清点：绑单提交
+    public static void jsonCountBindorderSubmit(Context context, JSONObject jsonObject, RequestCallBackInterface callBackInterface, String tag, boolean showDialog) {
+        jsonPostRequest(context, jsonObject, callBackInterface, "counting/code/bindOrderBat", tag, showDialog);
+    }
+
     // 清点-提交上传图片
     public static void countingUploadPicSubmit(Context context, JSONObject jsonObject, RequestCallBackInterface callBackInterface, String tag, boolean showDialog) {
         jsonPostRequest(context, jsonObject, callBackInterface, "counting/photo", tag, showDialog);
+    }
+
+    // 清点：清点提交
+    public static void countSubmit(Context context, JSONObject jsonObject, RequestCallBackInterface callBackInterface, String tag, boolean showDialog) {
+        jsonPostRequest(context, jsonObject, callBackInterface, "counting/submit", tag, showDialog);
     }
 
     /**
@@ -436,7 +455,7 @@ public class BirdApi {
             @Override
             public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
                 super.onFailure(statusCode, headers, throwable, errorResponse);
-//                callBackInterface.errorCallBack(errorResponse);
+                callBackInterface.errorCallBack(errorResponse);
                 switch (statusCode){
                     case 401:
                         T.showShort(mContext,mContext.getString(R.string.request401));

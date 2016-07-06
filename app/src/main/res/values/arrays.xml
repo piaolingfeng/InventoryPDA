@@ -37,8 +37,9 @@
 
     <string-array name="count_list">
         <item>清点任务</item>
-        <item>绑定区域</item>
+        <!--<item>绑定区域</item>-->
         <item>打印清点单</item>
+        <item>绑定清点单</item>
         <item>追踪箱号</item>
         <item>拍照</item>
     </string-array>

@@ -102,7 +102,6 @@
                     android:id="@+id/edt_count_num"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:imeOptions="actionSearch"
                     android:singleLine="true"
                     android:textColor="@color/context_2" />
             </com.zhy.android.percent.support.PercentLinearLayout>
@@ -137,7 +136,6 @@
                     android:id="@+id/edt_upc"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:imeOptions="actionSearch"
                     android:singleLine="true"
                     android:textColor="@color/context_2" />
             </com.zhy.android.percent.support.PercentLinearLayout>
@@ -166,14 +164,15 @@
             <com.zhy.android.percent.support.PercentLinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:orientation="vertical"
                 app:layout_paddingPercent="@string/item_padding_3w">
 
                 <com.pda.birdex.pda.widget.ClearEditText
                     android:id="@+id/edt_count_length"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:imeOptions="actionSearch"
                     android:singleLine="true"
+                    android:inputType="number"
                     android:textColor="@color/context_2" />
 
                 <com.pda.birdex.pda.widget.MyGridView

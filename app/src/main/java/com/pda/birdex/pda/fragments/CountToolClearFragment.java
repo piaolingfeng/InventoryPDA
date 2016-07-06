@@ -15,7 +15,9 @@ import android.provider.MediaStore;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.widget.AdapterView;
 import android.widget.TextView;
 
@@ -28,7 +30,9 @@ import com.pda.birdex.pda.adapter.PhotoGVAdapter;
 import com.pda.birdex.pda.api.BirdApi;
 import com.pda.birdex.pda.entity.ContainerInfo;
 import com.pda.birdex.pda.entity.TakingOrder;
+import com.pda.birdex.pda.entity.UpcData;
 import com.pda.birdex.pda.interfaces.RequestCallBackInterface;
+import com.pda.birdex.pda.response.CountingOrderNoInfoEntity;
 import com.pda.birdex.pda.response.TakingOrderNoInfoEntity;
 import com.pda.birdex.pda.utils.GsonHelper;
 import com.pda.birdex.pda.utils.T;
@@ -55,7 +59,7 @@ import butterknife.OnClick;
 /**
  * Created by chuming.zhuang on 2016/6/24.
  */
-public class CountToolClearFragment extends BarScanBaseFragment implements View.OnClickListener{
+public class CountToolClearFragment extends BarScanBaseFragment implements View.OnClickListener {
 
     String tag = "CountToolClearFragment";
 
@@ -64,6 +68,9 @@ public class CountToolClearFragment extends BarScanBaseFragment implements View.
 
     @Bind(R.id.edt_count_length)
     com.pda.birdex.pda.widget.ClearEditText edt_count_length;
+
+    @Bind(R.id.edt_upc)
+    com.pda.birdex.pda.widget.ClearEditText edt_upc;
 
     @Bind(R.id.gv)
     com.pda.birdex.pda.widget.MyGridView gv;
@@ -92,18 +99,18 @@ public class CountToolClearFragment extends BarScanBaseFragment implements View.
     private final static int COMPRESS_DOWN = 3;
     private final static int PHOTO_SHOW = 4;
 
-    TakingOrder takingOrder;//位置1进来传来的实体
-    TakingOrderNoInfoEntity orderNoInfoEntity;//位置2进来传来的实体
+    CountingOrderNoInfoEntity countingOrderNoInfoEntity;//清点任务详情
     ContainerInfo containerInfo;//位置2进来时传进来的item
+
+    private String owner;
+    private String tid;
+    private String orderNo;
 
     @Override
     public int getbarContentLayoutResId() {
         return R.layout.fragment_count_tool_clear_layout;
     }
 
-    // 标记是从揽收、或者 揽收任务 跳转过来的
-    // 1:揽收 2:揽收任务
-    private String from;
 
     // 记录上传图片成功返回的 url条数
     private int sucCounts = 0;
@@ -227,27 +234,33 @@ public class CountToolClearFragment extends BarScanBaseFragment implements View.
     @Override
     public void barInitializeContentViews() {
 
-        from = getActivity().getIntent().getExtras().getString("location_position");
-
-        if (from.equals("1")) {
-            // 从揽收进入的
-            takingOrder = (TakingOrder) getActivity().getIntent().getExtras().get("takingOrder");
-            tv_count_num.setText(takingOrder.getBaseInfo().getTakingOrderNo());
-//            edt_taking_num.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-//                @Override
-//                public void onFocusChange(View v, boolean hasFocus) {
-//                    if (!hasFocus) {
-//                        getAreaMes(edt_taking_num.getText() + "");
-//                    }
-//                }
-//            });
-        } else {//打印数量
-            // 从揽收任务进入的
-            orderNoInfoEntity = (TakingOrderNoInfoEntity) getActivity().getIntent().getExtras().get("orderNoInfoEntity");
-            containerInfo = (ContainerInfo) getActivity().getIntent().getExtras().get("containerInfo");
-            tv_count_num.setText(orderNoInfoEntity.getDetail().getBaseInfo().getBaseInfo().getTakingOrderNo());
-//            tv_area.setText(containerInfo.getArea());
+        countingOrderNoInfoEntity = (CountingOrderNoInfoEntity) getActivity().getIntent().getExtras().get("countingOrderNoInfoEntity");
+        containerInfo = (ContainerInfo) getActivity().getIntent().getExtras().get("containerInfo");
+        if (countingOrderNoInfoEntity != null) {
+            orderNo = countingOrderNoInfoEntity.getDetail().getBaseInfo().getBaseInfo().getOrderNo();
+            tv_count_num.setText(orderNo);
+            owner = countingOrderNoInfoEntity.getDetail().getBaseInfo().getPerson().getCo();
+            tid = countingOrderNoInfoEntity.getDetail().getBaseInfo().getBaseInfo().getTid();
         }
+
+        edt_count_num.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                edt_count_num.overrideOnFocusChange(hasFocus);
+                if (hasFocus) {
+                    setEdt_input(edt_count_num);
+                }
+            }
+        });
+        edt_upc.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                edt_upc.overrideOnFocusChange(hasFocus);
+                if (hasFocus) {
+                    setEdt_input(edt_upc);
+                }
+            }
+        });
 
         gv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -349,6 +362,12 @@ public class CountToolClearFragment extends BarScanBaseFragment implements View.
                     T.showShort(getContext(), getString(R.string.count_num_toast));
                     return;
                 }
+
+                if (TextUtils.isEmpty(edt_upc.getText())) {
+                    T.showShort(getContext(), getString(R.string.upc_empty));
+                    return;
+                }
+
                 if (TextUtils.isEmpty(edt_count_length.getText())) {
                     T.showShort(getContext(), getString(R.string.box_size_toast));
                     return;
@@ -375,25 +394,24 @@ public class CountToolClearFragment extends BarScanBaseFragment implements View.
         JSONObject jsonObject = new JSONObject();
         try {
 
-//            RequestParams params = new RequestParams();
-            if ("1".equals(from)) {
-                jsonObject.put("tid", takingOrder.getBaseInfo().getTid());
-                jsonObject.put("owner", takingOrder.getPerson().getCo());
-            } else if ("2".equals(from)) {
-                jsonObject.put("tid", orderNoInfoEntity.getDetail().getBaseInfo().getBaseInfo().getTid());
-                jsonObject.put("owner", orderNoInfoEntity.getDetail().getBaseInfo().getPerson().getCo());
-            }
-//        params.put("takingOrderNo", tv_taking_num.getText() + "");
-//        List containerList = new ArrayList();
-//        containerList.add(edt_taking_container.getText() + "");
+            jsonObject.put("tid", tid);
+            jsonObject.put("owner", owner);
             jsonObject.put("containerNo", edt_count_num.getText() + "");
-            jsonObject.put("count", edt_count_length.getText() + "");
 
             String str = GsonHelper.createJsonString(photoUrl);
             JSONArray jsonArray = new JSONArray(str);
-            jsonObject.put("photoUrl", jsonArray);
+            jsonObject.put("photoIds", jsonArray);
 
-            BirdApi.takingSubmit(getActivity(), jsonObject, new RequestCallBackInterface() {
+            List<UpcData> list = new ArrayList<>();
+            UpcData upcData = new UpcData();
+            upcData.setCount(edt_count_length.getText() + "");
+            upcData.setUpc(edt_upc.getText() + "");
+            list.add(upcData);
+
+            JSONArray upcArr = new JSONArray(GsonHelper.createJsonString(list));
+            jsonObject.put("upcData", upcArr);
+
+            BirdApi.countSubmit(getActivity(), jsonObject, new RequestCallBackInterface() {
 
                 @Override
                 public void successCallBack(JSONObject object) {
