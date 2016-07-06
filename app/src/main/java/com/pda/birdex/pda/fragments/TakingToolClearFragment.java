@@ -71,6 +71,10 @@ public class TakingToolClearFragment extends BarScanBaseFragment implements View
     @Bind(R.id.tv_taking_num)
     TextView tv_taking_num;
 
+//    //区域
+//    @Bind(R.id.tv_area)
+//    TextView tv_area;
+
 
     // 存储照片路径的 list
     private ArrayList<String> pathList = new ArrayList<String>();

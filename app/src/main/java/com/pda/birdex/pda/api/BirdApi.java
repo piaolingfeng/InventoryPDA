@@ -405,7 +405,7 @@ public class BirdApi {
                             if ("success".equals(response.getString("result"))) {
                                 callBackInterface.successCallBack(response);
                             } else {
-                                T.showShort(mContext, response.getString("errMsg"));
+//                                T.showShort(mContext, response.getString("errMsg"));
                                 callBackInterface.errorCallBack(response);
                             }
                         } catch (JSONException e) {
