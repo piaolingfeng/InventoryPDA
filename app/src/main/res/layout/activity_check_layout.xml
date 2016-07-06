@@ -27,6 +27,7 @@
                 app:layout_marginTopPercent="@string/item_padding_3w">
 
                 <TextView
+                    android:id="@+id/tv_taking_num_head"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/tv_taking_num"

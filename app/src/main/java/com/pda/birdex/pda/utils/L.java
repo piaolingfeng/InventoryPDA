@@ -43,17 +43,17 @@ public class L {
 
 	public static void d(Class<?> _class, String msg) {
 		if (isDebug)
-			Log.i(_class.getName(), msg);
+			Log.d(_class.getName(), msg);
 	}
 
 	public static void e(Class<?> _class, String msg) {
 		if (isDebug)
-			Log.i(_class.getName(), msg);
+			Log.e(_class.getName(), msg);
 	}
 
 	public static void v(Class<?> _class, String msg) {
 		if (isDebug)
-			Log.i(_class.getName(), msg);
+			Log.v(_class.getName(), msg);
 	}
 
 	// 下面是传入自定义tag的函数
@@ -64,16 +64,16 @@ public class L {
 
 	public static void d(String tag, String msg) {
 		if (isDebug)
-			Log.i(tag, msg);
+			Log.d(tag, msg);
 	}
 
 	public static void e(String tag, String msg) {
 		if (isDebug)
-			Log.i(tag, msg);
+			Log.e(tag, msg);
 	}
 
 	public static void v(String tag, String msg) {
 		if (isDebug)
-			Log.i(tag, msg);
+			Log.v(tag, msg);
 	}
 }

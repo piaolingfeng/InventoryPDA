@@ -32,8 +32,8 @@ import butterknife.OnClick;
 /**
  * Created by chuming.zhuang on 2016/6/30.
  */
-public class TakingSelectBussinessActivity extends BaseActivity implements OnClickListener {
-    String tag = "TakingSelectBussinessActivity";
+public class TakingSelectMerchantActivity extends BaseActivity implements OnClickListener {
+    String tag = "TakingSelectMerchantActivity";
     @Bind(R.id.title)
     TitleView title;
     @Bind(R.id.spin_bussiness)
@@ -95,28 +95,6 @@ public class TakingSelectBussinessActivity extends BaseActivity implements OnCli
             T.showShort(this, getString(R.string.co_recivier_not));
             return;
         }
-//        RequestParams params = new RequestParams();
-//        params.put("expressNo", getIntent().getStringExtra("expressNo"));//快递号
-//        params.put("merchant", merchantId);
-//        params.put("name", edt_recivier.getText().toString());//收件人姓名
-//        params.put("co", edt_co.getText().toString());//用户编号
-//        BirdApi.postTakingCreat(this, params, new RequestCallBackInterface() {
-//            @Override
-//            public void successCallBack(JSONObject object) {
-//                try {
-//                    String tid = object.getString("tid");
-//                    getMerchant(tid);
-//                } catch (JSONException e) {
-//                    e.printStackTrace();
-//                }
-//            }
-//
-//            @Override
-//            public void errorCallBack(JSONObject object) {
-//
-//            }
-//        }, tag, true);
-
         JSONObject jsonObject = new JSONObject();
         try {
             jsonObject.put("expressNo", getIntent().getStringExtra("expressNo"));
@@ -155,14 +133,18 @@ public class TakingSelectBussinessActivity extends BaseActivity implements OnCli
             public void successCallBack(JSONObject object) {
                 TakingOrderNoInfoEntity entity;
                 entity = GsonHelper.getPerson(object.toString(), TakingOrderNoInfoEntity.class);
+                String orderId = entity.getDetail().getBaseInfo().getBaseInfo().getTakingOrderNo();
+                String tid = entity.getDetail().getBaseInfo().getBaseInfo().getTid();
+                String owner = entity.getDetail().getBaseInfo().getPerson().getCo();
+                MyApplication.loggingUpload.selectMerchant(TakingSelectMerchantActivity.this,tag,orderId,tid,owner);//日志上报
                 if (entity != null) {
-                    Intent intent = new Intent(TakingSelectBussinessActivity.this, TakingToolActivity.class);
+                    Intent intent = new Intent(TakingSelectMerchantActivity.this, TakingToolActivity.class);
                     Bundle b = new Bundle();
                     b.putString("location_position", "1");
                     b.putSerializable("takingOrder", entity.getDetail().getBaseInfo());
                     intent.putExtras(b);
                     startActivity(intent);
-                    TakingSelectBussinessActivity.this.finish();//结束这个activity
+                    TakingSelectMerchantActivity.this.finish();//结束这个activity
                 }
             }
 

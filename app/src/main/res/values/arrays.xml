@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string-array name="tool_menu">
+    <string-array name="counting_tool_menu">
         <!--<item>解绑</item>-->
         <item>打印清点单</item>
         <item>绑定清点单</item>
@@ -20,8 +20,6 @@
     <string-array name="index_list">
         <item>收货</item>
         <item>清点</item>
-        <item>出库</item>
-        <item>仓库</item>
         <item>设置</item>
     </string-array>
 
@@ -34,6 +32,7 @@
         <item>揽收任务</item>
         <item>拍照</item>
         <item>打印揽收单</item>
+        <item>绑定揽收单</item>
     </string-array>
 
     <string-array name="count_list">

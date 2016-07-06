@@ -52,7 +52,8 @@ public class TakingMissionClearAdapter extends RecyclerView.Adapter<TakingMissio
         holder.pll_item.setBackgroundColor(mContext.getResources().getColor(R.color.white));
         holder.tv_clear_num.setText(takingOrders.get(position).getBaseInfo().getTakingOrderNo());
 //        String time = TimeUtil.long2Date(Long.parseLong(takingOrders.get(position).getBaseInfo().getDeadLine()));
-        holder.tv_last_time.setText(takingOrders.get(position).getBaseInfo().getDeadLine());
+
+        holder.tv_last_time.setText(takingOrders.get(position).getBaseInfo().getDeadLine().substring(5));
         switch (takingOrders.get(position).getBaseInfo().getTakingStatus()){
             case 1://未开始
                 holder.tv_status.setText(mContext.getString(R.string.mission_assign));

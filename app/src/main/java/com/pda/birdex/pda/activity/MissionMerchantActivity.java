@@ -30,8 +30,8 @@ import butterknife.Bind;
 /**
  * Created by chuming.zhuang on 2016/6/22.
  */
-public class CountMissionMerchantActivity extends BaseActivity {
-    String tag = "CountMissionMerchantActivity";
+public class MissionMerchantActivity extends BaseActivity {
+    String tag = "MissionMerchantActivity";
 
     @Bind(R.id.title)
     TitleView title;
@@ -80,9 +80,9 @@ public class CountMissionMerchantActivity extends BaseActivity {
             public void onLoadMore() {
 //xrcy.loadMoreComplete();
                 if (getResources().getString(R.string.taking).equals(HeadName)) {//揽收清点
-                    getTakingMerchantMission("unTaking");
+                    getTakingMerchantMission("null");
                 } else {
-                    getCountingMerchantMission("unCounting");
+                    getCountingMerchantMission("null");
                 }
             }
         });
@@ -93,12 +93,11 @@ public class CountMissionMerchantActivity extends BaseActivity {
             title.setTitle(getString(R.string.taking_task));
             tv_name_count_mission.setText(getResources().getString(R.string.tv_taking_mission));
             tv_clear_num.setText(getResources().getString(R.string.tv_taking_num_1));
-            getTakingMerchantMission("unTaking");
             takingAdapter = new TakingMissionClearAdapter(this, takingList);
             takingAdapter.setOnRecycleViewItemClickListener(new OnRecycleViewItemClickListener() {
                 @Override
                 public void onItemClick(int position) {
-                    Intent intent = new Intent(CountMissionMerchantActivity.this, CountMissionClearNumActivity.class);
+                    Intent intent = new Intent(MissionMerchantActivity.this, MissionClearNumActivity.class);
                     intent.putExtra("baseInfo", takingList.get(position).getBaseInfo());//传递揽收单号
                     intent.putExtra("HeadName", HeadName);
                     startActivity(intent);
@@ -107,12 +106,11 @@ public class CountMissionMerchantActivity extends BaseActivity {
             xrcy.setAdapter(takingAdapter);
         } else {
             title.setTitle(getString(R.string.count_task));
-            getCountingMerchantMission("unCounting");//默认为清点
             countingAdapter = new CountingMissonClearAdapter(this,countingOrderList);
             countingAdapter.setOnRecycleViewItemClickListener(new OnRecycleViewItemClickListener() {
                 @Override
                 public void onItemClick(int position) {
-                    Intent intent = new Intent(CountMissionMerchantActivity.this, CountMissionClearNumActivity.class);
+                    Intent intent = new Intent(MissionMerchantActivity.this, MissionClearNumActivity.class);
                     intent.putExtra("baseInfo", countingOrderList.get(position).getBaseInfo());//传递揽收单号
                     intent.putExtra("HeadName", HeadName);
                     startActivity(intent);
@@ -120,7 +118,16 @@ public class CountMissionMerchantActivity extends BaseActivity {
             });
             xrcy.setAdapter(countingAdapter);
         }
+    }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (getResources().getString(R.string.taking).equals(HeadName)) {//揽收清点
+            getTakingMerchantMission("null");
+        } else {
+            getCountingMerchantMission("null");
+        }
     }
 
     //通过网络请求获取商家待清点任务列表
@@ -137,7 +144,7 @@ public class CountMissionMerchantActivity extends BaseActivity {
                     xrcy.loadMoreComplete();
                 entity = GsonHelper.getPerson(object.toString(), MerchantDetailEntity.class);
                 if (entity.getTakingList().size() < count) {
-                    T.showShort(CountMissionMerchantActivity.this, getString(R.string.last_page));
+                    T.showShort(MissionMerchantActivity.this, getString(R.string.last_page));
                 }
                 takingList.addAll(entity.getTakingList());
                 tv_count_mission.setText(entity.getCount() + "");
@@ -167,10 +174,10 @@ public class CountMissionMerchantActivity extends BaseActivity {
                     xrcy.loadMoreComplete();
                 CountingListResultEntity countingListResultEntity = GsonHelper.getPerson(object.toString(), CountingListResultEntity.class);
                 if (countingListResultEntity.getList().size() < count) {
-                    T.showShort(CountMissionMerchantActivity.this, getString(R.string.last_page));
+                    T.showShort(MissionMerchantActivity.this, getString(R.string.last_page));
                 }
                 countingOrderList.addAll(countingListResultEntity.getList());
-                tv_count_mission.setText(countingListResultEntity.getCount()+"");
+                tv_count_mission.setText(countingListResultEntity.getCount() + "");
                 countingAdapter.notifyDataSetChanged();
             }
 

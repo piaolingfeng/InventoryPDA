@@ -8,6 +8,7 @@ import android.support.v7.widget.RecyclerView;
 import com.pda.birdex.pda.MyApplication;
 import com.pda.birdex.pda.R;
 import com.pda.birdex.pda.adapter.IndexAdapter;
+import com.pda.birdex.pda.api.BirdApi;
 import com.pda.birdex.pda.interfaces.OnRecycleViewItemClickListener;
 import com.pda.birdex.pda.response.CommonItemEntity;
 import com.pda.birdex.pda.utils.PreferenceUtils;
@@ -60,6 +61,8 @@ public class SettingBarScanActivity extends BasePrintBarScanActivity {
                         }
                         Intent intent = new Intent(SettingBarScanActivity.this,LoginActivity.class);
                         startActivity(intent);
+                        BirdApi.asyncHttpClient = null;
+                        BirdApi.ahc = null;
                         PreferenceUtils.setPrefString(SettingBarScanActivity.this, "token", "");
                         SettingBarScanActivity.this.finish();
                         break;

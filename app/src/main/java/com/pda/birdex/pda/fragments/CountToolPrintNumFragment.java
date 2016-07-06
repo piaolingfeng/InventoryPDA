@@ -9,8 +9,8 @@ import com.pda.birdex.pda.R;
 import com.pda.birdex.pda.api.BirdApi;
 import com.pda.birdex.pda.entity.ContainerInfo;
 import com.pda.birdex.pda.interfaces.RequestCallBackInterface;
+import com.pda.birdex.pda.response.CountingOrderNoInfoEntity;
 import com.pda.birdex.pda.response.PrintEntity;
-import com.pda.birdex.pda.response.TakingOrderNoInfoEntity;
 import com.pda.birdex.pda.utils.GsonHelper;
 import com.pda.birdex.pda.widget.ClearEditText;
 
@@ -29,7 +29,7 @@ public class CountToolPrintNumFragment extends BarScanBaseFragment implements Vi
     TextView tv_count_num;
     @Bind(R.id.edt_taking_num)
     ClearEditText edt_taking_num;
-    TakingOrderNoInfoEntity orderNoInfoEntity;//位置2进来传来的实体
+    CountingOrderNoInfoEntity countingOrderNoInfoEntity;//清点任务详情
     ContainerInfo containerInfo;
 
     @Override
@@ -39,9 +39,9 @@ public class CountToolPrintNumFragment extends BarScanBaseFragment implements Vi
 
     @Override
     public void barInitializeContentViews() {
-        orderNoInfoEntity = (TakingOrderNoInfoEntity) getActivity().getIntent().getExtras().get("orderNoInfoEntity");
-        if (orderNoInfoEntity != null) {
-            tv_count_num.setText(orderNoInfoEntity.getDetail().getBaseInfo().getBaseInfo().getTakingOrderNo());
+        countingOrderNoInfoEntity = (CountingOrderNoInfoEntity) getActivity().getIntent().getExtras().get("countingOrderNoInfoEntity");
+        if (countingOrderNoInfoEntity != null) {
+            tv_count_num.setText(countingOrderNoInfoEntity.getDetail().getBaseInfo().getBaseInfo().getOrderNo());
         }
         containerInfo = (ContainerInfo) getActivity().getIntent().getExtras().get("containerInfo");
     }
@@ -63,13 +63,13 @@ public class CountToolPrintNumFragment extends BarScanBaseFragment implements Vi
     }
 
     private void print() {
-        if(orderNoInfoEntity == null)
+        if(countingOrderNoInfoEntity == null)
             return;
         JSONObject jsonObject = new JSONObject();
         try {
             jsonObject.put("count", 1);
-            jsonObject.put("owner", orderNoInfoEntity.getDetail().getBaseInfo().getPerson().getCo());
-            jsonObject.put("tkNo", orderNoInfoEntity.getDetail().getBaseInfo().getBaseInfo().getTakingOrderNo());
+            jsonObject.put("owner", countingOrderNoInfoEntity.getDetail().getBaseInfo().getPerson().getCo());
+            jsonObject.put("tkNo", countingOrderNoInfoEntity.getDetail().getBaseInfo().getBaseInfo().getOrderNo());
             BirdApi.postCountingCodePrint(getActivity(), jsonObject, new RequestCallBackInterface() {
                 @Override
                 public void successCallBack(JSONObject object) {

@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.device.ScanManager;
+import android.media.AudioManager;
 import android.media.SoundPool;
 import android.os.Vibrator;
 import android.view.Window;
@@ -78,11 +79,11 @@ public abstract class BarScanActivity extends BaseActivity {
 
     private void initScan() {
         // TODO Auto-generated method stub
-//        mScanManager = new ScanManager();
-//        mScanManager.openScanner();
-//        mScanManager.switchOutputMode(0);
-//        soundpool = new SoundPool(1, AudioManager.STREAM_NOTIFICATION, 100); // MODE_RINGTONE
-//        soundid = soundpool.load("/etc/Scan_new.ogg", 1);
+        mScanManager = new ScanManager();
+        mScanManager.openScanner();
+        mScanManager.switchOutputMode(0);
+        soundpool = new SoundPool(1, AudioManager.STREAM_NOTIFICATION, 100); // MODE_RINGTONE
+        soundid = soundpool.load("/etc/Scan_new.ogg", 1);
     }
 
     private void setupView() {

@@ -33,8 +33,8 @@ import butterknife.Bind;
 /**
  * Created by chuming.zhuang on 2016/6/22.
  */
-public class CountMissionActivity extends BarScanActivity implements BaseFragment.OnFragmentInteractionListener, BackHandledInterface {
-    String tag = "CountMissionActivity";
+public class MissionActivity extends BarScanActivity implements BaseFragment.OnFragmentInteractionListener, BackHandledInterface {
+    String tag = "MissionActivity";
     @Bind(R.id.title)
     TitleView title;
     @Bind(R.id.edt_input_business)
@@ -54,10 +54,10 @@ public class CountMissionActivity extends BarScanActivity implements BaseFragmen
         EventBus.getDefault().register(this);
         if(getResources().getString(R.string.taking).equals(getIntent().getStringExtra("HeadName"))){//揽收
             title.setTitle(getString(R.string.taking_task));
-            getAllTakingMerchant();//获取揽收商家列表
+//            getAllTakingMerchant();//获取揽收商家列表
         }else {
             title.setTitle(getString(R.string.count_task));
-            getAllCountingMerchant();
+//            getAllCountingMerchant();
         }
         title.setBackInterface(new TitleBarBackInterface() {//
             @Override
@@ -65,7 +65,7 @@ public class CountMissionActivity extends BarScanActivity implements BaseFragmen
                 if (getSupportFragmentManager().getBackStackEntryCount() > 0)
                     getSupportFragmentManager().popBackStack();
                 else {
-                    CountMissionActivity.this.finish();
+                    MissionActivity.this.finish();
                 }
             }
         });
@@ -96,6 +96,16 @@ public class CountMissionActivity extends BarScanActivity implements BaseFragmen
         bussniessFragment.setUIArguments(b);
         getSupportFragmentManager().beginTransaction().replace(R.id.framelayout, bussniessFragment).commit();
 
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if(getResources().getString(R.string.taking).equals(getIntent().getStringExtra("HeadName"))){//揽收
+            getAllTakingMerchant();//获取揽收商家列表
+        }else {
+            getAllCountingMerchant();
+        }
     }
 
     //获取揽收所有商家的任务数量

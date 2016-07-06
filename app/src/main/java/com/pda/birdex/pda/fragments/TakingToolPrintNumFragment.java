@@ -6,7 +6,7 @@ import android.view.inputmethod.EditorInfo;
 import android.widget.TextView;
 import android.widget.TextView.OnEditorActionListener;
 
-import com.loopj.android.http.RequestParams;
+import com.pda.birdex.pda.MyApplication;
 import com.pda.birdex.pda.R;
 import com.pda.birdex.pda.api.BirdApi;
 import com.pda.birdex.pda.entity.ContainerInfo;
@@ -54,8 +54,10 @@ public class TakingToolPrintNumFragment extends BarScanBaseFragment implements V
 
         if (getActivity().getIntent().getExtras().getString("location_position").equals("1")) {//打印数量
             takingOrder = (TakingOrder) getActivity().getIntent().getExtras().get("takingOrder");
-            tv_taking_num.setText(takingOrder.getBaseInfo().getTakingOrderNo());
-            tv_bussiness.setText(takingOrder.getPerson().getName());
+            if (takingOrder != null) {
+                tv_taking_num.setText(takingOrder.getBaseInfo().getTakingOrderNo());
+                tv_bussiness.setText(takingOrder.getPerson().getName());
+            }
             edt_print_num.setOnEditorActionListener(this);
         } else {
             edt_print_num.setVisibility(View.GONE);
@@ -63,8 +65,12 @@ public class TakingToolPrintNumFragment extends BarScanBaseFragment implements V
             tv_print_num.setText(getString(R.string.taking_num));
             orderNoInfoEntity = (TakingOrderNoInfoEntity) getActivity().getIntent().getExtras().get("orderNoInfoEntity");
             containerInfo = (ContainerInfo) getActivity().getIntent().getExtras().get("containerInfo");
-            tv_taking_num.setText(orderNoInfoEntity.getDetail().getBaseInfo().getBaseInfo().getTakingOrderNo());
-            tv_bussiness.setText(orderNoInfoEntity.getDetail().getBaseInfo().getPerson().getName());
+            if (containerInfo != null)
+                tv_taking_container.setText(containerInfo.getContainerId());
+            if (orderNoInfoEntity != null) {
+                tv_taking_num.setText(orderNoInfoEntity.getDetail().getBaseInfo().getBaseInfo().getTakingOrderNo());
+                tv_bussiness.setText(orderNoInfoEntity.getDetail().getBaseInfo().getPerson().getName());
+            }
         }
     }
 
@@ -91,6 +97,8 @@ public class TakingToolPrintNumFragment extends BarScanBaseFragment implements V
 //        RequestParams params = new RequestParams();
         JSONObject jsonObject = new JSONObject();
         try {
+            final String tid;
+            final String orderId;
             if (getActivity().getIntent().getExtras().getString("location_position").equals("1")) {//打印数量
                 int count = 1;
                 if (!StringUtils.isEmpty(edt_print_num.getText().toString())) {
@@ -99,15 +107,20 @@ public class TakingToolPrintNumFragment extends BarScanBaseFragment implements V
                 jsonObject.put("count", count);
                 jsonObject.put("owner", takingOrder.getPerson().getCo());
                 jsonObject.put("tkNo", takingOrder.getBaseInfo().getTakingOrderNo());
+                orderId = takingOrder.getBaseInfo().getTakingOrderNo();
+                tid = takingOrder.getBaseInfo().getTid();
             } else {
                 jsonObject.put("count", 1);
                 jsonObject.put("owner", orderNoInfoEntity.getDetail().getBaseInfo().getPerson().getCo());
                 jsonObject.put("tkNo", orderNoInfoEntity.getDetail().getBaseInfo().getBaseInfo().getTakingOrderNo());
+                orderId = orderNoInfoEntity.getDetail().getBaseInfo().getBaseInfo().getTakingOrderNo();
+                tid = orderNoInfoEntity.getDetail().getBaseInfo().getBaseInfo().getTid();
             }
             BirdApi.postCodePrint(getActivity(), jsonObject, new RequestCallBackInterface() {
                 @Override
                 public void successCallBack(JSONObject object) {
                     PrintEntity entity = GsonHelper.getPerson(object.toString(), PrintEntity.class);
+                    MyApplication.loggingUpload.PrintTag(getActivity(), tag, orderId, tid, entity.getContainerNos());
                     bus.post(entity.getData());
                 }
 

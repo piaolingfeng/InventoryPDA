@@ -15,6 +15,7 @@ import android.widget.PopupWindow;
 import android.widget.TextView;
 import android.widget.TextView.OnEditorActionListener;
 
+import com.pda.birdex.pda.MyApplication;
 import com.pda.birdex.pda.R;
 import com.pda.birdex.pda.adapter.CommonSimpleAdapter;
 import com.pda.birdex.pda.api.BirdApi;
@@ -71,17 +72,21 @@ public class TakingScanActivity extends BarScanActivity implements View.OnClickL
             @Override
             public void successCallBack(JSONObject object) {
                 CheckResultEntity entity = GsonHelper.getPerson(object.toString(), CheckResultEntity.class);
+                String tid = entity.getOrderInfo().getBaseInfo().getTid();
+                String orderId = entity.getOrderInfo().getBaseInfo().getTakingOrderNo();
+                boolean match =entity.isExist();
+                MyApplication.loggingUpload.scanUpload(TakingScanActivity.this, tag,orderId ,tid,code,match);//上报日志
                 if (entity.isExist()) {
                     Intent intent = new Intent(TakingScanActivity.this, TakingToolActivity.class);
-
                     Bundle b = new Bundle();
                     b.putSerializable("takingOrder", entity.getOrderInfo());
-                    b.putString("location_position","1");
+                    b.putString("location_position", "1");
                     intent.putExtras(b);
                     startActivity(intent);
+
                 } else {
 //                    T.showShort(TakingScanActivity.this, getString(R.string.taking_isExist));
-                    Intent i = new Intent(TakingScanActivity.this,TakingSelectBussinessActivity.class);
+                    Intent i = new Intent(TakingScanActivity.this,TakingSelectMerchantActivity.class);
                     i.putExtra("expressNo",code);
                     startActivity(i);
                 }
@@ -89,7 +94,7 @@ public class TakingScanActivity extends BarScanActivity implements View.OnClickL
 
             @Override
             public void errorCallBack(JSONObject object) {
-
+//                MyApplication.loggingUpload.scanUpload(TakingScanActivity.this, tag,"" ,"",code,false);//上报日志
             }
 
         }, tag, true);

@@ -4,7 +4,6 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.TextView;
 
-import com.loopj.android.http.RequestParams;
 import com.pda.birdex.pda.R;
 import com.pda.birdex.pda.api.BirdApi;
 import com.pda.birdex.pda.entity.ContainerInfo;
@@ -49,11 +48,15 @@ public class TakingToolBindAreaFragment extends BarScanBaseFragment implements V
         from = getActivity().getIntent().getExtras().getString("location_position");
         if ("1".equals(from)) {
             takingOrder = (TakingOrder) getActivity().getIntent().getExtras().get("takingOrder");
-            tv_taking_num.setText(takingOrder.getBaseInfo().getTakingOrderNo());
+            if(takingOrder!=null) {
+                tv_taking_num.setText(takingOrder.getBaseInfo().getTakingOrderNo());
+            }
         } else {//打印数量
             orderNoInfoEntity = (TakingOrderNoInfoEntity) getActivity().getIntent().getExtras().get("orderNoInfoEntity");
-            containerInfo = (ContainerInfo) getActivity().getIntent().getExtras().get("containerInfo");
-            tv_taking_num.setText(orderNoInfoEntity.getDetail().getBaseInfo().getBaseInfo().getTakingOrderNo());
+            if(orderNoInfoEntity!=null) {
+                containerInfo = (ContainerInfo) getActivity().getIntent().getExtras().get("containerInfo");
+                tv_taking_num.setText(orderNoInfoEntity.getDetail().getBaseInfo().getBaseInfo().getTakingOrderNo());
+            }
         }
 
         edt_taking_num.setOnFocusChangeListener(new View.OnFocusChangeListener() {

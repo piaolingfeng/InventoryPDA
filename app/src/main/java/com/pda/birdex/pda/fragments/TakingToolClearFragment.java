@@ -231,7 +231,9 @@ public class TakingToolClearFragment extends BarScanBaseFragment implements View
         if (from.equals("1")) {
             // 从揽收进入的
             takingOrder = (TakingOrder) getActivity().getIntent().getExtras().get("takingOrder");
-            tv_taking_num.setText(takingOrder.getBaseInfo().getTakingOrderNo());
+            if(takingOrder!=null) {
+                tv_taking_num.setText(takingOrder.getBaseInfo().getTakingOrderNo());
+            }
 //            edt_taking_num.setOnFocusChangeListener(new View.OnFocusChangeListener() {
 //                @Override
 //                public void onFocusChange(View v, boolean hasFocus) {
@@ -243,8 +245,10 @@ public class TakingToolClearFragment extends BarScanBaseFragment implements View
         } else {//打印数量
             // 从揽收任务进入的
             orderNoInfoEntity = (TakingOrderNoInfoEntity) getActivity().getIntent().getExtras().get("orderNoInfoEntity");
-            containerInfo = (ContainerInfo) getActivity().getIntent().getExtras().get("containerInfo");
-            tv_taking_num.setText(orderNoInfoEntity.getDetail().getBaseInfo().getBaseInfo().getTakingOrderNo());
+            if(orderNoInfoEntity!=null) {
+                containerInfo = (ContainerInfo) getActivity().getIntent().getExtras().get("containerInfo");
+                tv_taking_num.setText(orderNoInfoEntity.getDetail().getBaseInfo().getBaseInfo().getTakingOrderNo());
+            }
 //            tv_area.setText(containerInfo.getArea());
         }
 
@@ -373,13 +377,16 @@ public class TakingToolClearFragment extends BarScanBaseFragment implements View
     private void dataSubmit() {
         JSONObject jsonObject = new JSONObject();
         try {
-
+            String orderId = tv_taking_num.getText().toString(); //日志上报
+            String tid = null;
 //            RequestParams params = new RequestParams();
             if ("1".equals(from)) {
-                jsonObject.put("tid", takingOrder.getBaseInfo().getTid());
+                tid = takingOrder.getBaseInfo().getTid();
+                jsonObject.put("tid", tid);
                 jsonObject.put("owner", takingOrder.getPerson().getCo());
             } else if ("2".equals(from)) {
-                jsonObject.put("tid", orderNoInfoEntity.getDetail().getBaseInfo().getBaseInfo().getTid());
+                tid = orderNoInfoEntity.getDetail().getBaseInfo().getBaseInfo().getTid();
+                jsonObject.put("tid",tid );
                 jsonObject.put("owner", orderNoInfoEntity.getDetail().getBaseInfo().getPerson().getCo());
             }
 //        params.put("takingOrderNo", tv_taking_num.getText() + "");
@@ -391,6 +398,11 @@ public class TakingToolClearFragment extends BarScanBaseFragment implements View
             String str = GsonHelper.createJsonString(photoUrl);
             JSONArray jsonArray = new JSONArray(str);
             jsonObject.put("photoUrl", jsonArray);
+
+            //日志上报
+            String ctNo = edt_taking_num.getText().toString();
+            int count = Integer.parseInt(edt_box_size.getText().toString());
+            MyApplication.loggingUpload.takingClear(getActivity(),tag,orderId,tid,ctNo,count);
 
             BirdApi.takingSubmit(getActivity(), jsonObject, new RequestCallBackInterface() {
 

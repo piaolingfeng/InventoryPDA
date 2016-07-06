@@ -78,7 +78,7 @@ public class LoggingUpload {
     public RequestCallBackInterface backInterface = new RequestCallBackInterface() {
         @Override
         public void successCallBack(JSONObject object) {
-            L.e("Logging_Report_success",object.toString());
+            L.e("Logging_Report_success", object.toString());
         }
 
         @Override
@@ -91,7 +91,8 @@ public class LoggingUpload {
     public  void scanUpload(Context mContext,String tag,String orderId,String tid ,String trkNo,boolean match){
         JSONObject object = new JSONObject();
         try {
-            object.put("source",infos.toString());
+            object.put("task","take");
+            object.put("source","PDA");
             object.put("time",getLocalTime());
             object.put("userId",PreferenceUtils.getPrefString(MyApplication.getInstans(), "userId", ""));
             object.put("userName",PreferenceUtils.getPrefString(MyApplication.getInstans(), "user_name", ""));
@@ -105,7 +106,8 @@ public class LoggingUpload {
             params.put("trkNo",trkNo);//"物流单号"
             params.put("matched",match);
             object.put("params", params);
-            BirdApi.jsonPostRequest(mContext,object,backInterface,BirdApi.Logging_BASE_URL,tag,true);
+            L.e(object.toString());
+            BirdApi.jsonPostLoggingRequest(mContext,object,backInterface,tag,false);
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -124,7 +126,8 @@ public class LoggingUpload {
     public  void PrintTag(Context mContext,String tag,String orderId,String tid,List<String> ctNos){
         JSONObject object = new JSONObject();
         try {
-            object.put("source",infos.toString());
+            object.put("task","take");
+            object.put("source","PDA");
             object.put("time",getLocalTime());
             object.put("userId",PreferenceUtils.getPrefString(MyApplication.getInstans(), "username", ""));
             object.put("userName",PreferenceUtils.getPrefString(MyApplication.getInstans(), "user_name", ""));
@@ -139,7 +142,8 @@ public class LoggingUpload {
             JSONArray array = new JSONArray(ctNos);
             params.put("ctNos",array);//"物流单号"
             object.put("params", params);
-            BirdApi.jsonPostRequest(mContext,object,backInterface,BirdApi.Logging_BASE_URL,tag,true);
+            L.e(object.toString());
+            BirdApi.jsonPostLoggingRequest(mContext,object,backInterface,tag,false);
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -149,7 +153,8 @@ public class LoggingUpload {
     public  void takingClear(Context mContext,String tag,String orderId,String tid,String ctNo,int count){
         JSONObject object = new JSONObject();
         try {
-            object.put("source",infos.toString());
+            object.put("task","take");
+            object.put("source","PDA");
             object.put("time",getLocalTime());
             object.put("userId",PreferenceUtils.getPrefString(MyApplication.getInstans(), "username", ""));
             object.put("userName",PreferenceUtils.getPrefString(MyApplication.getInstans(), "user_name", ""));
@@ -164,16 +169,19 @@ public class LoggingUpload {
             params.put("ctNo",ctNo);//"物流单号"
             params.put("count",count);
             object.put("params", params);
-            BirdApi.jsonPostRequest(mContext,object,backInterface,BirdApi.Logging_BASE_URL,tag,true);
+            L.e(object.toString());
+            BirdApi.jsonPostLoggingRequest(mContext,object,backInterface,tag,false);
         } catch (JSONException e) {
             e.printStackTrace();
         }
     }
 
+    //绑单
     public  void bindOrder(Context mContext,String tag,String orderId,String tid,List<String> ctNos){
         JSONObject object = new JSONObject();
         try {
-            object.put("source",infos.toString());
+            object.put("task","take");
+            object.put("source","PDA");
             object.put("time",getLocalTime());
             object.put("userId",PreferenceUtils.getPrefString(MyApplication.getInstans(), "username", ""));
             object.put("userName",PreferenceUtils.getPrefString(MyApplication.getInstans(), "user_name", ""));
@@ -188,7 +196,8 @@ public class LoggingUpload {
             JSONArray array = new JSONArray(ctNos);
             params.put("ctNos",array);//""容器号1", "容器号2", ..."
             object.put("params", params);
-            BirdApi.jsonPostRequest(mContext,object,backInterface,BirdApi.Logging_BASE_URL,tag,true);
+            L.e(object.toString());
+            BirdApi.jsonPostLoggingRequest(mContext,object,backInterface,tag,false);
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -207,7 +216,8 @@ public class LoggingUpload {
     public  void takePhoto(Context mContext,String tag,String orderId,String tid,int photoNum,boolean tagError){
         JSONObject object = new JSONObject();
         try {
-            object.put("source",infos.toString());
+            object.put("task","take");
+            object.put("source","PDA");
             object.put("time",getLocalTime());
             object.put("userId",PreferenceUtils.getPrefString(MyApplication.getInstans(), "username", ""));
             object.put("userName",PreferenceUtils.getPrefString(MyApplication.getInstans(), "user_name", ""));
@@ -222,16 +232,19 @@ public class LoggingUpload {
             params.put("photoNum",photoNum);//"物流单号""photoNum": number, /* 提交照片张数 */
             params.put("tagError",tagError);//"tagError": true/false /* 是否标记异常 */
             object.put("params", params);
-            BirdApi.jsonPostRequest(mContext,object,backInterface,BirdApi.Logging_BASE_URL,tag,true);
+            L.e(object.toString());
+            BirdApi.jsonPostLoggingRequest(mContext,object,backInterface,tag,false);
         } catch (JSONException e) {
             e.printStackTrace();
         }
     }
 
+    //选择商家
     public  void selectMerchant(Context mContext,String tag,String orderId,String tid,String owner){
         JSONObject object = new JSONObject();
         try {
-            object.put("source",infos.toString());
+            object.put("task","take");
+            object.put("source","PDA");
             object.put("time",getLocalTime());
             object.put("userId",PreferenceUtils.getPrefString(MyApplication.getInstans(), "username", ""));
             object.put("userName",PreferenceUtils.getPrefString(MyApplication.getInstans(), "user_name", ""));
@@ -245,7 +258,8 @@ public class LoggingUpload {
             JSONObject params = new JSONObject();
             params.put("owner",owner);//"物流单号""photoNum": number, /* 提交照片张数 */
             object.put("params", params);
-            BirdApi.jsonPostRequest(mContext,object,backInterface,BirdApi.Logging_BASE_URL,tag,true);
+            L.e(object.toString());
+            BirdApi.jsonPostLoggingRequest(mContext,object,backInterface,tag,false);
         } catch (JSONException e) {
             e.printStackTrace();
         }

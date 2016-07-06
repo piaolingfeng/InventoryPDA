@@ -11,22 +11,18 @@ import com.loopj.android.http.RequestParams;
 import com.pda.birdex.pda.R;
 import com.pda.birdex.pda.adapter.BindNumAdapter;
 import com.pda.birdex.pda.api.BirdApi;
-import com.pda.birdex.pda.entity.BindOrder;
 import com.pda.birdex.pda.entity.ContainerInfo;
-import com.pda.birdex.pda.entity.TakingOrder;
 import com.pda.birdex.pda.interfaces.OnRecycleViewItemClickListener;
 import com.pda.birdex.pda.interfaces.RequestCallBackInterface;
-import com.pda.birdex.pda.response.TakingOrderNoInfoEntity;
+import com.pda.birdex.pda.response.CountingOrderNoInfoEntity;
 import com.pda.birdex.pda.utils.GsonHelper;
 import com.pda.birdex.pda.utils.T;
 import com.pda.birdex.pda.widget.ClearEditText;
 
-import org.apache.http.entity.StringEntity;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -52,12 +48,11 @@ public class CountToolBindOrderFragment extends BarScanBaseFragment implements V
 
     @Bind(R.id.tv_count_num)
     TextView tv_count_num;
-    TakingOrderNoInfoEntity orderNoInfoEntity;//位置2进来传来的实体
+    CountingOrderNoInfoEntity countingOrderNoInfoEntity;//清点任务详情
     ContainerInfo containerInfo;//位置2进来时传进来的item
     // 容器 list
     private List<String> containerList = new ArrayList<>();
 
-    private String from;
     private String owner;
 
     @Override
@@ -68,16 +63,13 @@ public class CountToolBindOrderFragment extends BarScanBaseFragment implements V
     @Override
     public void barInitializeContentViews() {
 
-        from = getActivity().getIntent().getExtras().getString("location_position");
-//        if ("1".equals(from)) {
-//            takingOrder = (TakingOrder) getActivity().getIntent().getExtras().get("takingOrder");
-//            tv_count_num.setText(takingOrder.getBaseInfo().getTakingOrderNo());
-//            owner = takingOrder.getPerson().getCo();
-//        } else {//打印数量
-        orderNoInfoEntity = (TakingOrderNoInfoEntity) getActivity().getIntent().getExtras().get("orderNoInfoEntity");
+        countingOrderNoInfoEntity = (CountingOrderNoInfoEntity) getActivity().getIntent().getExtras().get("countingOrderNoInfoEntity");
         containerInfo = (ContainerInfo) getActivity().getIntent().getExtras().get("containerInfo");
-        tv_count_num.setText(orderNoInfoEntity.getDetail().getBaseInfo().getBaseInfo().getTakingOrderNo());
-        owner = orderNoInfoEntity.getDetail().getBaseInfo().getPerson().getCo();
+        if (countingOrderNoInfoEntity != null) {
+            tv_count_num.setText(countingOrderNoInfoEntity.getDetail().getBaseInfo().getBaseInfo().getOrderNo());
+            tv_count_num.setText(countingOrderNoInfoEntity.getDetail().getBaseInfo().getBaseInfo().getOrderNo());
+            owner = countingOrderNoInfoEntity.getDetail().getBaseInfo().getPerson().getCo();
+        }
 //        }
 
         xrcy.setLayoutManager(new LinearLayoutManager(getContext()));

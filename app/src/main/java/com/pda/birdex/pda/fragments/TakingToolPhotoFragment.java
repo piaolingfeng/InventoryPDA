@@ -90,7 +90,7 @@ public class TakingToolPhotoFragment extends BarScanBaseFragment implements View
     // 标记是从揽收、或者 揽收任务 跳转过来的
     // 1:揽收 2:揽收任务
     private String from;
-
+    private String tid;//供上传日志使用
     // 图片 path
     private String filePath;
 
@@ -188,7 +188,9 @@ public class TakingToolPhotoFragment extends BarScanBaseFragment implements View
                                             String urlsStr = GsonHelper.createJsonString(photoUrl);
                                             JSONArray array = new JSONArray(urlsStr);
                                             jsonObject.put("photoIds", array);
-
+                                            //上传日志
+                                            String orderId = tv_taking_num.getText().toString();
+                                            MyApplication.loggingUpload.takePhoto(getActivity(),tag,orderId,tid,sucCounts,exception_cb.isChecked());
                                             BirdApi.uploadPicSubmit(getContext(), jsonObject, new RequestCallBackInterface() {
 
                                                 @Override
@@ -264,7 +266,7 @@ public class TakingToolPhotoFragment extends BarScanBaseFragment implements View
         if ("1".equals(from)) {
             takingOrder = (TakingOrder) getActivity().getIntent().getExtras().get("takingOrder");
             tv_taking_num.setText(takingOrder.getBaseInfo().getTakingOrderNo());
-
+            tid = takingOrder.getBaseInfo().getTid();
 //            edt_taking_num.setOnFocusChangeListener(new View.OnFocusChangeListener() {
 //                @Override
 //                public void onFocusChange(View v, boolean hasFocus) {

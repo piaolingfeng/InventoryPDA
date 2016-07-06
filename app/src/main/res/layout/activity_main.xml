@@ -9,6 +9,15 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
+    <com.pda.birdex.pda.widget.ClearEditText
+        android:id="@+id/edt_search"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:hint="@string/index_hint"
+        android:singleLine="true"
+        android:visibility="gone"
+        android:imeOptions="actionSearch"/>
     <android.support.v7.widget.RecyclerView
         android:id="@+id/rcy"
         android:layout_width="match_parent"

@@ -18,6 +18,7 @@ import com.pda.birdex.pda.response.MerchantEntity;
 import com.pda.birdex.pda.services.BluetoothService;
 import com.pda.birdex.pda.utils.GsonHelper;
 import com.pda.birdex.pda.utils.T;
+import com.pda.birdex.pda.widget.ClearEditText;
 import com.pda.birdex.pda.widget.TitleView;
 
 import org.json.JSONObject;
@@ -36,6 +37,8 @@ public class MainActivity extends BaseActivity implements OnRecycleViewItemClick
     RecyclerView rcy;
     @Bind(R.id.title)
     TitleView title;
+    @Bind(R.id.edt_search)
+    ClearEditText edt_search;
     IndexAdapter adapter;
     String[] lists;
     String[] takinglists;//收货
@@ -129,11 +132,11 @@ public class MainActivity extends BaseActivity implements OnRecycleViewItemClick
                     b.putStringArray("list", countToLists);
                     break;
                 case 2:
+                    intent.setClass(MainActivity.this, SettingBarScanActivity.class);
                     break;
                 case 3:
                     break;
                 case 4:
-                    intent.setClass(MainActivity.this, SettingBarScanActivity.class);
                     break;
             }
             intent.putExtras(b);

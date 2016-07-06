@@ -43,4 +43,32 @@ public class ContainerInfo implements Serializable{
     public String getAreaCode() {
         return areaCode;
     }
+
+    public void setContainerId(String containerId) {
+        this.containerId = containerId;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public void setOwner(String owner) {
+        this.owner = owner;
+    }
+
+    public void setAreaCode(String areaCode) {
+        this.areaCode = areaCode;
+    }
+
+    public void setArea(String area) {
+        this.area = area;
+    }
+
+    public void setCount(int count) {
+        this.count = count;
+    }
+
+    public void setPhotoUrl(List<String> photoUrl) {
+        this.photoUrl = photoUrl;
+    }
 }
