@@ -221,6 +221,11 @@ public class BirdApi {
     public static void jsonTakingBindorderSubmit(Context context, JSONObject jsonObject, RequestCallBackInterface callBackInterface, String tag, boolean showDialog) {
         jsonPostRequest(context, jsonObject, callBackInterface, "code/bindOrder", tag, showDialog);
     }
+    // 清点：绑单提交
+    public static void jsonCountBindorderSubmit(Context context, JSONObject jsonObject, RequestCallBackInterface callBackInterface, String tag, boolean showDialog) {
+        jsonPostRequest(context, jsonObject, callBackInterface, "counting/code/bindOrderBat", tag, showDialog);
+    }
+
     // 揽收：收货页面的绑定揽收单，绑单提交
     public static void jsonTakingBindorderBatSubmit(Context context, JSONObject jsonObject, RequestCallBackInterface callBackInterface, String tag, boolean showDialog) {
         jsonPostRequest(context, jsonObject, callBackInterface, "code/bindOrderBat", tag, showDialog);
@@ -240,7 +245,7 @@ public class BirdApi {
         ahc.post(context, UPLOADIP + "upload", params, jsonHttpResponseHandler);
     }
 
-    // 上传图片
+    // 上传日志post
     public static AsyncHttpClient asyncHttpClient=null;
     private static void uploadLogging(Context context, String url, HttpEntity entity, ResponseHandlerInterface responseHandlerInterface) {
         if (asyncHttpClient == null) {

@@ -8,6 +8,7 @@ import android.util.Log;
 import com.pda.birdex.pda.R;
 import com.pda.birdex.pda.fragments.BaseFragment;
 import com.pda.birdex.pda.fragments.CountToolBindAreaFragment;
+import com.pda.birdex.pda.fragments.CountToolBindOrderFragment;
 import com.pda.birdex.pda.fragments.CountToolClearFragment;
 import com.pda.birdex.pda.fragments.CountToolPhotoFragment;
 import com.pda.birdex.pda.fragments.CountToolPrintNumFragment;
@@ -37,12 +38,13 @@ public class CountToolActivity extends BasePrintBarScanActivity implements OnRec
     List<String> currentMenuList = new ArrayList<>();
     String[] toolMenu;
 
-    private CountToolUnbindFragment countToolUnbindFragment;
+//    private CountToolUnbindFragment countToolUnbindFragment;
     private CountToolPrintNumFragment countToolPrintNumFragment;
     private CountToolClearFragment countToolClearFragment;
     private CountToolPhotoFragment countToolPhotoFragment = null;
     private CountToolTrackFragment countToolTrackFragment = null;
-    private CountToolBindAreaFragment countToolBindAreaFragment;
+//    private CountToolBindAreaFragment countToolBindAreaFragment;
+    private CountToolBindOrderFragment countToolBindOrderFragment;
     private FragmentTransaction transaction;
 
     @Override
@@ -53,8 +55,8 @@ public class CountToolActivity extends BasePrintBarScanActivity implements OnRec
     @Override
     public void printInitializeContentViews() {
         bus.register(this);
-        if (countToolUnbindFragment == null)
-            countToolUnbindFragment = new CountToolUnbindFragment();
+//        if (countToolUnbindFragment == null)
+//            countToolUnbindFragment = new CountToolUnbindFragment();
         if (countToolPrintNumFragment == null)
             countToolPrintNumFragment = new CountToolPrintNumFragment();
         if (countToolClearFragment == null)
@@ -63,8 +65,10 @@ public class CountToolActivity extends BasePrintBarScanActivity implements OnRec
             countToolPhotoFragment = new CountToolPhotoFragment();
         if (countToolTrackFragment == null)
             countToolTrackFragment = new CountToolTrackFragment();
-        if (countToolBindAreaFragment == null)
-            countToolBindAreaFragment = new CountToolBindAreaFragment();
+//        if (countToolBindAreaFragment == null)
+//            countToolBindAreaFragment = new CountToolBindAreaFragment();
+        if (countToolBindOrderFragment == null)
+            countToolBindOrderFragment = new CountToolBindOrderFragment();
         tabPosition = getIntent().getIntExtra("statusPosition", 0);
         toolMenu = getResources().getStringArray(R.array.tool_menu);
         for (String title : toolMenu) {
@@ -118,11 +122,14 @@ public class CountToolActivity extends BasePrintBarScanActivity implements OnRec
         switch (tabPosition) {
             case 0:
                 switch (position) {
+//                    case 0:
+//                        baseFragment = countToolUnbindFragment;
+//                        break;
                     case 0:
-                        baseFragment = countToolUnbindFragment;
+                        baseFragment = countToolPrintNumFragment;
                         break;
                     case 1:
-                        baseFragment = countToolPrintNumFragment;
+                        baseFragment = countToolBindOrderFragment;
                         break;
                     case 2:
                         baseFragment = countToolClearFragment;
@@ -130,30 +137,9 @@ public class CountToolActivity extends BasePrintBarScanActivity implements OnRec
                     case 3:
                         baseFragment = countToolPhotoFragment;
                         break;
-                    case 4:
-                        baseFragment = countToolBindAreaFragment;
-                        break;
-                    case 5:
-                        baseFragment = countToolTrackFragment;
-                        break;
-                    default:
-                        baseFragment = countToolUnbindFragment;
-                }
-                break;
-            case 1:
-                switch (position) {
-                    case 0:
-                        baseFragment = countToolPrintNumFragment;
-                        break;
-                    case 1:
-                        baseFragment = countToolClearFragment;
-                        break;
-                    case 2:
-                        baseFragment = countToolPhotoFragment;
-                        break;
-                    case 3:
-                        baseFragment = countToolBindAreaFragment;
-                        break;
+//                    case 4:
+//                        baseFragment = countToolBindAreaFragment;
+//                        break;
                     case 4:
                         baseFragment = countToolTrackFragment;
                         break;
@@ -161,24 +147,7 @@ public class CountToolActivity extends BasePrintBarScanActivity implements OnRec
                         baseFragment = countToolPrintNumFragment;
                 }
                 break;
-            case 2:
-                switch (position) {
-                    case 0:
-                        baseFragment = countToolPrintNumFragment;
-                        break;
-                    case 1:
-                        baseFragment = countToolPhotoFragment;
-                        break;
-                    case 2:
-                        baseFragment = countToolBindAreaFragment;
-                        break;
-                    case 3:
-                        baseFragment = countToolTrackFragment;
-                        break;
-                    default:
-                        baseFragment = countToolPrintNumFragment;
-                }
-                break;
+
         }
         Log.e("android", transaction.isEmpty() + "");
         if (!baseFragment.isAdded())
@@ -193,18 +162,20 @@ public class CountToolActivity extends BasePrintBarScanActivity implements OnRec
 
     //隐藏所有fragment
     private void hideFragment() {
-        if (countToolUnbindFragment != null)
-            transaction.hide(countToolUnbindFragment);
+//        if (countToolUnbindFragment != null)
+//            transaction.hide(countToolUnbindFragment);
         if (countToolPrintNumFragment != null)
             transaction.hide(countToolPrintNumFragment);
+        if (countToolBindOrderFragment != null)
+            transaction.hide(countToolBindOrderFragment);
         if (countToolClearFragment != null)
             transaction.hide(countToolClearFragment);
         if (countToolPhotoFragment != null)
             transaction.hide(countToolPhotoFragment);
         if (countToolTrackFragment != null)
             transaction.hide(countToolTrackFragment);
-        if (countToolBindAreaFragment != null)
-            transaction.hide(countToolBindAreaFragment);
+//        if (countToolBindAreaFragment != null)
+//            transaction.hide(countToolBindAreaFragment);
     }
 
     @Subscribe

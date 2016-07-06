@@ -49,8 +49,8 @@ import butterknife.OnClick;
 /**
  * Created by chuming.zhuang on 2016/6/23.
  */
-public class CountMissionClearNumActivity extends BasePrintBarScanActivity implements OnTabSelectedListener, LoadingListener, OnRecycleViewItemClickListener, View.OnClickListener {
-    String tag = "CountMissionClearNumActivity";
+public class MissionClearNumActivity extends BasePrintBarScanActivity implements OnTabSelectedListener, LoadingListener, OnRecycleViewItemClickListener, View.OnClickListener {
+    String tag = "MissionClearNumActivity";
     @Bind(R.id.tablayout)
     TabLayout tablayout;
     @Bind(R.id.xrcy)
@@ -230,7 +230,7 @@ public class CountMissionClearNumActivity extends BasePrintBarScanActivity imple
                 if (takingOrderNoInfoEntity != null)
                     dealTakingDetail();
                 else {
-                    T.showShort(CountMissionClearNumActivity.this, getString(R.string.parse_error));
+                    T.showShort(MissionClearNumActivity.this, getString(R.string.parse_error));
                 }
             }
 
@@ -251,7 +251,7 @@ public class CountMissionClearNumActivity extends BasePrintBarScanActivity imple
                 if (countingOrderNoInfoEntity != null)
                     dealTakingDetail();
                 else {
-                    T.showShort(CountMissionClearNumActivity.this, getString(R.string.parse_error));
+                    T.showShort(MissionClearNumActivity.this, getString(R.string.parse_error));
                 }
             }
 
@@ -304,7 +304,7 @@ public class CountMissionClearNumActivity extends BasePrintBarScanActivity imple
 
                     @Override
                     public void successCallBack(JSONObject object) {
-                        T.showShort(CountMissionClearNumActivity.this, getString(R.string.taking_bind_suc));
+                        T.showShort(MissionClearNumActivity.this, getString(R.string.taking_bind_suc));
                         ContainerInfo info = new ContainerInfo();
                         info.setContainerId(code);
                         takingOrderNoInfoEntity.getDetail().getContainerList().add(info);
@@ -314,7 +314,7 @@ public class CountMissionClearNumActivity extends BasePrintBarScanActivity imple
 
                     @Override
                     public void errorCallBack(JSONObject object) {
-                        T.showShort(CountMissionClearNumActivity.this, getString(R.string.taking_bind_fal));
+                        T.showShort(MissionClearNumActivity.this, getString(R.string.taking_bind_fal));
                     }
                 }, tag, true);
 
@@ -329,7 +329,7 @@ public class CountMissionClearNumActivity extends BasePrintBarScanActivity imple
 
     @Override
     public void onTabSelected(TabLayout.Tab tab) {
-//        T.showShort(CountMissionClearNumActivity.this, "");
+//        T.showShort(MissionClearNumActivity.this, "");
 //        switch (tab.getPosition()) {
 //            case 0:
 //                adapter.setList(unassignedList);
@@ -372,7 +372,7 @@ public class CountMissionClearNumActivity extends BasePrintBarScanActivity imple
         Bundle b = new Bundle();
         b.putSerializable("takingOrderNoInfoEntity", takingOrderNoInfoEntity);
         b.putSerializable("containerInfo", list.get(position));
-        intent.setClass(this, TakingCheckActivity.class);
+        intent.setClass(this, CheckActivity.class);
         b.putString("location_position", "2");//揽收任务进入
         intent.putExtras(b);
         startActivity(intent);
@@ -397,12 +397,12 @@ public class CountMissionClearNumActivity extends BasePrintBarScanActivity imple
 //                break;
 //        }
         if (getResources().getString(R.string.taking).equals(HeadName)) {//揽收
-            b.putSerializable("takingOrderNoInfoEntity", takingOrderNoInfoEntity);
+            b.putSerializable("orderNoInfoEntity", takingOrderNoInfoEntity);
             intent.putExtra("location_position", "2");//揽收任务进入
         } else {
             b.putSerializable("countingOrderNoInfoEntity", countingOrderNoInfoEntity);
         }
-        intent.setClass(this, TakingCheckActivity.class);
+        intent.setClass(this, CheckActivity.class);
         b.putSerializable("containerInfo", list.get(position));
         intent.putExtras(b);
         startActivity(intent);
@@ -447,7 +447,7 @@ public class CountMissionClearNumActivity extends BasePrintBarScanActivity imple
             BirdApi.postTakingOrderNum(this, jsonObject, new RequestCallBackInterface() {
                 @Override
                 public void successCallBack(JSONObject object) {
-                    T.showShort(CountMissionClearNumActivity.this, getString(R.string.commit_success));
+                    T.showShort(MissionClearNumActivity.this, getString(R.string.commit_success));
                 }
 
                 @Override
@@ -462,7 +462,7 @@ public class CountMissionClearNumActivity extends BasePrintBarScanActivity imple
 //        BirdApi.postTakingOrderNum(this, params, new RequestCallBackInterface() {
 //            @Override
 //            public void successCallBack(JSONObject object) {
-//                T.showShort(CountMissionClearNumActivity.this, getString(R.string.commit_success));
+//                T.showShort(MissionClearNumActivity.this, getString(R.string.commit_success));
 //            }
 //
 //            @Override

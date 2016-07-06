@@ -33,8 +33,8 @@ import butterknife.Bind;
 /**
  * Created by chuming.zhuang on 2016/6/22.
  */
-public class CountMissionActivity extends BarScanActivity implements BaseFragment.OnFragmentInteractionListener, BackHandledInterface {
-    String tag = "CountMissionActivity";
+public class MissionActivity extends BarScanActivity implements BaseFragment.OnFragmentInteractionListener, BackHandledInterface {
+    String tag = "MissionActivity";
     @Bind(R.id.title)
     TitleView title;
     @Bind(R.id.edt_input_business)
@@ -65,7 +65,7 @@ public class CountMissionActivity extends BarScanActivity implements BaseFragmen
                 if (getSupportFragmentManager().getBackStackEntryCount() > 0)
                     getSupportFragmentManager().popBackStack();
                 else {
-                    CountMissionActivity.this.finish();
+                    MissionActivity.this.finish();
                 }
             }
         });
