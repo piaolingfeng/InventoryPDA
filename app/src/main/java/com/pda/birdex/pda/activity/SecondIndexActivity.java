@@ -197,15 +197,16 @@ public class SecondIndexActivity extends BarScanActivity implements OnRecycleVie
                         intent.setClass(SecondIndexActivity.this, MissionActivity.class);
                         break;
                     case 1:
-                        intent.setClass(SecondIndexActivity.this, CountBindActivity.class);
-                        break;
-                    case 2:
                         Bundle b = new Bundle();
                         b.putString("title", getString(R.string.count_print_no));
                         b.putString("inputname", getString(R.string.count_box_no));
                         intent.putExtras(b);
                         // 打印清点单
                         intent.setClass(SecondIndexActivity.this, TakingPrintBarScanActivity.class);
+                        break;
+                    case 2:
+                        // 绑定清点单
+                        intent.setClass(SecondIndexActivity.this, CountOrderBindActivity.class);
                         break;
                     case 3:
                         intent.setClass(SecondIndexActivity.this, CountTrackActivity.class);

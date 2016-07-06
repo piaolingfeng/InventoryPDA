@@ -1,4 +1,4 @@
-package com.pda.birdex.pda.fragments;
+package com.pda.birdex.pda.activity;
 
 import android.support.v7.widget.LinearLayoutManager;
 import android.text.TextUtils;
@@ -7,14 +7,11 @@ import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.TextView;
 
-import com.loopj.android.http.RequestParams;
 import com.pda.birdex.pda.R;
 import com.pda.birdex.pda.adapter.BindNumAdapter;
 import com.pda.birdex.pda.api.BirdApi;
-import com.pda.birdex.pda.entity.ContainerInfo;
 import com.pda.birdex.pda.interfaces.OnRecycleViewItemClickListener;
 import com.pda.birdex.pda.interfaces.RequestCallBackInterface;
-import com.pda.birdex.pda.response.CountingOrderNoInfoEntity;
 import com.pda.birdex.pda.utils.GsonHelper;
 import com.pda.birdex.pda.utils.T;
 import com.pda.birdex.pda.widget.ClearEditText;
@@ -32,10 +29,13 @@ import butterknife.OnClick;
 /**
  * Created by hyj on 2016/7/6.
  */
-public class CountToolBindOrderFragment extends BarScanBaseFragment implements View.OnClickListener {
-    String tag = "CountToolBindOrderFragment";
+public class CountOrderBindActivity extends BarScanActivity implements View.OnClickListener{
+    String tag = "CountOrderBindActivity";
 
     private BindNumAdapter adapter;
+
+    @Bind(R.id.title)
+    com.pda.birdex.pda.widget.TitleView titleView;
 
     @Bind(R.id.xrcy)
     com.jcodecraeer.xrecyclerview.XRecyclerView xrcy;
@@ -46,10 +46,6 @@ public class CountToolBindOrderFragment extends BarScanBaseFragment implements V
     @Bind(R.id.edt_count_num)
     com.pda.birdex.pda.widget.ClearEditText edt_count_num;
 
-    @Bind(R.id.tv_count_num)
-    TextView tv_count_num;
-    CountingOrderNoInfoEntity countingOrderNoInfoEntity;//清点任务详情
-    ContainerInfo containerInfo;//位置2进来时传进来的item
     // 容器 list
     private List<String> containerList = new ArrayList<>();
 
@@ -57,22 +53,15 @@ public class CountToolBindOrderFragment extends BarScanBaseFragment implements V
 
     @Override
     public int getbarContentLayoutResId() {
-        return R.layout.fragment_count_tool_bindorder_layout;
+        return R.layout.activity_count_tool_bindorder_layout;
     }
 
     @Override
     public void barInitializeContentViews() {
+        titleView.setTitle(getString(R.string.count_bind));
 
-        countingOrderNoInfoEntity = (CountingOrderNoInfoEntity) getActivity().getIntent().getExtras().get("countingOrderNoInfoEntity");
-        containerInfo = (ContainerInfo) getActivity().getIntent().getExtras().get("containerInfo");
-        if (countingOrderNoInfoEntity != null) {
-            tv_count_num.setText(countingOrderNoInfoEntity.getDetail().getBaseInfo().getBaseInfo().getOrderNo());
-            owner = countingOrderNoInfoEntity.getDetail().getBaseInfo().getPerson().getCo();
-        }
-//        }
-
-        xrcy.setLayoutManager(new LinearLayoutManager(getContext()));
-        adapter = new BindNumAdapter(getContext(), containerList);
+        xrcy.setLayoutManager(new LinearLayoutManager(this));
+        adapter = new BindNumAdapter(this, containerList);
         xrcy.setAdapter(adapter);
 
         adapter.setOnRecyclerViewItemClickListener(new OnRecycleViewItemClickListener() {
@@ -106,6 +95,25 @@ public class CountToolBindOrderFragment extends BarScanBaseFragment implements V
                 }
             }
         });
+
+        edt_count_num.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                edt_count_num.overrideOnFocusChange(hasFocus);
+                if (hasFocus) {
+                    setEdt_input(edt_count_num);
+                }
+            }
+        });
+        edt_count_container.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                edt_count_container.overrideOnFocusChange(hasFocus);
+                if (hasFocus) {
+                    setEdt_input(edt_count_container);
+                }
+            }
+        });
     }
 
     private void inputEntry(String input) {
@@ -117,14 +125,12 @@ public class CountToolBindOrderFragment extends BarScanBaseFragment implements V
 
     @Override
     public ClearEditText getClearEditText() {
-        return edt_count_container;
+        return edt_count_num;
     }
 
     @Override
     public void ClearEditTextCallBack(String code) {
-        if (this.isVisible()) {
-            inputEntry(code);
-        }
+        inputEntry(code);
     }
 
 
@@ -134,10 +140,10 @@ public class CountToolBindOrderFragment extends BarScanBaseFragment implements V
         switch (v.getId()) {
             // 点击提交
             case R.id.btn_commit:
-//                if (TextUtils.isEmpty(edt_count_container.getText())) {
-//                    T.showShort(getContext(), R.string.count_num_toast);
-//                    return;
-//                }
+                if (TextUtils.isEmpty(edt_count_num.getText())) {
+                    T.showShort(this, R.string.count_order_toast);
+                    return;
+                }
                 if (containerList.size() > 0) {
 
                     JSONObject jsonObject = new JSONObject();
@@ -146,19 +152,19 @@ public class CountToolBindOrderFragment extends BarScanBaseFragment implements V
 //                        jsonObject.put("containerConfig",str);
 
                         JSONArray object = new JSONArray(str);
-                        jsonObject.put("orderNO", tv_count_num.getText() + "");
+                        jsonObject.put("orderNO", edt_count_num.getText() + "");
                         jsonObject.put("containers", object);
 
-                        BirdApi.jsonCountBindorderSubmit(getContext(), jsonObject, new RequestCallBackInterface() {
+                        BirdApi.jsonCountBindorderSubmit(this, jsonObject, new RequestCallBackInterface() {
 
                             @Override
                             public void successCallBack(JSONObject object) {
-                                T.showShort(getContext(), getString(R.string.taking_submit_suc));
+                                T.showShort(getApplication(), getString(R.string.taking_submit_suc));
                             }
 
                             @Override
                             public void errorCallBack(JSONObject object) {
-                                T.showShort(getContext(), getString(R.string.taking_submit_fal));
+                                T.showShort(getApplication(), getString(R.string.taking_submit_fal));
                             }
                         }, tag, true);
 
@@ -166,7 +172,7 @@ public class CountToolBindOrderFragment extends BarScanBaseFragment implements V
                         e.printStackTrace();
                     }
                 } else {
-                    T.showShort(getContext(), getString(R.string.taking_bind_no));
+                    T.showShort(this, getString(R.string.taking_bind_no));
                 }
                 break;
         }
