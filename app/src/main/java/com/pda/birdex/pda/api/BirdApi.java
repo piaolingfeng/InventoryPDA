@@ -216,6 +216,10 @@ public class BirdApi {
     public static void jsonTakingBindorderSubmit(Context context, JSONObject jsonObject, RequestCallBackInterface callBackInterface, String tag, boolean showDialog) {
         jsonPostRequest(context, jsonObject, callBackInterface, "code/bindOrder", tag, showDialog);
     }
+    // 清点：绑单提交
+    public static void jsonCountBindorderSubmit(Context context, JSONObject jsonObject, RequestCallBackInterface callBackInterface, String tag, boolean showDialog) {
+        jsonPostRequest(context, jsonObject, callBackInterface, "counting/code/bindOrderBat", tag, showDialog);
+    }
 
     //拍照上传地址
     public static final String UPLOADIP = "http://192.168.1.225:4869/";
