@@ -249,7 +249,7 @@ public class MissionClearNumActivity extends BasePrintBarScanActivity implements
                 xrcy.refreshComplete();
                 countingOrderNoInfoEntity = GsonHelper.getPerson(object.toString(), CountingOrderNoInfoEntity.class);
                 if (countingOrderNoInfoEntity != null)
-                    dealTakingDetail();
+                    dealCountDetail();
                 else {
                     T.showShort(MissionClearNumActivity.this, getString(R.string.parse_error));
                 }

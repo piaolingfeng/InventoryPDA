@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string-array name="tool_menu">
+    <string-array name="counting_tool_menu">
         <!--<item>解绑</item>-->
         <item>打印清点单</item>
         <item>绑定清点单</item>

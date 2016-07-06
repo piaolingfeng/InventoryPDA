@@ -19,6 +19,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.CheckBox;
 import android.widget.GridView;
+import android.widget.TextView;
 
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
@@ -28,6 +29,7 @@ import com.pda.birdex.pda.activity.PhotoShowActivity;
 import com.pda.birdex.pda.adapter.PhotoGVAdapter;
 import com.pda.birdex.pda.api.BirdApi;
 import com.pda.birdex.pda.interfaces.RequestCallBackInterface;
+import com.pda.birdex.pda.response.CountingOrderNoInfoEntity;
 import com.pda.birdex.pda.utils.GsonHelper;
 import com.pda.birdex.pda.utils.T;
 import com.pda.birdex.pda.widget.ClearEditText;
@@ -67,9 +69,12 @@ public class CountToolPhotoFragment extends BarScanBaseFragment implements View.
     @Bind(R.id.edt_count_num)
     com.pda.birdex.pda.widget.ClearEditText edt_count_num;
 
+    @Bind(R.id.tv_count_num)
+    TextView tv_count_num;
+
     @Bind(R.id.edt_upc)
     com.pda.birdex.pda.widget.ClearEditText edt_upc;
-
+    CountingOrderNoInfoEntity countingOrderNoInfoEntity;//清点任务详情
     // 存储照片路径的 list
     private ArrayList<String> pathList = new ArrayList<String>();
 
@@ -270,7 +275,10 @@ public class CountToolPhotoFragment extends BarScanBaseFragment implements View.
 
     @Override
     public void barInitializeContentViews() {
-
+        countingOrderNoInfoEntity = (CountingOrderNoInfoEntity) getActivity().getIntent().getExtras().get("countingOrderNoInfoEntity");
+        if (countingOrderNoInfoEntity != null) {
+            tv_count_num.setText(countingOrderNoInfoEntity.getDetail().getBaseInfo().getBaseInfo().getOrderNo());
+        }
         edt_count_num.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {

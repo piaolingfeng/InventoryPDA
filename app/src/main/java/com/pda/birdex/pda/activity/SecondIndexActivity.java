@@ -172,7 +172,7 @@ public class SecondIndexActivity extends BarScanActivity implements OnRecycleVie
                         intent.setClass(SecondIndexActivity.this, TakingScanActivity.class);
                         break;
                     case 1:
-                        intent.setClass(SecondIndexActivity.this, CountMissionActivity.class);//揽收任务，跟清点任务页面相同
+                        intent.setClass(SecondIndexActivity.this, MissionActivity.class);//揽收任务，跟清点任务页面相同
                         break;
                     case 2:
                         intent.setClass(SecondIndexActivity.this, PhotoActivity.class);
@@ -194,7 +194,7 @@ public class SecondIndexActivity extends BarScanActivity implements OnRecycleVie
             if (getString(R.string.count).equals(titleStr)) {
                 switch (position) {
                     case 0:
-                        intent.setClass(SecondIndexActivity.this, CountMissionActivity.class);
+                        intent.setClass(SecondIndexActivity.this, MissionActivity.class);
                         break;
                     case 1:
                         intent.setClass(SecondIndexActivity.this, CountBindActivity.class);

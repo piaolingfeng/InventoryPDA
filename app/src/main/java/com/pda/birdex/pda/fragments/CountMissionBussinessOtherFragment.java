@@ -6,7 +6,7 @@ import android.view.KeyEvent;
 
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
 import com.pda.birdex.pda.R;
-import com.pda.birdex.pda.activity.CountMissionMerchantActivity;
+import com.pda.birdex.pda.activity.MissionMerchantActivity;
 import com.pda.birdex.pda.adapter.MerchantOtherAdapter;
 import com.pda.birdex.pda.entity.Merchant;
 import com.pda.birdex.pda.interfaces.OnRecycleViewItemClickListener;
@@ -54,7 +54,7 @@ public class CountMissionBussinessOtherFragment extends BaseFragment {
         adapter.setOnRecycleViewItemClickListener(new OnRecycleViewItemClickListener() {
             @Override
             public void onItemClick(int position) {
-                Intent intent = new Intent(getActivity(), CountMissionMerchantActivity.class);
+                Intent intent = new Intent(getActivity(), MissionMerchantActivity.class);
                 bundle.putString("MerchantId", now_displayList.get(position).getMerchantId());
                 bundle.putString("merchantName",now_displayList.get(position).getMerchantName());
                 intent.putExtras(bundle);

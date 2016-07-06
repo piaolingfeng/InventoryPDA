@@ -107,15 +107,15 @@
             android:windowSoftInputMode="adjustUnspecified|stateHidden"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".activity.CountMissionMerchantActivity"
+            android:name=".activity.MissionMerchantActivity"
             android:windowSoftInputMode="adjustUnspecified|stateHidden"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".activity.CountMissionActivity"
+            android:name=".activity.MissionActivity"
             android:windowSoftInputMode="adjustUnspecified|stateHidden"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".activity.CountMissionClearNumActivity"
+            android:name=".activity.MissionClearNumActivity"
             android:windowSoftInputMode="adjustUnspecified|stateHidden"
             android:screenOrientation="portrait" />
         <activity
@@ -132,7 +132,7 @@
             android:windowSoftInputMode="adjustPan|stateAlwaysHidden"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".activity.TakingCheckActivity"
+            android:name=".activity.CheckActivity"
             android:windowSoftInputMode="adjustPan|stateHidden"
             android:screenOrientation="portrait" />
         <activity

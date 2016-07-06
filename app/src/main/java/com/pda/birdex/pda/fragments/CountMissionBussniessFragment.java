@@ -10,7 +10,7 @@ import android.view.ViewGroup;
 
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
 import com.pda.birdex.pda.R;
-import com.pda.birdex.pda.activity.CountMissionMerchantActivity;
+import com.pda.birdex.pda.activity.MissionMerchantActivity;
 import com.pda.birdex.pda.adapter.MerchantAdapter;
 import com.pda.birdex.pda.entity.Merchant;
 import com.pda.birdex.pda.interfaces.OnRecycleViewItemClickListener;
@@ -67,7 +67,7 @@ public class CountMissionBussniessFragment extends BaseFragment {
                 if (getString(R.string.more).equals(now_displayList.get(position).getMerchantName())) {
                     bus.post("count_mission_other");//进入到其他页面，数据替换成其他list的实体
                 } else {
-                    Intent intent = new Intent(getActivity(), CountMissionMerchantActivity.class);
+                    Intent intent = new Intent(getActivity(), MissionMerchantActivity.class);
                     bundle.putString("MerchantId", now_displayList.get(position).getMerchantId());
                     bundle.putString("merchantName",now_displayList.get(position).getMerchantName());
                     intent.putExtras(bundle);
