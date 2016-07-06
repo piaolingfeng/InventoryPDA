@@ -26,7 +26,6 @@
                 android:id="@+id/tv_count_num"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="dfafdsf"
                 android:textColor="@color/context_1"
                 app:layout_paddingPercent="@string/item_padding_3w"
                 app:layout_textSizePercent="@string/size_6w" />
@@ -35,6 +34,7 @@
         <com.zhy.android.percent.support.PercentLinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:visibility="gone"
             android:orientation="vertical">
 
             <com.zhy.android.percent.support.PercentRelativeLayout
@@ -86,7 +86,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/taking_num"
+                    android:text="@string/count_container_no"
                     android:textColor="@color/context_1"
                     app:layout_paddingPercent="@string/item_padding_3w"
                     app:layout_textSizePercent="@string/size_6w" />
@@ -99,7 +99,7 @@
                 app:layout_paddingPercent="@string/item_padding_3w">
 
                 <com.pda.birdex.pda.widget.ClearEditText
-                    android:id="@+id/edt_taking_num"
+                    android:id="@+id/edt_count_num"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:imeOptions="actionSearch"
@@ -175,6 +175,17 @@
                     android:imeOptions="actionSearch"
                     android:singleLine="true"
                     android:textColor="@color/context_2" />
+
+                <com.pda.birdex.pda.widget.MyGridView
+                    android:id="@+id/gv"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_marginTop="20dp"
+                    android:horizontalSpacing="20dp"
+                    android:listSelector="#00000000"
+                    android:numColumns="4" />
             </com.zhy.android.percent.support.PercentLinearLayout>
         </com.zhy.android.percent.support.PercentLinearLayout>
 
@@ -183,7 +194,7 @@
             android:layout_height="150dp">
 
             <Button
-                android:id="@+id/btn_unbind"
+                android:id="@+id/btn_commit"
                 android:layout_width="200dp"
                 android:layout_height="50dp"
                 android:layout_alignParentBottom="true"
