@@ -87,6 +87,7 @@
                 android:layout_height="wrap_content"
                 android:imeOptions="actionSearch"
                 android:inputType="number"
+                android:text="1"
                 android:singleLine="true"
                 android:textColor="@color/context_2" />
             <TextView
