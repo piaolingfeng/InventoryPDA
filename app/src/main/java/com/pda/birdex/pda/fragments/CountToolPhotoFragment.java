@@ -25,12 +25,14 @@ import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 import com.pda.birdex.pda.MyApplication;
 import com.pda.birdex.pda.R;
+import com.pda.birdex.pda.activity.CountToolActivity;
 import com.pda.birdex.pda.activity.PhotoShowActivity;
 import com.pda.birdex.pda.adapter.PhotoGVAdapter;
 import com.pda.birdex.pda.api.BirdApi;
 import com.pda.birdex.pda.interfaces.RequestCallBackInterface;
 import com.pda.birdex.pda.response.CountingOrderNoInfoEntity;
 import com.pda.birdex.pda.utils.GsonHelper;
+import com.pda.birdex.pda.utils.HideSoftKeyboardUtil;
 import com.pda.birdex.pda.utils.T;
 import com.pda.birdex.pda.widget.ClearEditText;
 
@@ -89,6 +91,8 @@ public class CountToolPhotoFragment extends BarScanBaseFragment implements View.
     // 存放所有返回图片地址的 list
     private List<String> photoUrl = new ArrayList<>();
 
+    String orderId = "";
+    String tid = "";
 
     // 记录上传图片成功返回的 url条数
     private int sucCounts = 0;
@@ -180,12 +184,17 @@ public class CountToolPhotoFragment extends BarScanBaseFragment implements View.
                                             JSONArray array = new JSONArray(urlsStr);
                                             jsonObject.put("photoIds", array);
 
+
                                             BirdApi.countingUploadPicSubmit(getContext(), jsonObject, new RequestCallBackInterface() {
 
                                                 @Override
                                                 public void successCallBack(JSONObject object) {
                                                     try {
                                                         if ("success".equals(object.getString("result"))) {
+                                                            //拍照日志上报
+                                                            boolean tagErr = exception_cb.isChecked();
+                                                            String upc = edt_upc.getText() + "";
+                                                            MyApplication.loggingUpload.countTakePhoto(getActivity(),tag,orderId,tid,sucCounts,tagErr,upc);
                                                             T.showShort(getContext(), getString(R.string.taking_upload_suc));
                                                         } else {
                                                             T.showShort(getContext(), getString(R.string.taking_upload_fal));
@@ -277,7 +286,9 @@ public class CountToolPhotoFragment extends BarScanBaseFragment implements View.
     public void barInitializeContentViews() {
         countingOrderNoInfoEntity = (CountingOrderNoInfoEntity) getActivity().getIntent().getExtras().get("countingOrderNoInfoEntity");
         if (countingOrderNoInfoEntity != null) {
-            tv_count_num.setText(countingOrderNoInfoEntity.getDetail().getBaseInfo().getBaseInfo().getOrderNo());
+            orderId = countingOrderNoInfoEntity.getDetail().getBaseInfo().getBaseInfo().getOrderNo();
+            tid = countingOrderNoInfoEntity.getDetail().getBaseInfo().getBaseInfo().getTid();
+            tv_count_num.setText(orderId);
         }
         edt_count_num.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
@@ -561,6 +572,8 @@ public class CountToolPhotoFragment extends BarScanBaseFragment implements View.
 
     @Override
     public void ClearEditTextCallBack(String code) {
-
+        if (this.isVisible()) {
+            HideSoftKeyboardUtil.hideSoftKeyboard((CountToolActivity) getActivity());
+        }
     }
 }

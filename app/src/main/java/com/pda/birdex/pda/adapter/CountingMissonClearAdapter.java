@@ -56,16 +56,16 @@ public class CountingMissonClearAdapter extends RecyclerView.Adapter<CountingMis
         switch (countingOrderList.get(position).getBaseInfo().getStatus()){
             case 1://未开始
                 holder.tv_status.setText(mContext.getString(R.string.mission_assign));
-                holder.pll_item.setBackgroundColor(mContext.getResources().getColor(R.color.white));
+//                holder.pll_item.setBackgroundColor(mContext.getResources().getColor(R.color.white));
                 break;
             case 2:
             case 3:
                 holder.tv_status.setText(mContext.getString(R.string.mission_excute));
-                holder.pll_item.setBackgroundColor(mContext.getResources().getColor(R.color.green));
+//                holder.pll_item.setBackgroundColor(mContext.getResources().getColor(R.color.green));
                 break;
             case 4:
                 holder.tv_status.setText(mContext.getString(R.string.mission_close));
-                holder.pll_item.setBackgroundColor(mContext.getResources().getColor(R.color.yellow));
+//                holder.pll_item.setBackgroundColor(mContext.getResources().getColor(R.color.yellow));
                 break;
         }
     }

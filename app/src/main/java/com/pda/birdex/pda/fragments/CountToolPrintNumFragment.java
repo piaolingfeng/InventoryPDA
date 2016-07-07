@@ -5,13 +5,16 @@ import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.TextView;
 
+import com.pda.birdex.pda.MyApplication;
 import com.pda.birdex.pda.R;
+import com.pda.birdex.pda.activity.CountToolActivity;
 import com.pda.birdex.pda.api.BirdApi;
 import com.pda.birdex.pda.entity.ContainerInfo;
 import com.pda.birdex.pda.interfaces.RequestCallBackInterface;
 import com.pda.birdex.pda.response.CountingOrderNoInfoEntity;
 import com.pda.birdex.pda.response.PrintEntity;
 import com.pda.birdex.pda.utils.GsonHelper;
+import com.pda.birdex.pda.utils.HideSoftKeyboardUtil;
 import com.pda.birdex.pda.widget.ClearEditText;
 
 import org.json.JSONException;
@@ -32,6 +35,8 @@ public class CountToolPrintNumFragment extends BarScanBaseFragment implements Vi
     CountingOrderNoInfoEntity countingOrderNoInfoEntity;//清点任务详情
     ContainerInfo containerInfo;
 
+    String orderId = "";
+    String tid = "";
     @Override
     public int getbarContentLayoutResId() {
         return R.layout.fragment_count_tool_print_layout;
@@ -41,7 +46,9 @@ public class CountToolPrintNumFragment extends BarScanBaseFragment implements Vi
     public void barInitializeContentViews() {
         countingOrderNoInfoEntity = (CountingOrderNoInfoEntity) getActivity().getIntent().getExtras().get("countingOrderNoInfoEntity");
         if (countingOrderNoInfoEntity != null) {
-            tv_count_num.setText(countingOrderNoInfoEntity.getDetail().getBaseInfo().getBaseInfo().getOrderNo());
+            orderId = countingOrderNoInfoEntity.getDetail().getBaseInfo().getBaseInfo().getOrderNo();
+            tid = countingOrderNoInfoEntity.getDetail().getBaseInfo().getBaseInfo().getTid();
+            tv_count_num.setText(orderId);
         }
         containerInfo = (ContainerInfo) getActivity().getIntent().getExtras().get("containerInfo");
     }
@@ -53,7 +60,9 @@ public class CountToolPrintNumFragment extends BarScanBaseFragment implements Vi
 
     @Override
     public void ClearEditTextCallBack(String code) {
-
+        if (this.isVisible()) {
+            HideSoftKeyboardUtil.hideSoftKeyboard((CountToolActivity) getActivity());
+        }
     }
 
     @OnClick(R.id.edt_taking_num)
@@ -74,6 +83,8 @@ public class CountToolPrintNumFragment extends BarScanBaseFragment implements Vi
                 @Override
                 public void successCallBack(JSONObject object) {
                     PrintEntity entity = GsonHelper.getPerson(object.toString(), PrintEntity.class);
+                    //日志上报
+                    MyApplication.loggingUpload.countPrint(getActivity(), tag, orderId, tid, entity.getContainerNos());
                     bus.post(entity.getData());
                 }
 

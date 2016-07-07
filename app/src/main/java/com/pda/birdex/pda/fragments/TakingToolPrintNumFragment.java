@@ -8,6 +8,7 @@ import android.widget.TextView.OnEditorActionListener;
 
 import com.pda.birdex.pda.MyApplication;
 import com.pda.birdex.pda.R;
+import com.pda.birdex.pda.activity.BaseActivity;
 import com.pda.birdex.pda.api.BirdApi;
 import com.pda.birdex.pda.entity.ContainerInfo;
 import com.pda.birdex.pda.entity.TakingOrder;
@@ -15,6 +16,7 @@ import com.pda.birdex.pda.interfaces.RequestCallBackInterface;
 import com.pda.birdex.pda.response.PrintEntity;
 import com.pda.birdex.pda.response.TakingOrderNoInfoEntity;
 import com.pda.birdex.pda.utils.GsonHelper;
+import com.pda.birdex.pda.utils.HideSoftKeyboardUtil;
 import com.pda.birdex.pda.utils.StringUtils;
 import com.pda.birdex.pda.widget.ClearEditText;
 
@@ -56,7 +58,7 @@ public class TakingToolPrintNumFragment extends BarScanBaseFragment implements V
             takingOrder = (TakingOrder) getActivity().getIntent().getExtras().get("takingOrder");
             if (takingOrder != null) {
                 tv_taking_num.setText(takingOrder.getBaseInfo().getTakingOrderNo());
-                tv_bussiness.setText(takingOrder.getPerson().getName());
+                tv_bussiness.setText(takingOrder.getPerson().getCo());
             }
             edt_print_num.setOnEditorActionListener(this);
         } else {
@@ -82,16 +84,16 @@ public class TakingToolPrintNumFragment extends BarScanBaseFragment implements V
     @Override
     public void ClearEditTextCallBack(String code) {
         if (this.isVisible()) {
-
+            HideSoftKeyboardUtil.hideSoftKeyboard((BaseActivity)getActivity());
         }
     }
 
     @OnClick(R.id.btn_commit)
     @Override
-    public void onClick(View v) {
+        public void onClick(View v) {
 //        startActivity(new Intent(getActivity(), PrintActivity.class));
-        print();
-    }
+            print();
+        }
 
     private void print() {
 //        RequestParams params = new RequestParams();

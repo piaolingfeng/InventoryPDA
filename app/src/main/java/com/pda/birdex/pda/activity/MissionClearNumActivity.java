@@ -150,9 +150,9 @@ public class MissionClearNumActivity extends BasePrintBarScanActivity implements
 
         String[] tabTitle = getResources().getStringArray(R.array.tab_title);
         tv_clear_num.setText(tabTitle[0]);
-        tv_last_time.setText(tabTitle[1]);
-        tv_status.setText(tabTitle[2]);
-        tv_last_time.setVisibility(View.GONE);//不需要数量这块
+        tv_last_time.setText(tabTitle[2]);
+        tv_status.setText(tabTitle[1]);
+        tv_status.setVisibility(View.GONE);//不需要数量这块
         String[] tabList = getResources().getStringArray(R.array.tab_list);
         //添加3种分类
         for (int i = 0; i < tabList.length; i++) {
@@ -356,7 +356,11 @@ public class MissionClearNumActivity extends BasePrintBarScanActivity implements
 
     @Override
     public void onRefresh() {
-        getTakingOrderDetail();
+        if (getResources().getString(R.string.taking).equals(HeadName)) {//揽收
+            getTakingOrderDetail();//通过揽收单号获取揽收单详情
+        } else {
+            getCountingOrderDetail();//获取清点单详情
+        }
     }
 
     @Override

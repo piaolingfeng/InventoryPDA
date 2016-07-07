@@ -34,8 +34,9 @@ public class CountingBindOrderActivity extends BaseActivity implements  BaseFrag
         if (bindOrderFragment == null){
             bindOrderFragment = new CountToolBindOrderFragment();
         }
-        Bundle b = new Bundle();
+        Bundle b = getIntent().getExtras();
         b .putString("location_position","SecondIndex");
+        bindOrderFragment.setUIArguments(b);
         getSupportFragmentManager().beginTransaction().replace(R.id.framelayout,bindOrderFragment).commit();
     }
 

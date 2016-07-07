@@ -25,16 +25,15 @@
             <com.zhy.android.percent.support.PercentLinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                app:layout_paddingPercent="@string/item_padding_3w">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/count_num"
                     android:textColor="@color/context_1"
-                    app:layout_paddingTopPercent="@string/item_padding_3w"
-                    app:layout_paddingRightPercent="@string/item_padding_3w"
-                    app:layout_paddingLeftPercent="@string/item_padding_3w"
+                    app:layout_paddingBottomPercent="@string/item_padding_3w"
                     app:layout_textSizePercent="@string/size_6w" />
 
                 <com.zhy.android.percent.support.PercentRelativeLayout
@@ -46,8 +45,16 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:imeOptions="actionDone"
+                        android:visibility="gone"
                         android:singleLine="true"
                         android:textColor="@color/context_2" />
+                    <TextView
+                        android:id="@+id/tv_count_num"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/context_2"
+                        app:layout_textSizePercent="@string/size_6w" />
+
                 </com.zhy.android.percent.support.PercentRelativeLayout>
 
             </com.zhy.android.percent.support.PercentLinearLayout>
