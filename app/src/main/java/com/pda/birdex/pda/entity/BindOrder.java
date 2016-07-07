@@ -6,23 +6,23 @@ package com.pda.birdex.pda.entity;
 public class BindOrder {
 
     // 容器编号
-    private String Code;
+    private String containerNo;
     // 容器属主
-    private String Owner;
+    private String owner;
 
-    public String getCode() {
-        return Code;
+    public String getContainerNo() {
+        return containerNo;
     }
 
-    public void setCode(String code) {
-        Code = code;
+    public void setContainerNo(String containerNo) {
+        this.containerNo = containerNo;
     }
 
     public String getOwner() {
-        return Owner;
+        return owner;
     }
 
     public void setOwner(String owner) {
-        Owner = owner;
+        this.owner = owner;
     }
 }

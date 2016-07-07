@@ -220,7 +220,7 @@ public class BirdApi {
 
     // 揽收：绑单提交
     public static void jsonTakingBindorderSubmit(Context context, JSONObject jsonObject, RequestCallBackInterface callBackInterface, String tag, boolean showDialog) {
-        jsonPostRequest(context, jsonObject, callBackInterface, "code/takeBindOrder", tag, showDialog);
+        jsonPostRequest(context, jsonObject, callBackInterface, "code/bindOrder", tag, showDialog);
     }
 
     // 揽收：收货页面的绑定揽收单，绑单提交

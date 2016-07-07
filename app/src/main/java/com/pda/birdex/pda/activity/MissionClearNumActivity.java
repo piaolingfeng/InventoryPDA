@@ -285,7 +285,7 @@ public class MissionClearNumActivity extends BasePrintBarScanActivity implements
         if (code != null && takingOrderNoInfoEntity != null) {
             List<BindOrder> containerConfig = new ArrayList<>();
             BindOrder bo = new BindOrder();
-            bo.setCode(code);
+            bo.setContainerNo(code);
             bo.setOwner(takingOrderNoInfoEntity.getDetail().getBaseInfo().getPerson().getCo());
             containerConfig.add(bo);
             JSONObject jsonObject = new JSONObject();
