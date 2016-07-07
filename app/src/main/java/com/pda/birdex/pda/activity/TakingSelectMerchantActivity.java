@@ -64,16 +64,16 @@ public class TakingSelectMerchantActivity extends BaseActivity implements OnClic
         spin_bussiness.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                if (isSpinnerFirst) {
-//第一次初始化spinner时，不显示默认被选择的第一项即可
-//                    view.setVisibility(View.INVISIBLE);
-                    TextView textView = (TextView) view.findViewById(R.id.tv_context);
-                    textView.setText(getString(R.string.select_merchant));
-                    isSpinnerFirst = false;
-                } else {
+//                if (isSpinnerFirst) {
+////第一次初始化spinner时，不显示默认被选择的第一项即可
+////                    view.setVisibility(View.INVISIBLE);
+//                    TextView textView = (TextView) view.findViewById(R.id.tv_context);
+//                    textView.setText(getString(R.string.select_merchant));
+//                    isSpinnerFirst = false;
+//                } else {
 //                    isSpinnerFirst = false;
                     merchantId = list.get(position).getMerchantId();
-                }
+//                }
             }
 
             @Override

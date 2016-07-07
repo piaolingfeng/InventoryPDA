@@ -52,15 +52,16 @@ public class CountToolBindOrderFragment extends BarScanBaseFragment implements V
     @Bind(R.id.tv_count_num)
     TextView tv_count_num;
 
-    @Bind(R.id.btn_commit)
-    Button btn_commit;
     CountingOrderNoInfoEntity countingOrderNoInfoEntity;//清点任务详情
     ContainerInfo containerInfo;//位置2进来时传进来的item
     // 容器 list
     private List<String> containerList = new ArrayList<>();
 
     private String owner;
-    private String orderId = "";
+    private String orderId="";
+
+    // 标记位， 1：从首页进来的  2：从清点任务进来的
+    private int index;
 
     @Override
     public int getbarContentLayoutResId() {
@@ -70,7 +71,8 @@ public class CountToolBindOrderFragment extends BarScanBaseFragment implements V
     @Override
     public void barInitializeContentViews() {
 
-        if (bundle != null && bundle.getString("location_position") != null) {//清点首页进来的绑定清点单
+        if(bundle!=null && bundle.getString("location_position")!=null){//清点首页进来的绑定清点单
+            index = 1;
             edt_count_num.setVisibility(View.VISIBLE);
             tv_count_num.setVisibility(View.GONE);
             edt_count_num.setOnFocusChangeListener(new View.OnFocusChangeListener() {
@@ -83,7 +85,8 @@ public class CountToolBindOrderFragment extends BarScanBaseFragment implements V
                 }
             });
             edt_count_num.requestFocus();
-        } else {//清点任务进来的绑单
+        }else{//清点任务进来的绑单
+            index = 2;
             countingOrderNoInfoEntity = (CountingOrderNoInfoEntity) getActivity().getIntent().getExtras().get("countingOrderNoInfoEntity");
             containerInfo = (ContainerInfo) getActivity().getIntent().getExtras().get("containerInfo");
             if (countingOrderNoInfoEntity != null) {
@@ -175,7 +178,6 @@ public class CountToolBindOrderFragment extends BarScanBaseFragment implements V
             HideSoftKeyboardUtil.hideSoftKeyboard((BaseActivity) getActivity());
             if (edt_count_container.hasFocus()) {
                 inputEntry(code);
-                btn_commit.requestFocus();
             }
             if(edt_count_num.hasFocus()){
                 edt_count_container.requestFocus();
@@ -209,7 +211,13 @@ public class CountToolBindOrderFragment extends BarScanBaseFragment implements V
 //                        jsonObject.put("containerConfig",str);
 
                 JSONArray object = new JSONArray(str);
-                jsonObject.put("orderNO", tv_count_num.getText() + "");
+                if(index == 1){
+                    //从首页进来的
+                    jsonObject.put("orderNO", edt_count_num.getText() + "");
+                } else {
+                    // 从清点任务进来的
+                    jsonObject.put("orderNO", tv_count_num.getText() + "");
+                }
                 jsonObject.put("containers", object);
 
                 BirdApi.jsonCountBindorderSubmit(getContext(), jsonObject, new RequestCallBackInterface() {
