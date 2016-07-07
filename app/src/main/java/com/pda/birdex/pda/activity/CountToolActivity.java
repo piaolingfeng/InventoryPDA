@@ -3,6 +3,7 @@ package com.pda.birdex.pda.activity;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
+import android.view.KeyEvent;
 
 import com.pda.birdex.pda.R;
 import com.pda.birdex.pda.fragments.BaseFragment;
@@ -43,6 +44,7 @@ public class CountToolActivity extends BasePrintBarScanActivity implements OnRec
     private CountToolTrackFragment countToolTrackFragment = null;
     //    private CountToolBindAreaFragment countToolBindAreaFragment;
     private CountToolBindOrderFragment countToolBindOrderFragment;
+    private BaseFragment baseFragment;
     private FragmentTransaction transaction;
 
     @Override
@@ -78,6 +80,14 @@ public class CountToolActivity extends BasePrintBarScanActivity implements OnRec
         dealToolMenuList();//处理数据
         addFragment(currentPosition, false);//初始默认第一个fragment
     }
+
+//    @Override
+//    public boolean onKeyDown(int keyCode, KeyEvent event) {
+//        if(baseFragment!=null) {
+//            baseFragment.onKeyDown(keyCode, event);
+//        }
+//        return super.onKeyDown(keyCode, event);
+//    }
 
     //处理save list
     private void dealToolMenuList() {
@@ -191,7 +201,7 @@ public class CountToolActivity extends BasePrintBarScanActivity implements OnRec
 
     @Override
     public void setSelectedFragment(BaseFragment selectedFragment) {
-
+        baseFragment = selectedFragment;
     }
 
     @Override

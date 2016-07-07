@@ -83,7 +83,7 @@
         </activity>
 
         <activity
-            android:name=".activity.TakingPrintBarScanActivity"
+            android:name=".activity.PrintOrderActivity"
             android:windowSoftInputMode="adjustUnspecified|stateHidden"
             android:screenOrientation="portrait" />
 
@@ -124,11 +124,6 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".activity.CountToolMapActivity"
-            android:windowSoftInputMode="adjustUnspecified|stateHidden"
-            android:screenOrientation="portrait" />
-
-        <activity
-            android:name=".activity.CountOrderBindActivity"
             android:windowSoftInputMode="adjustUnspecified|stateHidden"
             android:screenOrientation="portrait" />
 

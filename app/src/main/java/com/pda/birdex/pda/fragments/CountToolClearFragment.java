@@ -15,9 +15,7 @@ import android.provider.MediaStore;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.View;
-import android.view.inputmethod.EditorInfo;
 import android.widget.AdapterView;
 import android.widget.TextView;
 
@@ -25,16 +23,16 @@ import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 import com.pda.birdex.pda.MyApplication;
 import com.pda.birdex.pda.R;
+import com.pda.birdex.pda.activity.BaseActivity;
 import com.pda.birdex.pda.activity.PhotoShowActivity;
 import com.pda.birdex.pda.adapter.PhotoGVAdapter;
 import com.pda.birdex.pda.api.BirdApi;
 import com.pda.birdex.pda.entity.ContainerInfo;
-import com.pda.birdex.pda.entity.TakingOrder;
 import com.pda.birdex.pda.entity.UpcData;
 import com.pda.birdex.pda.interfaces.RequestCallBackInterface;
 import com.pda.birdex.pda.response.CountingOrderNoInfoEntity;
-import com.pda.birdex.pda.response.TakingOrderNoInfoEntity;
 import com.pda.birdex.pda.utils.GsonHelper;
+import com.pda.birdex.pda.utils.HideSoftKeyboardUtil;
 import com.pda.birdex.pda.utils.T;
 import com.pda.birdex.pda.widget.ClearEditText;
 
@@ -417,6 +415,11 @@ public class CountToolClearFragment extends BarScanBaseFragment implements View.
                 public void successCallBack(JSONObject object) {
                     try {
                         if ("success".equals(object.getString("result"))) {
+                            //清点日志上报
+                            String upc = edt_upc.getText().toString();
+                            int count = Integer.parseInt(edt_count_length.getText().toString());
+                            String ctNo = edt_count_num.getText().toString();
+                            MyApplication.loggingUpload.countClearCommit(getActivity(), tag, orderNo, tid, upc,ctNo,count);
                             T.showShort(getContext(), getString(R.string.taking_upload_suc));
                         } else {
                             T.showShort(getContext(), getString(R.string.taking_upload_fal));
@@ -446,6 +449,7 @@ public class CountToolClearFragment extends BarScanBaseFragment implements View.
         }
     }
 
+
     // 上传图片
     private void uploadPic() {
 
@@ -465,6 +469,11 @@ public class CountToolClearFragment extends BarScanBaseFragment implements View.
 
     }
 
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        BirdApi.cancelRequestWithTag(tag);
+    }
 
     class MyTask extends AsyncTask<String, Integer, Void> {
         String path;
@@ -631,7 +640,9 @@ public class CountToolClearFragment extends BarScanBaseFragment implements View.
 
     @Override
     public void ClearEditTextCallBack(String code) {
-//        if (this.isVisible()) {
+        if (this.isVisible()) {
+            HideSoftKeyboardUtil.hideSoftKeyboard((BaseActivity)getActivity());
+        }
 //            if ("1".equals(from)) {
 //                // 说明是从揽收进入的 需要通过容器号 调用接口  获取区域信息
 //                getAreaMes(code);

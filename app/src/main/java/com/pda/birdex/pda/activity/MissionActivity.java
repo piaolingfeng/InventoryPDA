@@ -95,7 +95,6 @@ public class MissionActivity extends BarScanActivity implements BaseFragment.OnF
         otherFragment.setUIArguments(b);
         bussniessFragment.setUIArguments(b);
         getSupportFragmentManager().beginTransaction().replace(R.id.framelayout, bussniessFragment).commit();
-
     }
 
     @Override
@@ -110,7 +109,7 @@ public class MissionActivity extends BarScanActivity implements BaseFragment.OnF
 
     //获取揽收所有商家的任务数量
     public void getAllTakingMerchant(){
-        BirdApi.getTakingListCountMerchant(this, "all/unTaking", new RequestCallBackInterface() {
+        BirdApi.getTakingListCountMerchant(this, "each/unTaking", new RequestCallBackInterface() {
             @Override
             public void successCallBack(JSONObject object) {
                 try {

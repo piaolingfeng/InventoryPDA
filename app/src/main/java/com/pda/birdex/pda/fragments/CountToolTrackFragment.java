@@ -4,17 +4,28 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
 
+import com.pda.birdex.pda.MyApplication;
 import com.pda.birdex.pda.R;
+import com.pda.birdex.pda.activity.CountToolActivity;
+import com.pda.birdex.pda.api.BirdApi;
 import com.pda.birdex.pda.entity.ContainerInfo;
+import com.pda.birdex.pda.interfaces.RequestCallBackInterface;
 import com.pda.birdex.pda.response.CountingOrderNoInfoEntity;
+import com.pda.birdex.pda.utils.HideSoftKeyboardUtil;
+import com.pda.birdex.pda.utils.StringUtils;
+import com.pda.birdex.pda.utils.T;
 import com.pda.birdex.pda.widget.ClearEditText;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import butterknife.Bind;
 
 /**
  * Created by chuming.zhuang on 2016/6/24.
  */
-public class CountToolTrackFragment extends BarScanBaseFragment {
+public class CountToolTrackFragment extends BarScanBaseFragment implements View.OnClickListener,RequestCallBackInterface{
+    String tag="CountToolTrackFragment";
     @Bind(R.id.tv_count_num)
     TextView tv_count_num;
     @Bind(R.id.edt_count_now_no)
@@ -24,6 +35,9 @@ public class CountToolTrackFragment extends BarScanBaseFragment {
     CountingOrderNoInfoEntity countingOrderNoInfoEntity;//清点任务详情
     ContainerInfo containerInfo;//位置2进来时传进来的item
     Bundle b;
+    String orderId="";
+    String tid="";
+    String owner ="";
     @Override
     public int getbarContentLayoutResId() {
         return R.layout.fragment_count_tool_track_layout;
@@ -36,6 +50,9 @@ public class CountToolTrackFragment extends BarScanBaseFragment {
             countingOrderNoInfoEntity = (CountingOrderNoInfoEntity) b.get("countingOrderNoInfoEntity");
             containerInfo = (ContainerInfo) getActivity().getIntent().getExtras().get("containerInfo");
             if (countingOrderNoInfoEntity != null) {
+                orderId = countingOrderNoInfoEntity.getDetail().getBaseInfo().getBaseInfo().getOrderNo();
+                owner = countingOrderNoInfoEntity.getDetail().getBaseInfo().getPerson().getCo();
+                tid = countingOrderNoInfoEntity.getDetail().getBaseInfo().getBaseInfo().getTid();
                 tv_count_num.setText(countingOrderNoInfoEntity.getDetail().getBaseInfo().getBaseInfo().getOrderNo());
             }
         }
@@ -66,6 +83,55 @@ public class CountToolTrackFragment extends BarScanBaseFragment {
 
     @Override
     public void ClearEditTextCallBack(String code) {
+        if (this.isVisible()) {
+            HideSoftKeyboardUtil.hideSoftKeyboard((CountToolActivity) getActivity());
+        }
+    }
 
+    @Override
+    public void onClick(View v) {
+        commit();
+    }
+
+    private void commit(){
+        String oldContainerNo = edt_count_old_no.getText().toString();
+        String newContainerNo = edt_count_now_no.getText().toString();
+        if(StringUtils.isEmpty(oldContainerNo)){
+            T.showShort(getActivity(),getString(R.string.count_old_toast));
+            return;
+        }
+        if(StringUtils.isEmpty(newContainerNo)){
+            T.showShort(getActivity(),getString(R.string.count_new_toast));
+            return;
+        }
+        JSONObject object  = new JSONObject();
+        try {
+            object.put("oldContainerNo",oldContainerNo);
+            object.put("owner",owner);
+            object.put("newContainerNo",newContainerNo);
+            BirdApi.jsonCountTrack(getActivity(), object, this, tag, true);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void onDestroy() {
+        BirdApi.cancelRequestWithTag(tag);
+        super.onDestroy();
+    }
+
+    @Override
+    public void successCallBack(JSONObject object) {
+        //日志上报
+        String oldContainerNo = edt_count_old_no.getText().toString();
+        String newContainerNo = edt_count_now_no.getText().toString();
+        MyApplication.loggingUpload.countTrack(getActivity(),tag,orderId,tid,oldContainerNo,newContainerNo);
+        T.showShort(getActivity(),getString(R.string.commit_success));
+    }
+
+    @Override
+    public void errorCallBack(JSONObject object) {
+        T.showShort(getActivity(),getString(R.string.taking_submit_fal));
     }
 }

@@ -252,7 +252,7 @@ public class BirdApi {
             asyncHttpClient.addHeader("X-Access-Token", "dsssss");
             asyncHttpClient.addHeader("X-User-Id", PreferenceUtils.getPrefString(context, "userId", ""));
         }
-        asyncHttpClient.post(context, url, entity,"application/json", responseHandlerInterface);
+        asyncHttpClient.post(context, url, entity, "application/json", responseHandlerInterface);
     }
     //    // 提交上传图片
 //    public static void uploadPicSubmit(Context context, RequestParams params, RequestCallBackInterface callBackInterface, String tag, boolean showDialog) {
@@ -291,6 +291,25 @@ public class BirdApi {
         jsonPostRequest(context, jsonObject, callBackInterface, "counting/submit", tag, showDialog);
     }
 
+    //清点：打印
+    public static void postCountingCodePrint(Context context, JSONObject jsonObject, RequestCallBackInterface callBackInterface, String tag, boolean showDialog) {
+        jsonPostRequest(context, jsonObject, callBackInterface, "counting/code/print", tag, showDialog);
+    }
+
+    //清点：打印相同
+    public static void postCountingCodeSamePrint(Context context, String containerNo, RequestCallBackInterface callBackInterface, String tag, boolean showDialog) {
+        postRequest(context, new RequestParams(), callBackInterface, "code/printSame/" + containerNo, tag, showDialog);
+    }
+
+    //清点：打印新的
+    public static void postCountingCodeNewPrint(Context context, String containerNo, RequestCallBackInterface callBackInterface, String tag, boolean showDialog) {
+        postRequest(context, new RequestParams(), callBackInterface, "code/printNew/" + containerNo, tag, showDialog);
+    }
+
+    //清点：追踪
+    public static void jsonCountTrack(Context context, JSONObject jsonObject, RequestCallBackInterface callBackInterface, String tag, boolean showDialog) {
+        jsonPostRequest(context, jsonObject, callBackInterface, "counting/track", tag, showDialog);
+    }
     /**
      * mContext 上下文对象
      * params请求参数
@@ -514,10 +533,7 @@ public class BirdApi {
     public static void postCountingOrderNum(Context context, JSONObject jsonObject, RequestCallBackInterface callBackInterface, String tag, boolean showDialog) {
         jsonPostRequest(context, jsonObject, callBackInterface, "counting/merge", tag, showDialog);
     }
-    //清点打印
-    public static void postCountingCodePrint(Context context, JSONObject jsonObject, RequestCallBackInterface callBackInterface, String tag, boolean showDialog) {
-        jsonPostRequest(context, jsonObject, callBackInterface, "counting/code/print", tag, showDialog);
-    }
+
     /**
      * mContext 上下文对象
      * callBackInterface 请求成功回调

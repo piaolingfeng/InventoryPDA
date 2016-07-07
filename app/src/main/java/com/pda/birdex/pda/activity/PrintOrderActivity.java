@@ -31,9 +31,9 @@ import butterknife.OnClick;
 /**
  * Created by hyj on 2016/6/17.
  */
-public class TakingPrintBarScanActivity extends BasePrintBarScanActivity implements View.OnClickListener,RequestCallBackInterface {
+public class PrintOrderActivity extends BasePrintBarScanActivity implements View.OnClickListener, RequestCallBackInterface {
 
-    String tag = "TakingPrintBarScanActivity";
+    String tag = "PrintOrderActivity";
 
     @Bind(R.id.titleView)
     com.pda.birdex.pda.widget.TitleView title;
@@ -59,10 +59,10 @@ public class TakingPrintBarScanActivity extends BasePrintBarScanActivity impleme
     public void printInitializeContentViews() {
         String titleText = getIntent().getExtras().getString("title");
         String name = getIntent().getExtras().getString("inputname");
-        if(!TextUtils.isEmpty(titleText)) {
+        if (!TextUtils.isEmpty(titleText)) {
             title.setTitle(titleText);
         }
-        if(!TextUtils.isEmpty(name)){
+        if (!TextUtils.isEmpty(name)) {
             no_tv.setText(name);
         }
 
@@ -79,7 +79,7 @@ public class TakingPrintBarScanActivity extends BasePrintBarScanActivity impleme
 
             @Override
             public void afterTextChanged(Editable s) {
-                if(TextUtils.isEmpty(codeEt.getText())){
+                if (TextUtils.isEmpty(codeEt.getText())) {
                     gone();
                 }
             }
@@ -101,8 +101,8 @@ public class TakingPrintBarScanActivity extends BasePrintBarScanActivity impleme
                 main.setFocusableInTouchMode(true);
                 main.requestFocus();
 
-                if(!TextUtils.isEmpty(codeEt.getText())){
-                    if(button_ll.getVisibility() != View.VISIBLE) {
+                if (!TextUtils.isEmpty(codeEt.getText())) {
+                    if (button_ll.getVisibility() != View.VISIBLE) {
                         visible();
                     }
                 }
@@ -120,13 +120,13 @@ public class TakingPrintBarScanActivity extends BasePrintBarScanActivity impleme
     @Override
     public void ClearEditTextCallBack(String code) {
         HideSoftKeyboardUtil.hideSoftKeyboard(this);
-        if(!TextUtils.isEmpty(code)){
+        if (!TextUtils.isEmpty(code)) {
             visible();
         }
     }
 
     // Visible 动画
-    private void visible(){
+    private void visible() {
         TranslateAnimation mShowAction = new TranslateAnimation(Animation.RELATIVE_TO_SELF, 0.0f,
                 Animation.RELATIVE_TO_SELF, 0.0f, Animation.RELATIVE_TO_SELF,
                 2.0f, Animation.RELATIVE_TO_SELF, 0.0f);
@@ -136,7 +136,7 @@ public class TakingPrintBarScanActivity extends BasePrintBarScanActivity impleme
     }
 
     // gone 动画
-    private void gone(){
+    private void gone() {
         TranslateAnimation mHiddenAction = new TranslateAnimation(Animation.RELATIVE_TO_SELF,
                 0.0f, Animation.RELATIVE_TO_SELF, 0.0f,
                 Animation.RELATIVE_TO_SELF, 0.0f, Animation.RELATIVE_TO_SELF,
@@ -160,13 +160,19 @@ public class TakingPrintBarScanActivity extends BasePrintBarScanActivity impleme
     }
 
     //打印相同箱单
-    private void printSame(){
-        BirdApi.postTakingCodeSamePrint(this, codeEt.getText().toString(), this, tag, true);
+    private void printSame() {
+        if (no_tv.equals(getString(R.string.count_box_no)))// 清点
+            BirdApi.postCountingCodeSamePrint(this, codeEt.getText().toString(), this, tag, true);
+        else
+            BirdApi.postTakingCodeSamePrint(this, codeEt.getText().toString(), this, tag, true);
     }
 
     //打印相同箱单
-    private void printNew(){
-        BirdApi.postTakingCodeNewPrint(this, codeEt.getText().toString(), this, tag, true);
+    private void printNew() {
+        if (no_tv.equals(getString(R.string.count_box_no)))// 清点
+            BirdApi.postCountingCodeNewPrint(this, codeEt.getText().toString(), this, tag, true);
+        else
+            BirdApi.postTakingCodeNewPrint(this, codeEt.getText().toString(), this, tag, true);
     }
 
     @Override
@@ -180,16 +186,19 @@ public class TakingPrintBarScanActivity extends BasePrintBarScanActivity impleme
         //日志上报
         String orderId = entity.getOrderNo();
         String tid = entity.getTid();
-        MyApplication.loggingUpload.takePrint(this, tag, orderId, tid, entity.getContainerNos());
-        if(entity!=null) {
+        if (no_tv.equals(getString(R.string.count_box_no)))// 清点日志上报
+            MyApplication.loggingUpload.countPrint(this, tag, orderId, tid, entity.getContainerNos());
+        else//揽收日志上报
+            MyApplication.loggingUpload.takePrint(this, tag, orderId, tid, entity.getContainerNos());
+        if (entity != null) {
             print(entity.getData());
-        }else{
-            T.showLong(this,getString(R.string.parse_error));
+        } else {
+            T.showLong(this, getString(R.string.parse_error));
         }
     }
 
-    private void print(List<String> list){
-        for (String s : list){
+    private void print(List<String> list) {
+        for (String s : list) {
             sendMessage(s);
         }
     }

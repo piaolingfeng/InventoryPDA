@@ -311,15 +311,16 @@ public class LoggingUpload {
     }
 
     //绑单
-    public void countBindOrder(Context mContext,String tag,String orderId,String tid,String ctNo){
+    public void countBindOrder(Context mContext,String tag,String orderId,String tid,List<String> ctNos){
         JSONObject object = creatCountJsonObject(orderId,tid);
         try {
             object.put("job", "bind_ct");
             object.put("logLevel", "info");
             object.put("event", "commit");
             JSONObject params = new JSONObject();
-            params.put("ctNo",ctNo);
-            object.put("params",params);
+            JSONArray array = new JSONArray(ctNos);
+            params.put("ctNos",array);//""容器号1", "容器号2", ..."
+            object.put("params", params);
             L.e(object.toString());
             BirdApi.jsonPostLoggingRequest(mContext, object, backInterface, tag, false);
         } catch (JSONException e) {
