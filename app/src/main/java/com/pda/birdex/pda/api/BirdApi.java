@@ -161,21 +161,21 @@ public class BirdApi {
     }
 
     //打印
-//    public static void postCodePrint(Context context, RequestParams params, RequestCallBackInterface callBackInterface, String tag, boolean showDialog) {
+//    public static void postTakingCodePrint(Context context, RequestParams params, RequestCallBackInterface callBackInterface, String tag, boolean showDialog) {
 //        postRequest(context, params, callBackInterface, "code/print", tag, showDialog);
 //    }
-    //打印
-    public static void postCodePrint(Context context, JSONObject jsonObject, RequestCallBackInterface callBackInterface, String tag, boolean showDialog) {
+    //揽收：打印
+    public static void postTakingCodePrint(Context context, JSONObject jsonObject, RequestCallBackInterface callBackInterface, String tag, boolean showDialog) {
         jsonPostRequest(context, jsonObject, callBackInterface, "code/print", tag, showDialog);
     }
 
-    //打印相同
-    public static void postCodeSamePrint(Context context, String containerNo, RequestCallBackInterface callBackInterface, String tag, boolean showDialog) {
+    //揽收：打印相同
+    public static void postTakingCodeSamePrint(Context context, String containerNo, RequestCallBackInterface callBackInterface, String tag, boolean showDialog) {
         postRequest(context, new RequestParams(), callBackInterface, "code/printSame/" + containerNo, tag, showDialog);
     }
 
-    //打印新的
-    public static void postCodeNewPrint(Context context, String containerNo, RequestCallBackInterface callBackInterface, String tag, boolean showDialog) {
+    //揽收：打印新的
+    public static void postTakingCodeNewPrint(Context context, String containerNo, RequestCallBackInterface callBackInterface, String tag, boolean showDialog) {
         postRequest(context, new RequestParams(), callBackInterface, "code/printNew/" + containerNo, tag, showDialog);
     }
 
@@ -214,12 +214,12 @@ public class BirdApi {
 
     // 揽收：绑单提交
 //    public static void takingBindorderSubmit(Context context,RequestParams params, RequestCallBackInterface callBackInterface, String tag, boolean showDialog) {
-//        postRequest(context, params, callBackInterface, "code/bindOrder", tag, showDialog);
+//        postRequest(context, params, callBackInterface, "code/takeBindOrder", tag, showDialog);
 //    }
 
     // 揽收：绑单提交
     public static void jsonTakingBindorderSubmit(Context context, JSONObject jsonObject, RequestCallBackInterface callBackInterface, String tag, boolean showDialog) {
-        jsonPostRequest(context, jsonObject, callBackInterface, "code/bindOrder", tag, showDialog);
+        jsonPostRequest(context, jsonObject, callBackInterface, "code/takeBindOrder", tag, showDialog);
     }
 
     // 揽收：收货页面的绑定揽收单，绑单提交
@@ -250,7 +250,7 @@ public class BirdApi {
             asyncHttpClient.setConnectTimeout(4 * 1000);//设置30秒超时
             asyncHttpClient.setMaxConnections(5);
             asyncHttpClient.addHeader("X-Access-Token", "dsssss");
-            asyncHttpClient.addHeader("X-User-Id",PreferenceUtils.getPrefString(context, "userId", ""));
+            asyncHttpClient.addHeader("X-User-Id", PreferenceUtils.getPrefString(context, "userId", ""));
         }
         asyncHttpClient.post(context, url, entity,"application/json", responseHandlerInterface);
     }

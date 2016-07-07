@@ -233,7 +233,7 @@ public class TakingToolBindOrderFragment extends BarScanBaseFragment implements 
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-            MyApplication.loggingUpload.bindOrder(getActivity(), tag, orderId, tid, containerList);
+            MyApplication.loggingUpload.takeBindOrder(getActivity(), tag, orderId, tid, containerList);
         }
 
         @Override

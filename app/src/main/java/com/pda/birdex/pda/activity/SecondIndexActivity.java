@@ -100,7 +100,7 @@ public class SecondIndexActivity extends BarScanActivity implements OnRecycleVie
 
     //获取所有的揽收任务
     public void getAllTakingMission() {
-        BirdApi.getTakingListCountMerchant(this, "null/null", new RequestCallBackInterface() {
+        BirdApi.getTakingListCountMerchant(this, "all/unTaking", new RequestCallBackInterface() {
             @Override
             public void successCallBack(JSONObject object) {
                 try {

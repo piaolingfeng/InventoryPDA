@@ -8,16 +8,14 @@
     <com.zhy.android.percent.support.PercentLinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        app:layout_paddingPercent="@string/item_padding_3w">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/count_num"
             android:textColor="@color/context_1"
-            app:layout_paddingTopPercent="@string/item_padding_3w"
-            app:layout_paddingRightPercent="@string/item_padding_3w"
-            app:layout_paddingLeftPercent="@string/item_padding_3w"
             app:layout_textSizePercent="@string/size_6w" />
 
         <TextView
@@ -25,36 +23,32 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="@color/context_2"
-            app:layout_paddingPercent="@string/item_padding_3w"
+            app:layout_paddingTopPercent="@string/item_padding_3w"
             app:layout_textSizePercent="@string/size_6w" />
     </com.zhy.android.percent.support.PercentLinearLayout>
 
     <com.zhy.android.percent.support.PercentLinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        app:layout_paddingPercent="@string/item_padding_3w">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/count_container_no"
             android:textColor="@color/context_1"
-            app:layout_paddingPercent="@string/item_padding_3w"
-            app:layout_textSizePercent="@string/size_6w" />
+            app:layout_textSizePercent="@string/size_6w"
+            app:layout_marginBottomPercent="@string/item_padding_3w"/>
 
-        <com.zhy.android.percent.support.PercentLinearLayout
+
+        <com.pda.birdex.pda.widget.ClearEditText
+            android:id="@+id/edt_taking_num"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:layout_paddingPercent="@string/item_padding_3w">
-
-            <com.pda.birdex.pda.widget.ClearEditText
-                android:id="@+id/edt_taking_num"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:imeOptions="actionSearch"
-                android:singleLine="true"
-                android:textColor="@color/context_2" />
-        </com.zhy.android.percent.support.PercentLinearLayout>
+            android:imeOptions="actionSearch"
+            android:singleLine="true"
+            android:textColor="@color/context_2" />
     </com.zhy.android.percent.support.PercentLinearLayout>
 
     <com.zhy.android.percent.support.PercentRelativeLayout

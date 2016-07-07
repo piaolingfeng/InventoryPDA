@@ -155,6 +155,60 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
+                android:id="@+id/pll_upc"
+                android:visibility="gone">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/upc"
+                    android:textColor="@color/context_1"
+                    app:layout_paddingLeftPercent="@string/item_padding_3w"
+                    app:layout_paddingRightPercent="@string/item_padding_3w"
+                    app:layout_paddingTopPercent="@string/item_padding_3w"
+                    app:layout_textSizePercent="@string/size_6w" />
+
+                <TextView
+                    android:id="@+id/tv_upc"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/context_2"
+                    app:layout_paddingLeftPercent="@string/item_padding_3w"
+                    app:layout_paddingRightPercent="@string/item_padding_3w"
+                    app:layout_paddingTopPercent="@string/item_padding_3w"
+                    app:layout_textSizePercent="@string/size_5w" />
+
+            </com.zhy.android.percent.support.PercentLinearLayout>
+
+            <com.zhy.android.percent.support.PercentLinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_paddingPercent="@string/item_padding_3w"
+                android:id="@+id/pll_amount"
+                android:visibility="gone">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/amount"
+                    android:textColor="@color/context_1"
+                    app:layout_textSizePercent="@string/size_6w" />
+
+                <TextView
+                    android:id="@+id/tv_amount"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/context_2"
+                    app:layout_paddingTopPercent="@string/item_padding_3w"
+                    app:layout_textSizePercent="@string/size_5w" />
+
+            </com.zhy.android.percent.support.PercentLinearLayout>
+
+            <com.zhy.android.percent.support.PercentLinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
                 app:layout_paddingTopPercent="@string/item_padding_3w">
 
                 <TextView

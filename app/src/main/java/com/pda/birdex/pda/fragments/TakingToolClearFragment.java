@@ -402,7 +402,7 @@ public class TakingToolClearFragment extends BarScanBaseFragment implements View
             //日志上报
             String ctNo = edt_taking_num.getText().toString();
             int count = Integer.parseInt(edt_box_size.getText().toString());
-            MyApplication.loggingUpload.takingClear(getActivity(),tag,orderId,tid,ctNo,count);
+            MyApplication.loggingUpload.takeTakeClear(getActivity(), tag, orderId, tid, ctNo, count);
 
             BirdApi.takingSubmit(getActivity(), jsonObject, new RequestCallBackInterface() {
 

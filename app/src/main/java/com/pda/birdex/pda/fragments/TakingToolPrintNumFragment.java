@@ -116,11 +116,11 @@ public class TakingToolPrintNumFragment extends BarScanBaseFragment implements V
                 orderId = orderNoInfoEntity.getDetail().getBaseInfo().getBaseInfo().getTakingOrderNo();
                 tid = orderNoInfoEntity.getDetail().getBaseInfo().getBaseInfo().getTid();
             }
-            BirdApi.postCodePrint(getActivity(), jsonObject, new RequestCallBackInterface() {
+            BirdApi.postTakingCodePrint(getActivity(), jsonObject, new RequestCallBackInterface() {
                 @Override
                 public void successCallBack(JSONObject object) {
                     PrintEntity entity = GsonHelper.getPerson(object.toString(), PrintEntity.class);
-                    MyApplication.loggingUpload.PrintTag(getActivity(), tag, orderId, tid, entity.getContainerNos());
+                    MyApplication.loggingUpload.takePrint(getActivity(), tag, orderId, tid, entity.getContainerNos());
                     bus.post(entity.getData());
                 }
 

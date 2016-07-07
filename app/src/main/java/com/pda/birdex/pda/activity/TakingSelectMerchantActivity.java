@@ -136,7 +136,7 @@ public class TakingSelectMerchantActivity extends BaseActivity implements OnClic
                 String orderId = entity.getDetail().getBaseInfo().getBaseInfo().getTakingOrderNo();
                 String tid = entity.getDetail().getBaseInfo().getBaseInfo().getTid();
                 String owner = entity.getDetail().getBaseInfo().getPerson().getCo();
-                MyApplication.loggingUpload.selectMerchant(TakingSelectMerchantActivity.this,tag,orderId,tid,owner);//日志上报
+                MyApplication.loggingUpload.takeSelectMerchant(TakingSelectMerchantActivity.this, tag, orderId, tid, owner);//日志上报
                 if (entity != null) {
                     Intent intent = new Intent(TakingSelectMerchantActivity.this, TakingToolActivity.class);
                     Bundle b = new Bundle();
