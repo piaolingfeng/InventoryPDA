@@ -74,6 +74,9 @@ public class MissionClearNumActivity extends BasePrintBarScanActivity implements
 
     @Bind(R.id.btn_count_print_no)
     Button btn_count_print_no;
+
+    @Bind(R.id.pll_item)
+    PercentLinearLayout pll_item;
     //揽收清点的空间
     @Bind(R.id.tv_name_count_num)
     TextView tv_name_count_num;
@@ -108,6 +111,7 @@ public class MissionClearNumActivity extends BasePrintBarScanActivity implements
     public void printInitializeContentViews() {
         HeadName = getIntent().getStringExtra("HeadName");
 
+        pll_item.setBackgroundColor(getResources().getColor(R.color.gray));
         if (getResources().getString(R.string.taking).equals(HeadName)) {//揽收
             tv_name_count_num.setText(getString(R.string.tv_taking_num));
             btn_count_print_no.setText(getString(R.string.taking_print_no));
@@ -139,7 +143,7 @@ public class MissionClearNumActivity extends BasePrintBarScanActivity implements
 //        tv_status.setVisibility(View.GONE);//隐藏状态栏
 
         xrcy.setLoadingMoreEnabled(false);
-        xrcy.setPullRefreshEnabled(true);
+        xrcy.setPullRefreshEnabled(false);
         xrcy.setLoadingListener(this);//加载监听器
         xrcy.setLayoutManager(new LinearLayoutManager(this));
         xrcy.setLoadingMoreProgressStyle(ProgressStyle.SquareSpin);//上拉加载类型

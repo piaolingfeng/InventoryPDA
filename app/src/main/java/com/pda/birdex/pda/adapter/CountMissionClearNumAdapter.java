@@ -48,7 +48,7 @@ public class CountMissionClearNumAdapter extends RecyclerView.Adapter<CountMissi
     public void onBindViewHolder(CountMissionClearNumAdapterHolder holder, int position) {
         holder.position = position;
 //        holder.tv_status.setVisibility(View.GONE);
-        holder.pll_item.setBackgroundColor(mContext.getResources().getColor(R.color.white));
+//        holder.pll_item.setBackgroundColor(mContext.getResources().getColor(R.color.white));
         holder.tv_clear_num.setText(list.get(position).getContainerId());
         holder.tv_last_time.setText(list.get(position).getCount()+"");
         holder.tv_status.setText(list.get(position).getArea());

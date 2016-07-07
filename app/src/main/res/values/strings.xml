@@ -21,6 +21,7 @@
     <string name="username_hint">输入帐号</string>
     <string name="password_hint">输入密码</string>
     <string name="service_hint">输入服务器地址</string>
+    <string name="service_addr_wrong">服务器地址错误.</string>
     <string name="service_addr_error">输入的ip地址不合法</string>
     <string name="login">登  录</string>
     <string name="notempty">用户名或密码不能为空</string>

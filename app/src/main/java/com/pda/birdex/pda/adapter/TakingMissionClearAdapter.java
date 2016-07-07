@@ -49,7 +49,7 @@ public class TakingMissionClearAdapter extends RecyclerView.Adapter<TakingMissio
     public void onBindViewHolder(TakingMissionClearAdapterHolder holder, int position) {
         holder.position = position;
 
-        holder.pll_item.setBackgroundColor(mContext.getResources().getColor(R.color.white));
+//        holder.pll_item.setBackgroundColor(mContext.getResources().getColor(R.color.white));
         holder.tv_clear_num.setText(takingOrders.get(position).getBaseInfo().getTakingOrderNo());
 //        String time = TimeUtil.long2Date(Long.parseLong(takingOrders.get(position).getBaseInfo().getDeadLine()));
 
