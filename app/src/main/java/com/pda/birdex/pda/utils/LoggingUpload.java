@@ -107,7 +107,7 @@ public class LoggingUpload {
     //扫描物流号
 //    "trkNo": "物流单号",
 //            "matched": true/false   /* 是否匹配到揽收单号 */
-    public  void takeScan(Context mContext, String tag, String orderId, String tid, String trkNo, boolean match){
+    public void takeScan(Context mContext, String tag, String orderId, String tid, String trkNo, boolean match){
         JSONObject object =createTakingJson(orderId,tid);
         try {
             object.put("job", "scan");

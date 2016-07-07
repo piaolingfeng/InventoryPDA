@@ -25,7 +25,7 @@ import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 import com.pda.birdex.pda.MyApplication;
 import com.pda.birdex.pda.R;
-import com.pda.birdex.pda.activity.CountToolActivity;
+import com.pda.birdex.pda.activity.BaseActivity;
 import com.pda.birdex.pda.activity.PhotoShowActivity;
 import com.pda.birdex.pda.adapter.PhotoGVAdapter;
 import com.pda.birdex.pda.api.BirdApi;
@@ -299,6 +299,7 @@ public class CountToolPhotoFragment extends BarScanBaseFragment implements View.
                 }
             }
         });
+        edt_count_num.requestFocus();
         edt_upc.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
@@ -573,7 +574,10 @@ public class CountToolPhotoFragment extends BarScanBaseFragment implements View.
     @Override
     public void ClearEditTextCallBack(String code) {
         if (this.isVisible()) {
-            HideSoftKeyboardUtil.hideSoftKeyboard((CountToolActivity) getActivity());
+            HideSoftKeyboardUtil.hideSoftKeyboard((BaseActivity) getActivity());
+            if(edt_count_num.hasFocus()){
+                edt_upc.requestFocus();
+            }
         }
     }
 }

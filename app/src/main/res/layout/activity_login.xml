@@ -56,6 +56,25 @@
             android:background="#C7C7C7"
             app:layout_marginTopPercent="2%" />
 
+        <EditText
+            android:id="@+id/service_edt"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@null"
+            android:hint="@string/service_hint"
+            android:digits="0123456789.:"
+            android:text="192.168.1.224:3000"
+            android:singleLine="true"
+            android:textColor="#979797"
+            app:layout_marginLeftPercent="1%"
+            app:layout_marginTopPercent="8%" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#C7C7C7"
+            app:layout_marginTopPercent="2%" />
+
         <CheckBox
             android:id="@+id/remember_cb"
             android:layout_width="wrap_content"

@@ -127,7 +127,8 @@
             <com.zhy.android.percent.support.PercentLinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                app:layout_marginBottomPercent="@string/item_padding_3w">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -225,7 +226,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
-                    app:layout_marginLeftPercent="@string/item_padding_3w">
+                    app:layout_marginLeftPercent="@string/item_padding_3w"
+                    app:layout_marginTopPercent="@string/item_padding_3w">
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -250,7 +252,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
-                    app:layout_marginLeftPercent="@string/item_padding_3w">
+                    app:layout_marginLeftPercent="@string/item_padding_3w"
+                    app:layout_marginTopPercent="@string/item_padding_3w">
 
                     <TextView
                         android:layout_width="wrap_content"

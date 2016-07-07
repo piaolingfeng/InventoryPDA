@@ -24,7 +24,7 @@
             android:id="@+id/tv_bussiness"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@color/context_1"
+            android:textColor="@color/context_2"
             app:layout_paddingTopPercent="@string/item_padding_3w"
             app:layout_paddingRightPercent="@string/item_padding_3w"
             app:layout_paddingLeftPercent="@string/item_padding_3w"
@@ -51,7 +51,7 @@
             android:id="@+id/tv_taking_num"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@color/context_1"
+            android:textColor="@color/context_2"
             app:layout_paddingTopPercent="@string/item_padding_3w"
             app:layout_paddingRightPercent="@string/item_padding_3w"
             app:layout_paddingLeftPercent="@string/item_padding_3w"
@@ -94,8 +94,8 @@
                 android:visibility="gone"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textColor="@color/context_1"
-                app:layout_textSizePercent="@string/size_5w" />
+                android:textColor="@color/context_2"
+                app:layout_textSizePercent="@string/size_6w" />
 
         </com.zhy.android.percent.support.PercentRelativeLayout>
 

@@ -19,7 +19,7 @@ import com.pda.birdex.pda.widget.ClearEditText;
 public abstract class BarScanBaseFragment extends BaseFragment {
 
     private final String SCAN_ACTION = "urovo.rcv.message";//扫描结束action
-
+    private final String SCAN_ACTION_1 = "com.android.scancontext";
     private Vibrator mVibrator;
     private ScanManager mScanManager;
     private SoundPool soundpool = null;
@@ -32,6 +32,10 @@ public abstract class BarScanBaseFragment extends BaseFragment {
 
     public void setEdt_input(ClearEditText edt_input) {
         this.edt_input = edt_input;
+    }
+
+    public ClearEditText getEdt_input() {
+        return edt_input;
     }
 
     @Override
@@ -56,22 +60,42 @@ public abstract class BarScanBaseFragment extends BaseFragment {
             // TODO Auto-generated method stub
             isScaning = false;
 //            soundpool.play(soundid, 1, 1, 0, 0, 1);
-            if(edt_input!=null)
-                edt_input.setText("");
-            mVibrator.vibrate(100);
+            if (intent.getAction().equals(SCAN_ACTION)) {
+                if (edt_input != null)
+                    edt_input.setText("");
+                mVibrator.vibrate(100);
 
-            byte[] barcode = intent.getByteArrayExtra("barocode");
-            //byte[] barcode = intent.getByteArrayExtra("barcode");
-            int barocodelen = intent.getIntExtra("length", 0);
-            byte temp = intent.getByteExtra("barcodeType", (byte) 0);
-            android.util.Log.i("debug", "----codetype--" + temp);
-            barcodeStr = new String(barcode, 0, barocodelen);
-            if(edt_input!=null)
-                edt_input.setText(barcodeStr);
-            ClearEditTextCallBack(barcodeStr);
+                byte[] barcode = intent.getByteArrayExtra("barocode");
+                //byte[] barcode = intent.getByteArrayExtra("barcode");
+                int barocodelen = intent.getIntExtra("length", 0);
+                byte temp = intent.getByteExtra("barcodeType", (byte) 0);
+                android.util.Log.i("debug", "----codetype--" + temp);
+                barcodeStr = new String(barcode, 0, barocodelen);
+                if (edt_input != null) {
+                    edt_input.setText(barcodeStr);
+                    edt_input.requestFocus();
+                }
+                ClearEditTextCallBack(barcodeStr);
+            }
+            else if (intent.getAction().equals(SCAN_ACTION_1)) {
+                String str = intent.getStringExtra("Scan_context");
+                if (edt_input != null) {
+                    edt_input.setText(str);
+                    edt_input.requestFocus();
+                }
+                ClearEditTextCallBack(str);
+            }
         }
 
     };
+
+    //A3系列设置声音
+    public static void pdaScanStatic(Context context, boolean state) {
+        Intent intent = new Intent("com.android.service_settings");
+        intent.putExtra("scanner_sound_play", state);
+        intent.putExtra("scanner_vibrate", true);
+        context.sendBroadcast(intent);
+    }
 
     private void initScan() {
         // TODO Auto-generated method stub
@@ -80,6 +104,18 @@ public abstract class BarScanBaseFragment extends BaseFragment {
 //        mScanManager.switchOutputMode(0);
 //        soundpool = new SoundPool(1, AudioManager.STREAM_NOTIFICATION, 100); // MODE_RINGTONE
 //        soundid = soundpool.load("/etc/Scan_new.ogg", 1);
+        //启动扫描服务
+        Intent scanIntent = new Intent("com.android.scanservice.scan.on");
+        getActivity().sendBroadcast(scanIntent);
+        pdaScanStatic(getActivity(), false);//关闭声音
+        //关闭扫描服务
+//        Intent scanIntent = new Intent("com.android.scanservice.scan.off");
+//        sendBroadcast(scanIntent);
+
+        //注册监听广播
+//        IntentFilter scanDataIntentFilter = new IntentFilter();
+//        scanDataIntentFilter.addAction("com.android.scancontext");
+//        registerReceiver(mScanReceiver, scanDataIntentFilter);
     }
 
     private void setupView() {
@@ -157,6 +193,7 @@ public abstract class BarScanBaseFragment extends BaseFragment {
 //        edt_input.setText("");
         IntentFilter filter = new IntentFilter();
         filter.addAction(SCAN_ACTION);
+        filter.addAction(SCAN_ACTION_1);
         getActivity().registerReceiver(mScanReceiver, filter);
     }
 

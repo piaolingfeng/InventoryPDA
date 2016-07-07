@@ -61,6 +61,7 @@ public class TakingToolPrintNumFragment extends BarScanBaseFragment implements V
                 tv_bussiness.setText(takingOrder.getPerson().getCo());
             }
             edt_print_num.setOnEditorActionListener(this);
+            edt_print_num.requestFocus();
         } else {
             edt_print_num.setVisibility(View.GONE);
             tv_taking_container.setVisibility(View.VISIBLE);

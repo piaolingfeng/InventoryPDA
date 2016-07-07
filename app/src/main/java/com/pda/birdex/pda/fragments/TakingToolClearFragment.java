@@ -23,6 +23,7 @@ import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 import com.pda.birdex.pda.MyApplication;
 import com.pda.birdex.pda.R;
+import com.pda.birdex.pda.activity.BaseActivity;
 import com.pda.birdex.pda.activity.PhotoShowActivity;
 import com.pda.birdex.pda.adapter.PhotoGVAdapter;
 import com.pda.birdex.pda.api.BirdApi;
@@ -31,6 +32,7 @@ import com.pda.birdex.pda.entity.TakingOrder;
 import com.pda.birdex.pda.interfaces.RequestCallBackInterface;
 import com.pda.birdex.pda.response.TakingOrderNoInfoEntity;
 import com.pda.birdex.pda.utils.GsonHelper;
+import com.pda.birdex.pda.utils.HideSoftKeyboardUtil;
 import com.pda.birdex.pda.utils.T;
 import com.pda.birdex.pda.widget.ClearEditText;
 
@@ -251,6 +253,8 @@ public class TakingToolClearFragment extends BarScanBaseFragment implements View
             }
 //            tv_area.setText(containerInfo.getArea());
         }
+
+        edt_taking_num.requestFocus();
 
         gv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -624,7 +628,12 @@ public class TakingToolClearFragment extends BarScanBaseFragment implements View
 
     @Override
     public void ClearEditTextCallBack(String code) {
-//        if (this.isVisible()) {
+        if (this.isVisible()) {
+            HideSoftKeyboardUtil.hideSoftKeyboard((BaseActivity)getActivity());
+            if(edt_taking_num.hasFocus()){
+                edt_box_size.requestFocus();
+            }
+        }
 //            if ("1".equals(from)) {
 //                // 说明是从揽收进入的 需要通过容器号 调用接口  获取区域信息
 //                getAreaMes(code);

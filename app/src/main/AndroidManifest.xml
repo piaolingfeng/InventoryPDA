@@ -120,7 +120,7 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".activity.CountToolActivity"
-            android:windowSoftInputMode="adjustResize|stateHidden"
+            android:windowSoftInputMode="adjustPan|stateHidden"
             android:screenOrientation="portrait" />
         <activity
             android:name=".activity.CountToolMapActivity"

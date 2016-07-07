@@ -5,6 +5,7 @@ import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.pda.birdex.pda.MyApplication;
@@ -50,13 +51,17 @@ public class CountToolBindOrderFragment extends BarScanBaseFragment implements V
 
     @Bind(R.id.tv_count_num)
     TextView tv_count_num;
+
+    @Bind(R.id.btn_commit)
+    Button btn_commit;
     CountingOrderNoInfoEntity countingOrderNoInfoEntity;//清点任务详情
     ContainerInfo containerInfo;//位置2进来时传进来的item
     // 容器 list
     private List<String> containerList = new ArrayList<>();
 
     private String owner;
-    private String orderId="";
+    private String orderId = "";
+
     @Override
     public int getbarContentLayoutResId() {
         return R.layout.fragment_count_tool_bindorder_layout;
@@ -65,7 +70,7 @@ public class CountToolBindOrderFragment extends BarScanBaseFragment implements V
     @Override
     public void barInitializeContentViews() {
 
-        if(bundle!=null && bundle.getString("location_position")!=null){//清点首页进来的绑定清点单
+        if (bundle != null && bundle.getString("location_position") != null) {//清点首页进来的绑定清点单
             edt_count_num.setVisibility(View.VISIBLE);
             tv_count_num.setVisibility(View.GONE);
             edt_count_num.setOnFocusChangeListener(new View.OnFocusChangeListener() {
@@ -77,7 +82,8 @@ public class CountToolBindOrderFragment extends BarScanBaseFragment implements V
                     }
                 }
             });
-        }else{//清点任务进来的绑单
+            edt_count_num.requestFocus();
+        } else {//清点任务进来的绑单
             countingOrderNoInfoEntity = (CountingOrderNoInfoEntity) getActivity().getIntent().getExtras().get("countingOrderNoInfoEntity");
             containerInfo = (ContainerInfo) getActivity().getIntent().getExtras().get("containerInfo");
             if (countingOrderNoInfoEntity != null) {
@@ -85,6 +91,7 @@ public class CountToolBindOrderFragment extends BarScanBaseFragment implements V
                 tv_count_num.setText(orderId);
                 owner = countingOrderNoInfoEntity.getDetail().getBaseInfo().getPerson().getCo();
             }
+            edt_count_container.requestFocus();//获取焦点
         }
 
         edt_count_container.setOnFocusChangeListener(new View.OnFocusChangeListener() {
@@ -117,7 +124,7 @@ public class CountToolBindOrderFragment extends BarScanBaseFragment implements V
         edt_count_container.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                if (actionId == EditorInfo.IME_ACTION_DONE) {
+                if (actionId == EditorInfo.IME_ACTION_DONE || actionId == EditorInfo.IME_ACTION_UNSPECIFIED) {
                     if (!TextUtils.isEmpty(edt_count_container.getText())) {
                         String input = edt_count_container.getText() + "";
                         inputEntry(input);
@@ -138,7 +145,7 @@ public class CountToolBindOrderFragment extends BarScanBaseFragment implements V
 
     private void inputEntry(String input) {
         HideSoftKeyboardUtil.hideSoftKeyboard((BaseActivity) getActivity());//隐藏软键盘
-        if(!TextUtils.isEmpty(input)) {
+        if (!TextUtils.isEmpty(input)) {
             if (!containerList.contains(input.trim())) {
                 containerList.add(input);
                 adapter.notifyDataSetChanged();
@@ -156,6 +163,9 @@ public class CountToolBindOrderFragment extends BarScanBaseFragment implements V
 
     @Override
     public ClearEditText getClearEditText() {
+        if(bundle != null && bundle.getString("location_position") != null){
+            return edt_count_num;
+        }
         return edt_count_container;
     }
 
@@ -163,7 +173,14 @@ public class CountToolBindOrderFragment extends BarScanBaseFragment implements V
     public void ClearEditTextCallBack(String code) {
         if (this.isVisible()) {
             HideSoftKeyboardUtil.hideSoftKeyboard((BaseActivity) getActivity());
-            inputEntry(code);
+            if (edt_count_container.hasFocus()) {
+                inputEntry(code);
+                btn_commit.requestFocus();
+            }
+            if(edt_count_num.hasFocus()){
+                edt_count_container.requestFocus();
+                return ;
+            }
         }
     }
 
@@ -183,7 +200,7 @@ public class CountToolBindOrderFragment extends BarScanBaseFragment implements V
         }
     }
 
-    private void commit(){
+    private void commit() {
         if (containerList.size() > 0) {
 
             JSONObject jsonObject = new JSONObject();
@@ -200,13 +217,13 @@ public class CountToolBindOrderFragment extends BarScanBaseFragment implements V
                     @Override
                     public void successCallBack(JSONObject object) {
                         //绑定清点单日志上报
-                        String tid ="";
+                        String tid = "";
                         try {
                             tid = object.getString("tid");
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
-                        MyApplication.loggingUpload.countBindOrder(getActivity(),tag,orderId,tid,containerList);
+                        MyApplication.loggingUpload.countBindOrder(getActivity(), tag, orderId, tid, containerList);
                         T.showShort(getContext(), getString(R.string.taking_submit_suc));
                     }
 

@@ -31,14 +31,14 @@
 
                 <com.zhy.android.percent.support.PercentRelativeLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    app:layout_paddingTopPercent="@string/item_padding_3w">
 
                     <TextView
                         android:id="@+id/tv_taking_num"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textColor="@color/context_1"
-                        app:layout_paddingBottomPercent="@string/item_padding_3w"
+                        android:textColor="@color/context_2"
                         app:layout_textSizePercent="@string/size_6w" />
 
 

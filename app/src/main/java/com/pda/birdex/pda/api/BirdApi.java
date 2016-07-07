@@ -34,9 +34,10 @@ import java.net.URLEncoder;
  * 请求接口
  */
 public class BirdApi {
-    public static String SERVER_ADDRESS = "192.168.1.224";
     public static String PORT = "3000";//8002
-    public static String BASE_URL = "http://" + SERVER_ADDRESS + ":" + PORT;//
+//    public static String SERVER_ADDRESS = "192.168.1.224"+ ":" + PORT;
+//    public static String SERVER_ADDRESS;//+ ":" + PORT;
+    public static String BASE_URL = "http://" ;//+ SERVER_ADDRESS ;//
     public static String Logging_BASE_URL = "http://192.168.1.222:3020/api/v1/oplog";
     private static Dialog loadingDialog;
 
@@ -226,6 +227,7 @@ public class BirdApi {
     public static void jsonTakingBindorderBatSubmit(Context context, JSONObject jsonObject, RequestCallBackInterface callBackInterface, String tag, boolean showDialog) {
         jsonPostRequest(context, jsonObject, callBackInterface, "code/bindOrderBat", tag, showDialog);
     }
+
     //拍照上传地址
     public static final String UPLOADIP = "http://192.168.1.225:4869/";
 
@@ -242,18 +244,20 @@ public class BirdApi {
     }
 
     // 上传日志post
-    public static AsyncHttpClient asyncHttpClient=null;
+    public static AsyncHttpClient asyncHttpClient = null;
+
     private static void uploadLogging(Context context, String url, HttpEntity entity, ResponseHandlerInterface responseHandlerInterface) {
         if (asyncHttpClient == null) {
             asyncHttpClient = new AsyncHttpClient();//获取网络连接超时
             asyncHttpClient.setTimeout(8 * 1000);//设置30秒超时
             asyncHttpClient.setConnectTimeout(4 * 1000);//设置30秒超时
             asyncHttpClient.setMaxConnections(5);
-            asyncHttpClient.addHeader("X-Access-Token", "dsssss");
+            asyncHttpClient.addHeader("X-Access-Token", PreferenceUtils.getPrefString(context, "token", ""));
             asyncHttpClient.addHeader("X-User-Id", PreferenceUtils.getPrefString(context, "userId", ""));
         }
         asyncHttpClient.post(context, url, entity, "application/json", responseHandlerInterface);
     }
+
     //    // 提交上传图片
 //    public static void uploadPicSubmit(Context context, RequestParams params, RequestCallBackInterface callBackInterface, String tag, boolean showDialog) {
 //        postRequest(context, params, callBackInterface, "photo", tag, showDialog);
@@ -264,12 +268,9 @@ public class BirdApi {
     }
 
 
-
-
-
-
     /**
-     *  清点
+     * 清点
+     *
      * @param context
      * @param jsonObject
      * @param callBackInterface
@@ -310,6 +311,7 @@ public class BirdApi {
     public static void jsonCountTrack(Context context, JSONObject jsonObject, RequestCallBackInterface callBackInterface, String tag, boolean showDialog) {
         jsonPostRequest(context, jsonObject, callBackInterface, "counting/track", tag, showDialog);
     }
+
     /**
      * mContext 上下文对象
      * params请求参数
@@ -352,12 +354,12 @@ public class BirdApi {
                 if (MyApplication.ahc != null) {
                     MyApplication.ahc.addHeader("x-access-token", PreferenceUtils.getPrefString(mContext, "token", ""));
                 }
-                switch (statusCode){
+                switch (statusCode) {
                     case 401:
-                        T.showShort(mContext,mContext.getString(R.string.request401));
+                        T.showShort(mContext, mContext.getString(R.string.request401));
                         break;
                     case 404:
-                        T.showShort(mContext,mContext.getString(R.string.request404));
+                        T.showShort(mContext, mContext.getString(R.string.request404));
                         break;
                 }
             }
@@ -375,7 +377,7 @@ public class BirdApi {
     }
 
     public static void jsonPostLoggingRequest(final Context mContext, JSONObject jsonObject, final RequestCallBackInterface callBackInterface,
-                                        String tag, final boolean showDialog) {
+                                              String tag, final boolean showDialog) {
         if (showDialog)
             showLoading(mContext);
         JsonHttpResponseHandler jsonHttpResponseHandler = new JsonHttpResponseHandler() {
@@ -405,12 +407,12 @@ public class BirdApi {
             @Override
             public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
                 super.onFailure(statusCode, headers, throwable, errorResponse);
-                switch (statusCode){
+                switch (statusCode) {
                     case 401:
-                        T.showShort(mContext,mContext.getString(R.string.request401));
+                        T.showShort(mContext, mContext.getString(R.string.log_report_error) + mContext.getString(R.string.request401));
                         break;
                     case 404:
-                        T.showShort(mContext,mContext.getString(R.string.request404));
+                        T.showShort(mContext, mContext.getString(R.string.log_report_error) + mContext.getString(R.string.request404));
                         break;
                 }
 //                callBackInterface.errorCallBack(errorResponse);
@@ -434,7 +436,6 @@ public class BirdApi {
 
 //        post(mContext, url, params, jsonHttpResponseHandler);
     }
-
 
 
     public static void jsonPostRequest(final Context mContext, JSONObject jsonObject, final RequestCallBackInterface callBackInterface,
@@ -475,12 +476,12 @@ public class BirdApi {
             public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
                 super.onFailure(statusCode, headers, throwable, errorResponse);
                 callBackInterface.errorCallBack(errorResponse);
-                switch (statusCode){
+                switch (statusCode) {
                     case 401:
-                        T.showShort(mContext,mContext.getString(R.string.request401));
+                        T.showShort(mContext, mContext.getString(R.string.request401));
                         break;
                     case 404:
-                        T.showShort(mContext,mContext.getString(R.string.request404));
+                        T.showShort(mContext, mContext.getString(R.string.request404));
                         break;
                 }
             }
@@ -529,6 +530,7 @@ public class BirdApi {
     public static void getCountingOrderNoInfo(Context context, String orderNo, RequestCallBackInterface callBackInterface, String tag, boolean showDialog) {
         getRequest(context, callBackInterface, "counting/info/" + orderNo, tag, showDialog);
     }
+
     //清点合并结果
     public static void postCountingOrderNum(Context context, JSONObject jsonObject, RequestCallBackInterface callBackInterface, String tag, boolean showDialog) {
         jsonPostRequest(context, jsonObject, callBackInterface, "counting/merge", tag, showDialog);
@@ -592,12 +594,12 @@ public class BirdApi {
                 if (MyApplication.ahc != null) {
                     MyApplication.ahc.addHeader("x-access-token", PreferenceUtils.getPrefString(mContext, "token", ""));
                 }
-                switch (statusCode){
+                switch (statusCode) {
                     case 401:
-                        T.showShort(mContext,mContext.getString(R.string.request401));
+                        T.showShort(mContext, mContext.getString(R.string.request401));
                         break;
                     case 404:
-                        T.showShort(mContext,mContext.getString(R.string.request404));
+                        T.showShort(mContext, mContext.getString(R.string.request404));
                         break;
                 }
             }

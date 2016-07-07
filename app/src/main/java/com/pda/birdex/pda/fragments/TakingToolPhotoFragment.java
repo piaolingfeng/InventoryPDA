@@ -281,7 +281,7 @@ public class TakingToolPhotoFragment extends BarScanBaseFragment implements View
             tv_taking_num.setText(orderNoInfoEntity.getDetail().getBaseInfo().getBaseInfo().getTakingOrderNo());
 //            tv_area.setText(containerInfo.getArea());
         }
-
+        edt_taking_num.requestFocus();
         gv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {

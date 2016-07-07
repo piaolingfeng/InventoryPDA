@@ -9,6 +9,7 @@ import android.widget.TextView;
 
 import com.pda.birdex.pda.MyApplication;
 import com.pda.birdex.pda.R;
+import com.pda.birdex.pda.activity.BaseActivity;
 import com.pda.birdex.pda.adapter.BindNumAdapter;
 import com.pda.birdex.pda.api.BirdApi;
 import com.pda.birdex.pda.entity.BindOrder;
@@ -18,6 +19,7 @@ import com.pda.birdex.pda.interfaces.OnRecycleViewItemClickListener;
 import com.pda.birdex.pda.interfaces.RequestCallBackInterface;
 import com.pda.birdex.pda.response.TakingOrderNoInfoEntity;
 import com.pda.birdex.pda.utils.GsonHelper;
+import com.pda.birdex.pda.utils.HideSoftKeyboardUtil;
 import com.pda.birdex.pda.utils.StringUtils;
 import com.pda.birdex.pda.utils.T;
 import com.pda.birdex.pda.widget.ClearEditText;
@@ -76,6 +78,7 @@ public class TakingToolBindOrderFragment extends BarScanBaseFragment implements 
                 tv_taking_num.setText(takingOrder.getBaseInfo().getTakingOrderNo());
                 owner = takingOrder.getPerson().getCo();
             }
+            edt_taking_container.requestFocus();
         } else {//打印数量
             if ("2".equals(from)) {
                 containerInfo = (ContainerInfo) getActivity().getIntent().getExtras().get("containerInfo");
@@ -84,8 +87,10 @@ public class TakingToolBindOrderFragment extends BarScanBaseFragment implements 
                     tv_taking_num.setText(orderNoInfoEntity.getDetail().getBaseInfo().getBaseInfo().getTakingOrderNo());
                     owner = orderNoInfoEntity.getDetail().getBaseInfo().getPerson().getCo();
                 }
+                edt_taking_container.requestFocus();
             } else {
                 edt_taking_num.setVisibility(View.VISIBLE);
+                edt_taking_num.requestFocus();
                 tv_taking_num.setVisibility(View.GONE);
             }
         }
@@ -149,13 +154,23 @@ public class TakingToolBindOrderFragment extends BarScanBaseFragment implements 
 
     @Override
     public ClearEditText getClearEditText() {
-        return edt_taking_container;
+        if("1".equals(from)||"2".equals(from))
+            return edt_taking_container;
+        else
+            return edt_taking_num;
     }
 
     @Override
     public void ClearEditTextCallBack(String code) {
         if (this.isVisible()) {
-            inputEntry(code);
+            HideSoftKeyboardUtil.hideSoftKeyboard((BaseActivity)getActivity());
+            if (edt_taking_container.hasFocus()||getEdt_input() == edt_taking_container) {
+                inputEntry(code);
+                edt_taking_container.requestFocus();
+            }
+            if(edt_taking_num.hasFocus()){
+                edt_taking_container.requestFocus();
+            }
         }
     }
 
@@ -203,9 +218,9 @@ public class TakingToolBindOrderFragment extends BarScanBaseFragment implements 
                     }
                     jsonObject = new JSONObject();
                     String orderId = edt_taking_num.getText().toString();//揽收单号
-                    jsonObject.put("orderNO",orderId);
+                    jsonObject.put("orderNO", orderId);
                     jsonArray = new JSONArray(containerList);
-                    jsonObject.put("containers",jsonArray);
+                    jsonObject.put("containers", jsonArray);
                 }
                 if ("1".equals(from) || "2".equals(from))
                     BirdApi.jsonTakingBindorderSubmit(getContext(), jsonObject, callBackInterface, tag, true);

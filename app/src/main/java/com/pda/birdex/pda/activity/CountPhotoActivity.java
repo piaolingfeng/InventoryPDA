@@ -343,6 +343,7 @@ public class CountPhotoActivity extends BarScanActivity implements View.OnClickL
                 }
             }
         });
+        vessel_et.requestFocus();
         upc_et.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
@@ -401,7 +402,9 @@ public class CountPhotoActivity extends BarScanActivity implements View.OnClickL
 
     @Override
     public void ClearEditTextCallBack(String code) {
-
+        if(vessel_et.hasFocus()){
+            upc_et.requestFocus();
+        }
     }
 
     /**

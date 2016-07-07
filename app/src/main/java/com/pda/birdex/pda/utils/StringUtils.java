@@ -303,6 +303,14 @@ public class StringUtils {
         return URL.matcher(str).matches();
     }
 
+    // 判断输入的IP是否合法
+    public static boolean checkIP(String str) {
+        Pattern pattern = Pattern
+                .compile("^((\\d|[1-9]\\d|1\\d\\d|2[0-4]\\d|25[0-5]"
+                        + "|[*])\\.){3}(\\d|[1-9]\\d|1\\d\\d|2[0-4]\\d|25[0-5]|[*])$");
+        return pattern.matcher(str).matches();
+    }
+
     /**
      * 字符串转整数
      *

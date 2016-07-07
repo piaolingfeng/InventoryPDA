@@ -17,6 +17,7 @@ import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.loopj.android.http.JsonHttpResponseHandler;
@@ -73,6 +74,8 @@ public class CountToolClearFragment extends BarScanBaseFragment implements View.
     @Bind(R.id.gv)
     com.pda.birdex.pda.widget.MyGridView gv;
 
+    @Bind(R.id.btn_commit)
+    Button btn_commit;
     // 揽收单号
     @Bind(R.id.tv_count_num)
     TextView tv_count_num;
@@ -250,6 +253,7 @@ public class CountToolClearFragment extends BarScanBaseFragment implements View.
                 }
             }
         });
+        edt_count_num.requestFocus();//获取焦点
         edt_upc.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
@@ -642,6 +646,14 @@ public class CountToolClearFragment extends BarScanBaseFragment implements View.
     public void ClearEditTextCallBack(String code) {
         if (this.isVisible()) {
             HideSoftKeyboardUtil.hideSoftKeyboard((BaseActivity)getActivity());
+            if(edt_count_num.hasFocus()){
+                edt_upc.requestFocus();//切换焦点
+                return;
+            }
+            if(edt_upc.hasFocus()){
+                edt_count_length.requestFocus();
+                setEdt_input(null);
+            }
         }
 //            if ("1".equals(from)) {
 //                // 说明是从揽收进入的 需要通过容器号 调用接口  获取区域信息

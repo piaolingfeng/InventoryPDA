@@ -1,62 +1,47 @@
 package com.pda.birdex.pda.activity;
 
-import android.view.View;
+import android.net.Uri;
+import android.os.Bundle;
 
 import com.pda.birdex.pda.R;
-import com.pda.birdex.pda.widget.ClearEditText;
+import com.pda.birdex.pda.fragments.BaseFragment;
+import com.pda.birdex.pda.fragments.CountToolTrackFragment;
+import com.pda.birdex.pda.interfaces.BackHandledInterface;
+import com.pda.birdex.pda.widget.TitleView;
 
 import butterknife.Bind;
 
 /**
  * Created by hyj on 2016/6/22.
  */
-public class CountTrackActivity extends BarScanActivity {
-
-    @Bind(R.id.now_et)
-    com.pda.birdex.pda.widget.ClearEditText now_et;
-
-    @Bind(R.id.old_et)
-    com.pda.birdex.pda.widget.ClearEditText old_et;
-
-    @Bind(R.id.titleView)
-    com.pda.birdex.pda.widget.TitleView titleView;
-
+public class CountTrackActivity extends BaseActivity implements  BaseFragment.OnFragmentInteractionListener, BackHandledInterface {
+    @Bind(R.id.title)
+    TitleView title;
+    private CountToolTrackFragment trackFragment;
     @Override
-    public int getbarContentLayoutResId() {
-        return R.layout.activity_count_track;
+    public int getContentLayoutResId() {
+        return R.layout.activity_taking_bindorder_layout;
     }
 
     @Override
-    public void barInitializeContentViews() {
-        titleView.setTitle(getString(R.string.count_track_no));
-
-        now_et.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-                now_et.overrideOnFocusChange(hasFocus);
-                if (hasFocus) {
-                    setEdt_input(now_et);
-                }
-            }
-        });
-        old_et.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-                old_et.overrideOnFocusChange(hasFocus);
-                if(hasFocus){
-                    setEdt_input(old_et);
-                }
-            }
-        });
+    public void initializeContentViews() {
+        title.setTitle(getString(R.string.count_track_no));
+        if (trackFragment == null){
+            trackFragment = new CountToolTrackFragment();
+        }
+        Bundle b = getIntent().getExtras();
+        b .putString("location_position","SecondIndex");
+        trackFragment.setUIArguments(b);
+        getSupportFragmentManager().beginTransaction().replace(R.id.framelayout,trackFragment).commit();
     }
 
     @Override
-    public ClearEditText getClearEditText() {
-        return now_et;
+    public void setSelectedFragment(BaseFragment selectedFragment) {
+
     }
 
     @Override
-    public void ClearEditTextCallBack(String code) {
+    public void onFragmentInteraction(Uri uri) {
 
     }
 }

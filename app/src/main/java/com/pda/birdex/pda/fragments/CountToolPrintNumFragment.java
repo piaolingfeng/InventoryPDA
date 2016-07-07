@@ -50,6 +50,7 @@ public class CountToolPrintNumFragment extends BarScanBaseFragment implements Vi
             tid = countingOrderNoInfoEntity.getDetail().getBaseInfo().getBaseInfo().getTid();
             tv_count_num.setText(orderId);
         }
+        edt_taking_num.requestFocus();
         containerInfo = (ContainerInfo) getActivity().getIntent().getExtras().get("containerInfo");
     }
 

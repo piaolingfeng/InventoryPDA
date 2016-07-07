@@ -20,6 +20,7 @@ import com.pda.birdex.pda.R;
 import com.pda.birdex.pda.api.BirdApi;
 import com.pda.birdex.pda.interfaces.RequestCallBackInterface;
 import com.pda.birdex.pda.utils.PreferenceUtils;
+import com.pda.birdex.pda.utils.StringUtils;
 import com.pda.birdex.pda.utils.T;
 
 import org.json.JSONException;
@@ -42,6 +43,10 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
     // 密码
     @Bind(R.id.password_edit)
     EditText password;
+
+    //服务器
+    @Bind(R.id.service_edt)
+    EditText service_edt;
 
     // 记住密码
     @Bind(R.id.remember_cb)
@@ -108,7 +113,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
         if (!TextUtils.isEmpty(oldToken)) {
             // 将 token 添加进去
             MyApplication.ahc.addHeader("x-access-token", oldToken);
-
+            BirdApi.BASE_URL = "http://"+ PreferenceUtils.getPrefString(this, "service", "");
             Intent intent = new Intent(MyApplication.getInstans(), MainActivity.class);
 
             startActivity(intent);
@@ -118,6 +123,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
 
         // 确认是否勾选了 记住密码
         boolean ischecked = PreferenceUtils.getPrefBoolean(this, "remember", false);
+        service_edt.setText(PreferenceUtils.getPrefString(this,"service",""));
         if (ischecked) {
             // 选中了 记住密码
             String usernamestr = PreferenceUtils.getPrefString(this, "username", "");
@@ -164,15 +170,16 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
     // 执行登录操作
     private void login() {
 //        showLoading();
-        spEdit();
+//        spEdit();
         RequestParams params = new RequestParams();
         params.put("account", username.getText().toString());
         params.put("password", password.getText().toString());
-
+        BirdApi.BASE_URL = "http://"+service_edt.getText().toString();
         BirdApi.login(this, username.getText().toString() + "/" + password.getText().toString(), new RequestCallBackInterface() {
 
             @Override
             public void successCallBack(JSONObject object) {
+                spEdit();
                 try {
                     String token = object.getString("token");
                     String userId = object.getString("useId");
@@ -202,6 +209,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
 
 
     private void spEdit() {
+        PreferenceUtils.setPrefString(this,"service",service_edt.getText().toString());
         if (remember.isChecked()) {
             // 选中了， 执行保存操作
             PreferenceUtils.setPrefString(this, "username", username.getText().toString());
@@ -231,7 +239,12 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                 if (TextUtils.isEmpty(username.getText()) || TextUtils.isEmpty(password.getText())) {
                     T.showShort(MyApplication.getInstans(), getString(R.string.notempty));
                 } else {
-                    login();
+                    String serviceaddr = service_edt.getText().toString();
+                    int end = serviceaddr.lastIndexOf(":");
+                    if(StringUtils.checkIP(serviceaddr.substring(0,end)))
+                        login();
+                    else
+                        T.showShort(this, getString(R.string.service_addr_error));
                 }
                 break;
         }
