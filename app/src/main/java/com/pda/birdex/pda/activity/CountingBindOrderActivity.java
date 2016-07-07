@@ -30,7 +30,7 @@ public class CountingBindOrderActivity extends BaseActivity implements  BaseFrag
 
     @Override
     public void initializeContentViews() {
-        title.setTitle(getString(R.string.bind_order));
+        title.setTitle(getString(R.string.count_bind));
         if (bindOrderFragment == null){
             bindOrderFragment = new CountToolBindOrderFragment();
         }

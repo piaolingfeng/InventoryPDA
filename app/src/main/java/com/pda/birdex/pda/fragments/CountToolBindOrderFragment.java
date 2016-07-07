@@ -57,6 +57,10 @@ public class CountToolBindOrderFragment extends BarScanBaseFragment implements V
 
     private String owner;
     private String orderId="";
+
+    // 标记位， 1：从首页进来的  2：从清点任务进来的
+    private int index;
+
     @Override
     public int getbarContentLayoutResId() {
         return R.layout.fragment_count_tool_bindorder_layout;
@@ -66,6 +70,7 @@ public class CountToolBindOrderFragment extends BarScanBaseFragment implements V
     public void barInitializeContentViews() {
 
         if(bundle!=null && bundle.getString("location_position")!=null){//清点首页进来的绑定清点单
+            index = 1;
             edt_count_num.setVisibility(View.VISIBLE);
             tv_count_num.setVisibility(View.GONE);
             edt_count_num.setOnFocusChangeListener(new View.OnFocusChangeListener() {
@@ -78,6 +83,7 @@ public class CountToolBindOrderFragment extends BarScanBaseFragment implements V
                 }
             });
         }else{//清点任务进来的绑单
+            index = 2;
             countingOrderNoInfoEntity = (CountingOrderNoInfoEntity) getActivity().getIntent().getExtras().get("countingOrderNoInfoEntity");
             containerInfo = (ContainerInfo) getActivity().getIntent().getExtras().get("containerInfo");
             if (countingOrderNoInfoEntity != null) {
@@ -192,7 +198,13 @@ public class CountToolBindOrderFragment extends BarScanBaseFragment implements V
 //                        jsonObject.put("containerConfig",str);
 
                 JSONArray object = new JSONArray(str);
-                jsonObject.put("orderNO", tv_count_num.getText() + "");
+                if(index == 1){
+                    //从首页进来的
+                    jsonObject.put("orderNO", edt_count_num.getText() + "");
+                } else {
+                    // 从清点任务进来的
+                    jsonObject.put("orderNO", tv_count_num.getText() + "");
+                }
                 jsonObject.put("containers", object);
 
                 BirdApi.jsonCountBindorderSubmit(getContext(), jsonObject, new RequestCallBackInterface() {
