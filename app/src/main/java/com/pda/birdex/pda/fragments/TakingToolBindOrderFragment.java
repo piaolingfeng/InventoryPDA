@@ -191,7 +191,7 @@ public class TakingToolBindOrderFragment extends BarScanBaseFragment implements 
             List<BindOrder> containerConfig = new ArrayList<>();
             for (String code : containerList) {
                 BindOrder bo = new BindOrder();
-                bo.setCode(code);
+                bo.setContainerNo(code);
                 bo.setOwner(owner);
                 containerConfig.add(bo);
             }
