@@ -83,8 +83,8 @@
             <com.zhy.android.percent.support.PercentLinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:visibility="gone">
+                android:visibility="gone"
+                android:orientation="vertical">
 
                 <com.zhy.android.percent.support.PercentRelativeLayout
                     android:layout_width="match_parent"
