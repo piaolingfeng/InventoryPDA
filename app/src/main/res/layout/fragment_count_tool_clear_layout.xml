@@ -175,16 +175,12 @@
                     android:inputType="number"
                     android:textColor="@color/context_2" />
 
-                <com.pda.birdex.pda.widget.MyGridView
-                    android:id="@+id/gv"
+
+                <FrameLayout
+                    android:id="@+id/framelayout_1"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginRight="10dp"
-                    android:layout_marginTop="20dp"
-                    android:horizontalSpacing="20dp"
-                    android:listSelector="#00000000"
-                    android:numColumns="4" />
+                    android:layout_height="wrap_content"></FrameLayout>
+
             </com.zhy.android.percent.support.PercentLinearLayout>
         </com.zhy.android.percent.support.PercentLinearLayout>
 
