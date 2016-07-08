@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.KeyEvent;
+import android.view.View;
 
 import com.pda.birdex.pda.R;
 import com.pda.birdex.pda.adapter.IndexAdapter;
@@ -57,6 +58,9 @@ public class SecondIndexActivity extends BarScanActivity implements OnRecycleVie
             }
         }
         title.setTitle(titleStr);
+        if (titleStr.equals(getString(R.string.storge))) {//入库
+            edt_search.setVisibility(View.VISIBLE);
+        }
         for (int i = 0; i < lists.length; i++) {
             CommonItemEntity entity = new CommonItemEntity();
             entity.setName(lists[i]);
@@ -151,7 +155,11 @@ public class SecondIndexActivity extends BarScanActivity implements OnRecycleVie
 
     @Override
     public void ClearEditTextCallBack(String code) {
-
+        if (getString(R.string.storge).equals(titleStr)) {//入库
+            Intent intent = new Intent(this, CheckActivity.class);
+            intent.putExtra("checkType", getString(R.string.storge));
+            startActivity(intent);
+        }
     }
 
     @Override
@@ -186,7 +194,7 @@ public class SecondIndexActivity extends BarScanActivity implements OnRecycleVie
                         intent.setClass(SecondIndexActivity.this, PrintOrderActivity.class);
                         break;
                     case 4:
-                        intent.setClass(SecondIndexActivity.this, TakingBindOrderActivity.class);
+                        intent.setClass(SecondIndexActivity.this, TakingFragmentActivity.class);
                         break;
                 }
             }
@@ -206,7 +214,7 @@ public class SecondIndexActivity extends BarScanActivity implements OnRecycleVie
                         break;
                     case 2:
                         // 绑定清点单
-                        intent.setClass(SecondIndexActivity.this, CountingBindOrderActivity.class);
+                        intent.setClass(SecondIndexActivity.this, CountFragmentActivity.class);
                         break;
                     case 3:
                         intent.setClass(SecondIndexActivity.this, CountTrackActivity.class);
@@ -215,6 +223,21 @@ public class SecondIndexActivity extends BarScanActivity implements OnRecycleVie
                         intent.setClass(SecondIndexActivity.this, CountPhotoActivity.class);
                         break;
                 }
+            }
+            //入库
+            if (getString(R.string.storge).equals(titleStr)) {
+                Bundle b = new Bundle();
+                switch (position) {
+                    case 1:
+                        b.putString("title", getString(R.string.storage_print_no));
+                        b.putString("inputname", getString(R.string.count_vessel_no));
+                        intent.setClass(SecondIndexActivity.this, PrintOrderActivity.class);
+                        break;
+                    default:
+                        intent.setClass(SecondIndexActivity.this, StorageFragmentActivity.class);
+                }
+                b.putInt("position", position);
+                intent.putExtras(b);
             }
             startActivity(intent);
         }

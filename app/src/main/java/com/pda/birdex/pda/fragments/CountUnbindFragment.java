@@ -14,7 +14,7 @@ import butterknife.OnClick;
 /**
  * Created by chuming.zhuang on 2016/6/24.
  */
-public class CountToolUnbindFragment extends BarScanBaseFragment implements View.OnClickListener{
+public class CountUnbindFragment extends BarScanBaseFragment implements View.OnClickListener{
     @Bind(R.id.tv_count_num)
     TextView tv_count_num;
     @Bind(R.id.tv_area)

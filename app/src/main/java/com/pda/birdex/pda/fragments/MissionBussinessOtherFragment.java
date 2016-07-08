@@ -24,7 +24,7 @@ import butterknife.Bind;
 /**
  * Created by chuming.zhuang on 2016/6/23.
  */
-public class CountMissionBussinessOtherFragment extends BaseFragment {
+public class MissionBussinessOtherFragment extends BaseFragment {
     @Bind(R.id.xrcy)
     XRecyclerView xrcy;
     MerchantOtherAdapter adapter;

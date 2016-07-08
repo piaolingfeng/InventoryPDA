@@ -43,6 +43,7 @@ public class MainActivity extends BaseActivity implements OnRecycleViewItemClick
     String[] lists;
     String[] takinglists;//收货
     String[] countToLists;//清点
+    String[] storageLists;//入库
     private long exitTime = 0;//退出事件累计
     List<CommonItemEntity> indexList = new ArrayList<>();
 
@@ -56,6 +57,7 @@ public class MainActivity extends BaseActivity implements OnRecycleViewItemClick
         lists = getResources().getStringArray(R.array.index_list);
         takinglists = getResources().getStringArray(R.array.taking_list);
         countToLists = getResources().getStringArray(R.array.count_list);
+        storageLists = getResources().getStringArray(R.array.storage_list);
         title.setBackIvVisble(false);
         title.setTitle(getString(R.string.index));
         for (int i = 0; i < lists.length; i++) {
@@ -132,9 +134,10 @@ public class MainActivity extends BaseActivity implements OnRecycleViewItemClick
                     b.putStringArray("list", countToLists);
                     break;
                 case 2:
-                    intent.setClass(MainActivity.this, SettingBarScanActivity.class);
+                    b.putStringArray("list", storageLists);
                     break;
                 case 3:
+                    intent.setClass(MainActivity.this, SettingBarScanActivity.class);
                     break;
                 case 4:
                     break;

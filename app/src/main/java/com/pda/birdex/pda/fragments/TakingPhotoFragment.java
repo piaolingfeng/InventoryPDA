@@ -25,14 +25,14 @@ import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 import com.pda.birdex.pda.MyApplication;
 import com.pda.birdex.pda.R;
-import com.pda.birdex.pda.activity.BaseActivity;
 import com.pda.birdex.pda.activity.PhotoShowActivity;
 import com.pda.birdex.pda.adapter.PhotoGVAdapter;
 import com.pda.birdex.pda.api.BirdApi;
+import com.pda.birdex.pda.entity.ContainerInfo;
+import com.pda.birdex.pda.entity.TakingOrder;
 import com.pda.birdex.pda.interfaces.RequestCallBackInterface;
-import com.pda.birdex.pda.response.CountingOrderNoInfoEntity;
+import com.pda.birdex.pda.response.TakingOrderNoInfoEntity;
 import com.pda.birdex.pda.utils.GsonHelper;
-import com.pda.birdex.pda.utils.HideSoftKeyboardUtil;
 import com.pda.birdex.pda.utils.T;
 import com.pda.birdex.pda.widget.ClearEditText;
 
@@ -55,44 +55,50 @@ import butterknife.Bind;
 import butterknife.OnClick;
 
 /**
- * Created by chuming.zhuang on 2016/6/24.
+ * Created by chuming.zhuang on 2016/6/25.
  */
-public class CountToolPhotoFragment extends BarScanBaseFragment implements View.OnClickListener {
-    String tag = "CountToolPhotoFragment";
+public class TakingPhotoFragment extends BarScanBaseFragment implements View.OnClickListener {
+    String tag = "TakingPhotoFragment";
 
-    // 存放照片的 gridview
-    @Bind(R.id.gv)
-    GridView gv;
+    @Bind(R.id.edt_taking_num)
+    com.pda.birdex.pda.widget.ClearEditText edt_taking_num;
 
     // 标记异常
     @Bind(R.id.exception_cb)
     CheckBox exception_cb;
 
-    @Bind(R.id.edt_count_num)
-    com.pda.birdex.pda.widget.ClearEditText edt_count_num;
+    // 揽收单号
+    @Bind(R.id.tv_taking_num)
+    TextView tv_taking_num;
 
-    @Bind(R.id.tv_count_num)
-    TextView tv_count_num;
+    // 存放照片的 gridview
+    @Bind(R.id.gv)
+    GridView gv;
 
-    @Bind(R.id.edt_upc)
-    com.pda.birdex.pda.widget.ClearEditText edt_upc;
-    CountingOrderNoInfoEntity countingOrderNoInfoEntity;//清点任务详情
-    // 存储照片路径的 list
-    private ArrayList<String> pathList = new ArrayList<String>();
-
-    // 图片 path
-    private String filePath;
-
+//    @Bind(R.id.tv_area)
+//    TextView tv_area;
     private final static int PHOTO_GREQUEST_CODE = 2;
     private final static int COMPRESS_DOWN = 3;
     private final static int PHOTO_SHOW = 4;
 
+    // 存储照片的 list
+    private List<Bitmap> bitmapList = new ArrayList<>();
+
+    // 存储照片路径的 list
+    private ArrayList<String> pathList = new ArrayList<String>();
+
+    // 标记是从揽收、或者 揽收任务 跳转过来的
+    // 1:揽收 2:揽收任务
+    private String from;
+    private String tid;//供上传日志使用
+    // 图片 path
+    private String filePath;
 
     // 存放所有返回图片地址的 list
     private List<String> photoUrl = new ArrayList<>();
-
-    String orderId = "";
-    String tid = "";
+    TakingOrder takingOrder;//位置1进来传来的实体
+    TakingOrderNoInfoEntity orderNoInfoEntity;//位置2进来传来的实体
+    ContainerInfo containerInfo;//位置2进来时传进来的item
 
     // 记录上传图片成功返回的 url条数
     private int sucCounts = 0;
@@ -177,24 +183,20 @@ public class CountToolPhotoFragment extends BarScanBaseFragment implements View.
                                         try {
 
                                             // 调用提交上传图片接口
-                                            jsonObject.put("containerNo", edt_count_num.getText() + "");
+                                            jsonObject.put("containerNo", edt_taking_num.getText() + "");
                                             jsonObject.put("isException", exception_cb.isChecked());
-                                            jsonObject.put("upc", edt_upc.getText() + "");
                                             String urlsStr = GsonHelper.createJsonString(photoUrl);
                                             JSONArray array = new JSONArray(urlsStr);
                                             jsonObject.put("photoIds", array);
-
-
-                                            BirdApi.countingUploadPicSubmit(getContext(), jsonObject, new RequestCallBackInterface() {
+                                            //上传日志
+                                            String orderId = tv_taking_num.getText().toString();
+                                            MyApplication.loggingUpload.takeTakePhoto(getActivity(), tag, orderId, tid, sucCounts, exception_cb.isChecked());
+                                            BirdApi.uploadPicSubmit(getContext(), jsonObject, new RequestCallBackInterface() {
 
                                                 @Override
                                                 public void successCallBack(JSONObject object) {
                                                     try {
                                                         if ("success".equals(object.getString("result"))) {
-                                                            //拍照日志上报
-                                                            boolean tagErr = exception_cb.isChecked();
-                                                            String upc = edt_upc.getText() + "";
-                                                            MyApplication.loggingUpload.countTakePhoto(getActivity(),tag,orderId,tid,sucCounts,tagErr,upc);
                                                             T.showShort(getContext(), getString(R.string.taking_upload_suc));
                                                         } else {
                                                             T.showShort(getContext(), getString(R.string.taking_upload_fal));
@@ -251,65 +253,35 @@ public class CountToolPhotoFragment extends BarScanBaseFragment implements View.
         }
     };
 
-
-    private ProgressDialog mProgress;
-
-    private int progress = 0;
-
-    /**
-     * 进度条Dialog
-     */
-    private void progressDialog() {
-        progress = 0;
-        mProgress = new ProgressDialog(getContext());
-        mProgress.setTitle("上传中...");
-        mProgress.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
-        mProgress.setCancelable(false);
-        mProgress.setMax(pathList.size());
-        mProgress.show();
-    }
-
-
-    // 关闭 上传进度条
-    private void dismissDialog() {
-        if (mProgress != null && mProgress.isShowing()) {
-            mProgress.dismiss();
-        }
-    }
-
     @Override
     public int getbarContentLayoutResId() {
-        return R.layout.fragment_count_tool_photo_layout;
+        return R.layout.fragment_taking_tool_photo_layout;
     }
 
     @Override
     public void barInitializeContentViews() {
-        countingOrderNoInfoEntity = (CountingOrderNoInfoEntity) getActivity().getIntent().getExtras().get("countingOrderNoInfoEntity");
-        if (countingOrderNoInfoEntity != null) {
-            orderId = countingOrderNoInfoEntity.getDetail().getBaseInfo().getBaseInfo().getOrderNo();
-            tid = countingOrderNoInfoEntity.getDetail().getBaseInfo().getBaseInfo().getTid();
-            tv_count_num.setText(orderId);
-        }
-        edt_count_num.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-                edt_count_num.overrideOnFocusChange(hasFocus);
-                if (hasFocus) {
-                    setEdt_input(edt_count_num);
-                }
-            }
-        });
-        edt_count_num.requestFocus();
-        edt_upc.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-                edt_upc.overrideOnFocusChange(hasFocus);
-                if (hasFocus) {
-                    setEdt_input(edt_upc);
-                }
-            }
-        });
 
+        from = getActivity().getIntent().getExtras().getString("location_position");
+
+        if ("1".equals(from)) {
+            takingOrder = (TakingOrder) getActivity().getIntent().getExtras().get("takingOrder");
+            tv_taking_num.setText(takingOrder.getBaseInfo().getTakingOrderNo());
+            tid = takingOrder.getBaseInfo().getTid();
+//            edt_taking_num.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+//                @Override
+//                public void onFocusChange(View v, boolean hasFocus) {
+//                    if (!hasFocus) {
+//                        getAreaMes(edt_taking_num.getText() + "");
+//                    }
+//                }
+//            });
+        } else {//打印数量
+            orderNoInfoEntity = (TakingOrderNoInfoEntity) getActivity().getIntent().getExtras().get("orderNoInfoEntity");
+            containerInfo = (ContainerInfo) getActivity().getIntent().getExtras().get("containerInfo");
+            tv_taking_num.setText(orderNoInfoEntity.getDetail().getBaseInfo().getBaseInfo().getTakingOrderNo());
+//            tv_area.setText(containerInfo.getArea());
+        }
+        edt_taking_num.requestFocus();
         gv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -390,12 +362,8 @@ public class CountToolPhotoFragment extends BarScanBaseFragment implements View.
         switch (v.getId()) {
             case R.id.btn_commit:
                 // 如果 upc 为空，照片 list 也为空， 不进行上传操作
-                if (TextUtils.isEmpty(edt_count_num.getText())) {
-                    T.showShort(getContext(), getString(R.string.count_num_toast));
-                    return;
-                }
-                if (TextUtils.isEmpty(edt_upc.getText())) {
-                    T.showShort(getContext(), getString(R.string.count_upc_toast));
+                if (TextUtils.isEmpty(edt_taking_num.getText())) {
+                    T.showShort(getContext(), getString(R.string.taking_num_toast));
                     return;
                 }
                 if (pathList.size() == 0) {
@@ -415,7 +383,6 @@ public class CountToolPhotoFragment extends BarScanBaseFragment implements View.
         }
     }
 
-
     // 上传图片
     private void uploadPic() {
 
@@ -433,6 +400,31 @@ public class CountToolPhotoFragment extends BarScanBaseFragment implements View.
 //        message.obj = pathList.get(i);
         handler.sendMessage(message);
 
+    }
+
+    private ProgressDialog mProgress;
+
+    private int progress = 0;
+
+    /**
+     * 进度条Dialog
+     */
+    private void progressDialog() {
+        progress = 0;
+        mProgress = new ProgressDialog(getContext());
+        mProgress.setTitle("上传中...");
+        mProgress.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+        mProgress.setCancelable(false);
+        mProgress.setMax(pathList.size());
+        mProgress.show();
+    }
+
+
+    // 关闭 上传进度条
+    private void dismissDialog() {
+        if (mProgress != null && mProgress.isShowing()) {
+            mProgress.dismiss();
+        }
     }
 
 
@@ -492,7 +484,6 @@ public class CountToolPhotoFragment extends BarScanBaseFragment implements View.
         }
     }
 
-
     private DisplayMetrics dm;
 
     public void compress(String srcPath) {
@@ -543,6 +534,7 @@ public class CountToolPhotoFragment extends BarScanBaseFragment implements View.
         }
     }
 
+
     /**
      * 生成文件路径和文件名
      *
@@ -568,16 +560,41 @@ public class CountToolPhotoFragment extends BarScanBaseFragment implements View.
 
     @Override
     public ClearEditText getClearEditText() {
-        return null;
+        return edt_taking_num;
     }
+
+    // 通过用户编码+容器号 获取区域信息
+//    private void getAreaMes(String code) {
+//        String owner = takingOrder.getPerson().getCo();
+//        if (!(TextUtils.isEmpty(code) || TextUtils.isEmpty(owner))) {
+//            BirdApi.getArea(getContext(), owner + "/" + code, new RequestCallBackInterface() {
+//
+//                @Override
+//                public void successCallBack(JSONObject object) {
+//                    try {
+//                        if ("success".equals(object.getString("result"))) {
+//                            tv_area.setText(object.getString("area"));
+//                        }
+//                    } catch (JSONException e) {
+//                        e.printStackTrace();
+//                    }
+//                }
+//
+//                @Override
+//                public void errorCallBack(JSONObject object) {
+//
+//                }
+//            }, tag, true);
+//        }
+//    }
 
     @Override
     public void ClearEditTextCallBack(String code) {
-        if (this.isVisible()) {
-            HideSoftKeyboardUtil.hideSoftKeyboard((BaseActivity) getActivity());
-            if(edt_count_num.hasFocus()){
-                edt_upc.requestFocus();
-            }
-        }
+//        if (this.isVisible()) {
+//            if ("1".equals(from)) {
+//                // 说明是从揽收进入的 需要通过容器号 调用接口  获取区域信息
+//                getAreaMes(code);
+//            }
+//        }
     }
 }

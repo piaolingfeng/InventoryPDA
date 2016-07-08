@@ -29,8 +29,8 @@ import butterknife.OnClick;
 /**
  * Created by chuming.zhuang on 2016/6/25.
  */
-public class TakingToolPrintNumFragment extends BarScanBaseFragment implements View.OnClickListener, OnEditorActionListener {
-    String tag = "TakingToolPrintNumFragment";
+public class TakingPrintNumFragment extends BarScanBaseFragment implements View.OnClickListener, OnEditorActionListener {
+    String tag = "TakingPrintNumFragment";
 
     @Bind(R.id.tv_bussiness)
     TextView tv_bussiness;

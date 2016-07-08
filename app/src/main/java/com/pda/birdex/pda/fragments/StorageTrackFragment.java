@@ -1,15 +1,15 @@
 package com.pda.birdex.pda.fragments;
 
-import com.pda.birdex.pda.R;
 import com.pda.birdex.pda.widget.ClearEditText;
 
 /**
- * Created by chuming.zhuang on 2016/6/24.
+ * Created by chuming.zhuang on 2016/7/8.
+ * 追踪箱号
  */
-public class CountToolBindAreaFragment extends BarScanBaseFragment {
+public class StorageTrackFragment extends BarScanBaseFragment {
     @Override
     public int getbarContentLayoutResId() {
-        return R.layout.fragment_count_tool_bindarea_layout;
+        return 0;
     }
 
     @Override

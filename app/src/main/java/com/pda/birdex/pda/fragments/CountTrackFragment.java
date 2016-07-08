@@ -26,8 +26,8 @@ import butterknife.OnClick;
 /**
  * Created by chuming.zhuang on 2016/6/24.
  */
-public class CountToolTrackFragment extends BarScanBaseFragment implements View.OnClickListener,RequestCallBackInterface{
-    String tag="CountToolTrackFragment";
+public class CountTrackFragment extends BarScanBaseFragment implements View.OnClickListener,RequestCallBackInterface{
+    String tag="CountTrackFragment";
     @Bind(R.id.tv_count_num)
     TextView tv_count_num;
     @Bind(R.id.edt_count_now_no)

@@ -58,9 +58,9 @@ import butterknife.OnClick;
 /**
  * Created by chuming.zhuang on 2016/6/24.
  */
-public class CountToolClearFragment extends BarScanBaseFragment implements View.OnClickListener {
+public class CountClearFragment extends BarScanBaseFragment implements View.OnClickListener {
 
-    String tag = "CountToolClearFragment";
+    String tag = "CountClearFragment";
 
     @Bind(R.id.edt_count_num)
     com.pda.birdex.pda.widget.ClearEditText edt_count_num;

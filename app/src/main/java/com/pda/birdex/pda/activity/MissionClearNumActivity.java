@@ -382,6 +382,7 @@ public class MissionClearNumActivity extends BasePrintBarScanActivity implements
         b.putSerializable("containerInfo", list.get(position));
         intent.setClass(this, CheckActivity.class);
         b.putString("location_position", "2");//揽收任务进入
+        b.putString("checkType", getString(R.string.taking));//揽收进入
         intent.putExtras(b);
         startActivity(intent);
     }
@@ -406,9 +407,11 @@ public class MissionClearNumActivity extends BasePrintBarScanActivity implements
 //        }
         if (getResources().getString(R.string.taking).equals(HeadName)) {//揽收
             b.putSerializable("orderNoInfoEntity", takingOrderNoInfoEntity);
-            intent.putExtra("location_position", "2");//揽收任务进入
-        } else {
+            b.putString("location_position", "2");//揽收任务进入
+            b.putString("checkType", getString(R.string.taking));//揽收进入
+        } else {//清点任务进入
             b.putSerializable("countingOrderNoInfoEntity", countingOrderNoInfoEntity);
+            b.putString("checkType", getString(R.string.count));//清点进入
         }
         intent.setClass(this, CheckActivity.class);
         b.putSerializable("containerInfo", list.get(position));

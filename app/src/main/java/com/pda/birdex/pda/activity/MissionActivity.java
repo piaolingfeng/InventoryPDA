@@ -10,8 +10,8 @@ import com.pda.birdex.pda.MyApplication;
 import com.pda.birdex.pda.R;
 import com.pda.birdex.pda.api.BirdApi;
 import com.pda.birdex.pda.fragments.BaseFragment;
-import com.pda.birdex.pda.fragments.CountMissionBussinessOtherFragment;
-import com.pda.birdex.pda.fragments.CountMissionBussniessFragment;
+import com.pda.birdex.pda.fragments.MissionBussinessOtherFragment;
+import com.pda.birdex.pda.fragments.MissionBussniessFragment;
 import com.pda.birdex.pda.interfaces.BackHandledInterface;
 import com.pda.birdex.pda.interfaces.RequestCallBackInterface;
 import com.pda.birdex.pda.interfaces.TitleBarBackInterface;
@@ -40,8 +40,8 @@ public class MissionActivity extends BarScanActivity implements BaseFragment.OnF
     @Bind(R.id.edt_input_business)
     ClearEditText edt_input_business;
 
-    CountMissionBussinessOtherFragment otherFragment;
-    CountMissionBussniessFragment bussniessFragment;
+    MissionBussinessOtherFragment otherFragment;
+    MissionBussniessFragment bussniessFragment;
 
     MerchantListEntity merchantListEntity;
     @Override
@@ -88,9 +88,9 @@ public class MissionActivity extends BarScanActivity implements BaseFragment.OnF
         Bundle b = new Bundle();
         b.putString("HeadName", getIntent().getStringExtra("HeadName"));
         if (otherFragment == null)
-            otherFragment = new CountMissionBussinessOtherFragment();
+            otherFragment = new MissionBussinessOtherFragment();
         if (bussniessFragment == null) {
-            bussniessFragment = new CountMissionBussniessFragment();
+            bussniessFragment = new MissionBussniessFragment();
         }
         otherFragment.setUIArguments(b);
         bussniessFragment.setUIArguments(b);
