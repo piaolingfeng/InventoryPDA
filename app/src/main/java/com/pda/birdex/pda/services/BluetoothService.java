@@ -18,6 +18,7 @@ package com.pda.birdex.pda.services;
 
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
+import android.bluetooth.BluetoothProfile;
 import android.bluetooth.BluetoothServerSocket;
 import android.bluetooth.BluetoothSocket;
 import android.content.Context;
@@ -72,6 +73,7 @@ public class BluetoothService implements Serializable {
      */
     public BluetoothService(Context context, Handler handler) {
         mAdapter = BluetoothAdapter.getDefaultAdapter();
+        int conect  = mAdapter.getProfileConnectionState(BluetoothProfile.HEADSET);
         mState = STATE_NONE;
         mHandler = handler;
     }

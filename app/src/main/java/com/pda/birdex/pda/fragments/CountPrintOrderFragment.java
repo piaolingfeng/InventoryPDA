@@ -26,8 +26,8 @@ import butterknife.OnClick;
 /**
  * Created by chuming.zhuang on 2016/6/24.
  */
-public class CountToolPrintNumFragment extends BarScanBaseFragment implements View.OnClickListener, TextView.OnEditorActionListener {
-    String tag = "CountToolPrintNumFragment";
+public class CountPrintOrderFragment extends BarScanBaseFragment implements View.OnClickListener, TextView.OnEditorActionListener {
+    String tag = "CountPrintOrderFragment";
     @Bind(R.id.tv_count_num)
     TextView tv_count_num;
     @Bind(R.id.edt_taking_num)

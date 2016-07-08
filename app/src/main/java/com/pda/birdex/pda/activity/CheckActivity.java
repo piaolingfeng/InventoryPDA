@@ -73,11 +73,7 @@ public class CheckActivity extends BaseActivity {
         b = getIntent().getExtras();
         if (b == null)
             return;
-        if (b.getString("location_position") != null) {//揽收容器
-            title.setTitle(getString(R.string.check_taking_info));
-            toolMenu = getResources().getStringArray(R.array.taking_tool_menu);
-            takingOrderNoInfoEntity = (TakingOrderNoInfoEntity) getIntent().getExtras().get("orderNoInfoEntity");
-        } else {//清点容器
+        if (b.getString("checkType").equals(getString(R.string.count))) {//清点
             title.setTitle(getString(R.string.check_counting_info));
             tv_taking_num_head.setText(R.string.count_num);
             pll_amount.setVisibility(View.VISIBLE);
@@ -85,13 +81,21 @@ public class CheckActivity extends BaseActivity {
             toolMenu = getResources().getStringArray(R.array.counting_tool_menu);
             countingOrderNoInfoEntity = (CountingOrderNoInfoEntity) getIntent().getExtras().get("countingOrderNoInfoEntity");
         }
+        if (b.getString("checkType").equals(getString(R.string.taking))) {//揽收
+            title.setTitle(getString(R.string.check_taking_info));
+            toolMenu = getResources().getStringArray(R.array.taking_tool_menu);
+            takingOrderNoInfoEntity = (TakingOrderNoInfoEntity) getIntent().getExtras().get("orderNoInfoEntity");
+        }
+        if (b.getString("checkType").equals(getString(R.string.storge))) {//入库
+            title.setTitle(getString(R.string.check_storage_info));
+            toolMenu = getResources().getStringArray(R.array.storage_tool_list);
+        }
         title.setMenuVisble(true);
         for (String title : toolMenu) {
             currentMenuList.add(title);
         }
         title.setSaveList(currentMenuList);
         title.setMenuVisble(true);
-
         containerInfo = (ContainerInfo) getIntent().getExtras().get("containerInfo");
         if (takingOrderNoInfoEntity != null) {
             tv_taking_num.setText(takingOrderNoInfoEntity.getDetail().getBaseInfo().getBaseInfo().getTakingOrderNo());
@@ -113,7 +117,7 @@ public class CheckActivity extends BaseActivity {
                 tv_taking_container.setText(containerInfo.getContainerId());
                 tv_area.setText(containerInfo.getArea());
                 tv_box_size.setText(containerInfo.getCount() + "");
-                tv_amount.setText(containerInfo.getCount()+"");
+                tv_amount.setText(containerInfo.getCount() + "");
             }
 //            tv_upc.setText(takingOrderNoInfoEntity.getDetail().getBaseInfo().getBaseInfo().getTid());upc暂时没有
             if (countingOrderNoInfoEntity.getDetail().getOperationLog() != null & countingOrderNoInfoEntity.getDetail().getOperationLog().size() > 0) {
@@ -126,10 +130,13 @@ public class CheckActivity extends BaseActivity {
             @Override
             public void onItemClick(int position) {
                 Intent intent = new Intent();
-                if (b.getString("location_position") != null)//揽收容器
+                if (b.getString("checkType").equals(getString(R.string.taking)))//揽收
                     intent.setClass(CheckActivity.this, TakingToolActivity.class);
-                else
+                else if (b.getString("checkType").equals(getString(R.string.count)))
                     intent.setClass(CheckActivity.this, CountToolActivity.class);
+                else if(b.getString("checkType").equals(getString(R.string.storge))){
+                    intent.setClass(CheckActivity.this,StorageToolActivity.class);
+                }
                 Bundle b = getIntent().getExtras();//把加载fragment的位置传递给takingtool
                 b.putInt("position", position);
                 intent.putExtras(b);

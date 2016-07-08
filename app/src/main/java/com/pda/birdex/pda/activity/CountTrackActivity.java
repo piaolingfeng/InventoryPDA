@@ -5,7 +5,7 @@ import android.os.Bundle;
 
 import com.pda.birdex.pda.R;
 import com.pda.birdex.pda.fragments.BaseFragment;
-import com.pda.birdex.pda.fragments.CountToolTrackFragment;
+import com.pda.birdex.pda.fragments.CountTrackFragment;
 import com.pda.birdex.pda.interfaces.BackHandledInterface;
 import com.pda.birdex.pda.widget.TitleView;
 
@@ -17,17 +17,17 @@ import butterknife.Bind;
 public class CountTrackActivity extends BaseActivity implements  BaseFragment.OnFragmentInteractionListener, BackHandledInterface {
     @Bind(R.id.title)
     TitleView title;
-    private CountToolTrackFragment trackFragment;
+    private CountTrackFragment trackFragment;
     @Override
     public int getContentLayoutResId() {
-        return R.layout.activity_taking_bindorder_layout;
+        return R.layout.activity_fragment_layout;
     }
 
     @Override
     public void initializeContentViews() {
         title.setTitle(getString(R.string.count_track_no));
         if (trackFragment == null){
-            trackFragment = new CountToolTrackFragment();
+            trackFragment = new CountTrackFragment();
         }
         Bundle b = getIntent().getExtras();
         b .putString("location_position","SecondIndex");

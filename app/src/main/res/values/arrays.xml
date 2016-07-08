@@ -20,6 +20,7 @@
     <string-array name="index_list">
         <item>收货</item>
         <item>清点</item>
+        <item>入库</item>
         <item>设置</item>
     </string-array>
 
@@ -63,4 +64,23 @@
         <item>数量</item>
     </string-array>
 
+
+    <string-array name="storage_list">
+        <item>打印入库单</item>
+        <item>打印容器单</item>
+        <item>绑定入库单</item>
+        <item>绑定库位</item>
+        <item>追踪箱号</item>
+        <item>解除绑单</item>
+    </string-array>
+
+    <string-array name="storage_tool_list">
+        <item>绑定入库单</item>
+        <item>打印容器单</item>
+        <item>绑定库位</item>
+        <item>拍照</item>
+        <item>追踪箱号</item>
+        <item>解除绑单</item>
+        <item>清点</item>
+    </string-array>
 </resources>

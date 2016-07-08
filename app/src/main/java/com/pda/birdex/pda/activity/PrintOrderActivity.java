@@ -30,6 +30,9 @@ import butterknife.OnClick;
 
 /**
  * Created by hyj on 2016/6/17.
+ * 揽收打印揽收单
+ * 清点打印清点单
+ * 入库打印容器单
  */
 public class PrintOrderActivity extends BasePrintBarScanActivity implements View.OnClickListener, RequestCallBackInterface {
 
@@ -65,7 +68,6 @@ public class PrintOrderActivity extends BasePrintBarScanActivity implements View
         if (!TextUtils.isEmpty(name)) {
             no_tv.setText(name);
         }
-
         codeEt.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -163,16 +165,24 @@ public class PrintOrderActivity extends BasePrintBarScanActivity implements View
     private void printSame() {
         if (no_tv.equals(getString(R.string.count_box_no)))// 清点
             BirdApi.postCountingCodeSamePrint(this, codeEt.getText().toString(), this, tag, true);
-        else
+        else if (no_tv.equals(getString(R.string.taking_num)))// 揽收
             BirdApi.postTakingCodeSamePrint(this, codeEt.getText().toString(), this, tag, true);
+        else if (no_tv.equals(getString(R.string.count_vessel_no)))// 入库
+        {
+
+        }
     }
 
     //打印相同箱单
     private void printNew() {
         if (no_tv.equals(getString(R.string.count_box_no)))// 清点
             BirdApi.postCountingCodeNewPrint(this, codeEt.getText().toString(), this, tag, true);
-        else
+        else if (no_tv.equals(getString(R.string.taking_num)))// 揽收
             BirdApi.postTakingCodeNewPrint(this, codeEt.getText().toString(), this, tag, true);
+        else if (no_tv.equals(getString(R.string.count_vessel_no)))// 入库
+        {
+
+        }
     }
 
     @Override
@@ -188,8 +198,12 @@ public class PrintOrderActivity extends BasePrintBarScanActivity implements View
         String tid = entity.getTid();
         if (no_tv.equals(getString(R.string.count_box_no)))// 清点日志上报
             MyApplication.loggingUpload.countPrint(this, tag, orderId, tid, entity.getContainerNos());
-        else//揽收日志上报
+        else if (no_tv.equals(getString(R.string.taking_num)))//揽收日志上报
             MyApplication.loggingUpload.takePrint(this, tag, orderId, tid, entity.getContainerNos());
+        else if (no_tv.equals(getString(R.string.count_vessel_no)))// 入库
+        {
+
+        }
         if (entity != null) {
             print(entity.getData());
         } else {

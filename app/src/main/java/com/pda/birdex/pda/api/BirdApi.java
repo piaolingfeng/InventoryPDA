@@ -35,9 +35,9 @@ import java.net.URLEncoder;
  */
 public class BirdApi {
     public static String PORT = "3000";//8002
-//    public static String SERVER_ADDRESS = "192.168.1.224"+ ":" + PORT;
+    //    public static String SERVER_ADDRESS = "192.168.1.224"+ ":" + PORT;
 //    public static String SERVER_ADDRESS;//+ ":" + PORT;
-    public static String BASE_URL = "http://" ;//+ SERVER_ADDRESS ;//
+    public static String BASE_URL = "http://";//+ SERVER_ADDRESS ;//
     public static String Logging_BASE_URL = "http://192.168.1.222:3020/api/v1/oplog";
     private static Dialog loadingDialog;
 
@@ -544,7 +544,7 @@ public class BirdApi {
      * showDialog 是否显示等待框
      */
     public static void getRequest(final Context mContext, final RequestCallBackInterface callBackInterface,
-                                  String url, String tag, final boolean showDialog) {
+                                  final String url, String tag, final boolean showDialog) {
         if (showDialog)
             showLoading(mContext);
         String encodedUR = "";
@@ -609,6 +609,8 @@ public class BirdApi {
                 super.onFinish();
                 if (showDialog)
                     hideLoading();
+                if (url.contains("login"))//登录接口才把错误回调
+                    callBackInterface.errorCallBack(null);
             }
 
             @Override

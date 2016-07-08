@@ -3,15 +3,14 @@ package com.pda.birdex.pda.activity;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
-import android.view.KeyEvent;
 
 import com.pda.birdex.pda.R;
 import com.pda.birdex.pda.fragments.BaseFragment;
-import com.pda.birdex.pda.fragments.CountToolBindOrderFragment;
-import com.pda.birdex.pda.fragments.CountToolClearFragment;
-import com.pda.birdex.pda.fragments.CountToolPhotoFragment;
-import com.pda.birdex.pda.fragments.CountToolPrintNumFragment;
-import com.pda.birdex.pda.fragments.CountToolTrackFragment;
+import com.pda.birdex.pda.fragments.CountBindOrderFragment;
+import com.pda.birdex.pda.fragments.CountClearFragment;
+import com.pda.birdex.pda.fragments.CountPhotoFragment;
+import com.pda.birdex.pda.fragments.CountPrintOrderFragment;
+import com.pda.birdex.pda.fragments.CountTrackFragment;
 import com.pda.birdex.pda.interfaces.BackHandledInterface;
 import com.pda.birdex.pda.interfaces.OnRecycleViewItemClickListener;
 import com.pda.birdex.pda.utils.L;
@@ -32,18 +31,17 @@ public class CountToolActivity extends BasePrintBarScanActivity implements OnRec
     @Bind(R.id.title)
     TitleView title;
 
-//    int tabPosition = 0;//跳转进来的tab的位置
     int currentPosition = 0;//当前savetext list的位置
     List<String> currentMenuList = new ArrayList<>();
     String[] toolMenu;
 
-    //    private CountToolUnbindFragment countToolUnbindFragment;
-    private CountToolPrintNumFragment countToolPrintNumFragment;
-    private CountToolClearFragment countToolClearFragment;
-    private CountToolPhotoFragment countToolPhotoFragment = null;
-    private CountToolTrackFragment countToolTrackFragment = null;
-    //    private CountToolBindAreaFragment countToolBindAreaFragment;
-    private CountToolBindOrderFragment countToolBindOrderFragment;
+    //    private CountUnbindFragment countToolUnbindFragment;
+    private CountPrintOrderFragment countToolPrintNumFragment;
+    private CountClearFragment countToolClearFragment;
+    private CountPhotoFragment countToolPhotoFragment = null;
+    private CountTrackFragment countToolTrackFragment = null;
+    //    private CountBindAreaFragment countToolBindAreaFragment;
+    private CountBindOrderFragment countToolBindOrderFragment;
     private BaseFragment baseFragment;
     private FragmentTransaction transaction;
 
@@ -56,19 +54,19 @@ public class CountToolActivity extends BasePrintBarScanActivity implements OnRec
     public void printInitializeContentViews() {
         bus.register(this);
 //        if (countToolUnbindFragment == null)
-//            countToolUnbindFragment = new CountToolUnbindFragment();
+//            countToolUnbindFragment = new CountUnbindFragment();
         if (countToolPrintNumFragment == null)
-            countToolPrintNumFragment = new CountToolPrintNumFragment();
+            countToolPrintNumFragment = new CountPrintOrderFragment();
         if (countToolClearFragment == null)
-            countToolClearFragment = new CountToolClearFragment();
+            countToolClearFragment = new CountClearFragment();
         if (countToolPhotoFragment == null)
-            countToolPhotoFragment = new CountToolPhotoFragment();
+            countToolPhotoFragment = new CountPhotoFragment();
         if (countToolTrackFragment == null)
-            countToolTrackFragment = new CountToolTrackFragment();
+            countToolTrackFragment = new CountTrackFragment();
 //        if (countToolBindAreaFragment == null)
-//            countToolBindAreaFragment = new CountToolBindAreaFragment();
+//            countToolBindAreaFragment = new CountBindAreaFragment();
         if (countToolBindOrderFragment == null)
-            countToolBindOrderFragment = new CountToolBindOrderFragment();
+            countToolBindOrderFragment = new CountBindOrderFragment();
 //        tabPosition = getIntent().getIntExtra("statusPosition", 0);
         toolMenu = getResources().getStringArray(R.array.counting_tool_menu);
         for (String title : toolMenu) {

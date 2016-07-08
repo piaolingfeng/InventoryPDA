@@ -9,10 +9,10 @@ import android.view.KeyEvent;
 import com.pda.birdex.pda.R;
 import com.pda.birdex.pda.entity.TakingOrder;
 import com.pda.birdex.pda.fragments.BaseFragment;
-import com.pda.birdex.pda.fragments.TakingToolBindOrderFragment;
-import com.pda.birdex.pda.fragments.TakingToolClearFragment;
-import com.pda.birdex.pda.fragments.TakingToolPhotoFragment;
-import com.pda.birdex.pda.fragments.TakingToolPrintNumFragment;
+import com.pda.birdex.pda.fragments.TakingBindOrderFragment;
+import com.pda.birdex.pda.fragments.TakingClearFragment;
+import com.pda.birdex.pda.fragments.TakingPhotoFragment;
+import com.pda.birdex.pda.fragments.TakingPrintNumFragment;
 import com.pda.birdex.pda.interfaces.BackHandledInterface;
 import com.pda.birdex.pda.interfaces.OnRecycleViewItemClickListener;
 import com.pda.birdex.pda.widget.ClearEditText;
@@ -37,11 +37,11 @@ public class TakingToolActivity extends BasePrintBarScanActivity implements OnRe
     List<String> currentMenuList = new ArrayList<>();
     String[] toolMenu;
 
-    private TakingToolPrintNumFragment printNumFragment;
-    private TakingToolClearFragment clearFragment;
-//    private TakingToolBindAreaFragment bindAreaFragment;
-    private TakingToolBindOrderFragment bindNumFragment = null;
-    private TakingToolPhotoFragment photoFragment = null;
+    private TakingPrintNumFragment printNumFragment;
+    private TakingClearFragment clearFragment;
+//    private TakingBindAreaFragment bindAreaFragment;
+    private TakingBindOrderFragment bindNumFragment = null;
+    private TakingPhotoFragment photoFragment = null;
     private FragmentTransaction transaction;
     private BaseFragment baseFragment=null;
 
@@ -67,15 +67,15 @@ public class TakingToolActivity extends BasePrintBarScanActivity implements OnRe
             location = getIntent().getStringExtra("location_position");
         }
         if (printNumFragment == null)
-            printNumFragment = new TakingToolPrintNumFragment();
+            printNumFragment = new TakingPrintNumFragment();
         if (photoFragment == null)
-            photoFragment = new TakingToolPhotoFragment();
+            photoFragment = new TakingPhotoFragment();
 //        if (bindAreaFragment == null)
-//            bindAreaFragment = new TakingToolBindAreaFragment();
+//            bindAreaFragment = new TakingBindAreaFragment();
         if (bindNumFragment == null)
-            bindNumFragment = new TakingToolBindOrderFragment();
+            bindNumFragment = new TakingBindOrderFragment();
         if (clearFragment == null)
-            clearFragment = new TakingToolClearFragment();
+            clearFragment = new TakingClearFragment();
 
         toolMenu = getResources().getStringArray(R.array.taking_tool_menu);
         for (String title : toolMenu) {

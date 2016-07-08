@@ -37,8 +37,8 @@ import butterknife.OnClick;
 /**
  * Created by chuming.zhuang on 2016/6/25.
  */
-public class TakingToolBindOrderFragment extends BarScanBaseFragment implements View.OnClickListener {
-    String tag = "TakingToolBindOrderFragment";
+public class TakingBindOrderFragment extends BarScanBaseFragment implements View.OnClickListener {
+    String tag = "TakingBindOrderFragment";
 
     private BindNumAdapter adapter;
 

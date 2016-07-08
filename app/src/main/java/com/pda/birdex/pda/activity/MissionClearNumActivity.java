@@ -74,6 +74,9 @@ public class MissionClearNumActivity extends BasePrintBarScanActivity implements
 
     @Bind(R.id.btn_count_print_no)
     Button btn_count_print_no;
+
+    @Bind(R.id.pll_item)
+    PercentLinearLayout pll_item;
     //揽收清点的空间
     @Bind(R.id.tv_name_count_num)
     TextView tv_name_count_num;
@@ -108,6 +111,7 @@ public class MissionClearNumActivity extends BasePrintBarScanActivity implements
     public void printInitializeContentViews() {
         HeadName = getIntent().getStringExtra("HeadName");
 
+        pll_item.setBackgroundColor(getResources().getColor(R.color.gray));
         if (getResources().getString(R.string.taking).equals(HeadName)) {//揽收
             tv_name_count_num.setText(getString(R.string.tv_taking_num));
             btn_count_print_no.setText(getString(R.string.taking_print_no));
@@ -139,7 +143,7 @@ public class MissionClearNumActivity extends BasePrintBarScanActivity implements
 //        tv_status.setVisibility(View.GONE);//隐藏状态栏
 
         xrcy.setLoadingMoreEnabled(false);
-        xrcy.setPullRefreshEnabled(true);
+        xrcy.setPullRefreshEnabled(false);
         xrcy.setLoadingListener(this);//加载监听器
         xrcy.setLayoutManager(new LinearLayoutManager(this));
         xrcy.setLoadingMoreProgressStyle(ProgressStyle.SquareSpin);//上拉加载类型
@@ -378,6 +382,7 @@ public class MissionClearNumActivity extends BasePrintBarScanActivity implements
         b.putSerializable("containerInfo", list.get(position));
         intent.setClass(this, CheckActivity.class);
         b.putString("location_position", "2");//揽收任务进入
+        b.putString("checkType", getString(R.string.taking));//揽收进入
         intent.putExtras(b);
         startActivity(intent);
     }
@@ -402,9 +407,11 @@ public class MissionClearNumActivity extends BasePrintBarScanActivity implements
 //        }
         if (getResources().getString(R.string.taking).equals(HeadName)) {//揽收
             b.putSerializable("orderNoInfoEntity", takingOrderNoInfoEntity);
-            intent.putExtra("location_position", "2");//揽收任务进入
-        } else {
+            b.putString("location_position", "2");//揽收任务进入
+            b.putString("checkType", getString(R.string.taking));//揽收进入
+        } else {//清点任务进入
             b.putSerializable("countingOrderNoInfoEntity", countingOrderNoInfoEntity);
+            b.putString("checkType", getString(R.string.count));//清点进入
         }
         intent.setClass(this, CheckActivity.class);
         b.putSerializable("containerInfo", list.get(position));

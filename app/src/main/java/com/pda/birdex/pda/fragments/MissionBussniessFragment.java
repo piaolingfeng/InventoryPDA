@@ -28,12 +28,12 @@ import butterknife.Bind;
 /**
  * Created by chuming.zhuang on 2016/6/22.
  */
-public class CountMissionBussniessFragment extends BaseFragment {
+public class MissionBussniessFragment extends BaseFragment {
 
 
     @Bind(R.id.xrcy)
     XRecyclerView xrcy;
-    String tag = "CountMissionBussniessFragment";
+    String tag = "MissionBussniessFragment";
 
     MerchantAdapter adapter;
     List<Merchant> list;//放所有的商家；

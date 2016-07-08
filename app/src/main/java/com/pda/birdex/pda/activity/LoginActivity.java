@@ -113,9 +113,8 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
         if (!TextUtils.isEmpty(oldToken)) {
             // 将 token 添加进去
             MyApplication.ahc.addHeader("x-access-token", oldToken);
-            BirdApi.BASE_URL = "http://"+ PreferenceUtils.getPrefString(this, "service", "");
+            BirdApi.BASE_URL = "http://" + PreferenceUtils.getPrefString(this, "service", "");
             Intent intent = new Intent(MyApplication.getInstans(), MainActivity.class);
-
             startActivity(intent);
             finish();
         }
@@ -123,7 +122,8 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
 
         // 确认是否勾选了 记住密码
         boolean ischecked = PreferenceUtils.getPrefBoolean(this, "remember", false);
-        service_edt.setText(PreferenceUtils.getPrefString(this,"service",""));
+        if (!StringUtils.isEmpty(PreferenceUtils.getPrefString(this, "service", "")))
+            service_edt.setText(PreferenceUtils.getPrefString(this, "service", ""));
         if (ischecked) {
             // 选中了 记住密码
             String usernamestr = PreferenceUtils.getPrefString(this, "username", "");
@@ -174,7 +174,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
         RequestParams params = new RequestParams();
         params.put("account", username.getText().toString());
         params.put("password", password.getText().toString());
-        BirdApi.BASE_URL = "http://"+service_edt.getText().toString();
+        BirdApi.BASE_URL = "http://" + service_edt.getText().toString();
         BirdApi.login(this, username.getText().toString() + "/" + password.getText().toString(), new RequestCallBackInterface() {
 
             @Override
@@ -188,9 +188,9 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                     PreferenceUtils.setPrefString(MyApplication.getInstans(), "token", token);
                     PreferenceUtils.setPrefString(MyApplication.getInstans(), "user_name", user_name);
                     PreferenceUtils.setPrefString(MyApplication.getInstans(), "userId", userId);
-                    if(getIntent().getBooleanExtra("jump_to_activity",false)){
+                    if (getIntent().getBooleanExtra("jump_to_activity", false)) {
                         LoginActivity.this.finish();
-                    }else {
+                    } else {
                         Intent intent = new Intent(MyApplication.getInstans(), MainActivity.class);
                         startActivity(intent);
                         finish();
@@ -202,14 +202,17 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
 
             @Override
             public void errorCallBack(JSONObject object) {
-                T.showShort(MyApplication.getInstans(), "用户名或密码错误");
+                if(object == null){
+                    T.showShort(LoginActivity.this,getString(R.string.service_addr_wrong));
+                }else
+                    T.showShort(MyApplication.getInstans(), "用户名或密码错误");
             }
         }, TAG, true);
     }
 
 
     private void spEdit() {
-        PreferenceUtils.setPrefString(this,"service",service_edt.getText().toString());
+        PreferenceUtils.setPrefString(this, "service", service_edt.getText().toString());
         if (remember.isChecked()) {
             // 选中了， 执行保存操作
             PreferenceUtils.setPrefString(this, "username", username.getText().toString());
@@ -241,7 +244,10 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener 
                 } else {
                     String serviceaddr = service_edt.getText().toString();
                     int end = serviceaddr.lastIndexOf(":");
-                    if(StringUtils.checkIP(serviceaddr.substring(0,end)))
+                    if(end==-1){
+                        end = serviceaddr.length();
+                    }
+                    if (StringUtils.checkIP(serviceaddr.substring(0, end)))
                         login();
                     else
                         T.showShort(this, getString(R.string.service_addr_error));

@@ -22,8 +22,8 @@ import butterknife.OnClick;
 /**
  * Created by chuming.zhuang on 2016/6/25.
  */
-public class TakingToolBindAreaFragment extends BarScanBaseFragment implements View.OnClickListener {
-    String tag = "TakingToolBindAreaFragment";
+public class TakingBindAreaFragment extends BarScanBaseFragment implements View.OnClickListener {
+    String tag = "TakingBindAreaFragment";
 
     @Bind(R.id.edt_taking_num)
     com.pda.birdex.pda.widget.ClearEditText edt_taking_num;

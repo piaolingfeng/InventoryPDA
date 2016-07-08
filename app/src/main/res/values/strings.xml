@@ -21,6 +21,7 @@
     <string name="username_hint">输入帐号</string>
     <string name="password_hint">输入密码</string>
     <string name="service_hint">输入服务器地址</string>
+    <string name="service_addr_wrong">服务器地址错误.</string>
     <string name="service_addr_error">输入的ip地址不合法</string>
     <string name="login">登  录</string>
     <string name="notempty">用户名或密码不能为空</string>
@@ -167,6 +168,21 @@
     <string name="count_bind_count">待绑定清点单的容器号</string>
 
     <string name="print_hint">请到设置中连接打印机.</string>
+
+
+    <!-- 入库-->
+    <string name="storge">入库</string>
+    <string name="check_storage_info">查看入库容器信息</string>
+    <string name="storage_print_no">打印容器单</string>
+
+
+
+
+
+
+
+
+
     //打印
     <string name="print_title">打印</string>
 

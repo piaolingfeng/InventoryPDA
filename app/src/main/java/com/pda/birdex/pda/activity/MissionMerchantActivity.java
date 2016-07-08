@@ -19,6 +19,7 @@ import com.pda.birdex.pda.response.MerchantDetailEntity;
 import com.pda.birdex.pda.utils.GsonHelper;
 import com.pda.birdex.pda.utils.T;
 import com.pda.birdex.pda.widget.TitleView;
+import com.zhy.android.percent.support.PercentLinearLayout;
 
 import org.json.JSONObject;
 
@@ -45,6 +46,8 @@ public class MissionMerchantActivity extends BaseActivity {
     TextView tv_name_count_mission;
     @Bind(R.id.tv_clear_num)
     TextView tv_clear_num;
+    @Bind(R.id.pll_item)
+    PercentLinearLayout pll_item;
     TakingMissionClearAdapter takingAdapter;
     CountingMissonClearAdapter countingAdapter;
     MerchantDetailEntity entity;//商家详情
@@ -86,6 +89,7 @@ public class MissionMerchantActivity extends BaseActivity {
                 }
             }
         });
+        pll_item.setBackgroundColor(getResources().getColor(R.color.gray));
         xrcy.setPullRefreshEnabled(false);
         xrcy.setLayoutManager(new LinearLayoutManager(this));
 
