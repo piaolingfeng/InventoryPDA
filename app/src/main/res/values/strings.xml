@@ -183,9 +183,9 @@
     <string name="sdcard_fail">SDCard读取失败，请重试</string>
     <string name="photo_most">照片不能超过10张</string>
     <string name="photo_delete">删除</string>
-
-
-
+    <string name="unbind_success">解绑成功！</string>
+    <string name="unbind_fail">解绑失败！</string>
+    <string name="print_storage_order">打印入库单</string>
 
 
 

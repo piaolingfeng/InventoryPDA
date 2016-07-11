@@ -255,10 +255,16 @@ public class SecondIndexActivity extends BarScanActivity implements OnRecycleVie
             if (getString(R.string.storge).equals(titleStr)) {
                 Bundle b = new Bundle();
                 switch (position) {
+                    case 0:
+                        intent.setClass(SecondIndexActivity.this, StoragePrintInActivity.class);//打印入库单
+                        break;
                     case 1:
                         b.putString("title", getString(R.string.storage_print_no));
                         b.putString("inputname", getString(R.string.count_vessel_no));
                         intent.setClass(SecondIndexActivity.this, PrintOrderActivity.class);
+                        break;
+                    case 5:
+                        intent.setClass(SecondIndexActivity.this, StorageUnBindActivity.class);
                         break;
                     default:
                         intent.setClass(SecondIndexActivity.this, StorageFragmentActivity.class);

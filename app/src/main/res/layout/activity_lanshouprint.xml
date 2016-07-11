@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<com.zhy.android.percent.support.PercentLinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:layout_width="match_parent"
@@ -12,11 +12,11 @@
 
     <com.zhy.android.percent.support.PercentRelativeLayout
         android:id="@+id/main"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        app:layout_marginLeftPercent="@string/margin_5w"
+        app:layout_marginRightPercent="@string/margin_5w">
 
         <TextView
             android:id="@+id/no_tv"
@@ -24,8 +24,8 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
             android:text="@string/taking_num"
-            android:textColor="@android:color/black"
-            android:textSize="24sp" />
+            android:textColor="@color/context_1"
+            app:layout_textSizePercent="@string/size_6w"/>
 
         <com.pda.birdex.pda.widget.ClearEditText
             android:id="@+id/code_et"
@@ -78,4 +78,4 @@
 
     </com.zhy.android.percent.support.PercentRelativeLayout>
 
-</LinearLayout>
+</com.zhy.android.percent.support.PercentLinearLayout>

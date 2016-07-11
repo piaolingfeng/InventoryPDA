@@ -15,8 +15,8 @@ import com.pda.birdex.pda.fragments.StorageTrackFragment;
 import com.pda.birdex.pda.fragments.StorageUnBindFragment;
 import com.pda.birdex.pda.interfaces.BackHandledInterface;
 import com.pda.birdex.pda.interfaces.OnRecycleViewItemClickListener;
-import com.pda.birdex.pda.utils.HideSoftKeyboardUtil;
 import com.pda.birdex.pda.utils.L;
+import com.pda.birdex.pda.utils.SoftKeyboardUtil;
 import com.pda.birdex.pda.widget.ClearEditText;
 import com.pda.birdex.pda.widget.TitleView;
 
@@ -177,7 +177,7 @@ public class StorageToolActivity extends BasePrintBarScanActivity implements OnR
 
     @Override
     public void ClearEditTextCallBack(String code) {
-        HideSoftKeyboardUtil.hideSoftKeyboard(this);//所有扫描动作都统一隐藏软键盘
+        SoftKeyboardUtil.hideSoftKeyboard(this);//所有扫描动作都统一隐藏软键盘
     }
 
     @Override
