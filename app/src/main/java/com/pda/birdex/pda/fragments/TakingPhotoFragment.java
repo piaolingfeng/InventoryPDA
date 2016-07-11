@@ -63,29 +63,14 @@ public class TakingPhotoFragment extends BarScanBaseFragment implements View.OnC
     @Bind(R.id.edt_taking_num)
     com.pda.birdex.pda.widget.ClearEditText edt_taking_num;
 
-    // 标记异常
-    @Bind(R.id.exception_cb)
-    CheckBox exception_cb;
-
     // 揽收单号
     @Bind(R.id.tv_taking_num)
     TextView tv_taking_num;
 
-    // 存放照片的 gridview
-    @Bind(R.id.gv)
-    GridView gv;
-
-//    @Bind(R.id.tv_area)
-//    TextView tv_area;
-    private final static int PHOTO_GREQUEST_CODE = 2;
     private final static int COMPRESS_DOWN = 3;
-    private final static int PHOTO_SHOW = 4;
-
-    // 存储照片的 list
-    private List<Bitmap> bitmapList = new ArrayList<>();
 
     // 存储照片路径的 list
-    private ArrayList<String> pathList = new ArrayList<String>();
+    private List<String> pathList = new ArrayList<String>();
 
     // 标记是从揽收、或者 揽收任务 跳转过来的
     // 1:揽收 2:揽收任务
@@ -103,9 +88,11 @@ public class TakingPhotoFragment extends BarScanBaseFragment implements View.OnC
     // 记录上传图片成功返回的 url条数
     private int sucCounts = 0;
 
+    // 图片 fragment
+    private PhotoFragment photoFragment;
+
     private static final int PIC_COMPRESS = 1;
     // 压缩完图片后 重新刷新
-    private static final int COMPRESS_REFLASH = 1001;
     private Handler handler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
@@ -113,25 +100,14 @@ public class TakingPhotoFragment extends BarScanBaseFragment implements View.OnC
 
             switch (msg.what) {
                 case PIC_COMPRESS:
-//                    String path = (String) msg.obj;
                     MyTask task = new MyTask();
                     task.execute();
                     break;
 
-                case COMPRESS_REFLASH:
-                    // 压缩完图片后 重新刷新
-                    PhotoGVAdapter adapter = new PhotoGVAdapter(getContext(), pathList);
-                    gv.setAdapter(adapter);
-                    break;
-
                 case COMPRESS_DOWN:
-
                     String path1 = msg.obj.toString();
-
                     RequestParams myparams = new RequestParams();
                     File file = new File(path1);
-//                    File file = new File("/storage/sdcard0/logs/recovery/20150430_104402.log");
-
                     try {
                         myparams.put("file", file);
                     } catch (FileNotFoundException e) {
@@ -173,7 +149,6 @@ public class TakingPhotoFragment extends BarScanBaseFragment implements View.OnC
                                 String[] spit2 = tail.split("</h1>");
                                 if (spit2.length >= 2) {
                                     String result = spit2[0].trim();
-//                                    String str = BirdApi.UPLOADIP + result;
                                     photoUrl.add(result);
                                     progress++;
                                     mProgress.setProgress(progress);
@@ -184,13 +159,13 @@ public class TakingPhotoFragment extends BarScanBaseFragment implements View.OnC
 
                                             // 调用提交上传图片接口
                                             jsonObject.put("containerNo", edt_taking_num.getText() + "");
-                                            jsonObject.put("isException", exception_cb.isChecked());
+                                            jsonObject.put("isException", photoFragment.isChecked());
                                             String urlsStr = GsonHelper.createJsonString(photoUrl);
                                             JSONArray array = new JSONArray(urlsStr);
                                             jsonObject.put("photoIds", array);
                                             //上传日志
                                             String orderId = tv_taking_num.getText().toString();
-                                            MyApplication.loggingUpload.takeTakePhoto(getActivity(), tag, orderId, tid, sucCounts, exception_cb.isChecked());
+                                            MyApplication.loggingUpload.takeTakePhoto(getActivity(), tag, orderId, tid, sucCounts, photoFragment.isChecked());
                                             BirdApi.uploadPicSubmit(getContext(), jsonObject, new RequestCallBackInterface() {
 
                                                 @Override
@@ -282,79 +257,11 @@ public class TakingPhotoFragment extends BarScanBaseFragment implements View.OnC
 //            tv_area.setText(containerInfo.getArea());
         }
         edt_taking_num.requestFocus();
-        gv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-                if (position < pathList.size()) {
-
-                    Intent showIntent = new Intent();
-                    Bundle b = new Bundle();
-//                b.putParcelable("bitmap",bitmapList.get(position));
-                    b.putString("path", pathList.get(position) + "");
-                    b.putInt("position", position);
-                    showIntent.putExtras(b);
-                    showIntent.setClass(getActivity().getApplicationContext(), PhotoShowActivity.class);
-                    startActivityForResult(showIntent, PHOTO_SHOW);
-                    getActivity().overridePendingTransition(R.anim.zoom_enter, R.anim.zoom_exit);
-                } else {
-                    if (pathList.size() <= 10) {
-                        Intent photoIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-
-                        filePath = getFileName();
-                        photoIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(new File(filePath)));
-
-                        startActivityForResult(photoIntent, PHOTO_GREQUEST_CODE);
-                    } else {
-                        T.showShort(getContext(), getString(R.string.taking_upload_photo_count));
-                    }
-                }
-            }
-        });
-
-//        Intent intent = new Intent();
-//        intent.setClass(PhotoActivity.this, MipcaActivityCapture.class);
-//        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-//        startActivityForResult(intent, SCANNIN_GREQUEST_CODE);
-
-        PhotoGVAdapter adapter = new PhotoGVAdapter(getContext(), pathList);
-        gv.setAdapter(adapter);
+        photoFragment = new PhotoFragment();
+        getActivity().getSupportFragmentManager().beginTransaction().add(R.id.framelayout_2, photoFragment).commit();
     }
 
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-//        super.onActivityResult(requestCode, resultCode, data);
-        switch (requestCode) {
-            case PHOTO_GREQUEST_CODE:
-                if (resultCode == Activity.RESULT_OK) {
-                    String sdStatus = Environment.getExternalStorageState();
-                    if (!sdStatus.equals(Environment.MEDIA_MOUNTED)) { // 检测sd是否可用
-                        Log.i("TestFile",
-                                "SD card is not avaiable/writeable right now.");
-                        T.showLong(getContext(), "SDCard读取失败，请重试");
-                        return;
-                    }
-                    pathList.add(filePath);
-                    MyTask1 myTask1 = new MyTask1();
-                    myTask1.execute(filePath);
-//                    PhotoGVAdapter adapter = new PhotoGVAdapter(getContext(), pathList);
-//                    gv.setAdapter(adapter);
-                }
-                break;
-
-            case PHOTO_SHOW:
-                if (resultCode == Activity.RESULT_OK) {
-                    Bundle bundle = data.getExtras();
-                    String newpath = bundle.getString("newpath");
-                    int newposition = bundle.getInt("position");
-                    pathList.remove(newposition);
-                    pathList.add(newposition, newpath);
-                }
-                PhotoGVAdapter adapter = new PhotoGVAdapter(getContext(), pathList);
-                gv.setAdapter(adapter);
-                break;
-        }
-    }
 
     @OnClick({R.id.btn_commit})
     @Override
@@ -366,6 +273,7 @@ public class TakingPhotoFragment extends BarScanBaseFragment implements View.OnC
                     T.showShort(getContext(), getString(R.string.taking_num_toast));
                     return;
                 }
+                pathList = photoFragment.getPathList();
                 if (pathList.size() == 0) {
                     T.showShort(getContext(), getString(R.string.taking_upload_empty_p));
                 } else {
@@ -385,21 +293,9 @@ public class TakingPhotoFragment extends BarScanBaseFragment implements View.OnC
 
     // 上传图片
     private void uploadPic() {
-
-//        for (int i = 0; i < pathList.size(); i++) {
-//
-//            Message message = Message.obtain();
-//            message.what = PIC_COMPRESS;
-//            message.obj = pathList.get(i);
-//            handler.sendMessage(message);
-//
-//        }
-
         Message message = Message.obtain();
         message.what = PIC_COMPRESS;
-//        message.obj = pathList.get(i);
         handler.sendMessage(message);
-
     }
 
     private ProgressDialog mProgress;
@@ -437,12 +333,8 @@ public class TakingPhotoFragment extends BarScanBaseFragment implements View.OnC
             photoUrl.clear();
             sucCounts = 0;
 
-//            path = params[0];
             for (int i = 0; i < pathList.size(); i++) {
                 path = pathList.get(i);
-//                Bitmap bt = comp(path);
-//                saveBitmapFile(bt, path);
-
                 Message message = Message.obtain();
                 message.what = COMPRESS_DOWN;
                 message.obj = path;
@@ -450,112 +342,6 @@ public class TakingPhotoFragment extends BarScanBaseFragment implements View.OnC
             }
             return null;
         }
-
-        @Override
-        protected void onPostExecute(Void aVoid) {
-            super.onPostExecute(aVoid);
-//            Message message = Message.obtain();
-//            message.what = COMPRESS_DOWN;
-//            message.obj = path;
-//            handler.sendMessage(message);
-        }
-    }
-
-
-    // 压缩图片的 Task
-    class MyTask1 extends AsyncTask<String, Void, Void> {
-
-        @Override
-        protected Void doInBackground(String... params) {
-            String picPath = params[0];
-//            Bitmap bt = comp(picPath);
-//            saveBitmapFile(bt, picPath);
-            compress(picPath);
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(Void aVoid) {
-            super.onPostExecute(aVoid);
-
-            Message msg = Message.obtain();
-            msg.what = COMPRESS_REFLASH;
-            handler.sendMessage(msg);
-        }
-    }
-
-    private DisplayMetrics dm;
-
-    public void compress(String srcPath) {
-        dm = new DisplayMetrics();
-        getActivity().getWindowManager().getDefaultDisplay().getMetrics(dm);
-
-        float hh = dm.heightPixels;
-        float ww = dm.widthPixels;
-        BitmapFactory.Options opts = new BitmapFactory.Options();
-        opts.inJustDecodeBounds = true;
-        Bitmap bitmap = BitmapFactory.decodeFile(srcPath, opts);
-        opts.inJustDecodeBounds = false;
-        int w = opts.outWidth;
-        int h = opts.outHeight;
-        int size = 0;
-        if (w <= ww && h <= hh) {
-            size = 1;
-        } else {
-            double scale = w >= h ? w / ww : h / hh;
-            double log = Math.log(scale) / Math.log(2);
-            double logCeil = Math.ceil(log);
-            size = (int) Math.pow(2, logCeil);
-        }
-        opts.inSampleSize = size;
-        bitmap = BitmapFactory.decodeFile(srcPath, opts);
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        int quality = 100;
-        bitmap.compress(Bitmap.CompressFormat.JPEG, quality, baos);
-        System.out.println(baos.toByteArray().length);
-        while (baos.toByteArray().length > 100 * 1024) {
-            baos.reset();
-            bitmap.compress(Bitmap.CompressFormat.JPEG, quality, baos);
-            quality -= 20;
-            System.out.println(baos.toByteArray().length);
-        }
-        try {
-//            baos.writeTo(new FileOutputStream("/mnt/sdcard/Servyou/photo/buffer/22.jpg"));
-            baos.writeTo(new FileOutputStream(srcPath));
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            try {
-                baos.flush();
-                baos.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-    }
-
-
-    /**
-     * 生成文件路径和文件名
-     *
-     * @return
-     */
-    private String getFileName() {
-        String saveDir = Environment.getExternalStorageDirectory() + "/myPic";
-        File dir = new File(saveDir);
-        if (!dir.exists()) {
-            dir.mkdirs(); // 创建文件夹
-        }
-        //用日期作为文件名，确保唯一性
-        Date date = new Date();
-        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss");
-        String fileName = saveDir + "/" + formatter.format(date) + ".jpg";
-
-//        File file = new File(fileName);
-//        if (!file.exists()) {
-//            file.mkdirs();
-//        }
-        return fileName;
     }
 
     @Override
@@ -563,30 +349,6 @@ public class TakingPhotoFragment extends BarScanBaseFragment implements View.OnC
         return edt_taking_num;
     }
 
-    // 通过用户编码+容器号 获取区域信息
-//    private void getAreaMes(String code) {
-//        String owner = takingOrder.getPerson().getCo();
-//        if (!(TextUtils.isEmpty(code) || TextUtils.isEmpty(owner))) {
-//            BirdApi.getArea(getContext(), owner + "/" + code, new RequestCallBackInterface() {
-//
-//                @Override
-//                public void successCallBack(JSONObject object) {
-//                    try {
-//                        if ("success".equals(object.getString("result"))) {
-//                            tv_area.setText(object.getString("area"));
-//                        }
-//                    } catch (JSONException e) {
-//                        e.printStackTrace();
-//                    }
-//                }
-//
-//                @Override
-//                public void errorCallBack(JSONObject object) {
-//
-//                }
-//            }, tag, true);
-//        }
-//    }
 
     @Override
     public void ClearEditTextCallBack(String code) {

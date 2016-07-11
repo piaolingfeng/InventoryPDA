@@ -60,14 +60,6 @@ import butterknife.OnClick;
 public class CountPhotoFragment extends BarScanBaseFragment implements View.OnClickListener {
     String tag = "CountPhotoFragment";
 
-    // 存放照片的 gridview
-    @Bind(R.id.gv)
-    GridView gv;
-
-    // 标记异常
-    @Bind(R.id.exception_cb)
-    CheckBox exception_cb;
-
     @Bind(R.id.edt_count_num)
     com.pda.birdex.pda.widget.ClearEditText edt_count_num;
 
@@ -78,14 +70,13 @@ public class CountPhotoFragment extends BarScanBaseFragment implements View.OnCl
     com.pda.birdex.pda.widget.ClearEditText edt_upc;
     CountingOrderNoInfoEntity countingOrderNoInfoEntity;//清点任务详情
     // 存储照片路径的 list
-    private ArrayList<String> pathList = new ArrayList<String>();
+    private List<String> pathList = new ArrayList<String>();
 
-    // 图片 path
-    private String filePath;
 
-    private final static int PHOTO_GREQUEST_CODE = 2;
+    // 图片 fragment
+    private PhotoFragment photoFragment;
+
     private final static int COMPRESS_DOWN = 3;
-    private final static int PHOTO_SHOW = 4;
 
 
     // 存放所有返回图片地址的 list
@@ -98,8 +89,6 @@ public class CountPhotoFragment extends BarScanBaseFragment implements View.OnCl
     private int sucCounts = 0;
 
     private static final int PIC_COMPRESS = 1;
-    // 压缩完图片后 重新刷新
-    private static final int COMPRESS_REFLASH = 1001;
     private Handler handler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
@@ -107,15 +96,8 @@ public class CountPhotoFragment extends BarScanBaseFragment implements View.OnCl
 
             switch (msg.what) {
                 case PIC_COMPRESS:
-//                    String path = (String) msg.obj;
                     MyTask task = new MyTask();
                     task.execute();
-                    break;
-
-                case COMPRESS_REFLASH:
-                    // 压缩完图片后 重新刷新
-                    PhotoGVAdapter adapter = new PhotoGVAdapter(getContext(), pathList);
-                    gv.setAdapter(adapter);
                     break;
 
                 case COMPRESS_DOWN:
@@ -124,8 +106,6 @@ public class CountPhotoFragment extends BarScanBaseFragment implements View.OnCl
 
                     RequestParams myparams = new RequestParams();
                     File file = new File(path1);
-//                    File file = new File("/storage/sdcard0/logs/recovery/20150430_104402.log");
-
                     try {
                         myparams.put("file", file);
                     } catch (FileNotFoundException e) {
@@ -178,12 +158,11 @@ public class CountPhotoFragment extends BarScanBaseFragment implements View.OnCl
 
                                             // 调用提交上传图片接口
                                             jsonObject.put("containerNo", edt_count_num.getText() + "");
-                                            jsonObject.put("isException", exception_cb.isChecked());
+                                            jsonObject.put("isException", photoFragment.isChecked());
                                             jsonObject.put("upc", edt_upc.getText() + "");
                                             String urlsStr = GsonHelper.createJsonString(photoUrl);
                                             JSONArray array = new JSONArray(urlsStr);
                                             jsonObject.put("photoIds", array);
-
 
                                             BirdApi.countingUploadPicSubmit(getContext(), jsonObject, new RequestCallBackInterface() {
 
@@ -192,7 +171,7 @@ public class CountPhotoFragment extends BarScanBaseFragment implements View.OnCl
                                                     try {
                                                         if ("success".equals(object.getString("result"))) {
                                                             //拍照日志上报
-                                                            boolean tagErr = exception_cb.isChecked();
+                                                            boolean tagErr = photoFragment.isChecked();
                                                             String upc = edt_upc.getText() + "";
                                                             MyApplication.loggingUpload.countTakePhoto(getActivity(),tag,orderId,tid,sucCounts,tagErr,upc);
                                                             T.showShort(getContext(), getString(R.string.taking_upload_suc));
@@ -310,79 +289,10 @@ public class CountPhotoFragment extends BarScanBaseFragment implements View.OnCl
             }
         });
 
-        gv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
-                if (position < pathList.size()) {
-
-                    Intent showIntent = new Intent();
-                    Bundle b = new Bundle();
-//                b.putParcelable("bitmap",bitmapList.get(position));
-                    b.putString("path", pathList.get(position) + "");
-                    b.putInt("position", position);
-                    showIntent.putExtras(b);
-                    showIntent.setClass(getActivity().getApplicationContext(), PhotoShowActivity.class);
-                    startActivityForResult(showIntent, PHOTO_SHOW);
-                    getActivity().overridePendingTransition(R.anim.zoom_enter, R.anim.zoom_exit);
-                } else {
-                    if (pathList.size() <= 10) {
-                        Intent photoIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-
-                        filePath = getFileName();
-                        photoIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(new File(filePath)));
-
-                        startActivityForResult(photoIntent, PHOTO_GREQUEST_CODE);
-                    } else {
-                        T.showShort(getContext(), getString(R.string.taking_upload_photo_count));
-                    }
-                }
-            }
-        });
-
-//        Intent intent = new Intent();
-//        intent.setClass(PhotoActivity.this, MipcaActivityCapture.class);
-//        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-//        startActivityForResult(intent, SCANNIN_GREQUEST_CODE);
-
-        PhotoGVAdapter adapter = new PhotoGVAdapter(getContext(), pathList);
-        gv.setAdapter(adapter);
+        photoFragment = new PhotoFragment();
+        getActivity().getSupportFragmentManager().beginTransaction().add(R.id.framelayout_2, photoFragment).commit();
     }
 
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-//        super.onActivityResult(requestCode, resultCode, data);
-        switch (requestCode) {
-            case PHOTO_GREQUEST_CODE:
-                if (resultCode == Activity.RESULT_OK) {
-                    String sdStatus = Environment.getExternalStorageState();
-                    if (!sdStatus.equals(Environment.MEDIA_MOUNTED)) { // 检测sd是否可用
-                        Log.i("TestFile",
-                                "SD card is not avaiable/writeable right now.");
-                        T.showLong(getContext(), "SDCard读取失败，请重试");
-                        return;
-                    }
-                    pathList.add(filePath);
-                    MyTask1 myTask1 = new MyTask1();
-                    myTask1.execute(filePath);
-//                    PhotoGVAdapter adapter = new PhotoGVAdapter(getContext(), pathList);
-//                    gv.setAdapter(adapter);
-                }
-                break;
-
-            case PHOTO_SHOW:
-                if (resultCode == Activity.RESULT_OK) {
-                    Bundle bundle = data.getExtras();
-                    String newpath = bundle.getString("newpath");
-                    int newposition = bundle.getInt("position");
-                    pathList.remove(newposition);
-                    pathList.add(newposition, newpath);
-                }
-                PhotoGVAdapter adapter = new PhotoGVAdapter(getContext(), pathList);
-                gv.setAdapter(adapter);
-                break;
-        }
-    }
 
     @OnClick({R.id.btn_commit})
     @Override
@@ -398,6 +308,7 @@ public class CountPhotoFragment extends BarScanBaseFragment implements View.OnCl
                     T.showShort(getContext(), getString(R.string.count_upc_toast));
                     return;
                 }
+                pathList = photoFragment.getPathList();
                 if (pathList.size() == 0) {
                     T.showShort(getContext(), getString(R.string.taking_upload_empty_p));
                 } else {
@@ -418,21 +329,9 @@ public class CountPhotoFragment extends BarScanBaseFragment implements View.OnCl
 
     // 上传图片
     private void uploadPic() {
-
-//        for (int i = 0; i < pathList.size(); i++) {
-//
-//            Message message = Message.obtain();
-//            message.what = PIC_COMPRESS;
-//            message.obj = pathList.get(i);
-//            handler.sendMessage(message);
-//
-//        }
-
         Message message = Message.obtain();
         message.what = PIC_COMPRESS;
-//        message.obj = pathList.get(i);
         handler.sendMessage(message);
-
     }
 
 
@@ -445,12 +344,8 @@ public class CountPhotoFragment extends BarScanBaseFragment implements View.OnCl
             photoUrl.clear();
             sucCounts = 0;
 
-//            path = params[0];
             for (int i = 0; i < pathList.size(); i++) {
                 path = pathList.get(i);
-//                Bitmap bt = comp(path);
-//                saveBitmapFile(bt, path);
-
                 Message message = Message.obtain();
                 message.what = COMPRESS_DOWN;
                 message.obj = path;
@@ -459,111 +354,6 @@ public class CountPhotoFragment extends BarScanBaseFragment implements View.OnCl
             return null;
         }
 
-        @Override
-        protected void onPostExecute(Void aVoid) {
-            super.onPostExecute(aVoid);
-//            Message message = Message.obtain();
-//            message.what = COMPRESS_DOWN;
-//            message.obj = path;
-//            handler.sendMessage(message);
-        }
-    }
-
-
-    // 压缩图片的 Task
-    class MyTask1 extends AsyncTask<String, Void, Void> {
-
-        @Override
-        protected Void doInBackground(String... params) {
-            String picPath = params[0];
-//            Bitmap bt = comp(picPath);
-//            saveBitmapFile(bt, picPath);
-            compress(picPath);
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(Void aVoid) {
-            super.onPostExecute(aVoid);
-
-            Message msg = Message.obtain();
-            msg.what = COMPRESS_REFLASH;
-            handler.sendMessage(msg);
-        }
-    }
-
-
-    private DisplayMetrics dm;
-
-    public void compress(String srcPath) {
-        dm = new DisplayMetrics();
-        getActivity().getWindowManager().getDefaultDisplay().getMetrics(dm);
-
-        float hh = dm.heightPixels;
-        float ww = dm.widthPixels;
-        BitmapFactory.Options opts = new BitmapFactory.Options();
-        opts.inJustDecodeBounds = true;
-        Bitmap bitmap = BitmapFactory.decodeFile(srcPath, opts);
-        opts.inJustDecodeBounds = false;
-        int w = opts.outWidth;
-        int h = opts.outHeight;
-        int size = 0;
-        if (w <= ww && h <= hh) {
-            size = 1;
-        } else {
-            double scale = w >= h ? w / ww : h / hh;
-            double log = Math.log(scale) / Math.log(2);
-            double logCeil = Math.ceil(log);
-            size = (int) Math.pow(2, logCeil);
-        }
-        opts.inSampleSize = size;
-        bitmap = BitmapFactory.decodeFile(srcPath, opts);
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        int quality = 100;
-        bitmap.compress(Bitmap.CompressFormat.JPEG, quality, baos);
-        System.out.println(baos.toByteArray().length);
-        while (baos.toByteArray().length > 100 * 1024) {
-            baos.reset();
-            bitmap.compress(Bitmap.CompressFormat.JPEG, quality, baos);
-            quality -= 20;
-            System.out.println(baos.toByteArray().length);
-        }
-        try {
-//            baos.writeTo(new FileOutputStream("/mnt/sdcard/Servyou/photo/buffer/22.jpg"));
-            baos.writeTo(new FileOutputStream(srcPath));
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            try {
-                baos.flush();
-                baos.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-    }
-
-    /**
-     * 生成文件路径和文件名
-     *
-     * @return
-     */
-    private String getFileName() {
-        String saveDir = Environment.getExternalStorageDirectory() + "/myPic";
-        File dir = new File(saveDir);
-        if (!dir.exists()) {
-            dir.mkdirs(); // 创建文件夹
-        }
-        //用日期作为文件名，确保唯一性
-        Date date = new Date();
-        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss");
-        String fileName = saveDir + "/" + formatter.format(date) + ".jpg";
-
-//        File file = new File(fileName);
-//        if (!file.exists()) {
-//            file.mkdirs();
-//        }
-        return fileName;
     }
 
     @Override
