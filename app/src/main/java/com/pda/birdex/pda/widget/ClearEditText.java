@@ -12,6 +12,7 @@ import android.view.View;
 import android.widget.EditText;
 
 import com.pda.birdex.pda.R;
+import com.pda.birdex.pda.utils.SoftKeyboardUtil;
 
 
 /**
@@ -25,16 +26,21 @@ public class ClearEditText extends EditText implements View.OnFocusChangeListene
     private OnClearETChangeListener listener;
     //设置清除文本时间
     private OnClearTextListener clearTextListener;
+
     public ClearEditText(Context context) {
         this(context, null);
     }
 
+    private Context mContext;
+
     public ClearEditText(Context context, AttributeSet attrs) {
         this(context, attrs, android.R.attr.editTextStyle);
+        mContext = context;
     }
 
     public ClearEditText(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
+        mContext = context;
         init();
     }
 
@@ -55,6 +61,10 @@ public class ClearEditText extends EditText implements View.OnFocusChangeListene
         // 设置输入框里面内容发生改变的监听
         addTextChangedListener(this);
     }
+
+    private int count = 0;
+    private long firClick = 0;
+    private long secClick = 0;
 
     /* @说明：isInnerWidth, isInnerHeight为ture，触摸点在删除图标之内，则视为点击了删除图标
      * event.getX() 获取相对应自身左上角的X坐标
@@ -83,13 +93,35 @@ public class ClearEditText extends EditText implements View.OnFocusChangeListene
                 boolean isInnerHeight = y > distance && y < (distance + height);
                 if (isInnerWidth && isInnerHeight) {
                     this.setText("");
-                    if(clearTextListener!=null){
+                    if (clearTextListener != null) {
                         clearTextListener.clearTextListenr();
                     }
                 }
             }
         }
-        return super.onTouchEvent(event);
+        if (MotionEvent.ACTION_DOWN == event.getAction()) {
+            count++;
+            if (count == 1) {
+                firClick = System.currentTimeMillis();
+                SoftKeyboardUtil.hideSoftKeyboard(mContext, this);
+                this.requestFocus();
+            } else if (count == 2) {
+                secClick = System.currentTimeMillis();
+                if (secClick - firClick < 300) {
+                    //双击事件
+                    SoftKeyboardUtil.openSoftKeyboard(mContext, this);
+                    count = 0;
+                    firClick = 0;
+                    secClick = 0;
+                } else {
+                    count = 1;
+                    firClick = System.currentTimeMillis();
+                    secClick = 0;
+                }
+                this.requestFocus();
+            }
+        }
+        return true;
     }
 
     /**
@@ -107,7 +139,7 @@ public class ClearEditText extends EditText implements View.OnFocusChangeListene
     }
 
     // 重写过 onFocusChange 后，需要调用
-    public void overrideOnFocusChange(boolean hasFocus){
+    public void overrideOnFocusChange(boolean hasFocus) {
         this.hasFoucs = hasFocus;
         if (hasFocus) {
             setClearIconVisible(getText().length() > 0);
@@ -164,12 +196,14 @@ public class ClearEditText extends EditText implements View.OnFocusChangeListene
     public void setOnClearETChangeListener(OnClearETChangeListener listener) {
         this.listener = listener;
     }
-    public interface OnClearTextListener{
+
+    public interface OnClearTextListener {
         void clearTextListenr();
     }
-    public void setOnClearTextListener(OnClearTextListener listener){
-        if(listener!=null){
-            this.clearTextListener=listener;
+
+    public void setOnClearTextListener(OnClearTextListener listener) {
+        if (listener != null) {
+            this.clearTextListener = listener;
         }
     }
 }

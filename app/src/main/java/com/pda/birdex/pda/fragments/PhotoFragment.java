@@ -120,7 +120,7 @@ public class PhotoFragment extends BaseFragment {
 
                         startActivityForResult(photoIntent, PHOTO_GREQUEST_CODE);
                     } else {
-                        T.showShort(getContext(), "照片不能超过10张");
+                        T.showShort(getContext(), getString(R.string.photo_most));
                     }
                 }
             }
@@ -141,7 +141,7 @@ public class PhotoFragment extends BaseFragment {
                     if (!sdStatus.equals(Environment.MEDIA_MOUNTED)) { // 检测sd是否可用
                         Log.i("TestFile",
                                 "SD card is not avaiable/writeable right now.");
-                        T.showLong(getContext(), "SDCard读取失败，请重试");
+                        T.showLong(getContext(), getString(R.string.sdcard_fail));
                         return;
                     }
                     pathList.add(filePath);
@@ -155,10 +155,10 @@ public class PhotoFragment extends BaseFragment {
             case PHOTO_SHOW:
                 if (resultCode == Activity.RESULT_OK) {
                     Bundle bundle = data.getExtras();
-                    String newpath = bundle.getString("newpath");
+//                    String newpath = bundle.getString("newpath");
                     int newposition = bundle.getInt("position");
                     pathList.remove(newposition);
-                    pathList.add(newposition, newpath);
+//                    pathList.add(newposition, newpath);
                 }
                 PhotoGVAdapter adapter = new PhotoGVAdapter(getContext(), pathList);
                 gv.setAdapter(adapter);

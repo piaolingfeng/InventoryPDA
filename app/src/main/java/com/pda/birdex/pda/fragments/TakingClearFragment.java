@@ -6,7 +6,6 @@ import android.os.Handler;
 import android.os.Message;
 import android.text.TextUtils;
 import android.view.View;
-import android.widget.FrameLayout;
 import android.widget.TextView;
 
 import com.loopj.android.http.JsonHttpResponseHandler;
@@ -20,7 +19,7 @@ import com.pda.birdex.pda.entity.TakingOrder;
 import com.pda.birdex.pda.interfaces.RequestCallBackInterface;
 import com.pda.birdex.pda.response.TakingOrderNoInfoEntity;
 import com.pda.birdex.pda.utils.GsonHelper;
-import com.pda.birdex.pda.utils.HideSoftKeyboardUtil;
+import com.pda.birdex.pda.utils.SoftKeyboardUtil;
 import com.pda.birdex.pda.utils.T;
 import com.pda.birdex.pda.widget.ClearEditText;
 
@@ -379,7 +378,7 @@ public class TakingClearFragment extends BarScanBaseFragment implements View.OnC
     @Override
     public void ClearEditTextCallBack(String code) {
         if (this.isVisible()) {
-            HideSoftKeyboardUtil.hideSoftKeyboard((BaseActivity)getActivity());
+            SoftKeyboardUtil.hideSoftKeyboard((BaseActivity) getActivity());
             if(edt_taking_num.hasFocus()){
                 edt_box_size.requestFocus();
             }

@@ -18,7 +18,7 @@ import com.pda.birdex.pda.interfaces.TitleBarBackInterface;
 import com.pda.birdex.pda.response.MerchantEntity;
 import com.pda.birdex.pda.response.MerchantListEntity;
 import com.pda.birdex.pda.utils.GsonHelper;
-import com.pda.birdex.pda.utils.HideSoftKeyboardUtil;
+import com.pda.birdex.pda.utils.SoftKeyboardUtil;
 import com.pda.birdex.pda.widget.ClearEditText;
 import com.pda.birdex.pda.widget.TitleView;
 
@@ -175,7 +175,7 @@ public class MissionActivity extends BarScanActivity implements BaseFragment.OnF
 
     @Override
     public void ClearEditTextCallBack(String code) {
-        HideSoftKeyboardUtil.hideSoftKeyboard(this);
+        SoftKeyboardUtil.hideSoftKeyboard(this);
         EventBus.getDefault().post(code);
     }
 

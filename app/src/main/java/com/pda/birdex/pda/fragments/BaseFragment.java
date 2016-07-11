@@ -16,7 +16,7 @@ import android.widget.Toast;
 import com.pda.birdex.pda.R;
 import com.pda.birdex.pda.activity.BaseActivity;
 import com.pda.birdex.pda.interfaces.BackHandledInterface;
-import com.pda.birdex.pda.utils.HideSoftKeyboardUtil;
+import com.pda.birdex.pda.utils.SoftKeyboardUtil;
 import com.pda.birdex.pda.utils.SafeProgressDialog;
 import com.pda.birdex.pda.widget.RotateLoading;
 
@@ -169,7 +169,7 @@ public abstract class BaseFragment extends android.support.v4.app.Fragment {
             contentView = inflater.inflate(mContentLayoutResId, container, false);
             // 注解方式初始化控件
             ButterKnife.bind(this, contentView);
-            HideSoftKeyboardUtil.setupAppCompatUI(contentView, (BaseActivity) getActivity());
+            SoftKeyboardUtil.setupAppCompatUI(contentView, (BaseActivity) getActivity());
             initializeContentViews();
             isPrepared = true;
             lazyLoad();

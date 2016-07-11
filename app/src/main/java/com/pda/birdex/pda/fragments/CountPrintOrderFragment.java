@@ -14,7 +14,7 @@ import com.pda.birdex.pda.interfaces.RequestCallBackInterface;
 import com.pda.birdex.pda.response.CountingOrderNoInfoEntity;
 import com.pda.birdex.pda.response.PrintEntity;
 import com.pda.birdex.pda.utils.GsonHelper;
-import com.pda.birdex.pda.utils.HideSoftKeyboardUtil;
+import com.pda.birdex.pda.utils.SoftKeyboardUtil;
 import com.pda.birdex.pda.widget.ClearEditText;
 
 import org.json.JSONException;
@@ -62,7 +62,7 @@ public class CountPrintOrderFragment extends BarScanBaseFragment implements View
     @Override
     public void ClearEditTextCallBack(String code) {
         if (this.isVisible()) {
-            HideSoftKeyboardUtil.hideSoftKeyboard((CountToolActivity) getActivity());
+            SoftKeyboardUtil.hideSoftKeyboard((CountToolActivity) getActivity());
         }
     }
 

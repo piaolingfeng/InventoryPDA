@@ -5,7 +5,6 @@ import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
-import android.widget.Button;
 import android.widget.TextView;
 
 import com.pda.birdex.pda.MyApplication;
@@ -18,7 +17,7 @@ import com.pda.birdex.pda.interfaces.OnRecycleViewItemClickListener;
 import com.pda.birdex.pda.interfaces.RequestCallBackInterface;
 import com.pda.birdex.pda.response.CountingOrderNoInfoEntity;
 import com.pda.birdex.pda.utils.GsonHelper;
-import com.pda.birdex.pda.utils.HideSoftKeyboardUtil;
+import com.pda.birdex.pda.utils.SoftKeyboardUtil;
 import com.pda.birdex.pda.utils.T;
 import com.pda.birdex.pda.widget.ClearEditText;
 
@@ -147,7 +146,7 @@ public class CountBindOrderFragment extends BarScanBaseFragment implements View.
     }
 
     private void inputEntry(String input) {
-        HideSoftKeyboardUtil.hideSoftKeyboard((BaseActivity) getActivity());//隐藏软键盘
+        SoftKeyboardUtil.hideSoftKeyboard((BaseActivity) getActivity());//隐藏软键盘
         if (!TextUtils.isEmpty(input)) {
             if (!containerList.contains(input.trim())) {
                 containerList.add(input);
@@ -175,7 +174,7 @@ public class CountBindOrderFragment extends BarScanBaseFragment implements View.
     @Override
     public void ClearEditTextCallBack(String code) {
         if (this.isVisible()) {
-            HideSoftKeyboardUtil.hideSoftKeyboard((BaseActivity) getActivity());
+            SoftKeyboardUtil.hideSoftKeyboard((BaseActivity) getActivity());
             if (edt_count_container.hasFocus()) {
                 inputEntry(code);
             }

@@ -19,7 +19,7 @@ import com.pda.birdex.pda.interfaces.OnRecycleViewItemClickListener;
 import com.pda.birdex.pda.interfaces.RequestCallBackInterface;
 import com.pda.birdex.pda.response.TakingOrderNoInfoEntity;
 import com.pda.birdex.pda.utils.GsonHelper;
-import com.pda.birdex.pda.utils.HideSoftKeyboardUtil;
+import com.pda.birdex.pda.utils.SoftKeyboardUtil;
 import com.pda.birdex.pda.utils.StringUtils;
 import com.pda.birdex.pda.utils.T;
 import com.pda.birdex.pda.widget.ClearEditText;
@@ -163,7 +163,7 @@ public class TakingBindOrderFragment extends BarScanBaseFragment implements View
     @Override
     public void ClearEditTextCallBack(String code) {
         if (this.isVisible()) {
-            HideSoftKeyboardUtil.hideSoftKeyboard((BaseActivity)getActivity());
+            SoftKeyboardUtil.hideSoftKeyboard((BaseActivity) getActivity());
             if (edt_taking_container.hasFocus()||getEdt_input() == edt_taking_container) {
                 inputEntry(code);
                 edt_taking_container.requestFocus();

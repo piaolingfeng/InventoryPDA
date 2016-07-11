@@ -75,16 +75,25 @@ public class PhotoShowActivity extends BaseActivity{
 //        viewpager.setAdapter(myPagerAdapter);
 //        viewpager.setCurrentItem(position);
 
-        titleView.setSaveText("重拍");
+        titleView.setSaveText(getString(R.string.photo_delete));
         View.OnClickListener listener = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent photoIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+//                Intent photoIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+//
+//                filePath = getFileName();
+//                photoIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(new File(filePath)));
+//
+//                startActivityForResult(photoIntent, PHOTO_GREQUEST_CODE);
 
-                filePath = getFileName();
-                photoIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(new File(filePath)));
+                Intent resultIntent = new Intent();
+                Bundle bundle = new Bundle();
+//                bundle.putString("newpath", filePath);
+                bundle.putInt("position", position);
+                resultIntent.putExtras(bundle);
+                setResult(RESULT_OK, resultIntent);
 
-                startActivityForResult(photoIntent, PHOTO_GREQUEST_CODE);
+                finish();
             }
         };
         titleView.setSaveListener(listener);
