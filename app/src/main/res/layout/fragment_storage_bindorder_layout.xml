@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.zhy.android.percent.support.PercentLinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <com.zhy.android.percent.support.PercentLinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_paddingPercent="@string/item_padding_3w">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/count_vessel_no"
+            android:textColor="@color/context_1"
+            app:layout_textSizePercent="@string/size_6w" />
+
+        <TextView
+            android:id="@+id/tv_vessel_num"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/context_2"
+            app:layout_marginTopPercent="@string/item_padding_3w"
+            app:layout_textSizePercent="@string/size_6w" />
+    </com.zhy.android.percent.support.PercentLinearLayout>
+
+    <com.zhy.android.percent.support.PercentLinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_paddingPercent="@string/item_padding_3w">
+
+
+        <com.zhy.android.percent.support.PercentRelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/storage_order"
+                android:textColor="@color/context_1"
+                app:layout_marginBottomPercent="@string/item_padding_3w"
+                android:layout_centerVertical="true"
+                app:layout_textSizePercent="@string/size_6w" />
+            <Button
+                android:id="@+id/btn_edit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/rect_fullbluew_selector"
+                android:textColor="@color/btn_blue_selector"
+                android:text="@string/edit"
+                android:visibility="invisible"
+                android:layout_alignParentRight="true"
+                app:layout_textSizePercent="@string/size_5w"
+                app:layout_marginRightPercent="@string/size_5w"/>
+        </com.zhy.android.percent.support.PercentRelativeLayout>
+
+        <com.zhy.android.percent.support.PercentRelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <com.pda.birdex.pda.widget.ClearEditText
+                android:id="@+id/edt_storage_order"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:singleLine="true"
+                android:textColor="@color/context_2" />
+
+            <TextView
+                android:id="@+id/tv_storage_order"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                android:textColor="@color/context_2"
+                app:layout_textSizePercent="@string/size_6w" />
+
+        </com.zhy.android.percent.support.PercentRelativeLayout>
+
+    </com.zhy.android.percent.support.PercentLinearLayout>
+
+    <com.zhy.android.percent.support.PercentRelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <Button
+            android:id="@+id/btn_commit"
+            android:layout_width="200dp"
+            android:layout_height="50dp"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:background="@drawable/rect_fullbluew_selector"
+            android:text="@string/submit"
+            android:textColor="@color/btn_blue_selector"
+            app:layout_marginBottomPercent="@string/size_5w"
+            app:layout_textSizePercent="@string/size_6w" />
+    </com.zhy.android.percent.support.PercentRelativeLayout>
+</com.zhy.android.percent.support.PercentLinearLayout>

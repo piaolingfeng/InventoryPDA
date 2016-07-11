@@ -29,7 +29,8 @@ public class CheckActivity extends BaseActivity {
     TextView tv_taking_num;
     @Bind(R.id.tv_taking_num_head)
     TextView tv_taking_num_head;
-
+    @Bind(R.id.tv_print_num)
+    TextView tv_print_num;
     @Bind(R.id.tv_taking_container)
     TextView tv_taking_container;
     @Bind(R.id.tv_check_map)
@@ -52,8 +53,13 @@ public class CheckActivity extends BaseActivity {
     PercentLinearLayout pll_amount;
     @Bind(R.id.pll_upc)
     PercentLinearLayout pll_upc;
-
-
+    @Bind(R.id.pll_count_num)
+    PercentLinearLayout pll_count_num;
+    //入库才有的部分
+    @Bind(R.id.pll_storage_position)
+    PercentLinearLayout pll_storage_position;//库位
+    @Bind(R.id.tv_storage_position)
+    TextView tv_storage_position;
     Bundle b = null;
 
     List<String> currentMenuList = new ArrayList<>();
@@ -88,7 +94,13 @@ public class CheckActivity extends BaseActivity {
         }
         if (b.getString("checkType").equals(getString(R.string.storge))) {//入库
             title.setTitle(getString(R.string.check_storage_info));
+            tv_taking_num_head.setText(getString(R.string.count_vessel_no));
+            tv_print_num.setText(getString(R.string.storage_order));
+            pll_amount.setVisibility(View.VISIBLE);
+            pll_upc.setVisibility(View.VISIBLE);
             toolMenu = getResources().getStringArray(R.array.storage_tool_list);
+            pll_count_num.setVisibility(View.GONE);
+            pll_storage_position.setVisibility(View.VISIBLE);
         }
         title.setMenuVisble(true);
         for (String title : toolMenu) {
@@ -134,8 +146,8 @@ public class CheckActivity extends BaseActivity {
                     intent.setClass(CheckActivity.this, TakingToolActivity.class);
                 else if (b.getString("checkType").equals(getString(R.string.count)))
                     intent.setClass(CheckActivity.this, CountToolActivity.class);
-                else if(b.getString("checkType").equals(getString(R.string.storge))){
-                    intent.setClass(CheckActivity.this,StorageToolActivity.class);
+                else if (b.getString("checkType").equals(getString(R.string.storge))) {
+                    intent.setClass(CheckActivity.this, StorageToolActivity.class);
                 }
                 Bundle b = getIntent().getExtras();//把加载fragment的位置传递给takingtool
                 b.putInt("position", position);

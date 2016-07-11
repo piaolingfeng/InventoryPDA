@@ -161,7 +161,7 @@ public class TakingScanActivity extends BarScanActivity implements View.OnClickL
 
     @Override
     public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-        if (actionId == EditorInfo.IME_ACTION_SEARCH ) {
+        if (actionId == EditorInfo.IME_ACTION_SEARCH || actionId == EditorInfo.IME_ACTION_UNSPECIFIED) {
             String string = v.getText().toString();
             ClearEditTextCallBack(string);
         }

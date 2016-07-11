@@ -15,9 +15,12 @@ import com.pda.birdex.pda.fragments.StorageTrackFragment;
 import com.pda.birdex.pda.fragments.StorageUnBindFragment;
 import com.pda.birdex.pda.interfaces.BackHandledInterface;
 import com.pda.birdex.pda.interfaces.OnRecycleViewItemClickListener;
+import com.pda.birdex.pda.utils.HideSoftKeyboardUtil;
 import com.pda.birdex.pda.utils.L;
 import com.pda.birdex.pda.widget.ClearEditText;
 import com.pda.birdex.pda.widget.TitleView;
+
+import org.greenrobot.eventbus.Subscribe;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -57,6 +60,7 @@ public class StorageToolActivity extends BasePrintBarScanActivity implements OnR
 
     @Override
     public void printInitializeContentViews() {
+        bus.register(this);
         if(bindOrderFragment==null)
             bindOrderFragment = new StorageBindOrderFragment();
         if(printOrderFragment == null)
@@ -173,12 +177,27 @@ public class StorageToolActivity extends BasePrintBarScanActivity implements OnR
 
     @Override
     public void ClearEditTextCallBack(String code) {
-
+        HideSoftKeyboardUtil.hideSoftKeyboard(this);//所有扫描动作都统一隐藏软键盘
     }
 
     @Override
     public void onFragmentInteraction(Uri uri) {
 
+    }
+
+    @Subscribe
+    public void onEvent(List<String> list){
+        if(list!=null){//发送给打印机
+            for (String i:list){
+                sendMessage(i);
+            }
+        }
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        bus.unregister(this);
     }
 
 }
