@@ -149,6 +149,11 @@
 
         </com.zhy.android.percent.support.PercentLinearLayout>
 
+        <FrameLayout
+            android:id="@+id/framelayout_2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"></FrameLayout>
+
         <com.zhy.android.percent.support.PercentRelativeLayout
             android:layout_width="match_parent"
             android:layout_marginTop="20dp"

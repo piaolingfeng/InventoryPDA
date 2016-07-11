@@ -31,6 +31,10 @@ public class StorageClearFragment extends BarScanBaseFragment implements View.On
     TextView tv_amount;
     @Bind(R.id.btn_commit)
     Button btn_commit;
+
+    // 图片 fragment
+    private PhotoFragment photoFragment;
+
     @Override
     public int getbarContentLayoutResId() {
         return R.layout.fragment_storage_clear_layout;
@@ -38,6 +42,9 @@ public class StorageClearFragment extends BarScanBaseFragment implements View.On
 
     @Override
     public void barInitializeContentViews() {
+
+        photoFragment = new PhotoFragment(false);
+        getActivity().getSupportFragmentManager().beginTransaction().add(R.id.framelayout_2, photoFragment).commit();
 
     }
 

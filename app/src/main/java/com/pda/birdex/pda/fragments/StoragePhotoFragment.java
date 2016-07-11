@@ -28,6 +28,9 @@ public class StoragePhotoFragment extends BarScanBaseFragment implements View.On
     @Bind(R.id.btn_commit)
     Button btn_commit;
 
+    // 图片 fragment
+    private PhotoFragment photoFragment;
+
     @Override
     public int getbarContentLayoutResId() {
         return R.layout.fragment_storage_photo_layout;
@@ -45,6 +48,9 @@ public class StoragePhotoFragment extends BarScanBaseFragment implements View.On
                 return false;
             }
         });
+
+        photoFragment = new PhotoFragment();
+        getActivity().getSupportFragmentManager().beginTransaction().add(R.id.framelayout_1, photoFragment).commit();
     }
 
     @Override
