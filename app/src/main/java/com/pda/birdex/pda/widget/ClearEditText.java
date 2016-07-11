@@ -107,7 +107,7 @@ public class ClearEditText extends EditText implements View.OnFocusChangeListene
                 this.requestFocus();
             } else if (count == 2) {
                 secClick = System.currentTimeMillis();
-                if (secClick - firClick < 500) {
+                if (secClick - firClick < 300) {
                     //双击事件
                     SoftKeyboardUtil.openSoftKeyboard(mContext, this);
                     count = 0;
