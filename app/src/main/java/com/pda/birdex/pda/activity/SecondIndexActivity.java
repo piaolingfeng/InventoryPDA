@@ -271,6 +271,10 @@ public class SecondIndexActivity extends BarScanActivity implements OnRecycleVie
                         //绑定入库单
                         intent.setClass(SecondIndexActivity.this, StorageBindOrderActivity.class);
                         break;
+                    case 3:
+                        //绑定库位
+                        intent.setClass(SecondIndexActivity.this, StorageBindStockActivity.class);
+                        break;
                     default:
                         intent.setClass(SecondIndexActivity.this, StorageFragmentActivity.class);
                 }
