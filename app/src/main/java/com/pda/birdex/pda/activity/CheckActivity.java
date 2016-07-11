@@ -10,6 +10,7 @@ import com.pda.birdex.pda.R;
 import com.pda.birdex.pda.entity.ContainerInfo;
 import com.pda.birdex.pda.interfaces.OnRecycleViewItemClickListener;
 import com.pda.birdex.pda.response.CountingOrderNoInfoEntity;
+import com.pda.birdex.pda.response.StockInContainerInfoEntity;
 import com.pda.birdex.pda.response.TakingOrderNoInfoEntity;
 import com.pda.birdex.pda.widget.TitleView;
 import com.zhy.android.percent.support.PercentLinearLayout;
@@ -69,6 +70,8 @@ public class CheckActivity extends BaseActivity {
     TakingOrderNoInfoEntity takingOrderNoInfoEntity;//揽收任务详情
     CountingOrderNoInfoEntity countingOrderNoInfoEntity;//清点任务详情
 
+    StockInContainerInfoEntity stockInContainerInfoEntity;//入库详情
+    String stockNum="";//入库容器号
     @Override
     public int getContentLayoutResId() {
         return R.layout.activity_check_layout;
@@ -101,6 +104,8 @@ public class CheckActivity extends BaseActivity {
             toolMenu = getResources().getStringArray(R.array.storage_tool_list);
             pll_count_num.setVisibility(View.GONE);
             pll_storage_position.setVisibility(View.VISIBLE);
+            stockInContainerInfoEntity = (StockInContainerInfoEntity) getIntent().getExtras().get("StockInContainerInfoEntity");
+            stockNum = getIntent().getStringExtra("stockNum");
         }
         title.setMenuVisble(true);
         for (String title : toolMenu) {
@@ -117,8 +122,8 @@ public class CheckActivity extends BaseActivity {
                 tv_box_size.setText(containerInfo.getCount() + "");
             }
             if (takingOrderNoInfoEntity.getDetail().getOperationLog() != null & takingOrderNoInfoEntity.getDetail().getOperationLog().size() > 0) {
-                tv_operation_man.setText(takingOrderNoInfoEntity.getDetail().getOperationLog().get(0).getOperator());
-                tv_time.setText(takingOrderNoInfoEntity.getDetail().getOperationLog().get(0).getOpterateTime());
+                tv_operation_man.setText(takingOrderNoInfoEntity.getDetail().getOperationLog().get(0).getUserName());
+                tv_time.setText(takingOrderNoInfoEntity.getDetail().getOperationLog().get(0).getTime());
 
             }
         }
@@ -133,8 +138,19 @@ public class CheckActivity extends BaseActivity {
             }
 //            tv_upc.setText(takingOrderNoInfoEntity.getDetail().getBaseInfo().getBaseInfo().getTid());upc暂时没有
             if (countingOrderNoInfoEntity.getDetail().getOperationLog() != null & countingOrderNoInfoEntity.getDetail().getOperationLog().size() > 0) {
-                tv_operation_man.setText(countingOrderNoInfoEntity.getDetail().getOperationLog().get(0).getOperator());
-                tv_time.setText(countingOrderNoInfoEntity.getDetail().getOperationLog().get(0).getOpterateTime());
+                tv_operation_man.setText(countingOrderNoInfoEntity.getDetail().getOperationLog().get(0).getUserName());
+                tv_time.setText(countingOrderNoInfoEntity.getDetail().getOperationLog().get(0).getTime());
+            }
+        }
+
+        //入库数据
+        if(stockInContainerInfoEntity!=null){
+            tv_taking_num.setText(stockNum);//容器号
+            tv_taking_container.setText(stockInContainerInfoEntity.getOrderNo());//入库单号
+//            tv_upc.setText(stockInContainerInfoEntity.getUpcData().get());
+            if (stockInContainerInfoEntity.getOperationLog().size() > 0) {
+                tv_operation_man.setText(stockInContainerInfoEntity.getOperationLog().get(0).getUserName());
+                tv_time.setText(stockInContainerInfoEntity.getOperationLog().get(0).getTime());
             }
         }
 

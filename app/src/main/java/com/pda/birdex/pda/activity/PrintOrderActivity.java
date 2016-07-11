@@ -168,9 +168,7 @@ public class PrintOrderActivity extends BasePrintBarScanActivity implements View
         else if (no_tv.equals(getString(R.string.taking_num)))// 揽收
             BirdApi.postTakingCodeSamePrint(this, codeEt.getText().toString(), this, tag, true);
         else if (no_tv.equals(getString(R.string.count_vessel_no)))// 入库
-        {
-
-        }
+            BirdApi.postStockInCodeSamePrint(this, codeEt.getText().toString(), this, tag, true);
     }
 
     //打印相同箱单
@@ -180,9 +178,7 @@ public class PrintOrderActivity extends BasePrintBarScanActivity implements View
         else if (no_tv.equals(getString(R.string.taking_num)))// 揽收
             BirdApi.postTakingCodeNewPrint(this, codeEt.getText().toString(), this, tag, true);
         else if (no_tv.equals(getString(R.string.count_vessel_no)))// 入库
-        {
-
-        }
+            BirdApi.postStockInCodeNewPrint(this, codeEt.getText().toString(), this, tag, true);
     }
 
     @Override

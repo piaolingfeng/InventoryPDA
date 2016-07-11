@@ -18,13 +18,26 @@
             android:textColor="@color/context_1"
             app:layout_textSizePercent="@string/size_6w" />
 
-        <TextView
-            android:id="@+id/tv_vessel_num"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="@color/context_2"
-            app:layout_marginTopPercent="@string/item_padding_3w"
-            app:layout_textSizePercent="@string/size_6w" />
+        <com.zhy.android.percent.support.PercentRelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <com.pda.birdex.pda.widget.ClearEditText
+                android:id="@+id/edt_vessel_num"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:singleLine="true"
+                android:visibility="gone"
+                android:textColor="@color/context_2" />
+
+            <TextView
+                android:id="@+id/tv_vessel_num"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/context_2"
+                app:layout_marginTopPercent="@string/item_padding_3w"
+                app:layout_textSizePercent="@string/size_6w" />
+        </com.zhy.android.percent.support.PercentRelativeLayout>
     </com.zhy.android.percent.support.PercentLinearLayout>
 
     <com.zhy.android.percent.support.PercentLinearLayout

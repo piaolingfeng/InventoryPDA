@@ -299,18 +299,48 @@ public class BirdApi {
 
     //清点：打印相同
     public static void postCountingCodeSamePrint(Context context, String containerNo, RequestCallBackInterface callBackInterface, String tag, boolean showDialog) {
-        postRequest(context, new RequestParams(), callBackInterface, "code/printSame/" + containerNo, tag, showDialog);
+        postRequest(context, new RequestParams(), callBackInterface, "counting/code/printSame/" + containerNo, tag, showDialog);
     }
 
     //清点：打印新的
     public static void postCountingCodeNewPrint(Context context, String containerNo, RequestCallBackInterface callBackInterface, String tag, boolean showDialog) {
-        postRequest(context, new RequestParams(), callBackInterface, "code/printNew/" + containerNo, tag, showDialog);
+        postRequest(context, new RequestParams(), callBackInterface, "counting/code/printNew/" + containerNo, tag, showDialog);
     }
 
     //清点：追踪
     public static void jsonCountTrack(Context context, JSONObject jsonObject, RequestCallBackInterface callBackInterface, String tag, boolean showDialog) {
         jsonPostRequest(context, jsonObject, callBackInterface, "counting/track", tag, showDialog);
     }
+
+
+    /**
+     *   入库接口
+     * */
+
+    //入库：查看入库容器信息
+    public static void stockInfo(Context context, String containerNo, RequestCallBackInterface callBackInterface, String tag, boolean showDialog) {
+        getRequest(context, callBackInterface, "/stockIn/" + containerNo, tag, showDialog);
+    }
+
+    //入库：打印相同
+    public static void postStockInCodeSamePrint(Context context, String containerNo, RequestCallBackInterface callBackInterface, String tag, boolean showDialog) {
+        postRequest(context, new RequestParams(), callBackInterface, "stockIn/code/printSame/" + containerNo, tag, showDialog);
+    }
+
+    //入库：打印新的
+    public static void postStockInCodeNewPrint(Context context, String containerNo, RequestCallBackInterface callBackInterface, String tag, boolean showDialog) {
+        postRequest(context, new RequestParams(), callBackInterface, "stockIn/code/printNew/" + containerNo, tag, showDialog);
+    }
+
+    //入库：打印
+    public static void postStockInCodePrint(Context context, JSONObject jsonObject, RequestCallBackInterface callBackInterface, String tag, boolean showDialog) {
+        jsonPostRequest(context, jsonObject, callBackInterface, "stockIn/code/print", tag, showDialog);
+    }
+
+
+
+
+
 
     /**
      * mContext 上下文对象

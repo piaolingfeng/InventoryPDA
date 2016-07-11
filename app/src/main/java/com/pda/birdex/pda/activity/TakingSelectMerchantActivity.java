@@ -6,7 +6,6 @@ import android.support.v7.widget.AppCompatSpinner;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.AdapterView;
-import android.widget.TextView;
 
 import com.pda.birdex.pda.MyApplication;
 import com.pda.birdex.pda.R;
@@ -72,7 +71,8 @@ public class TakingSelectMerchantActivity extends BaseActivity implements OnClic
 //                    isSpinnerFirst = false;
 //                } else {
 //                    isSpinnerFirst = false;
-                    merchantId = list.get(position).getMerchantId();
+                merchantId = list.get(position).getMerchantId();
+                edt_co.setText(merchantId);
 //                }
             }
 

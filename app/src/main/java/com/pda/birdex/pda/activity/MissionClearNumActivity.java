@@ -378,7 +378,7 @@ public class MissionClearNumActivity extends BasePrintBarScanActivity implements
     private void enterToTakingActivity(int position) {
         Intent intent = new Intent();
         Bundle b = new Bundle();
-        b.putSerializable("takingOrderNoInfoEntity", takingOrderNoInfoEntity);
+        b.putSerializable("orderNoInfoEntity", takingOrderNoInfoEntity);
         b.putSerializable("containerInfo", list.get(position));
         intent.setClass(this, CheckActivity.class);
         b.putString("location_position", "2");//揽收任务进入
@@ -489,28 +489,38 @@ public class MissionClearNumActivity extends BasePrintBarScanActivity implements
             try {
                 jsonObject.put("count", 1);
                 jsonObject.put("owner", takingOrderNoInfoEntity.getDetail().getBaseInfo().getPerson().getCo());
-                jsonObject.put("tkNo", takingOrderNoInfoEntity.getDetail().getBaseInfo().getBaseInfo().getTakingOrderNo());
-                BirdApi.postTakingCodePrint(this, jsonObject, new RequestCallBackInterface() {
-                    @Override
-                    public void successCallBack(JSONObject object) {
-                        PrintEntity entity = GsonHelper.getPerson(object.toString(), PrintEntity.class);
-                        if (entity != null && entity.getData() != null) {//发送给打印机
-                            for (String i : entity.getData()) {
-                                sendMessage(i);
-                            }
-                        }
-                    }
-
-                    @Override
-                    public void errorCallBack(JSONObject object) {
-
-                    }
-                }, tag, true);
+                jsonObject.put("orderNo", takingOrderNoInfoEntity.getDetail().getBaseInfo().getBaseInfo().getTakingOrderNo());
+                if (getResources().getString(R.string.taking).equals(HeadName)) //揽收
+                     BirdApi.postTakingCodePrint(this, jsonObject,callBackInterface , tag, true);
+                else{
+                    BirdApi.postCountingCodePrint(this, jsonObject,callBackInterface , tag, true);
+                }
             } catch (JSONException e) {
                 e.printStackTrace();
             }
         }
     }
+
+    RequestCallBackInterface callBackInterface = new RequestCallBackInterface() {
+        @Override
+        public void successCallBack(JSONObject object) {
+            PrintEntity entity = GsonHelper.getPerson(object.toString(), PrintEntity.class);
+            if (entity != null && entity.getData() != null) {//发送给打印机
+                for (String i : entity.getData()) {
+                    sendMessage(i);
+                }
+            }
+        }
+
+        @Override
+        public void errorCallBack(JSONObject object) {
+            try {
+                T.showShort(MissionClearNumActivity.this, object.getString("errMsg"));
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+    };
 
     @OnClick({R.id.btn_commit, R.id.btn_count_print_no})
     @Override

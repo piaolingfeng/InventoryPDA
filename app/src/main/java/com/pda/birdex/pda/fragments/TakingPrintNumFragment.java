@@ -109,13 +109,13 @@ public class TakingPrintNumFragment extends BarScanBaseFragment implements View.
                 }
                 jsonObject.put("count", count);
                 jsonObject.put("owner", takingOrder.getPerson().getCo());
-                jsonObject.put("tkNo", takingOrder.getBaseInfo().getTakingOrderNo());
+                jsonObject.put("orderNo", takingOrder.getBaseInfo().getTakingOrderNo());
                 orderId = takingOrder.getBaseInfo().getTakingOrderNo();
                 tid = takingOrder.getBaseInfo().getTid();
             } else {
                 jsonObject.put("count", 1);
                 jsonObject.put("owner", orderNoInfoEntity.getDetail().getBaseInfo().getPerson().getCo());
-                jsonObject.put("tkNo", orderNoInfoEntity.getDetail().getBaseInfo().getBaseInfo().getTakingOrderNo());
+                jsonObject.put("orderNo", orderNoInfoEntity.getDetail().getBaseInfo().getBaseInfo().getTakingOrderNo());
                 orderId = orderNoInfoEntity.getDetail().getBaseInfo().getBaseInfo().getTakingOrderNo();
                 tid = orderNoInfoEntity.getDetail().getBaseInfo().getBaseInfo().getTid();
             }

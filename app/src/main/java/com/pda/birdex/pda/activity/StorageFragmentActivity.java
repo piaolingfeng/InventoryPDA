@@ -24,7 +24,7 @@ public class StorageFragmentActivity extends BaseActivity implements  BaseFragme
     BaseFragment baseFragment;
     StoragePrintOrderFragment printOrderFragment;//打印入库单
     StorageBindOrderFragment bindOrderFragment;//绑定入库单
-    StorageTrackFragment trackFragment;//追踪箱号
+    StorageTrackFragment trackFragment;//追踪箱号，ok
     StorageUnBindFragment unBindFragment;//解除绑单
     StorageBindPositionFragment bindPositionFragment;//绑定库位
 

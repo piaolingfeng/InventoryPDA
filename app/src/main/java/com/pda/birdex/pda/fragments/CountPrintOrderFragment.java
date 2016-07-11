@@ -79,7 +79,7 @@ public class CountPrintOrderFragment extends BarScanBaseFragment implements View
         try {
             jsonObject.put("count", 1);
             jsonObject.put("owner", countingOrderNoInfoEntity.getDetail().getBaseInfo().getPerson().getCo());
-            jsonObject.put("tkNo", countingOrderNoInfoEntity.getDetail().getBaseInfo().getBaseInfo().getOrderNo());
+            jsonObject.put("orderNo", countingOrderNoInfoEntity.getDetail().getBaseInfo().getBaseInfo().getOrderNo());
             BirdApi.postCountingCodePrint(getActivity(), jsonObject, new RequestCallBackInterface() {
                 @Override
                 public void successCallBack(JSONObject object) {

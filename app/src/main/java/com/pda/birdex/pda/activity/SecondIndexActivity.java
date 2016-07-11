@@ -14,6 +14,9 @@ import com.pda.birdex.pda.api.BirdApi;
 import com.pda.birdex.pda.interfaces.OnRecycleViewItemClickListener;
 import com.pda.birdex.pda.interfaces.RequestCallBackInterface;
 import com.pda.birdex.pda.response.CommonItemEntity;
+import com.pda.birdex.pda.response.StockInContainerInfoEntity;
+import com.pda.birdex.pda.utils.GsonHelper;
+import com.pda.birdex.pda.utils.T;
 import com.pda.birdex.pda.widget.ClearEditText;
 import com.pda.birdex.pda.widget.TitleView;
 
@@ -156,10 +159,34 @@ public class SecondIndexActivity extends BarScanActivity implements OnRecycleVie
     @Override
     public void ClearEditTextCallBack(String code) {
         if (getString(R.string.storge).equals(titleStr)) {//入库
-            Intent intent = new Intent(this, CheckActivity.class);
-            intent.putExtra("checkType", getString(R.string.storge));
-            startActivity(intent);
+            checkForStockIn(code);
         }
+    }
+
+    //入库容器号搜索
+    private void checkForStockIn(final String code){
+        BirdApi.stockInfo(this, code, new RequestCallBackInterface() {
+            @Override
+            public void successCallBack(JSONObject object) {
+                StockInContainerInfoEntity entity = GsonHelper.getPerson(object.toString(), StockInContainerInfoEntity.class);
+                Intent intent = new Intent(SecondIndexActivity.this, CheckActivity.class);
+                Bundle b = new Bundle();
+                b.putSerializable("StockInContainerInfoEntity",entity);
+                b.putString("checkType", getString(R.string.storge));
+                b.putString("stockNum",code);
+                intent.putExtras(b);
+                startActivity(intent);
+            }
+
+            @Override
+            public void errorCallBack(JSONObject object) {
+                try {
+                    T.showShort(SecondIndexActivity.this, object.getString("errMsg"));
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        },tag,true);
     }
 
     @Override
@@ -242,4 +269,5 @@ public class SecondIndexActivity extends BarScanActivity implements OnRecycleVie
             startActivity(intent);
         }
     }
+
 }
