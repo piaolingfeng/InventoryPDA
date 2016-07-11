@@ -16,7 +16,7 @@ import com.pda.birdex.pda.interfaces.RequestCallBackInterface;
 import com.pda.birdex.pda.response.PrintEntity;
 import com.pda.birdex.pda.response.TakingOrderNoInfoEntity;
 import com.pda.birdex.pda.utils.GsonHelper;
-import com.pda.birdex.pda.utils.HideSoftKeyboardUtil;
+import com.pda.birdex.pda.utils.SoftKeyboardUtil;
 import com.pda.birdex.pda.utils.StringUtils;
 import com.pda.birdex.pda.widget.ClearEditText;
 
@@ -85,7 +85,7 @@ public class TakingPrintNumFragment extends BarScanBaseFragment implements View.
     @Override
     public void ClearEditTextCallBack(String code) {
         if (this.isVisible()) {
-            HideSoftKeyboardUtil.hideSoftKeyboard((BaseActivity)getActivity());
+            SoftKeyboardUtil.hideSoftKeyboard((BaseActivity) getActivity());
         }
     }
 

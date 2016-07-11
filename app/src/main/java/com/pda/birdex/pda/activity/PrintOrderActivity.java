@@ -16,7 +16,7 @@ import com.pda.birdex.pda.api.BirdApi;
 import com.pda.birdex.pda.interfaces.RequestCallBackInterface;
 import com.pda.birdex.pda.response.PrintEntity;
 import com.pda.birdex.pda.utils.GsonHelper;
-import com.pda.birdex.pda.utils.HideSoftKeyboardUtil;
+import com.pda.birdex.pda.utils.SoftKeyboardUtil;
 import com.pda.birdex.pda.utils.T;
 import com.pda.birdex.pda.widget.ClearEditText;
 import com.pda.birdex.pda.widget.TitleView;
@@ -121,7 +121,7 @@ public class PrintOrderActivity extends BasePrintBarScanActivity implements View
 
     @Override
     public void ClearEditTextCallBack(String code) {
-        HideSoftKeyboardUtil.hideSoftKeyboard(this);
+        SoftKeyboardUtil.hideSoftKeyboard(this);
         if (!TextUtils.isEmpty(code)) {
             visible();
         }

@@ -19,7 +19,7 @@ import com.pda.birdex.pda.MyApplication;
 import com.pda.birdex.pda.R;
 import com.pda.birdex.pda.utils.Constant;
 import com.pda.birdex.pda.utils.HelperUtil;
-import com.pda.birdex.pda.utils.HideSoftKeyboardUtil;
+import com.pda.birdex.pda.utils.SoftKeyboardUtil;
 import com.pda.birdex.pda.utils.SafeProgressDialog;
 import com.pda.birdex.pda.widget.RotateLoading;
 import com.pda.birdex.pda.widget.SystemBarTintManager;
@@ -39,7 +39,7 @@ public abstract class BaseActivity extends AppCompatActivity {
 
         // 添加到 activity 栈
         MyApplication.activityList.add(this);
-//        HideSoftKeyboardUtil.setupAppCompatUI(getRootView(this), this);
+//        SoftKeyboardUtil.setupAppCompatUI(getRootView(this), this);
         mContentLayoutResId = getContentLayoutResId();
         if (0 == mContentLayoutResId) {
             throw new IllegalArgumentException(
@@ -57,7 +57,7 @@ public abstract class BaseActivity extends AppCompatActivity {
             setTranslucentStatus(this,true);
         }
         ButterKnife.bind(this);
-        HideSoftKeyboardUtil.setupAppCompatUI(getRootView(this), this);
+        SoftKeyboardUtil.setupAppCompatUI(getRootView(this), this);
         bar = new ProgressDialog(this);
         loadingDialog = new SafeProgressDialog(this, R.style.semester_dialog);// 创建自定义样式dialog
         bar.setCanceledOnTouchOutside(false);

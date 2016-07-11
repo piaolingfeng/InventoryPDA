@@ -178,6 +178,13 @@
 
 
 
+    <string name="sdcard_fail">SDCard读取失败，请重试</string>
+    <string name="photo_most">照片不能超过10张</string>
+    <string name="photo_delete">删除</string>
+
+
+
+
 
 
 
