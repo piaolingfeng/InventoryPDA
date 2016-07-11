@@ -179,6 +179,10 @@
     <string name="check_storage_position">查看参考库位</string>
     <string name="not_unbind">该容器号未绑定入库单，无法进行解除绑单。</string>
     <string name="release_unbind">解除绑单</string>
+    <string name="storage_bind_count">待绑定入库单的容器号</string>
+    <string name="storage_bind_stock_count">待绑定库位的容器号</string>
+    <string name="storage_bind_order">绑定入库单</string>
+    <string name="storage_bind_stock">绑定库位</string>
 
     <string name="sdcard_fail">SDCard读取失败，请重试</string>
     <string name="photo_most">照片不能超过10张</string>

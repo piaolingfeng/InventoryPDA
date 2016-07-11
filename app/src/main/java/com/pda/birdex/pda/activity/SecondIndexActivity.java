@@ -159,7 +159,14 @@ public class SecondIndexActivity extends BarScanActivity implements OnRecycleVie
     @Override
     public void ClearEditTextCallBack(String code) {
         if (getString(R.string.storge).equals(titleStr)) {//入库
-            checkForStockIn(code);
+//            checkForStockIn(code);
+            Intent intent = new Intent(SecondIndexActivity.this, CheckActivity.class);
+            Bundle b = new Bundle();
+//            b.putSerializable("StockInContainerInfoEntity",entity);
+            b.putString("checkType", getString(R.string.storge));
+            b.putString("stockNum",code);
+            intent.putExtras(b);
+            startActivity(intent);
         }
     }
 
@@ -263,7 +270,15 @@ public class SecondIndexActivity extends BarScanActivity implements OnRecycleVie
                         b.putString("inputname", getString(R.string.count_vessel_no));
                         intent.setClass(SecondIndexActivity.this, PrintOrderActivity.class);
                         break;
-                    case 5:
+                    case 2:
+                        //绑定入库单
+                        intent.setClass(SecondIndexActivity.this, StorageBindOrderActivity.class);
+                        break;
+                    case 3:
+                        //绑定库位
+                        intent.setClass(SecondIndexActivity.this, StorageBindStockActivity.class);
+                        break;
+                    case 5://解绑
                         intent.setClass(SecondIndexActivity.this, StorageUnBindActivity.class);
                         break;
                     default:
