@@ -55,7 +55,9 @@ public class StorageUnBindFragment extends BaseFragment implements View.OnClickL
         if(entity!=null && StringUtils.isEmpty(entity.getOrderNo())){//异常，不能解绑
             disableEditMode();
         }else{
-            tv_storage_order.setText(entity.getOrderNo());
+            if(entity!=null) {
+                tv_storage_order.setText(entity.getOrderNo());
+            }
             editMode();
         }
     }
@@ -66,6 +68,8 @@ public class StorageUnBindFragment extends BaseFragment implements View.OnClickL
         try {
             object.put("containerNo",tv_vessel_num.getText());
             object.put("orderNo",tv_storage_order.getText());
+            object.put("tid",entity.getTid());
+            object.put("owner",entity.getOwner());
         } catch (JSONException e) {
             e.printStackTrace();
         }

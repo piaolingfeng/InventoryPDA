@@ -137,7 +137,7 @@ public class MainActivity extends BaseActivity implements OnRecycleViewItemClick
                     b.putStringArray("list", storageLists);
                     break;
                 case 3:
-                    intent.setClass(MainActivity.this, SettingBarScanActivity.class);
+                    intent.setClass(MainActivity.this, SettingActivity.class);
                     break;
                 case 4:
                     break;

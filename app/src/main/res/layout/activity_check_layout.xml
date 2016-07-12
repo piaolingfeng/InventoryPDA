@@ -236,7 +236,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                app:layout_paddingTopPercent="@string/item_padding_3w">
+                app:layout_paddingTopPercent="@string/item_padding_3w"
+                app:layout_marginBottomPercent="@string/item_padding_3w">
 
                 <TextView
                     android:layout_width="wrap_content"

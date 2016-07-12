@@ -58,7 +58,7 @@ public class StorageTrackFragment extends BarScanBaseFragment implements View.On
             entity = (StockInContainerInfoEntity) bundle.getSerializable("StockInContainerInfoEntity");
             stockNum = bundle.getString("stockNum");
             tv_vessel_num.setText(stockNum);
-            if (StringUtils.isEmpty(entity.getOldNo())) {//未提交过
+            if (entity!=null && StringUtils.isEmpty(entity.getLink())) {//未提交过
                 editMode();
             } else {
                 disEnableEditMode();

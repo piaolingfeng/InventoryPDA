@@ -1,9 +1,13 @@
 package com.pda.birdex.pda.activity;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 
 import com.pda.birdex.pda.MyApplication;
 import com.pda.birdex.pda.R;
@@ -23,7 +27,7 @@ import butterknife.Bind;
 /**
  * Created by chuming.zhuang on 2016/7/1.
  */
-public class SettingBarScanActivity extends BasePrintBarScanActivity {
+public class SettingActivity extends BasePrintBarScanActivity {
     @Bind(R.id.title)
     TitleView title;
     @Bind(R.id.rcy)
@@ -46,25 +50,26 @@ public class SettingBarScanActivity extends BasePrintBarScanActivity {
             entity.setCount("");
             indexList.add(entity);
         }
+        indexList.get(2).setName(indexList.get(2).getName()+getAppVersionName(this));
         adapter = new IndexAdapter(this,indexList);
         adapter.setOnRecycleViewItemClickListener(new OnRecycleViewItemClickListener() {
             @Override
             public void onItemClick(int position) {
                 switch (position){
                     case 0:
-                        Intent serverIntent = new Intent(SettingBarScanActivity.this, DeviceListActivity.class);
+                        Intent serverIntent = new Intent(SettingActivity.this, DeviceListActivity.class);
                         startActivityForResult(serverIntent, REQUEST_CONNECT_DEVICE);
                         break;
                     case 1:
                         for (Activity activity:MyApplication.activityList){
                             activity.finish();
                         }
-                        Intent intent = new Intent(SettingBarScanActivity.this,LoginActivity.class);
+                        Intent intent = new Intent(SettingActivity.this,LoginActivity.class);
                         startActivity(intent);
                         BirdApi.asyncHttpClient = null;
                         BirdApi.ahc = null;
-                        PreferenceUtils.setPrefString(SettingBarScanActivity.this, "token", "");
-                        SettingBarScanActivity.this.finish();
+                        PreferenceUtils.setPrefString(SettingActivity.this, "token", "");
+                        SettingActivity.this.finish();
                         break;
                 }
             }
@@ -86,5 +91,25 @@ public class SettingBarScanActivity extends BasePrintBarScanActivity {
     @Override
     public void ClearEditTextCallBack(String code) {
 
+    }
+
+    /**
+     * 返回当前程序版本名
+     */
+    public static String getAppVersionName(Context context) {
+        String versionName = "";
+        try {
+            // ---get the package info---
+            PackageManager pm = context.getPackageManager();
+            PackageInfo pi = pm.getPackageInfo(context.getPackageName(), 0);
+            versionName = pi.versionName;
+//            versioncode = pi.versionCode;
+            if (versionName == null || versionName.length() <= 0) {
+                return "";
+            }
+        } catch (Exception e) {
+            Log.e("VersionInfo", "Exception", e);
+        }
+        return versionName;
     }
 }

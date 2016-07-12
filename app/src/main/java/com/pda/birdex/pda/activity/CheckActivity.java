@@ -12,6 +12,7 @@ import com.pda.birdex.pda.interfaces.OnRecycleViewItemClickListener;
 import com.pda.birdex.pda.response.CountingOrderNoInfoEntity;
 import com.pda.birdex.pda.response.StockInContainerInfoEntity;
 import com.pda.birdex.pda.response.TakingOrderNoInfoEntity;
+import com.pda.birdex.pda.utils.TimeUtil;
 import com.pda.birdex.pda.widget.TitleView;
 import com.zhy.android.percent.support.PercentLinearLayout;
 
@@ -123,8 +124,8 @@ public class CheckActivity extends BaseActivity {
             }
             if (takingOrderNoInfoEntity.getDetail().getOperationLog() != null & takingOrderNoInfoEntity.getDetail().getOperationLog().size() > 0) {
                 tv_operation_man.setText(takingOrderNoInfoEntity.getDetail().getOperationLog().get(0).getUserName());
-                tv_time.setText(takingOrderNoInfoEntity.getDetail().getOperationLog().get(0).getTime());
-
+                String time = TimeUtil.long2Date(Long.parseLong(takingOrderNoInfoEntity.getDetail().getOperationLog().get(0).getTime()));
+                tv_time.setText(time);
             }
         }
 
@@ -134,12 +135,15 @@ public class CheckActivity extends BaseActivity {
                 tv_taking_container.setText(containerInfo.getContainerId());
                 tv_area.setText(containerInfo.getArea());
                 tv_box_size.setText(containerInfo.getCount() + "");
-                tv_amount.setText(containerInfo.getCount() + "");
+                if(containerInfo.getUpcData().size()>0) {
+                    tv_amount.setText(containerInfo.getUpcData().get(0).getCount());
+                    tv_upc.setText(containerInfo.getUpcData().get(0).getUpc());//upc取第一条数据
+                }
             }
-//            tv_upc.setText(takingOrderNoInfoEntity.getDetail().getBaseInfo().getBaseInfo().getTid());upc暂时没有
             if (countingOrderNoInfoEntity.getDetail().getOperationLog() != null & countingOrderNoInfoEntity.getDetail().getOperationLog().size() > 0) {
                 tv_operation_man.setText(countingOrderNoInfoEntity.getDetail().getOperationLog().get(0).getUserName());
-                tv_time.setText(countingOrderNoInfoEntity.getDetail().getOperationLog().get(0).getTime());
+                String time = TimeUtil.long2Date(Long.parseLong(countingOrderNoInfoEntity.getDetail().getOperationLog().get(0).getTime()));
+                tv_time.setText(time);
             }
         }
 
@@ -150,7 +154,12 @@ public class CheckActivity extends BaseActivity {
 //            tv_upc.setText(stockInContainerInfoEntity.getUpcData().get());
             if (stockInContainerInfoEntity.getOperationLog().size() > 0) {
                 tv_operation_man.setText(stockInContainerInfoEntity.getOperationLog().get(0).getUserName());
-                tv_time.setText(stockInContainerInfoEntity.getOperationLog().get(0).getTime());
+                String time = TimeUtil.long2Date(Long.parseLong(stockInContainerInfoEntity.getOperationLog().get(0).getTime()));
+                tv_time.setText(time);
+                if(stockInContainerInfoEntity.getUpcData().size()>0) {
+                    tv_amount.setText(stockInContainerInfoEntity.getUpcData().get(0).getCount());
+                    tv_upc.setText(stockInContainerInfoEntity.getUpcData().get(0).getUpc());//upc取第一条数据
+                }
             }
         }
 

@@ -326,7 +326,7 @@ public class BirdApi {
 
     //入库：查看入库容器信息
     public static void stockInfo(Context context, String containerNo, RequestCallBackInterface callBackInterface, String tag, boolean showDialog) {
-        getRequest(context, callBackInterface, "/stockIn/" + containerNo, tag, showDialog);
+        getRequest(context, callBackInterface, "stockIn/" + containerNo, tag, showDialog);
     }
 
     //入库：打印相同
@@ -349,8 +349,10 @@ public class BirdApi {
         jsonPostRequest(context, jsonObject, callBackInterface, "stockIn/track", tag, showDialog);
     }
 
-
-
+    //入库：绑单
+    public static void postStockInbBndOrderBat(Context context, JSONObject jsonObject, RequestCallBackInterface callBackInterface, String tag, boolean showDialog) {
+        jsonPostRequest(context, jsonObject, callBackInterface, "stockIn/code/bindOrderBat", tag, showDialog);
+    }
 
 
 

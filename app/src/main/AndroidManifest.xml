@@ -140,7 +140,7 @@
             android:windowSoftInputMode="adjustPan|stateHidden"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".activity.SettingBarScanActivity"
+            android:name=".activity.SettingActivity"
             android:windowSoftInputMode="adjustResize|stateHidden"
             android:screenOrientation="portrait" />
         <activity
