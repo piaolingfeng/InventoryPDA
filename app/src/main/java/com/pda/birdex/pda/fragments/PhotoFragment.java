@@ -130,6 +130,15 @@ public class PhotoFragment extends BaseFragment {
         gv.setAdapter(adapter);
     }
 
+    // 显示标记异常
+    public void showException(boolean flag){
+        if(flag) {
+            exception_cb.setVisibility(View.VISIBLE);
+        } else {
+            exception_cb.setVisibility(View.GONE);
+        }
+    }
+
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {

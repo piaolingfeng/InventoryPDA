@@ -337,6 +337,20 @@ public class BirdApi {
         jsonPostRequest(context, jsonObject, callBackInterface, "stockIn/code/print", tag, showDialog);
     }
 
+    //入库：上传照片
+    public static void postStockUploadPhoto(Context context, JSONObject jsonObject, RequestCallBackInterface callBackInterface, String tag, boolean showDialog) {
+        jsonPostRequest(context, jsonObject, callBackInterface, "stockIn/photo", tag, showDialog);
+    }
+
+    //入库：绑定入库单
+    public static void postStockBindOrder(Context context, JSONObject jsonObject, RequestCallBackInterface callBackInterface, String tag, boolean showDialog) {
+        jsonPostRequest(context, jsonObject, callBackInterface, "stockIn/code/bindOrderBat", tag, showDialog);
+    }
+
+    //入库：清点
+    public static void postStockCounting(Context context, JSONObject jsonObject, RequestCallBackInterface callBackInterface, String tag, boolean showDialog) {
+        jsonPostRequest(context, jsonObject, callBackInterface, "stockIn/counting", tag, showDialog);
+    }
 
 
 

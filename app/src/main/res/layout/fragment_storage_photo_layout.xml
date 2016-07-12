@@ -51,6 +51,7 @@
                 android:background="@drawable/rect_fullbluew_selector"
                 android:textColor="@color/btn_blue_selector"
                 android:text="@string/edit"
+                android:visibility="gone"
                 android:layout_alignParentRight="true"
                 app:layout_textSizePercent="@string/size_5w"
                 app:layout_marginRightPercent="@string/size_5w"/>
@@ -83,6 +84,19 @@
         android:id="@+id/framelayout_1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"></FrameLayout>
+
+    <TextView
+        android:id="@+id/tv_exception"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:drawableLeft="@drawable/checkbox_selector"
+        android:drawablePadding="10dp"
+        android:padding="20dp"
+        android:background="@null"
+        android:visibility="gone"
+        android:text="@string/exception"
+        android:textColor="#979797" />
 
     <com.zhy.android.percent.support.PercentRelativeLayout
         android:id="@+id/pll_item"

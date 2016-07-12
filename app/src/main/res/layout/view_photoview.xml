@@ -26,6 +26,6 @@
         android:drawablePadding="10dp"
         android:padding="20dp"
         android:background="@null"
-        android:text="标记异常"
+        android:text="@string/sign_exception"
         android:textColor="#979797" />
 </LinearLayout>

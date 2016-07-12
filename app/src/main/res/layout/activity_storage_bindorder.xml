@@ -106,24 +106,24 @@
 
             </com.zhy.android.percent.support.PercentLinearLayout>
 
+            <com.zhy.android.percent.support.PercentRelativeLayout
+                android:id="@+id/pll_item"
+                android:layout_width="match_parent"
+                android:layout_height="80dp"
+                android:layout_alignParentBottom="true">
+
+                <Button
+                    android:id="@+id/btn_commit"
+                    android:layout_width="200dp"
+                    android:layout_height="50dp"
+                    android:layout_centerInParent="true"
+                    android:background="@drawable/rect_fullbluew_selector"
+                    android:text="@string/submit"
+                    android:textColor="@color/btn_blue_selector"
+                    app:layout_textSizePercent="@string/size_6w" />
+            </com.zhy.android.percent.support.PercentRelativeLayout>
 
         </com.zhy.android.percent.support.PercentLinearLayout>
     </com.pda.birdex.pda.widget.MyScrollview>
 
-    <com.zhy.android.percent.support.PercentRelativeLayout
-        android:id="@+id/pll_item"
-        android:layout_width="match_parent"
-        android:layout_height="80dp"
-        android:layout_alignParentBottom="true">
-
-        <Button
-            android:id="@+id/btn_commit"
-            android:layout_width="200dp"
-            android:layout_height="50dp"
-            android:layout_centerInParent="true"
-            android:background="@drawable/rect_fullbluew_selector"
-            android:text="@string/submit"
-            android:textColor="@color/btn_blue_selector"
-            app:layout_textSizePercent="@string/size_6w" />
-    </com.zhy.android.percent.support.PercentRelativeLayout>
 </com.zhy.android.percent.support.PercentLinearLayout>
