@@ -140,7 +140,7 @@
             android:windowSoftInputMode="adjustPan|stateHidden"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".activity.SettingBarScanActivity"
+            android:name=".activity.SettingActivity"
             android:windowSoftInputMode="adjustResize|stateHidden"
             android:screenOrientation="portrait" />
         <activity
@@ -157,6 +157,14 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".activity.StorageFragmentActivity"
+            android:windowSoftInputMode="adjustResize|stateHidden"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.StorageUnBindActivity"
+            android:windowSoftInputMode="adjustResize|stateHidden"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.StoragePrintInActivity"
             android:windowSoftInputMode="adjustResize|stateHidden"
             android:screenOrientation="portrait" />
         <activity

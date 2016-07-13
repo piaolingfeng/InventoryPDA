@@ -28,6 +28,7 @@
     <string name="not_null">不能为空!</string>
     <string name="keyCode_back">再按一次退出程序</string>
     <string name="parse_error">获取数据有误请与技术联系。</string>
+    <string name="parse_fail">解析失败,数据有误</string>
     <string name="index_hint">扫描单号、容器号搜索</string>
     <string name="submit">提\t交</string>
     <string name="photo">拍照</string>
@@ -191,11 +192,11 @@
     <string name="sdcard_fail">SDCard读取失败，请重试</string>
     <string name="photo_most">照片不能超过10张</string>
     <string name="photo_delete">删除</string>
-
-
-
-
-
+    <string name="unbind_success">解绑成功！</string>
+    <string name="unbind_fail">解绑失败！</string>
+    <string name="print_storage_order">打印入库单</string>
+    <string name="tablayout_text">请标记该库位商品稀缺程度</string>
+    <string name="tablayout_text1">该库位商品稀缺程度</string>
 
 
 

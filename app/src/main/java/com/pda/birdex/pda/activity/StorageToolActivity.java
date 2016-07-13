@@ -15,8 +15,8 @@ import com.pda.birdex.pda.fragments.StorageTrackFragment;
 import com.pda.birdex.pda.fragments.StorageUnBindFragment;
 import com.pda.birdex.pda.interfaces.BackHandledInterface;
 import com.pda.birdex.pda.interfaces.OnRecycleViewItemClickListener;
-import com.pda.birdex.pda.utils.SoftKeyboardUtil;
 import com.pda.birdex.pda.utils.L;
+import com.pda.birdex.pda.utils.SoftKeyboardUtil;
 import com.pda.birdex.pda.widget.ClearEditText;
 import com.pda.birdex.pda.widget.TitleView;
 

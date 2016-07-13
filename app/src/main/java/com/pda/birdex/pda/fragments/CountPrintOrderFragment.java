@@ -15,6 +15,7 @@ import com.pda.birdex.pda.response.CountingOrderNoInfoEntity;
 import com.pda.birdex.pda.response.PrintEntity;
 import com.pda.birdex.pda.utils.GsonHelper;
 import com.pda.birdex.pda.utils.SoftKeyboardUtil;
+import com.pda.birdex.pda.utils.T;
 import com.pda.birdex.pda.widget.ClearEditText;
 
 import org.json.JSONException;
@@ -86,7 +87,10 @@ public class CountPrintOrderFragment extends BarScanBaseFragment implements View
                     PrintEntity entity = GsonHelper.getPerson(object.toString(), PrintEntity.class);
                     //日志上报
                     MyApplication.loggingUpload.countPrint(getActivity(), tag, orderId, tid, entity.getContainerNos());
-                    bus.post(entity.getData());
+                    if (entity != null)
+                        bus.post(entity.getData());
+                    else
+                        T.showShort(getActivity(), getString(R.string.parse_fail));
                 }
 
                 @Override

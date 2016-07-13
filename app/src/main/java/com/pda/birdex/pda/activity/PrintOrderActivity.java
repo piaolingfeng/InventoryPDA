@@ -16,7 +16,6 @@ import com.pda.birdex.pda.api.BirdApi;
 import com.pda.birdex.pda.interfaces.RequestCallBackInterface;
 import com.pda.birdex.pda.response.PrintEntity;
 import com.pda.birdex.pda.utils.GsonHelper;
-import com.pda.birdex.pda.utils.SoftKeyboardUtil;
 import com.pda.birdex.pda.utils.T;
 import com.pda.birdex.pda.widget.ClearEditText;
 import com.pda.birdex.pda.widget.TitleView;
@@ -90,7 +89,8 @@ public class PrintOrderActivity extends BasePrintBarScanActivity implements View
         codeEt.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                visible();
+                if(actionId == KeyEvent.KEYCODE_ENTER || actionId == KeyEvent.KEYCODE_UNKNOWN || actionId == KeyEvent.KEYCODE_ENDCALL)
+                    ClearEditTextCallBack(v.getText().toString());
                 return false;
             }
         });
@@ -121,7 +121,7 @@ public class PrintOrderActivity extends BasePrintBarScanActivity implements View
 
     @Override
     public void ClearEditTextCallBack(String code) {
-        SoftKeyboardUtil.hideSoftKeyboard(this);
+//        SoftKeyboardUtil.hideSoftKeyboard(this);
         if (!TextUtils.isEmpty(code)) {
             visible();
         }
@@ -163,21 +163,21 @@ public class PrintOrderActivity extends BasePrintBarScanActivity implements View
 
     //打印相同箱单
     private void printSame() {
-        if (no_tv.equals(getString(R.string.count_box_no)))// 清点
+        if (no_tv.getText().equals(getString(R.string.count_box_no)))// 清点
             BirdApi.postCountingCodeSamePrint(this, codeEt.getText().toString(), this, tag, true);
-        else if (no_tv.equals(getString(R.string.taking_num)))// 揽收
+        else if (no_tv.getText().equals(getString(R.string.taking_num)))// 揽收
             BirdApi.postTakingCodeSamePrint(this, codeEt.getText().toString(), this, tag, true);
-        else if (no_tv.equals(getString(R.string.count_vessel_no)))// 入库
+        else if (no_tv.getText().equals(getString(R.string.count_vessel_no)))// 入库
             BirdApi.postStockInCodeSamePrint(this, codeEt.getText().toString(), this, tag, true);
     }
 
     //打印相同箱单
     private void printNew() {
-        if (no_tv.equals(getString(R.string.count_box_no)))// 清点
+        if (no_tv.getText().equals(getString(R.string.count_box_no)))// 清点
             BirdApi.postCountingCodeNewPrint(this, codeEt.getText().toString(), this, tag, true);
-        else if (no_tv.equals(getString(R.string.taking_num)))// 揽收
+        else if (no_tv.getText().equals(getString(R.string.taking_num)))// 揽收
             BirdApi.postTakingCodeNewPrint(this, codeEt.getText().toString(), this, tag, true);
-        else if (no_tv.equals(getString(R.string.count_vessel_no)))// 入库
+        else if (no_tv.getText().equals(getString(R.string.count_vessel_no)))// 入库
             BirdApi.postStockInCodeNewPrint(this, codeEt.getText().toString(), this, tag, true);
     }
 
@@ -192,11 +192,11 @@ public class PrintOrderActivity extends BasePrintBarScanActivity implements View
         //日志上报
         String orderId = entity.getOrderNo();
         String tid = entity.getTid();
-        if (no_tv.equals(getString(R.string.count_box_no)))// 清点日志上报
+        if (no_tv.getText().equals(getString(R.string.count_box_no)))// 清点日志上报
             MyApplication.loggingUpload.countPrint(this, tag, orderId, tid, entity.getContainerNos());
-        else if (no_tv.equals(getString(R.string.taking_num)))//揽收日志上报
+        else if (no_tv.getText().equals(getString(R.string.taking_num)))//揽收日志上报
             MyApplication.loggingUpload.takePrint(this, tag, orderId, tid, entity.getContainerNos());
-        else if (no_tv.equals(getString(R.string.count_vessel_no)))// 入库
+        else if (no_tv.getText().equals(getString(R.string.count_vessel_no)))// 入库
         {
 
         }

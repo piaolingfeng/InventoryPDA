@@ -7,6 +7,7 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.KeyEvent;
 import android.view.View;
+import android.widget.TextView;
 
 import com.pda.birdex.pda.R;
 import com.pda.birdex.pda.adapter.IndexAdapter;
@@ -16,6 +17,7 @@ import com.pda.birdex.pda.interfaces.RequestCallBackInterface;
 import com.pda.birdex.pda.response.CommonItemEntity;
 import com.pda.birdex.pda.response.StockInContainerInfoEntity;
 import com.pda.birdex.pda.utils.GsonHelper;
+import com.pda.birdex.pda.utils.SoftKeyboardUtil;
 import com.pda.birdex.pda.utils.T;
 import com.pda.birdex.pda.widget.ClearEditText;
 import com.pda.birdex.pda.widget.TitleView;
@@ -92,6 +94,18 @@ public class SecondIndexActivity extends BarScanActivity implements OnRecycleVie
         }
         rcy.setLayoutManager(myGLManager);
         rcy.setAdapter(adapter);
+
+        edt_search.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if(actionId == KeyEvent.KEYCODE_ENTER || actionId == KeyEvent.KEYCODE_UNKNOWN|| actionId == KeyEvent.KEYCODE_ENDCALL){
+                    if (getString(R.string.storge).equals(titleStr)) {//入库
+                        ClearEditTextCallBack(v.getText().toString());
+                    }
+                }
+                return false;
+            }
+        });
     }
 
     @Override
@@ -102,6 +116,8 @@ public class SecondIndexActivity extends BarScanActivity implements OnRecycleVie
 //            edt_search.setVisibility(View.VISIBLE);
         } else if (getString(R.string.count).equals(titleStr)) {
             getAllCountingMission();
+        }else if (titleStr.equals(getString(R.string.storge))) {//入库
+            edt_search.requestFocus();
         }
     }
 
@@ -158,15 +174,16 @@ public class SecondIndexActivity extends BarScanActivity implements OnRecycleVie
 
     @Override
     public void ClearEditTextCallBack(String code) {
+        SoftKeyboardUtil.hideSoftKeyboard(this);
         if (getString(R.string.storge).equals(titleStr)) {//入库
-//            checkForStockIn(code);
-            Intent intent = new Intent(SecondIndexActivity.this, CheckActivity.class);
-            Bundle b = new Bundle();
-//            b.putSerializable("StockInContainerInfoEntity",entity);
-            b.putString("checkType", getString(R.string.storge));
-            b.putString("stockNum",code);
-            intent.putExtras(b);
-            startActivity(intent);
+            checkForStockIn(code);
+//            Intent intent = new Intent(SecondIndexActivity.this, CheckActivity.class);
+//            Bundle b = new Bundle();
+////            b.putSerializable("StockInContainerInfoEntity",entity);
+//            b.putString("checkType", getString(R.string.storge));
+//            b.putString("stockNum",code);
+//            intent.putExtras(b);
+//            startActivity(intent);
         }
     }
 
@@ -262,6 +279,9 @@ public class SecondIndexActivity extends BarScanActivity implements OnRecycleVie
             if (getString(R.string.storge).equals(titleStr)) {
                 Bundle b = new Bundle();
                 switch (position) {
+                    case 0:
+                        intent.setClass(SecondIndexActivity.this, StoragePrintInActivity.class);//打印入库单
+                        break;
                     case 1:
                         b.putString("title", getString(R.string.storage_print_no));
                         b.putString("inputname", getString(R.string.count_vessel_no));
@@ -274,6 +294,9 @@ public class SecondIndexActivity extends BarScanActivity implements OnRecycleVie
                     case 3:
                         //绑定库位
                         intent.setClass(SecondIndexActivity.this, StorageBindStockActivity.class);
+                        break;
+                    case 5://解绑,最后跳转到storageFragmentActivity
+                        intent.setClass(SecondIndexActivity.this, StorageUnBindActivity.class);
                         break;
                     default:
                         intent.setClass(SecondIndexActivity.this, StorageFragmentActivity.class);

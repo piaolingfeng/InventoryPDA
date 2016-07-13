@@ -11,6 +11,7 @@ import com.pda.birdex.pda.api.BirdApi;
 import com.pda.birdex.pda.interfaces.OnRecycleViewItemClickListener;
 import com.pda.birdex.pda.interfaces.RequestCallBackInterface;
 import com.pda.birdex.pda.utils.GsonHelper;
+import com.pda.birdex.pda.utils.SoftKeyboardUtil;
 import com.pda.birdex.pda.utils.T;
 import com.pda.birdex.pda.widget.ClearEditText;
 import com.pda.birdex.pda.widget.TitleView;
@@ -21,6 +22,8 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import org.json.JSONObject;
 
 import butterknife.Bind;
 import butterknife.OnClick;
@@ -108,6 +111,13 @@ public class StorageBindOrderActivity extends BarScanActivity implements View.On
 
     @Override
     public void ClearEditTextCallBack(String code) {
+        SoftKeyboardUtil.hideSoftKeyboard(this);
+        if (edt_storage_num.hasFocus()) {
+            setEdt_input(edt_storage_container);
+            edt_storage_container.requestFocus();
+        } else {
+            setEdt_input(edt_storage_num);
+            edt_storage_num.requestFocus();
 //        if (edt_storage_num.hasFocus()) {
 //            setEdt_input(edt_storage_container);
 //            edt_storage_container.requestFocus();

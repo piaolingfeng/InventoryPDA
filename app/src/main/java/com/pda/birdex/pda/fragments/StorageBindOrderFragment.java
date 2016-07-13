@@ -12,6 +12,8 @@ import com.pda.birdex.pda.api.BirdApi;
 import com.pda.birdex.pda.interfaces.RequestCallBackInterface;
 import com.pda.birdex.pda.utils.GsonHelper;
 import com.pda.birdex.pda.utils.T;
+import com.pda.birdex.pda.response.StockInContainerInfoEntity;
+import com.pda.birdex.pda.utils.StringUtils;
 import com.pda.birdex.pda.widget.ClearEditText;
 
 import org.json.JSONArray;
@@ -42,6 +44,9 @@ public class StorageBindOrderFragment extends BarScanBaseFragment implements Vie
     Button btn_edit;
     @Bind(R.id.btn_commit)
     Button btn_commit;
+    StockInContainerInfoEntity entity;
+    String stockNum;//容器号
+
 
     @Override
     public int getbarContentLayoutResId() {
@@ -50,6 +55,19 @@ public class StorageBindOrderFragment extends BarScanBaseFragment implements Vie
 
     @Override
     public void barInitializeContentViews() {
+        bundle = getActivity().getIntent().getExtras();
+        if (bundle != null) {
+            entity = (StockInContainerInfoEntity) bundle.getSerializable("StockInContainerInfoEntity");
+            stockNum = bundle.getString("stockNum");
+        }
+        tv_vessel_num.setText(stockNum + "");
+        if (entity != null && !StringUtils.isEmpty(entity.getOrderNo())) {//异常，不能解绑
+            disableEditMode();
+            tv_storage_order.setText(entity.getOrderNo());
+        } else {
+            editMode();
+        }
+
         edt_storage_order.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
@@ -78,15 +96,17 @@ public class StorageBindOrderFragment extends BarScanBaseFragment implements Vie
         btn_edit.setVisibility(View.INVISIBLE);
         edt_storage_order.setVisibility(View.VISIBLE);
         tv_storage_order.setVisibility(View.INVISIBLE);
+        edt_storage_order.setText(tv_storage_order.getText());
         btn_commit.setClickable(true);
         btn_commit.setBackgroundResource(R.drawable.rect_fullbluew_selector);
         btn_commit.setTextColor(getResources().getColor(R.color.btn_blue_selector));
     }
 
-    private void disEnableEditMode() {
+    private void disableEditMode() {
         btn_edit.setVisibility(View.VISIBLE);
         edt_storage_order.setVisibility(View.INVISIBLE);
         tv_storage_order.setVisibility(View.VISIBLE);
+        tv_storage_order.setText(edt_storage_order.getText().toString());
         btn_commit.setClickable(false);
         btn_commit.setBackgroundResource(R.drawable.rect_fullgray);
         btn_commit.setTextColor(getResources().getColor(R.color.white));
@@ -109,7 +129,7 @@ public class StorageBindOrderFragment extends BarScanBaseFragment implements Vie
                     try {
                         if ("success".equals(object.getString("result"))) {
                             T.showShort(getContext(), getString(R.string.taking_submit_suc));
-                            disEnableEditMode();
+                            disableEditMode();
                         } else {
                             T.showShort(getContext(), getString(R.string.taking_submit_fal));
                         }
@@ -147,5 +167,11 @@ public class StorageBindOrderFragment extends BarScanBaseFragment implements Vie
                 editMode();
                 break;
         }
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        BirdApi.cancelRequestWithTag(TAG);
     }
 }

@@ -44,23 +44,23 @@ public class StorageFragmentActivity extends BaseActivity implements  BaseFragme
         int position = getIntent().getIntExtra("position",0);
         title.setTitle(head[position]);
         switch (position){
-            case 0:
-                if(printOrderFragment==null)
-                    printOrderFragment = new StoragePrintOrderFragment();
-                baseFragment = printOrderFragment;
-                break;
-            case 2:
-                if(bindOrderFragment==null)
-                    bindOrderFragment = new StorageBindOrderFragment();
-                baseFragment = bindOrderFragment;
-                break;
-            case 3:
-                if(bindPositionFragment == null)
-                    bindPositionFragment = new StorageBindPositionFragment();
-                baseFragment = bindPositionFragment;
-                break;
+//            case 0:
+//                if(printOrderFragment==null)
+//                    printOrderFragment = new StoragePrintOrderFragment();
+//                baseFragment = printOrderFragment;
+//                break;
+//            case 2:
+//                if(bindOrderFragment==null)
+//                    bindOrderFragment = new StorageBindOrderFragment();
+//                baseFragment = bindOrderFragment;
+//                break;
+//            case 3:
+//                if(bindPositionFragment == null)
+//                    bindPositionFragment = new StorageBindPositionFragment();
+//                baseFragment = bindPositionFragment;
+//                break;
             case 4:
-                if(trackFragment ==null)
+                if (trackFragment == null)
                     trackFragment = new StorageTrackFragment();
                 baseFragment = trackFragment;
                 break;

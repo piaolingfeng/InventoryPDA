@@ -76,6 +76,11 @@ public class BirdApi {
         MyApplication.ahc.post(context, BASE_URL + "/" + url, entity, "application/json", responseHandlerInterface);
     }
 
+    //删除
+    private static void delete(Context context, String url, HttpEntity entity, ResponseHandlerInterface responseHandlerInterface){
+        MyApplication.ahc.delete(context, BASE_URL + "/" + url, entity, "application/json", responseHandlerInterface);
+    }
+
     /**
      * @param context
      * @param url
@@ -117,6 +122,8 @@ public class BirdApi {
     private static void get(Context context, String url, TextHttpResponseHandler textHttpResponseHandler) {
         MyApplication.ahc.get(context, BASE_URL + "/" + url, textHttpResponseHandler);
     }
+
+
 
     //查询揽收单结果
     public static void Check(Context context, String expressNo, RequestCallBackInterface callBackInterface, String tag, boolean showDialog) {
@@ -319,7 +326,7 @@ public class BirdApi {
 
     //入库：查看入库容器信息
     public static void stockInfo(Context context, String containerNo, RequestCallBackInterface callBackInterface, String tag, boolean showDialog) {
-        getRequest(context, callBackInterface, "/stockIn/" + containerNo, tag, showDialog);
+        getRequest(context, callBackInterface, "stockIn/" + containerNo, tag, showDialog);
     }
 
     //入库：打印相同
@@ -351,6 +358,16 @@ public class BirdApi {
     public static void postStockCounting(Context context, JSONObject jsonObject, RequestCallBackInterface callBackInterface, String tag, boolean showDialog) {
         jsonPostRequest(context, jsonObject, callBackInterface, "stockIn/counting", tag, showDialog);
     }
+    //入库：追踪
+    public static void postStockInTrack(Context context, JSONObject jsonObject, RequestCallBackInterface callBackInterface, String tag, boolean showDialog) {
+        jsonPostRequest(context, jsonObject, callBackInterface, "stockIn/track", tag, showDialog);
+    }
+
+    //入库：绑单
+    public static void postStockInbBndOrderBat(Context context, JSONObject jsonObject, RequestCallBackInterface callBackInterface, String tag, boolean showDialog) {
+        jsonPostRequest(context, jsonObject, callBackInterface, "stockIn/code/bindOrderBat", tag, showDialog);
+    }
+
 
 
 
@@ -549,6 +566,73 @@ public class BirdApi {
 //        post(mContext, url, params, jsonHttpResponseHandler);
     }
 
+    //删除
+    public static void deleteRequest(final Context mContext, JSONObject jsonObject, final RequestCallBackInterface callBackInterface,
+                                       String url, String tag, final boolean showDialog) {
+        if (showDialog)
+            showLoading(mContext);
+        JsonHttpResponseHandler jsonHttpResponseHandler = new JsonHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                super.onSuccess(statusCode, headers, response);
+                if (callBackInterface != null) {
+                    if (response != null) {
+                        try {
+                            if ("success".equals(response.getString("result"))) {
+                                callBackInterface.successCallBack(response);
+                            } else {
+//                                T.showShort(mContext, response.getString("errMsg"));
+                                callBackInterface.errorCallBack(response);
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    } else {
+                        T.showShort(mContext, mContext.getString(R.string.successCallBack_error));
+                    }
+                } else {
+                    T.showShort(mContext, mContext.getString(R.string.callBack_error));
+                }
+            }
+
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
+                super.onSuccess(statusCode, headers, response);
+
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+                super.onFailure(statusCode, headers, throwable, errorResponse);
+                callBackInterface.errorCallBack(errorResponse);
+                switch (statusCode) {
+                    case 401:
+                        T.showShort(mContext, mContext.getString(R.string.request401));
+                        break;
+                    case 404:
+                        T.showShort(mContext, mContext.getString(R.string.request404));
+                        break;
+                }
+            }
+
+            @Override
+            public void onFinish() {
+                super.onFinish();
+                if (showDialog)
+                    hideLoading();
+            }
+
+        };
+        jsonHttpResponseHandler.setTag(tag);
+        try {
+            StringEntity stringEntity = new StringEntity(jsonObject.toString());
+            delete(mContext, url, stringEntity, jsonHttpResponseHandler);
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+
+//        post(mContext, url, params, jsonHttpResponseHandler);
+    }
 
     // 上传 upc 图片 url
     public static void upLoadUpc(Context context, RequestParams params, JsonHttpResponseHandler jsonHttpResponseHandler) {

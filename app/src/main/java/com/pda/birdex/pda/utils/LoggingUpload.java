@@ -22,6 +22,7 @@ import java.util.Map;
 
 /**
  * Created by chuming.zhuang on 2016/7/4.
+ * 日志
  */
 public class LoggingUpload {
     //日志上报

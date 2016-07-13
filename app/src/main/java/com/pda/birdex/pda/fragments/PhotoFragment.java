@@ -1,5 +1,6 @@
 package com.pda.birdex.pda.fragments;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -71,6 +72,7 @@ public class PhotoFragment extends BaseFragment {
 
     }
 
+    @SuppressLint("ValidFragment")
     public PhotoFragment(boolean flag) {
         isException = flag;
     }

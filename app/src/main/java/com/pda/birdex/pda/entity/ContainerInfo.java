@@ -15,7 +15,7 @@ public class ContainerInfo implements Serializable{
     String area = "";//": "string",
     int count=0;// (integer, optional): 箱号 ,
     List<String> photoUrl = new ArrayList<>();//": [
-
+    List<UpcData> upcData = new ArrayList<>();
     public String getContainerId() {
         return containerId;
     }
@@ -70,5 +70,9 @@ public class ContainerInfo implements Serializable{
 
     public void setPhotoUrl(List<String> photoUrl) {
         this.photoUrl = photoUrl;
+    }
+
+    public List<UpcData> getUpcData() {
+        return upcData;
     }
 }

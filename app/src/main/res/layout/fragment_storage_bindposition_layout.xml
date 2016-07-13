@@ -1,14 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <com.zhy.android.percent.support.PercentLinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
     <com.zhy.android.percent.support.PercentLinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_paddingPercent="@string/item_padding_3w"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        app:layout_paddingPercent="@string/item_padding_3w">
 
         <TextView
             android:layout_width="wrap_content"
@@ -29,8 +30,8 @@
     <com.zhy.android.percent.support.PercentLinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_paddingPercent="@string/item_padding_3w"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        app:layout_paddingPercent="@string/item_padding_3w">
 
         <TextView
             android:layout_width="wrap_content"
@@ -58,24 +59,26 @@
         <com.zhy.android.percent.support.PercentRelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
                 android:text="@string/storage_position"
                 android:textColor="@color/context_1"
                 app:layout_marginBottomPercent="@string/item_padding_3w"
-                android:layout_centerVertical="true"
                 app:layout_textSizePercent="@string/size_6w" />
+
             <Button
                 android:id="@+id/btn_edit"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="@drawable/rect_fullbluew_selector"
-                android:textColor="@color/btn_blue_selector"
-                android:text="@string/check_storage_position"
                 android:layout_alignParentRight="true"
-                app:layout_textSizePercent="@string/size_5w"
-                app:layout_marginRightPercent="@string/size_5w"/>
+                android:background="@drawable/rect_fullbluew_selector"
+                android:text="@string/check_storage_position"
+                android:textColor="@color/btn_blue_selector"
+                app:layout_marginRightPercent="@string/size_5w"
+                app:layout_textSizePercent="@string/size_5w" />
         </com.zhy.android.percent.support.PercentRelativeLayout>
 
         <com.zhy.android.percent.support.PercentRelativeLayout
@@ -93,11 +96,35 @@
                 android:id="@+id/tv_storage_position"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:visibility="gone"
                 android:textColor="@color/context_2"
+                android:visibility="gone"
                 app:layout_textSizePercent="@string/size_6w" />
 
         </com.zhy.android.percent.support.PercentRelativeLayout>
+
+    </com.zhy.android.percent.support.PercentLinearLayout>
+
+    <com.zhy.android.percent.support.PercentLinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_paddingPercent="@string/item_padding_3w">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/tablayout_text"
+            android:textColor="@color/red"
+            app:layout_marginBottomPercent="@string/item_padding_3w"
+            app:layout_textSizePercent="@string/size_5w"/>
+        <android.support.design.widget.TabLayout
+            android:id="@+id/tablayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_scrollFlags="scroll"
+            app:tabIndicatorColor="@color/blue"
+            app:tabSelectedTextColor="@color/blue"
+            app:tabTextColor="@color/gray" />
 
     </com.zhy.android.percent.support.PercentLinearLayout>
 
