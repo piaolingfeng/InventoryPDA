@@ -39,7 +39,7 @@ public class PhotoGVAdapter extends BaseAdapter {
 
     @Override
     public Object getItem(int position) {
-        if (position + 1 > bitmapList.size())
+        if (position + 1 < bitmapList.size())
             return bitmapList.get(position);
         else
             return null;

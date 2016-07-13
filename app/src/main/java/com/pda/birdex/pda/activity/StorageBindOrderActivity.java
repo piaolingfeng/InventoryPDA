@@ -1,5 +1,6 @@
 package com.pda.birdex.pda.activity;
 
+import android.nfc.Tag;
 import android.support.v7.widget.LinearLayoutManager;
 import android.text.TextUtils;
 import android.view.View;
@@ -118,13 +119,7 @@ public class StorageBindOrderActivity extends BarScanActivity implements View.On
         } else {
             setEdt_input(edt_storage_num);
             edt_storage_num.requestFocus();
-//        if (edt_storage_num.hasFocus()) {
-//            setEdt_input(edt_storage_container);
-//            edt_storage_container.requestFocus();
-//        } else {
-//            setEdt_input(edt_storage_num);
-//            edt_storage_num.requestFocus();
-//        }
+        }
         if (edt_storage_container.hasFocus() && (!TextUtils.isEmpty(code.trim()))) {
             inputEntry(code);
         }
@@ -179,5 +174,11 @@ public class StorageBindOrderActivity extends BarScanActivity implements View.On
                 upload();
                 break;
         }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        BirdApi.cancelRequestWithTag(TAG);
     }
 }

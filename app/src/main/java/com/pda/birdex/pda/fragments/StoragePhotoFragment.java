@@ -8,18 +8,24 @@ import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
+import android.widget.Adapter;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.TextView;
 
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 import com.pda.birdex.pda.MyApplication;
 import com.pda.birdex.pda.R;
+import com.pda.birdex.pda.adapter.PhotoGVAdapter;
+import com.pda.birdex.pda.adapter.PhotoGVUNAdapter;
 import com.pda.birdex.pda.api.BirdApi;
 import com.pda.birdex.pda.interfaces.RequestCallBackInterface;
+import com.pda.birdex.pda.response.StockInContainerInfoEntity;
 import com.pda.birdex.pda.utils.GsonHelper;
 import com.pda.birdex.pda.utils.T;
 import com.pda.birdex.pda.widget.ClearEditText;
+import com.pda.birdex.pda.widget.MyGridView;
 
 import org.apache.http.Header;
 import org.json.JSONArray;
@@ -56,8 +62,17 @@ public class StoragePhotoFragment extends BarScanBaseFragment implements View.On
     @Bind(R.id.tv_exception)
     TextView tv_exception;
 
+    @Bind(R.id.gv)
+    MyGridView gv;
+
+    @Bind(R.id.framelayout_1)
+    FrameLayout frameLayout;
+
     // 图片 fragment
     private PhotoFragment photoFragment;
+
+    private StockInContainerInfoEntity entity;
+    private String stockNum;//容器号
 
     // 存储照片路径的 list
     private List<String> pathList = new ArrayList<String>();
@@ -69,6 +84,7 @@ public class StoragePhotoFragment extends BarScanBaseFragment implements View.On
     private int sucCounts = 0;
 
     private final static int COMPRESS_DOWN = 3;
+    private final static int UPLOAD = 4;
 
     private Handler handler = new Handler() {
         @Override
@@ -126,45 +142,7 @@ public class StoragePhotoFragment extends BarScanBaseFragment implements View.On
                                     mProgress.setProgress(progress);
                                     sucCounts++;
                                     if (sucCounts == pathList.size()) {
-                                        JSONObject jsonObject = new JSONObject();
-                                        try {
-                                            // 调用提交上传图片接口
-                                            jsonObject.put("containerNo", tv_vessel_num.getText() + "");
-//                                            jsonObject.put("owner", ); owner暂时拿不到
-                                            jsonObject.put("upc", edt_upc.getText() + "");
-                                            jsonObject.put("isException", photoFragment.isChecked());
-                                            String urlsStr = GsonHelper.createJsonString(photoUrl);
-                                            JSONArray array = new JSONArray(urlsStr);
-                                            jsonObject.put("photoIds", array);
-                                            BirdApi.postStockUploadPhoto(getContext(), jsonObject, new RequestCallBackInterface() {
-
-                                                @Override
-                                                public void successCallBack(JSONObject object) {
-                                                    try {
-                                                        if ("success".equals(object.getString("result"))) {
-                                                            T.showShort(getContext(), getString(R.string.taking_upload_suc));
-                                                            disableEditMode();
-                                                            photoFragment.showException(false);
-                                                        } else {
-                                                            T.showShort(getContext(), getString(R.string.taking_upload_fal));
-                                                        }
-                                                    } catch (JSONException e) {
-                                                        e.printStackTrace();
-                                                    }
-                                                    dismissDialog();
-                                                }
-
-                                                @Override
-                                                public void errorCallBack(JSONObject object) {
-                                                    T.showShort(getContext(), getString(R.string.taking_upload_fal));
-                                                    dismissDialog();
-                                                }
-                                            }, TAG, true);
-                                        } catch (JSONException e) {
-                                            e.printStackTrace();
-                                            T.showShort(MyApplication.getInstans(), getString(R.string.taking_upload_fal));
-                                            dismissDialog();
-                                        }
+                                        upload();
                                     }
                                 } else {
                                     T.showShort(MyApplication.getInstans(), getString(R.string.taking_upload_fal));
@@ -197,6 +175,9 @@ public class StoragePhotoFragment extends BarScanBaseFragment implements View.On
                     });
 
                     break;
+                case UPLOAD:
+                    upload();
+                    break;
             }
         }
     };
@@ -221,6 +202,25 @@ public class StoragePhotoFragment extends BarScanBaseFragment implements View.On
 
         photoFragment = new PhotoFragment();
         getActivity().getSupportFragmentManager().beginTransaction().add(R.id.framelayout_1, photoFragment).commit();
+
+        bundle = getActivity().getIntent().getExtras();
+        if (bundle != null) {
+            entity = (StockInContainerInfoEntity) bundle.getSerializable("StockInContainerInfoEntity");
+            stockNum = bundle.getString("stockNum");
+            tv_vessel_num.setText(stockNum);
+
+            List<String> urls = entity.getPhotoUrl();
+            if (urls != null && urls.size() > 0) {
+                photoFragment.setPathList(urls);
+            }
+
+            if (entity.getUpcData().size() > 0) {
+                tv_upc.setText(entity.getUpcData().get(0).getUpc());//upc取第一条数据
+                edt_upc.setText(entity.getUpcData().get(0).getUpc());//upc取第一条数据
+                disableEditMode1();
+            }
+        }
+
     }
 
     @Override
@@ -255,12 +255,75 @@ public class StoragePhotoFragment extends BarScanBaseFragment implements View.On
 
             for (int i = 0; i < pathList.size(); i++) {
                 path = pathList.get(i);
-                Message message = Message.obtain();
-                message.what = COMPRESS_DOWN;
-                message.obj = path;
-                handler.sendMessage(message);
+                if(path.startsWith("http")){
+                    // http 开头的 说明已经上传过 图片服务器了
+                    String[] md5s = path.split("/");
+                    String md5 = md5s[md5s.length-1];
+
+                    progress++;
+                    mProgress.setProgress(progress);
+                    sucCounts++;
+                    photoUrl.add(md5);
+
+                    if (sucCounts == pathList.size()) {
+                        Message message = Message.obtain();
+                        message.what = UPLOAD;
+                        message.obj = path;
+                        handler.sendMessage(message);
+                    }
+                }else {
+                    Message message = Message.obtain();
+                    message.what = COMPRESS_DOWN;
+                    message.obj = path;
+                    handler.sendMessage(message);
+                }
             }
             return null;
+        }
+    }
+
+    private void upload(){
+        JSONObject jsonObject = new JSONObject();
+        try {
+            // 调用提交上传图片接口
+            jsonObject.put("containerNo", tv_vessel_num.getText() + "");
+            if (entity != null) {
+                jsonObject.put("owner", entity.getOwner());
+            }
+            jsonObject.put("upc", edt_upc.getText() + "");
+            jsonObject.put("isException", photoFragment.isChecked());
+            String urlsStr = GsonHelper.createJsonString(photoUrl);
+            JSONArray array = new JSONArray(urlsStr);
+            jsonObject.put("photoIds", array);
+            BirdApi.postStockUploadPhoto(getContext(), jsonObject, new RequestCallBackInterface() {
+
+                @Override
+                public void successCallBack(JSONObject object) {
+                    try {
+                        if ("success".equals(object.getString("result"))) {
+                            T.showShort(getContext(), getString(R.string.taking_upload_suc));
+                            disableEditMode();
+                            photoFragment.showException(false);
+                            tv_upc.setText(edt_upc.getText());
+                        } else {
+                            T.showShort(getContext(), getString(R.string.taking_upload_fal));
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                    dismissDialog();
+                }
+
+                @Override
+                public void errorCallBack(JSONObject object) {
+                    T.showShort(getContext(), getString(R.string.taking_upload_fal));
+                    dismissDialog();
+                }
+            }, TAG, true);
+        } catch (JSONException e) {
+            e.printStackTrace();
+            T.showShort(MyApplication.getInstans(), getString(R.string.taking_upload_fal));
+            dismissDialog();
         }
     }
 
@@ -296,6 +359,10 @@ public class StoragePhotoFragment extends BarScanBaseFragment implements View.On
         btn_commit.setTextColor(getResources().getColor(R.color.btn_blue_selector));
         edt_upc.setVisibility(View.VISIBLE);
         tv_upc.setVisibility(View.INVISIBLE);
+
+        tv_exception.setVisibility(View.GONE);
+        gv.setVisibility(View.GONE);
+        frameLayout.setVisibility(View.VISIBLE);
     }
 
     private void disableEditMode() {
@@ -306,11 +373,36 @@ public class StoragePhotoFragment extends BarScanBaseFragment implements View.On
         edt_upc.setVisibility(View.INVISIBLE);
         tv_upc.setVisibility(View.VISIBLE);
 
-        if(photoFragment.isChecked()){
+        if (photoFragment.isChecked()) {
             tv_exception.setVisibility(View.VISIBLE);
         } else {
             tv_exception.setVisibility(View.GONE);
         }
+        pathList = photoFragment.getPathList();
+        PhotoGVUNAdapter adapter = new PhotoGVUNAdapter(getContext(), pathList);
+        gv.setAdapter(adapter);
+        gv.setVisibility(View.VISIBLE);
+        frameLayout.setVisibility(View.GONE);
+    }
+
+    private void disableEditMode1() {
+        btn_edit.setVisibility(View.VISIBLE);
+        btn_commit.setClickable(false);
+        btn_commit.setBackgroundResource(R.drawable.rect_fullgray);
+        btn_commit.setTextColor(getResources().getColor(R.color.white));
+        edt_upc.setVisibility(View.INVISIBLE);
+        tv_upc.setVisibility(View.VISIBLE);
+
+//        if (photoFragment.isChecked()) {
+//            tv_exception.setVisibility(View.VISIBLE);
+//        } else {
+//            tv_exception.setVisibility(View.GONE);
+//        }
+        pathList = photoFragment.getPathList();
+        PhotoGVUNAdapter adapter = new PhotoGVUNAdapter(getContext(), pathList);
+        gv.setAdapter(adapter);
+        gv.setVisibility(View.VISIBLE);
+        frameLayout.setVisibility(View.GONE);
     }
 
     @OnClick({R.id.btn_commit, R.id.btn_edit})
@@ -344,5 +436,11 @@ public class StoragePhotoFragment extends BarScanBaseFragment implements View.On
                 photoFragment.showException(true);
                 break;
         }
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        BirdApi.cancelRequestWithTag(TAG);
     }
 }

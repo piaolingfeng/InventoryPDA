@@ -7,18 +7,22 @@ import android.os.Message;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.TextView;
 
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 import com.pda.birdex.pda.MyApplication;
 import com.pda.birdex.pda.R;
+import com.pda.birdex.pda.adapter.PhotoGVUNAdapter;
 import com.pda.birdex.pda.api.BirdApi;
 import com.pda.birdex.pda.entity.UpcData;
 import com.pda.birdex.pda.interfaces.RequestCallBackInterface;
+import com.pda.birdex.pda.response.StockInContainerInfoEntity;
 import com.pda.birdex.pda.utils.GsonHelper;
 import com.pda.birdex.pda.utils.T;
 import com.pda.birdex.pda.widget.ClearEditText;
+import com.pda.birdex.pda.widget.MyGridView;
 
 import org.apache.http.Header;
 import org.json.JSONArray;
@@ -58,6 +62,12 @@ public class StorageClearFragment extends BarScanBaseFragment implements View.On
     @Bind(R.id.btn_commit)
     Button btn_commit;
 
+    @Bind(R.id.gv)
+    MyGridView gv;
+
+    @Bind(R.id.framelayout_2)
+    FrameLayout frameLayout;
+
     // 图片 fragment
     private PhotoFragment photoFragment;
 
@@ -67,10 +77,14 @@ public class StorageClearFragment extends BarScanBaseFragment implements View.On
     // 存放所有返回图片地址的 list
     private List<String> photoUrl = new ArrayList<>();
 
+    private StockInContainerInfoEntity entity;
+    private String stockNum;//容器号
+
     // 记录上传图片成功返回的 url条数
     private int sucCounts = 0;
 
     private final static int COMPRESS_DOWN = 3;
+    private final static int UPLOAD = 4;
 
     private Handler handler = new Handler() {
         @Override
@@ -161,6 +175,9 @@ public class StorageClearFragment extends BarScanBaseFragment implements View.On
                     });
 
                     break;
+                case UPLOAD:
+                    commit();
+                    break;
             }
         }
     };
@@ -176,6 +193,37 @@ public class StorageClearFragment extends BarScanBaseFragment implements View.On
         photoFragment = new PhotoFragment(false);
         getActivity().getSupportFragmentManager().beginTransaction().add(R.id.framelayout_2, photoFragment).commit();
 
+        bundle = getActivity().getIntent().getExtras();
+        if (bundle != null) {
+            entity = (StockInContainerInfoEntity) bundle.getSerializable("StockInContainerInfoEntity");
+
+            stockNum = bundle.getString("stockNum");
+            if (!TextUtils.isEmpty(stockNum)) {
+                tv_vessel_num.setText(stockNum);
+            }
+            String order = entity.getOrderNo();
+            if (!TextUtils.isEmpty(order)) {
+                tv_storage_order.setText(order);
+            }
+
+            List<String> urls = entity.getPhotoUrl();
+            if (urls != null && urls.size() > 0) {
+                photoFragment.setPathList(urls);
+            }
+
+            if (entity.getUpcData().size() > 0) {
+                tv_upc.setText(entity.getUpcData().get(0).getUpc());//upc取第一条数据
+                edt_upc.setText(entity.getUpcData().get(0).getUpc());//upc取第一条数据
+                String count = entity.getUpcData().get(0).getCount();
+                if (!TextUtils.isEmpty(count)) {
+                    edt_amount.setText(count);
+                    tv_amount.setText(count);
+                }
+
+                disableEditMode();
+            }
+
+        }
     }
 
     private void editMode() {
@@ -187,6 +235,9 @@ public class StorageClearFragment extends BarScanBaseFragment implements View.On
         tv_upc.setVisibility(View.INVISIBLE);
         edt_amount.setVisibility(View.VISIBLE);
         tv_amount.setVisibility(View.INVISIBLE);
+
+        gv.setVisibility(View.GONE);
+        frameLayout.setVisibility(View.VISIBLE);
     }
 
     private void disableEditMode() {
@@ -198,6 +249,12 @@ public class StorageClearFragment extends BarScanBaseFragment implements View.On
         tv_upc.setVisibility(View.VISIBLE);
         edt_amount.setVisibility(View.INVISIBLE);
         tv_amount.setVisibility(View.VISIBLE);
+
+        pathList = photoFragment.getPathList();
+        PhotoGVUNAdapter adapter = new PhotoGVUNAdapter(getContext(), pathList);
+        gv.setAdapter(adapter);
+        gv.setVisibility(View.VISIBLE);
+        frameLayout.setVisibility(View.GONE);
     }
 
     @Override
@@ -220,9 +277,11 @@ public class StorageClearFragment extends BarScanBaseFragment implements View.On
     private void commit() {
         JSONObject jsonObject = new JSONObject();
         try {
-//            jsonObject.put("tid",);
+            if (entity != null) {
+                jsonObject.put("tid", entity.getTid());
+                jsonObject.put("owner", entity.getOwner());
+            }
             jsonObject.put("containerNo", tv_vessel_num.getText() + "");
-//            jsonObject.put("owner", );
             String urlsStr = GsonHelper.createJsonString(photoUrl);
             JSONArray array = new JSONArray(urlsStr);
             jsonObject.put("photoIds", array);
@@ -246,6 +305,8 @@ public class StorageClearFragment extends BarScanBaseFragment implements View.On
                             T.showShort(getContext(), getString(R.string.taking_submit_suc));
                             disableEditMode();
                             photoFragment.showException(false);
+                            tv_upc.setText(edt_upc.getText());
+                            tv_amount.setText(edt_amount.getText());
                         } else {
                             T.showShort(getContext(), getString(R.string.taking_submit_fal));
                         }
@@ -310,10 +371,28 @@ public class StorageClearFragment extends BarScanBaseFragment implements View.On
 
             for (int i = 0; i < pathList.size(); i++) {
                 path = pathList.get(i);
-                Message message = Message.obtain();
-                message.what = COMPRESS_DOWN;
-                message.obj = path;
-                handler.sendMessage(message);
+                if(path.startsWith("http")){
+                    // http 开头的 说明已经上传过 图片服务器了
+                    String[] md5s = path.split("/");
+                    String md5 = md5s[md5s.length-1];
+
+                    progress++;
+                    mProgress.setProgress(progress);
+                    sucCounts++;
+                    photoUrl.add(md5);
+
+                    if (sucCounts == pathList.size()) {
+                        Message message = Message.obtain();
+                        message.what = UPLOAD;
+                        message.obj = path;
+                        handler.sendMessage(message);
+                    }
+                }else {
+                    Message message = Message.obtain();
+                    message.what = COMPRESS_DOWN;
+                    message.obj = path;
+                    handler.sendMessage(message);
+                }
             }
             return null;
         }
@@ -341,7 +420,7 @@ public class StorageClearFragment extends BarScanBaseFragment implements View.On
                     return;
                 }
                 pathList = photoFragment.getPathList();
-                if(pathList.size() > 0){
+                if (pathList.size() > 0) {
                     //先要将图片上传到图片服务器
                     uploadPic();
                 } else {
@@ -352,5 +431,11 @@ public class StorageClearFragment extends BarScanBaseFragment implements View.On
                 editMode();
                 break;
         }
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        BirdApi.cancelRequestWithTag(TAG);
     }
 }
