@@ -49,20 +49,25 @@ public class StorageTrackFragment extends BarScanBaseFragment implements View.On
 
     @Override
     public void barInitializeContentViews() {
+        if (bundle !=null && bundle.getString("location_position")!=null) {//从StorageFragmentActivity进来
+            location_position = bundle.getString("location_position");
+        }else{
+            bundle = getActivity().getIntent().getExtras();
+            entity = (StockInContainerInfoEntity) bundle.getSerializable("StockInContainerInfoEntity");
+            stockNum = bundle.getString("stockNum");
+        }
 
-        location_position = bundle.getString("location_position");
+
         if ("SecondIndex".equals(location_position)) {//从入库的首页进来
             edt_vessel_num.setVisibility(View.VISIBLE);
             tv_vessel_num.setVisibility(View.INVISIBLE);
         } else {//从查看容器进来
-            entity = (StockInContainerInfoEntity) bundle.getSerializable("StockInContainerInfoEntity");
-            stockNum = bundle.getString("stockNum");
             tv_vessel_num.setText(stockNum);
-            if (entity!=null && StringUtils.isEmpty(entity.getLink())) {//未提交过
-                editMode();
-            } else {
+            if (entity != null && !StringUtils.isEmpty(entity.getLink())) {//未提交过
                 disEnableEditMode();
                 tv_storage_old_no.setText(entity.getOrderNo());
+            } else {
+                editMode();
             }
         }
         edt_storage_old_no.setOnEditorActionListener(new TextView.OnEditorActionListener() {
@@ -102,6 +107,7 @@ public class StorageTrackFragment extends BarScanBaseFragment implements View.On
         btn_edit.setVisibility(View.INVISIBLE);
         edt_storage_old_no.setVisibility(View.VISIBLE);
         tv_storage_old_no.setVisibility(View.INVISIBLE);
+        edt_storage_old_no.setText(tv_storage_old_no.getText().toString());
         btn_commit.setClickable(true);
         btn_commit.setBackgroundResource(R.drawable.rect_fullbluew_selector);
         btn_commit.setTextColor(getResources().getColor(R.color.btn_blue_selector));
@@ -111,6 +117,7 @@ public class StorageTrackFragment extends BarScanBaseFragment implements View.On
         btn_edit.setVisibility(View.VISIBLE);
         edt_storage_old_no.setVisibility(View.INVISIBLE);
         tv_storage_old_no.setVisibility(View.VISIBLE);
+        tv_storage_old_no.setText(edt_storage_old_no.getText().toString());
         btn_commit.setClickable(false);
         btn_commit.setBackgroundResource(R.drawable.rect_fullgray);
         btn_commit.setTextColor(getResources().getColor(R.color.white));
@@ -151,7 +158,7 @@ public class StorageTrackFragment extends BarScanBaseFragment implements View.On
 //                disEnableEditMode();
                 break;
             case R.id.btn_edit:
-                editMode();
+//                editMode();
                 break;
         }
     }

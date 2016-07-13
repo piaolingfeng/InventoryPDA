@@ -159,6 +159,7 @@ public class MissionActivity extends BarScanActivity implements BaseFragment.OnF
             for(int j=0;j<entity.getList().size();j++){
                 if(entity.getList().get(j).getMerchantId().equals(listEntity.getMerchantCounts().get(i).getMerchantId())){
                     listEntity.getMerchantCounts().get(i).setMerchantName(entity.getList().get(j).getMerchantName());
+//                    listEntity.getMerchantCounts().get(i).setShowCo(entity.getList().get(j).getShowCo());
                     break;
                 }
             }

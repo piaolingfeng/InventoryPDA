@@ -47,6 +47,7 @@ public class StorageUnBindFragment extends BaseFragment implements View.OnClickL
 
     @Override
     public void initializeContentViews() {
+        bundle = getActivity().getIntent().getExtras();
         if (bundle != null) {
             entity = (StockInContainerInfoEntity) bundle.getSerializable("StockInContainerInfoEntity");
             stockNum = bundle.getString("stockNum");

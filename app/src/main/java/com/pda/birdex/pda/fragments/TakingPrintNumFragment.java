@@ -72,7 +72,7 @@ public class TakingPrintNumFragment extends BarScanBaseFragment implements View.
                 tv_taking_container.setText(containerInfo.getContainerId());
             if (orderNoInfoEntity != null) {
                 tv_taking_num.setText(orderNoInfoEntity.getDetail().getBaseInfo().getBaseInfo().getTakingOrderNo());
-                tv_bussiness.setText(orderNoInfoEntity.getDetail().getBaseInfo().getPerson().getName());
+                tv_bussiness.setText(orderNoInfoEntity.getDetail().getBaseInfo().getPerson().getCo());
             }
         }
     }

@@ -15,7 +15,7 @@ public class StockInContainerInfoEntity extends BaseEntity {
     String area ="";//(string, optional): 区域 ,
     String zone ="";//(string, optional): 区域zone ,
     String owner ="";//(string, optional): 容器所有者 ,
-    String capacityLevel ="";//(string, optional): 容器所有者 ,
+    String capacityLevel ="";//(string, optional): 容器物品数量等级,3高,2中,1低 ,
     String orderNo ="";//(string, optional): 单号 ,
     String tid ="";// (string, optional): tid ,
     String link ="";//(string, optional): 连接的容器号 ,

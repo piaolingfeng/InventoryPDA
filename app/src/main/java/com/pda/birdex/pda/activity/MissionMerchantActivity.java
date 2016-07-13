@@ -56,7 +56,7 @@ public class MissionMerchantActivity extends BaseActivity {
     String merchantId = "";
     String merchantName = "";
     String HeadName = "";
-
+//    int offset=0;//d
     @Override
     public int getContentLayoutResId() {
         return R.layout.activity_countbussiness_layout;
@@ -122,16 +122,21 @@ public class MissionMerchantActivity extends BaseActivity {
             });
             xrcy.setAdapter(countingAdapter);
         }
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
         if (getResources().getString(R.string.taking).equals(HeadName)) {//揽收清点
             getTakingMerchantMission("null");
         } else {
             getCountingMerchantMission("null");
         }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+//        if (getResources().getString(R.string.taking).equals(HeadName)) {//揽收清点
+//            getTakingMerchantMission("null");
+//        } else {
+//            getCountingMerchantMission("null");
+//        }
     }
 
     //通过网络请求获取商家待清点任务列表

@@ -19,6 +19,7 @@ import com.pda.birdex.pda.utils.StringUtils;
 import com.pda.birdex.pda.utils.T;
 import com.pda.birdex.pda.widget.ClearEditText;
 import com.pda.birdex.pda.widget.TitleView;
+import com.zhy.android.percent.support.PercentLinearLayout;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -41,11 +42,14 @@ public class TakingSelectMerchantActivity extends BaseActivity implements OnClic
     ClearEditText edt_co;
     @Bind(R.id.edt_recivier)
     ClearEditText edt_recivier;
-
+    @Bind(R.id.pll_code)
+    PercentLinearLayout pll_code;
+    @Bind(R.id.pll_reciver)
+    PercentLinearLayout pll_reciver;
     SpinnerDropAdapter adapter;
     List<Merchant> list;
     String merchantId = "";//商家编号
-    boolean isSpinnerFirst = true;
+    int isSpinnerFirst = 0;
 
     @Override
     public int getContentLayoutResId() {
@@ -63,22 +67,44 @@ public class TakingSelectMerchantActivity extends BaseActivity implements OnClic
         spin_bussiness.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-//                if (isSpinnerFirst) {
+//                try {
+//                    Field field = null;
+//                    try {
+//                        field = AdapterView.class.getDeclaredField("mOldSelectedPosition");
+//                    } catch (NoSuchFieldException e) {
+//                        e.printStackTrace();
+//                    }
+//                    field.setAccessible(true);  //设置mOldSelectedPosition可访问
+//                    field.setInt(spin_bussiness, AdapterView.INVALID_POSITION); //设置mOldSelectedPosition的值
+//                } catch (IllegalAccessException e) {
+//                    e.printStackTrace();
+//                }
+//                if (isSpinnerFirst<2) {
 ////第一次初始化spinner时，不显示默认被选择的第一项即可
 ////                    view.setVisibility(View.INVISIBLE);
 //                    TextView textView = (TextView) view.findViewById(R.id.tv_context);
 //                    textView.setText(getString(R.string.select_merchant));
-//                    isSpinnerFirst = false;
+//                    isSpinnerFirst ++;
 //                } else {
+//                    TextView textView = (TextView) view.findViewById(R.id.tv_context);
+//                    textView.setText(list.get(position).getMerchantName());
+                    merchantId = list.get(position).getMerchantId();
+                    edt_co.setText(merchantId);
+                    if (list.get(position).getShowCo() == 0) {
+                        pll_code.setVisibility(View.GONE);
+                        pll_reciver.setVisibility(View.GONE);
+                    } else {
+                        pll_code.setVisibility(View.VISIBLE);
+                        pll_reciver.setVisibility(View.VISIBLE);
+                    }
 //                    isSpinnerFirst = false;
-                merchantId = list.get(position).getMerchantId();
-                edt_co.setText(merchantId);
+//                }
+
 //                }
             }
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
-
             }
         });
     }
