@@ -197,6 +197,15 @@
     <string name="print_storage_order">打印入库单</string>
     <string name="tablayout_text">请标记该库位商品稀缺程度</string>
     <string name="tablayout_text1">该库位商品稀缺程度</string>
+    <string name="capacityLevel">偏少</string>
+    <string name="capacityLeve2">中等</string>
+    <string name="capacityLeve3">充足</string>
+
+
+
+
+
+
 
 
 

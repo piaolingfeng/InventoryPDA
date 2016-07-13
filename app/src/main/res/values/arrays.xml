@@ -84,4 +84,10 @@
         <item>解除绑单</item>
         <item>清点</item>
     </string-array>
+    
+    <string-array name="capacityLevel">
+        <item>偏少</item>
+        <item>中等</item>
+        <item>充足</item>
+    </string-array>
 </resources>

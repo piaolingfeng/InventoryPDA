@@ -108,7 +108,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        app:layout_paddingPercent="@string/item_padding_3w">
+        app:layout_paddingTopPercent="@string/item_padding_3w"
+        app:layout_paddingLeftPercent="@string/item_padding_3w"
+        app:layout_paddingRightPercent="@string/item_padding_3w">
 
         <TextView
             android:layout_width="match_parent"
@@ -116,16 +118,48 @@
             android:text="@string/tablayout_text"
             android:textColor="@color/red"
             app:layout_marginBottomPercent="@string/item_padding_3w"
-            app:layout_textSizePercent="@string/size_5w"/>
-        <android.support.design.widget.TabLayout
-            android:id="@+id/tablayout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:layout_scrollFlags="scroll"
-            app:tabIndicatorColor="@color/blue"
-            app:tabSelectedTextColor="@color/blue"
-            app:tabTextColor="@color/gray" />
+            app:layout_textSizePercent="@string/size_5w" />
 
+       <com.zhy.android.percent.support.PercentLinearLayout
+           android:layout_width="match_parent"
+           android:layout_height="wrap_content">
+           <TextView
+               android:id="@+id/capacityLevel_1"
+               android:layout_width="0dp"
+               android:layout_height="wrap_content"
+               android:text="@string/capacityLevel"
+               app:layout_paddingPercent="@string/item_padding_3w"
+               android:background="@drawable/tab_selector"
+               android:textColor="@color/blue_head_1"
+               android:layout_weight="1"
+               android:gravity="center"
+               app:layout_textSizePercent="@string/size_5w"
+               android:clickable="true"/>
+           <TextView
+               android:id="@+id/capacityLevel_2"
+               android:layout_width="0dp"
+               android:layout_height="wrap_content"
+               android:text="@string/capacityLeve2"
+               app:layout_paddingPercent="@string/item_padding_3w"
+               android:background="@drawable/tab_selector"
+               android:textColor="@color/blue_head_1"
+               android:layout_weight="1"
+               android:gravity="center"
+               app:layout_textSizePercent="@string/size_5w"
+               android:clickable="true"/>
+           <TextView
+               android:id="@+id/capacityLevel_3"
+               android:layout_width="0dp"
+               android:layout_height="wrap_content"
+               android:text="@string/capacityLeve3"
+               app:layout_paddingPercent="@string/item_padding_3w"
+               android:background="@drawable/tab_selector"
+               android:textColor="@color/blue_head_1"
+               android:layout_weight="1"
+               android:gravity="center"
+               app:layout_textSizePercent="@string/size_5w"
+               android:clickable="true"/>
+       </com.zhy.android.percent.support.PercentLinearLayout>
     </com.zhy.android.percent.support.PercentLinearLayout>
 
     <com.zhy.android.percent.support.PercentRelativeLayout
