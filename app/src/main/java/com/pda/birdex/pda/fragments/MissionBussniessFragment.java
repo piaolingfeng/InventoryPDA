@@ -10,10 +10,12 @@ import android.view.ViewGroup;
 
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
 import com.pda.birdex.pda.R;
+import com.pda.birdex.pda.activity.MissionActivity;
 import com.pda.birdex.pda.activity.MissionMerchantActivity;
 import com.pda.birdex.pda.adapter.MerchantAdapter;
 import com.pda.birdex.pda.entity.Merchant;
 import com.pda.birdex.pda.interfaces.OnRecycleViewItemClickListener;
+import com.pda.birdex.pda.utils.PinYinUtil;
 import com.pda.birdex.pda.utils.StringUtils;
 
 import org.greenrobot.eventbus.Subscribe;
@@ -113,11 +115,35 @@ public class MissionBussniessFragment extends BaseFragment {
         if (StringUtils.isEmpty(text)) {
             now_displayList = index_list;
         } else {
-            now_displayList = search(text, list);
+            if(PinYinUtil.checkString(text)){//是中文
+                now_displayList = search(text, list);
+            }else{//简拼或者全拼模糊搜索
+                now_displayList = searchPinYin(text);
+            }
         }
         adapter.setList(now_displayList);
         adapter.notifyDataSetChanged();
     }
+
+    //模糊搜索简拼和全拼
+    public List<Merchant> searchPinYin(String name){
+        List<Merchant> results = new ArrayList<>();
+        name = name.toLowerCase();
+        List<Merchant> list = MissionActivity.merchantList;
+        for(int i=0;i<list.size();i++){
+            if(list.get(i).getMerchantFirtSpell().toLowerCase().contains(name)){
+                results.add(list.get(i));
+            }
+        }
+        if(results.size()==0)
+            for(int i=0;i<list.size();i++){
+                if(list.get(i).getMerchantFullSpell().toLowerCase().contains(name)){
+                    results.add(list.get(i));
+                }
+            }
+        return results;
+    }
+
 
     //模糊查询本地列表
     public List<Merchant> search(String name, List<Merchant> list) {

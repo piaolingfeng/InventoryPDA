@@ -9,7 +9,7 @@ android {
         minSdkVersion 14
         targetSdkVersion 23
         versionCode 1
-        versionName "1.0.3"
+        versionName "1.0.5"
     }
     buildTypes {
         release {
@@ -35,4 +35,5 @@ dependencies {
     compile 'org.greenrobot:eventbus:3.0.0'
     compile 'com.android.support:appcompat-v7:23.2.1'
     compile 'com.android.support:design:23.2.1'
+    compile files('libs/pinyin4j-2.5.0.jar')
 }

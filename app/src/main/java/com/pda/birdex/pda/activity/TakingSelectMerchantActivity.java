@@ -88,15 +88,16 @@ public class TakingSelectMerchantActivity extends BaseActivity implements OnClic
 //                } else {
 //                    TextView textView = (TextView) view.findViewById(R.id.tv_context);
 //                    textView.setText(list.get(position).getMerchantName());
-                    merchantId = list.get(position).getMerchantId();
-                    edt_co.setText(merchantId);
-                    if (list.get(position).getShowCo() == 0) {
-                        pll_code.setVisibility(View.GONE);
-                        pll_reciver.setVisibility(View.GONE);
-                    } else {
-                        pll_code.setVisibility(View.VISIBLE);
-                        pll_reciver.setVisibility(View.VISIBLE);
-                    }
+                merchantId = list.get(position).getMerchantId();
+                edt_co.setText(merchantId);
+                edt_recivier.setText(list.get(position).getMerchantName());
+                if (list.get(position).getShowCo() == 0) {
+                    pll_code.setVisibility(View.GONE);
+                    pll_reciver.setVisibility(View.GONE);
+                } else {
+                    pll_code.setVisibility(View.VISIBLE);
+                    pll_reciver.setVisibility(View.VISIBLE);
+                }
 //                    isSpinnerFirst = false;
 //                }
 
@@ -117,7 +118,9 @@ public class TakingSelectMerchantActivity extends BaseActivity implements OnClic
 
     //创建无预报揽收
     private void createTaking() {
-        if (StringUtils.isEmpty(edt_co.getText().toString()) || StringUtils.isEmpty(edt_recivier.getText().toString())) {
+        if (pll_reciver.getVisibility() == View.VISIBLE &&
+                (StringUtils.isEmpty(edt_co.getText().toString()) ||
+                        StringUtils.isEmpty(edt_recivier.getText().toString()))) {
             T.showShort(this, getString(R.string.co_recivier_not));
             return;
         }
@@ -144,7 +147,11 @@ public class TakingSelectMerchantActivity extends BaseActivity implements OnClic
 
                 @Override
                 public void errorCallBack(JSONObject object) {
-
+                    try {
+                        T.showShort(TakingSelectMerchantActivity.this, object.getString("errMsg"));
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
                 }
             }, tag, true);
         } catch (JSONException e) {
