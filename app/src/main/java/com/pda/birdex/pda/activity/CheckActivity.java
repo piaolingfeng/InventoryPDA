@@ -72,7 +72,8 @@ public class CheckActivity extends BaseActivity {
     CountingOrderNoInfoEntity countingOrderNoInfoEntity;//清点任务详情
 
     StockInContainerInfoEntity stockInContainerInfoEntity;//入库详情
-    String stockNum="";//入库容器号
+    String stockNum = "";//入库容器号
+
     @Override
     public int getContentLayoutResId() {
         return R.layout.activity_check_layout;
@@ -124,7 +125,12 @@ public class CheckActivity extends BaseActivity {
             }
             if (takingOrderNoInfoEntity.getDetail().getOperationLog() != null & takingOrderNoInfoEntity.getDetail().getOperationLog().size() > 0) {
                 tv_operation_man.setText(takingOrderNoInfoEntity.getDetail().getOperationLog().get(0).getUserName());
-                String time = TimeUtil.long2Date(Long.parseLong(takingOrderNoInfoEntity.getDetail().getOperationLog().get(0).getTime()));
+                String time = "";
+                try {
+                    time = TimeUtil.long2Date(Long.parseLong(takingOrderNoInfoEntity.getDetail().getOperationLog().get(0).getTime()));
+                } catch (Exception e) {
+
+                }
                 tv_time.setText(time);
             }
         }
@@ -135,28 +141,38 @@ public class CheckActivity extends BaseActivity {
                 tv_taking_container.setText(containerInfo.getContainerId());
                 tv_area.setText(containerInfo.getArea());
                 tv_box_size.setText(containerInfo.getCount() + "");
-                if(containerInfo.getUpcData().size()>0) {
+                if (containerInfo.getUpcData().size() > 0) {
                     tv_amount.setText(containerInfo.getUpcData().get(0).getCount());
                     tv_upc.setText(containerInfo.getUpcData().get(0).getUpc());//upc取第一条数据
                 }
             }
             if (countingOrderNoInfoEntity.getDetail().getOperationLog() != null & countingOrderNoInfoEntity.getDetail().getOperationLog().size() > 0) {
                 tv_operation_man.setText(countingOrderNoInfoEntity.getDetail().getOperationLog().get(0).getUserName());
-                String time = TimeUtil.long2Date(Long.parseLong(countingOrderNoInfoEntity.getDetail().getOperationLog().get(0).getTime()));
+                String time = "";
+                try {
+                    time = TimeUtil.long2Date(Long.parseLong(countingOrderNoInfoEntity.getDetail().getOperationLog().get(0).getTime()));
+                } catch (Exception e) {
+
+                }
                 tv_time.setText(time);
             }
         }
 
         //入库数据
-        if(stockInContainerInfoEntity!=null){
+        if (stockInContainerInfoEntity != null) {
             tv_taking_num.setText(stockNum);//容器号
             tv_taking_container.setText(stockInContainerInfoEntity.getOrderNo());//入库单号
 //            tv_upc.setText(stockInContainerInfoEntity.getUpcData().get());
             if (stockInContainerInfoEntity.getOperationLog().size() > 0) {
                 tv_operation_man.setText(stockInContainerInfoEntity.getOperationLog().get(0).getUserName());
-                String time = TimeUtil.long2Date(Long.parseLong(stockInContainerInfoEntity.getOperationLog().get(0).getTime()));
+                String time = "";
+                try {
+                    time = TimeUtil.long2Date(Long.parseLong(stockInContainerInfoEntity.getOperationLog().get(0).getTime()));
+                } catch (Exception e) {
+
+                }
                 tv_time.setText(time);
-                if(stockInContainerInfoEntity.getUpcData().size()>0) {
+                if (stockInContainerInfoEntity.getUpcData().size() > 0) {
                     tv_amount.setText(stockInContainerInfoEntity.getUpcData().get(0).getCount());
                     tv_upc.setText(stockInContainerInfoEntity.getUpcData().get(0).getUpc());//upc取第一条数据
                 }

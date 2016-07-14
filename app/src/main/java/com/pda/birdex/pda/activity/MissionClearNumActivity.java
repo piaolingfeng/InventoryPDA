@@ -220,6 +220,7 @@ public class MissionClearNumActivity extends BasePrintBarScanActivity implements
         tv_title_last_time.setText(countingOrderNoInfoEntity.getDetail().getBaseInfo().getBaseInfo().getDeadline());
         tv_operate_vessl.setText(countingOrderNoInfoEntity.getDetail().getContainerList().size() + "");
         list = countingOrderNoInfoEntity.getDetail().getContainerList();
+        list.addAll(countingOrderNoInfoEntity.getDetail().getTakingContainList());
         adapter.setList(list);
         adapter.notifyDataSetChanged();
     }

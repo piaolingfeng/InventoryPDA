@@ -90,18 +90,16 @@ public class TakingSelectMerchantActivity extends BaseActivity implements OnClic
 //                    textView.setText(list.get(position).getMerchantName());
                 merchantId = list.get(position).getMerchantId();
                 edt_co.setText(merchantId);
-                edt_recivier.setText(list.get(position).getMerchantName());
+//                edt_recivier.setText(list.get(position).getMerchantName());
                 if (list.get(position).getShowCo() == 0) {
                     pll_code.setVisibility(View.GONE);
                     pll_reciver.setVisibility(View.GONE);
                 } else {
                     pll_code.setVisibility(View.VISIBLE);
                     pll_reciver.setVisibility(View.VISIBLE);
+                    edt_recivier.setText(getString(R.string.birdex));
                 }
 //                    isSpinnerFirst = false;
-//                }
-
-//                }
             }
 
             @Override

@@ -9,6 +9,7 @@ import java.util.List;
  */
 public class CountingOrderDetail implements Serializable {
     CountingOrder baseInfo = new CountingOrder();
+    List<ContainerInfo> takingContainList = new ArrayList<>();
     List<ContainerInfo> containerList = new ArrayList<>();
     List<OperationLog> operationLog = new ArrayList<>();
 
@@ -22,5 +23,9 @@ public class CountingOrderDetail implements Serializable {
 
     public List<OperationLog> getOperationLog() {
         return operationLog;
+    }
+
+    public List<ContainerInfo> getTakingContainList() {
+        return takingContainList;
     }
 }

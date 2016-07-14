@@ -695,7 +695,6 @@ public class BirdApi {
                                 callBackInterface.successCallBack(response);
                             } else {
                                 try {
-
                                     T.showShort(mContext, response.getString("errMsg"));
                                 } catch (JSONException e) {
                                     e.printStackTrace();
@@ -716,9 +715,9 @@ public class BirdApi {
 
             @Override
             public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+                super.onFailure(statusCode, headers, throwable, errorResponse);
                 if (showDialog)
                     hideLoading();
-                super.onFailure(statusCode, headers, throwable, errorResponse);
                 if (MyApplication.ahc != null) {
                     MyApplication.ahc.addHeader("x-access-token", PreferenceUtils.getPrefString(mContext, "token", ""));
                 }
@@ -730,6 +729,11 @@ public class BirdApi {
                         T.showShort(mContext, mContext.getString(R.string.request404));
                         break;
                 }
+                if (url.contains("login"))//登录接口才把错误回调
+                    callBackInterface.errorCallBack(null);
+                else{
+                    T.showShort(mContext, throwable.getMessage());
+                }
             }
 
             @Override
@@ -737,8 +741,8 @@ public class BirdApi {
                 super.onFinish();
                 if (showDialog)
                     hideLoading();
-                if (url.contains("login"))//登录接口才把错误回调
-                    callBackInterface.errorCallBack(null);
+//                if (url.contains("login"))//登录接口才把错误回调
+//                    callBackInterface.errorCallBack(null);
             }
 
             @Override
