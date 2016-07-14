@@ -76,8 +76,6 @@ public class TakingPhotoFragment extends BarScanBaseFragment implements View.OnC
     // 1:揽收 2:揽收任务
     private String from;
     private String tid;//供上传日志使用
-    // 图片 path
-    private String filePath;
 
     // 存放所有返回图片地址的 list
     private List<String> photoUrl = new ArrayList<>();
@@ -92,7 +90,7 @@ public class TakingPhotoFragment extends BarScanBaseFragment implements View.OnC
     private PhotoFragment photoFragment;
 
     private static final int PIC_COMPRESS = 1;
-    // 压缩完图片后 重新刷新
+
     private Handler handler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
@@ -191,6 +189,8 @@ public class TakingPhotoFragment extends BarScanBaseFragment implements View.OnC
                                             }, tag, true);
                                         } catch (JSONException e) {
                                             e.printStackTrace();
+                                            T.showShort(MyApplication.getInstans(), getString(R.string.taking_upload_fal));
+                                            dismissDialog();
                                         }
                                     }
                                 } else {

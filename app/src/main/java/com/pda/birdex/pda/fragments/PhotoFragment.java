@@ -49,13 +49,10 @@ public class PhotoFragment extends BaseFragment {
 
 
     // 存储照片路径的 list
-    private ArrayList<String> pathList = new ArrayList<String>();
+    private List<String> pathList = new ArrayList<String>();
 
     // 图片 path
     private String filePath;
-
-    // 存放所有返回图片地址的 list
-    private List<String> photoUrl = new ArrayList<>();
 
     // 是否要显示 标记异常
     private boolean isException = true;
@@ -80,6 +77,10 @@ public class PhotoFragment extends BaseFragment {
     @Override
     protected void key(int keyCode, KeyEvent event) {
 
+    }
+
+    public void setPathList(List<String> pathList) {
+        this.pathList = pathList;
     }
 
     @Override
@@ -130,6 +131,15 @@ public class PhotoFragment extends BaseFragment {
 
         PhotoGVAdapter adapter = new PhotoGVAdapter(getContext(), pathList);
         gv.setAdapter(adapter);
+    }
+
+    // 显示标记异常
+    public void showException(boolean flag){
+        if(flag) {
+            exception_cb.setVisibility(View.VISIBLE);
+        } else {
+            exception_cb.setVisibility(View.GONE);
+        }
     }
 
 

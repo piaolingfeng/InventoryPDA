@@ -134,6 +134,7 @@
                     android:id="@+id/edt_amount"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:inputType="number"
                     android:singleLine="true"
                     android:textColor="@color/context_2" />
 
@@ -153,6 +154,18 @@
             android:id="@+id/framelayout_2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"></FrameLayout>
+
+        <com.pda.birdex.pda.widget.MyGridView
+            android:id="@+id/gv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="20dp"
+            android:horizontalSpacing="20dp"
+            android:listSelector="#00000000"
+            android:visibility="gone"
+            android:numColumns="4" />
 
         <com.zhy.android.percent.support.PercentRelativeLayout
             android:layout_width="match_parent"

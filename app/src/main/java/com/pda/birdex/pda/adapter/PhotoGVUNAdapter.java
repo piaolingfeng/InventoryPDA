@@ -13,9 +13,9 @@ import com.pda.birdex.pda.utils.glide.GlideUtils;
 import java.util.List;
 
 /**
- * Created by hyj on 2016/3/11.
+ * Created by hyj on 2016/7/13.
  */
-public class PhotoGVAdapter extends BaseAdapter {
+public class PhotoGVUNAdapter extends BaseAdapter {
 
     // 传过来的 list bitmap
     private List<String> bitmapList;
@@ -23,26 +23,19 @@ public class PhotoGVAdapter extends BaseAdapter {
     // 传过来的 context
     private Context context;
 
-    public PhotoGVAdapter(Context context, List<String> bitmapList) {
+    public PhotoGVUNAdapter(Context context, List<String> bitmapList) {
         this.context = context;
         this.bitmapList = bitmapList;
     }
 
     @Override
     public int getCount() {
-        if (bitmapList.size() >= 10) {
-            return bitmapList.size();
-        }else {
-            return bitmapList.size() + 1;
-        }
+        return bitmapList.size();
     }
 
     @Override
     public Object getItem(int position) {
-        if (position + 1 < bitmapList.size())
-            return bitmapList.get(position);
-        else
-            return null;
+        return bitmapList.get(position);
     }
 
     @Override
@@ -67,11 +60,7 @@ public class PhotoGVAdapter extends BaseAdapter {
         ViewGroup.LayoutParams params = vh.iv.getLayoutParams();
         params.height = params.width;
         vh.iv.setLayoutParams(params);
-        if (position < bitmapList.size()) {
-            GlideUtils.setImageToLocalPath1(vh.iv, bitmapList.get(position));
-        } else {
-            GlideUtils.setImageToLocal(vh.iv, R.drawable.chrome);
-        }
+        GlideUtils.setImageToLocalPath1(vh.iv, bitmapList.get(position));
 
 
         return convertView;

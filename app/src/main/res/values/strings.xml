@@ -147,6 +147,8 @@
     <string name="count_box_no">清点箱号：</string>
     <string name="upc">UPC：</string>
     <string name="amount">数量：</string>
+    <string name="amount_empty">数量不能为空</string>
+    <string name="exception">异常</string>
     <string name="sign_exception">标记异常</string>
     <string name="count_vessel_empty">容器号不能为空</string>
     <string name="count_upc_empty">upc不能为空</string>
@@ -175,8 +177,10 @@
     <string name="check_storage_info">查看入库容器信息</string>
     <string name="storage_print_no">打印容器单</string>
     <string name="storage_order">入库单号：</string>
+    <string name="storage_order_empty">入库单号不能为空</string>
     <string name="edit">编 辑</string>
     <string name="storage_position">库位：</string>
+    <string name="storage_position_empty">库位不能为空</string>
     <string name="check_storage_position">查看参考库位</string>
     <string name="not_unbind">该容器号未绑定入库单，无法进行解除绑单。</string>
     <string name="release_unbind">解除绑单</string>

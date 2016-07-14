@@ -1,5 +1,6 @@
 package com.pda.birdex.pda.fragments;
 
+import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
@@ -9,9 +10,10 @@ import android.widget.TextView;
 import com.pda.birdex.pda.R;
 import com.pda.birdex.pda.api.BirdApi;
 import com.pda.birdex.pda.interfaces.RequestCallBackInterface;
+import com.pda.birdex.pda.utils.GsonHelper;
+import com.pda.birdex.pda.utils.T;
 import com.pda.birdex.pda.response.StockInContainerInfoEntity;
 import com.pda.birdex.pda.utils.StringUtils;
-import com.pda.birdex.pda.utils.T;
 import com.pda.birdex.pda.widget.ClearEditText;
 
 import org.json.JSONArray;
@@ -29,7 +31,9 @@ import butterknife.OnClick;
  * 绑定入库单
  */
 public class StorageBindOrderFragment extends BarScanBaseFragment implements View.OnClickListener {
-    String tag = "StorageBindOrderFragment";
+
+    public static final String TAG = "StorageBindOrderFragment";
+
     @Bind(R.id.tv_vessel_num)
     TextView tv_vessel_num;
     @Bind(R.id.edt_storage_order)
@@ -42,6 +46,7 @@ public class StorageBindOrderFragment extends BarScanBaseFragment implements Vie
     Button btn_commit;
     StockInContainerInfoEntity entity;
     String stockNum;//容器号
+
 
     @Override
     public int getbarContentLayoutResId() {
@@ -107,30 +112,40 @@ public class StorageBindOrderFragment extends BarScanBaseFragment implements Vie
         btn_commit.setTextColor(getResources().getColor(R.color.white));
     }
 
+    // 调用上传接口
     private void commit() {
-        JSONObject object = new JSONObject();
-        String ss = edt_storage_order.getText().toString();
-        List<String> list = new ArrayList<>();
-        list.add(stockNum);
+        JSONObject jsonObject = new JSONObject();
         try {
-            object.put("orderNO",ss);
-            JSONArray array = new JSONArray(list);
-            object.put("containers",array);
+            List<String> containers = new ArrayList<>();
+            containers.add(tv_vessel_num.getText() + "");
+            String containerStr = GsonHelper.createJsonString(containers);
+            JSONArray array = new JSONArray(containerStr);
+            jsonObject.put("containers", array);
+            jsonObject.put("orderNO", edt_storage_order.getText() + "");
+            BirdApi.postStockBindOrder(getContext(), jsonObject, new RequestCallBackInterface(){
+
+                @Override
+                public void successCallBack(JSONObject object) {
+                    try {
+                        if ("success".equals(object.getString("result"))) {
+                            T.showShort(getContext(), getString(R.string.taking_submit_suc));
+                            disableEditMode();
+                        } else {
+                            T.showShort(getContext(), getString(R.string.taking_submit_fal));
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+
+                @Override
+                public void errorCallBack(JSONObject object) {
+                    T.showShort(getContext(), getString(R.string.taking_submit_fal));
+                }
+            }, TAG, true);
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        BirdApi.postStockInbBndOrderBat(getActivity(), object, new RequestCallBackInterface() {
-            @Override
-            public void successCallBack(JSONObject object) {
-                T.showShort(getActivity(), getString(R.string.taking_bind_suc));
-                disableEditMode();
-            }
-
-            @Override
-            public void errorCallBack(JSONObject object) {
-                T.showShort(getActivity(), getString(R.string.taking_bind_fal));
-            }
-        }, tag, true);
     }
 
     @OnClick({R.id.btn_commit, R.id.btn_edit})
@@ -138,6 +153,14 @@ public class StorageBindOrderFragment extends BarScanBaseFragment implements Vie
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btn_commit:
+                if (TextUtils.isEmpty(tv_vessel_num.getText())) {
+                    T.showShort(getContext(), getString(R.string.count_vessel_empty));
+                    return;
+                }
+                if (TextUtils.isEmpty(edt_storage_order.getText())) {
+                    T.showShort(getContext(), getString(R.string.storage_order_empty));
+                    return;
+                }
                 commit();
                 break;
             case R.id.btn_edit:
@@ -149,6 +172,6 @@ public class StorageBindOrderFragment extends BarScanBaseFragment implements Vie
     @Override
     public void onDestroy() {
         super.onDestroy();
-        BirdApi.cancelRequestWithTag(tag);
+        BirdApi.cancelRequestWithTag(TAG);
     }
 }
