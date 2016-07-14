@@ -9,6 +9,7 @@ import android.widget.TextView;
 import com.pda.birdex.pda.MyApplication;
 import com.pda.birdex.pda.R;
 import com.pda.birdex.pda.api.BirdApi;
+import com.pda.birdex.pda.entity.Merchant;
 import com.pda.birdex.pda.fragments.BaseFragment;
 import com.pda.birdex.pda.fragments.MissionBussinessOtherFragment;
 import com.pda.birdex.pda.fragments.MissionBussniessFragment;
@@ -18,15 +19,19 @@ import com.pda.birdex.pda.interfaces.TitleBarBackInterface;
 import com.pda.birdex.pda.response.MerchantEntity;
 import com.pda.birdex.pda.response.MerchantListEntity;
 import com.pda.birdex.pda.utils.GsonHelper;
+import com.pda.birdex.pda.utils.PinYinUtil;
 import com.pda.birdex.pda.utils.SoftKeyboardUtil;
 import com.pda.birdex.pda.widget.ClearEditText;
 import com.pda.birdex.pda.widget.TitleView;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 import org.json.JSONObject;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.Bind;
 
@@ -106,6 +111,23 @@ public class MissionActivity extends BarScanActivity implements BaseFragment.OnF
             getAllCountingMerchant();
         }
     }
+
+    public static List<Merchant> merchantList = new ArrayList<>();
+
+    @Subscribe(threadMode = ThreadMode.ASYNC)
+    public  void onEvent(List<Merchant> list){
+        if(merchantList.size()==0) {
+            merchantList = list;
+            for (int i = 0; i < list.size(); i++) {//简拼
+                merchantList.get(i).setMerchantFirtSpell(PinYinUtil.getFirstSpell(list.get(i).getMerchantName()));
+            }
+            for (int i = 0; i < list.size(); i++) {//全拼
+                merchantList.get(i).setMerchantFullSpell(PinYinUtil.getFullSpell(list.get(i).getMerchantName()));
+            }
+        }
+    }
+
+
 
     //获取揽收所有商家的任务数量
     public void getAllTakingMerchant(){
