@@ -2,7 +2,9 @@ package com.pda.birdex.pda.activity;
 
 import android.support.v7.widget.LinearLayoutManager;
 import android.text.TextUtils;
+import android.view.KeyEvent;
 import android.view.View;
+import android.widget.TextView;
 
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
 import com.pda.birdex.pda.R;
@@ -90,6 +92,19 @@ public class StorageBindStockActivity extends BarScanActivity implements View.On
                     containerList.remove(containerList.get(position));
                     adapter.notifyDataSetChanged();
                 }
+            }
+        });
+
+        edt_storage_container.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if (actionId == KeyEvent.KEYCODE_ENTER || actionId == KeyEvent.KEYCODE_UNKNOWN || actionId == KeyEvent.KEYCODE_ENDCALL) {
+                    String str = edt_storage_container.getText().toString();
+                    if (!TextUtils.isEmpty(str)) {
+                        inputEntry(str);
+                    }
+                }
+                return false;
             }
         });
     }
