@@ -109,14 +109,10 @@ public class StorageBindStockActivity extends BarScanActivity implements View.On
 
     @Override
     public void ClearEditTextCallBack(String code) {
-//        if (edt_storage_num.hasFocus()) {
-//            setEdt_input(edt_storage_container);
-//            edt_storage_container.requestFocus();
-//        } else {
-//            setEdt_input(edt_storage_num);
-//            edt_storage_num.requestFocus();
-//        }
-
+        if (edt_storage_num.hasFocus()) {
+            setEdt_input(edt_storage_container);
+            edt_storage_container.requestFocus();
+        }
         if (edt_storage_container.hasFocus() && (!TextUtils.isEmpty(code.trim()))) {
             inputEntry(code);
         }
