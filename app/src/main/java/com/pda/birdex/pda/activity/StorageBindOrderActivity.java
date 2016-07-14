@@ -3,7 +3,9 @@ package com.pda.birdex.pda.activity;
 import android.nfc.Tag;
 import android.support.v7.widget.LinearLayoutManager;
 import android.text.TextUtils;
+import android.view.KeyEvent;
 import android.view.View;
+import android.widget.TextView;
 
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
 import com.pda.birdex.pda.R;
@@ -96,6 +98,19 @@ public class StorageBindOrderActivity extends BarScanActivity implements View.On
                 }
             }
         });
+
+        edt_storage_container.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if (actionId == KeyEvent.KEYCODE_ENTER || actionId == KeyEvent.KEYCODE_UNKNOWN || actionId == KeyEvent.KEYCODE_ENDCALL) {
+                    String str = edt_storage_container.getText().toString();
+                    if(!TextUtils.isEmpty(str)){
+                        inputEntry(str);
+                    }
+                }
+                return false;
+            }
+        });
     }
 
     private void inputEntry(String input) {
@@ -116,9 +131,6 @@ public class StorageBindOrderActivity extends BarScanActivity implements View.On
         if (edt_storage_num.hasFocus()) {
             setEdt_input(edt_storage_container);
             edt_storage_container.requestFocus();
-        } else {
-            setEdt_input(edt_storage_num);
-            edt_storage_num.requestFocus();
         }
         if (edt_storage_container.hasFocus() && (!TextUtils.isEmpty(code.trim()))) {
             inputEntry(code);
