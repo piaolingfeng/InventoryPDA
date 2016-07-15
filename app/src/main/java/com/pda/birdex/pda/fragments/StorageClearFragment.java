@@ -264,7 +264,7 @@ public class StorageClearFragment extends BarScanBaseFragment implements View.On
 
     @Override
     public void ClearEditTextCallBack(String code) {
-        if (this.isVisible && edt_upc.getVisibility() == View.VISIBLE) {
+        if (!this.isHidden() && edt_upc.getVisibility() == View.VISIBLE) {
             if (edt_upc.hasFocus()) {
                 edt_amount.requestFocus();//进入下一个
             } else

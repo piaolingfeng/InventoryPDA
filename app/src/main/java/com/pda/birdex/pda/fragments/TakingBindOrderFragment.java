@@ -162,7 +162,7 @@ public class TakingBindOrderFragment extends BarScanBaseFragment implements View
 
     @Override
     public void ClearEditTextCallBack(String code) {
-        if (this.isVisible()) {
+        if (!this.isHidden()) {
             SoftKeyboardUtil.hideSoftKeyboard((BaseActivity) getActivity());
             if (edt_taking_container.hasFocus()||getEdt_input() == edt_taking_container) {
                 inputEntry(code);

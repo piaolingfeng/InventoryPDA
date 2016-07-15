@@ -143,6 +143,8 @@
     <string name="count_print_no">打印清点单</string>
     <string name="count_now_no">现容器号：</string>
     <string name="count_old_no">原容器号：</string>
+    <string name="count_relevance_no">关联容器号：</string>
+    <string name="count_relevance_empty">关联容器号不能为空</string>
     <string name="count_track_no">追踪箱号</string>
     <string name="count_box_no">清点箱号：</string>
     <string name="upc">UPC：</string>
@@ -188,6 +190,9 @@
     <string name="storage_bind_stock_count">待绑定库位的容器号</string>
     <string name="storage_bind_order">绑定入库单</string>
     <string name="storage_bind_stock">绑定库位</string>
+    <string name="storage_track_out">转出</string>
+    <string name="storage_track_in">转自</string>
+    <string name="storage_track_message">转移商品信息</string>
 
     <string name="sdcard_fail">SDCard读取失败，请重试</string>
     <string name="photo_most">照片不能超过10张</string>

@@ -377,7 +377,7 @@ public class TakingClearFragment extends BarScanBaseFragment implements View.OnC
 
     @Override
     public void ClearEditTextCallBack(String code) {
-        if (this.isVisible()) {
+        if (!this.isHidden()) {
             SoftKeyboardUtil.hideSoftKeyboard((BaseActivity) getActivity());
             if(edt_taking_num.hasFocus()){
                 edt_box_size.requestFocus();

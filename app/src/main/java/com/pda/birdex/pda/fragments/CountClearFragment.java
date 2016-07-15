@@ -384,7 +384,7 @@ public class CountClearFragment extends BarScanBaseFragment implements View.OnCl
 
     @Override
     public void ClearEditTextCallBack(String code) {
-        if (this.isVisible()) {
+        if (!this.isHidden()) {
             SoftKeyboardUtil.hideSoftKeyboard((BaseActivity) getActivity());
             if(edt_count_num.hasFocus()){
                 edt_upc.requestFocus();//切换焦点
