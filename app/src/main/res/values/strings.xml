@@ -22,6 +22,7 @@
     <string name="password_hint">输入密码</string>
     <string name="service_hint">输入服务器地址</string>
     <string name="service_addr_wrong">服务器地址错误.</string>
+    <string name="service_no_response">服务器无相应，请稍后重试</string>
     <string name="service_addr_error">输入的ip地址不合法</string>
     <string name="login">登  录</string>
     <string name="notempty">用户名或密码不能为空</string>
@@ -58,8 +59,8 @@
     <!-- 打印揽收单 -->
     <string name="printlanshou">打印揽收单</string>
     <string name="print">打\t印</string>
-    <string name="printsame">打印相同箱号</string>
-    <string name="printnew">打印新的箱号</string>
+    <string name="printsame">打印相同容器单</string>
+    <string name="printnew">打印新的容器单</string>
 
     <string name="taking_error">该批入库商品未匹配到预报单，请手动选择。</string>
     <string name="taking_edit">点击此处进行编辑</string>
@@ -176,8 +177,8 @@
     <string name="storge">入库</string>
     <string name="check_storage_info">查看入库容器信息</string>
     <string name="storage_print_no">打印容器单</string>
-    <string name="storage_order">入库单号：</string>
-    <string name="storage_order_empty">入库单号不能为空</string>
+    <string name="storage_order">入库任务号：</string>
+    <string name="storage_order_empty">入库任务号不能为空</string>
     <string name="edit">编 辑</string>
     <string name="storage_position">库位：</string>
     <string name="storage_position_empty">库位不能为空</string>
@@ -201,10 +202,9 @@
     <string name="capacityLeve2">中等</string>
     <string name="capacityLeve3">充足</string>
     <string name="birdex">笨鸟海淘</string>
-
-
-
-
+    <string name="print_count">打印容器号数量</string>
+    <string name="print_each_copies">每个容器号打印份数</string>
+    <string name="print_copies">打印份数</string>
 
 
 
@@ -212,7 +212,6 @@
 
     //打印
     <string name="print_title">打印</string>
-
     <!--BTPrinterDemo-->
     <string name="send">发送</string>
     <string name="Print">连接</string>

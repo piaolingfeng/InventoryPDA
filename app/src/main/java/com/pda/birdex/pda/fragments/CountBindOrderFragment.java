@@ -126,7 +126,7 @@ public class CountBindOrderFragment extends BarScanBaseFragment implements View.
         edt_count_container.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                if (actionId == EditorInfo.IME_ACTION_DONE || actionId == EditorInfo.IME_ACTION_UNSPECIFIED) {
+                if (actionId == EditorInfo.IME_ACTION_DONE || actionId == EditorInfo.IME_ACTION_UNSPECIFIED || actionId == EditorInfo.IME_FLAG_NO_ENTER_ACTION) {
                     if (!TextUtils.isEmpty(edt_count_container.getText())) {
                         String input = edt_count_container.getText() + "";
                         inputEntry(input);
@@ -153,6 +153,7 @@ public class CountBindOrderFragment extends BarScanBaseFragment implements View.
                 adapter.notifyDataSetChanged();
             }
         }
+        edt_count_container.requestFocus();
     }
 
 //    @Override

@@ -127,8 +127,6 @@ public class MissionActivity extends BarScanActivity implements BaseFragment.OnF
         }
     }
 
-
-
     //获取揽收所有商家的任务数量
     public void getAllTakingMerchant(){
         BirdApi.getTakingListCountMerchant(this, "each/unTaking", new RequestCallBackInterface() {

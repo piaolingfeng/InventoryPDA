@@ -7,16 +7,13 @@ import android.widget.TextView;
 
 import com.pda.birdex.pda.MyApplication;
 import com.pda.birdex.pda.R;
-import com.pda.birdex.pda.activity.CountToolActivity;
 import com.pda.birdex.pda.api.BirdApi;
 import com.pda.birdex.pda.entity.ContainerInfo;
 import com.pda.birdex.pda.interfaces.RequestCallBackInterface;
 import com.pda.birdex.pda.response.CountingOrderNoInfoEntity;
 import com.pda.birdex.pda.response.PrintEntity;
 import com.pda.birdex.pda.utils.GsonHelper;
-import com.pda.birdex.pda.utils.SoftKeyboardUtil;
 import com.pda.birdex.pda.utils.T;
-import com.pda.birdex.pda.widget.ClearEditText;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -27,54 +24,50 @@ import butterknife.OnClick;
 /**
  * Created by chuming.zhuang on 2016/6/24.
  */
-public class CountPrintOrderFragment extends BarScanBaseFragment implements View.OnClickListener, TextView.OnEditorActionListener {
+public class CountPrintOrderFragment extends BaseFragment implements View.OnClickListener, TextView.OnEditorActionListener {
     String tag = "CountPrintOrderFragment";
     @Bind(R.id.tv_count_num)
     TextView tv_count_num;
-    @Bind(R.id.edt_taking_num)
-    ClearEditText edt_taking_num;
+    //    @Bind(R.id.edt_taking_num)
+//    ClearEditText edt_taking_num;
+    @Bind(R.id.tv_container_no)
+    TextView tv_container_no;
+    @Bind(R.id.tv_bussiness)
+    TextView tv_bussiness;
     CountingOrderNoInfoEntity countingOrderNoInfoEntity;//清点任务详情
     ContainerInfo containerInfo;
 
     String orderId = "";
     String tid = "";
+
     @Override
-    public int getbarContentLayoutResId() {
+    public int getContentLayoutResId() {
         return R.layout.fragment_count_tool_print_layout;
     }
 
     @Override
-    public void barInitializeContentViews() {
+    public void initializeContentViews() {
         countingOrderNoInfoEntity = (CountingOrderNoInfoEntity) getActivity().getIntent().getExtras().get("countingOrderNoInfoEntity");
         if (countingOrderNoInfoEntity != null) {
             orderId = countingOrderNoInfoEntity.getDetail().getBaseInfo().getBaseInfo().getOrderNo();
             tid = countingOrderNoInfoEntity.getDetail().getBaseInfo().getBaseInfo().getTid();
             tv_count_num.setText(orderId);
+            tv_bussiness.setText(countingOrderNoInfoEntity.getDetail().getBaseInfo().getPerson().getCo());
         }
-        edt_taking_num.requestFocus();
         containerInfo = (ContainerInfo) getActivity().getIntent().getExtras().get("containerInfo");
+        if (containerInfo != null)
+            tv_container_no.setText(containerInfo.getContainerId());
     }
 
-    @Override
-    public ClearEditText getClearEditText() {
-        return edt_taking_num;
-    }
 
-    @Override
-    public void ClearEditTextCallBack(String code) {
-        if (this.isVisible()) {
-            SoftKeyboardUtil.hideSoftKeyboard((CountToolActivity) getActivity());
-        }
-    }
-
-    @OnClick(R.id.edt_taking_num)
+    @OnClick(R.id.btn_commit)
     @Override
     public void onClick(View v) {
         print();
     }
 
     private void print() {
-        if(countingOrderNoInfoEntity == null)
+        if (countingOrderNoInfoEntity == null)
             return;
         JSONObject jsonObject = new JSONObject();
         try {
@@ -115,5 +108,15 @@ public class CountPrintOrderFragment extends BarScanBaseFragment implements View
     public void onDestroy() {
         super.onDestroy();
         BirdApi.cancelRequestWithTag(tag);
+    }
+
+    @Override
+    protected void key(int keyCode, KeyEvent event) {
+
+    }
+
+    @Override
+    protected void lazyLoad() {
+
     }
 }

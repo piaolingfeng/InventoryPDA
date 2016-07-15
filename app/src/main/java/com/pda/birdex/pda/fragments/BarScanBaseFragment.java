@@ -74,6 +74,7 @@ public abstract class BarScanBaseFragment extends BaseFragment {
                 if (edt_input != null) {
                     edt_input.setText(barcodeStr);
                     edt_input.requestFocus();
+                    edt_input.setSelection(barcodeStr.length());
                 }
                 ClearEditTextCallBack(barcodeStr);
             }
@@ -82,6 +83,7 @@ public abstract class BarScanBaseFragment extends BaseFragment {
                 if (edt_input != null) {
                     edt_input.setText(str);
                     edt_input.requestFocus();
+                    edt_input.setSelection(str.length());
                 }
                 ClearEditTextCallBack(str);
             }

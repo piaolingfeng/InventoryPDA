@@ -241,7 +241,7 @@ public class TakingBindOrderFragment extends BarScanBaseFragment implements View
         @Override
         public void successCallBack(JSONObject object) {
             T.showShort(getContext(), getString(R.string.taking_submit_suc));
-            //上报日志,
+            //日志上报,
             String orderId = tv_taking_num.getText().toString();
             try {
                 tid = object.getString("tid");//收货的绑定揽收单，获取到接口时会返回tid

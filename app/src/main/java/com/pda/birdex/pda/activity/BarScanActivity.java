@@ -67,14 +67,17 @@ public abstract class BarScanActivity extends BaseActivity {
                     android.util.Log.i("debug", "----codetype--" + temp);
                     barcodeStr = new String(barcode, 0, barocodelen);
 
-                    if (edt_input != null)
+                    if (edt_input != null) {
                         edt_input.setText(barcodeStr);
+                        edt_input.setSelection(barcodeStr.length());
+                    }
                     ClearEditTextCallBack(barcodeStr);
                 }
             } else if (intent.getAction().equals(SCAN_ACTION_1)) {
                 String str = intent.getStringExtra("Scan_context");
                 if (edt_input != null) {
                     edt_input.setText(str);
+                    edt_input.setSelection(str.length());
                 }
                 ClearEditTextCallBack(str);
             }

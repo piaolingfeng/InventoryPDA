@@ -44,6 +44,8 @@ public class ClearEditText extends EditText implements View.OnFocusChangeListene
         init();
     }
 
+
+
     private void init() {
         // 获取EditText的DrawableRight,假如没有设置我们就使用默认的图片,获取图片的顺序是左上右下（0,1,2,3,）
         mClearDrawable = getCompoundDrawables()[2];
@@ -133,6 +135,7 @@ public class ClearEditText extends EditText implements View.OnFocusChangeListene
         this.hasFoucs = hasFocus;
         if (hasFocus) {
             setClearIconVisible(getText().length() > 0);
+            setSelection(getText().length());
         } else {
             setClearIconVisible(false);
         }

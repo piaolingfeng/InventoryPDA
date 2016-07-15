@@ -1,31 +1,23 @@
 package com.pda.birdex.pda.activity;
 
-import android.text.Editable;
+import android.net.Uri;
+import android.os.Bundle;
 import android.text.TextUtils;
-import android.text.TextWatcher;
 import android.view.KeyEvent;
-import android.view.MotionEvent;
-import android.view.View;
-import android.view.animation.Animation;
-import android.view.animation.TranslateAnimation;
-import android.widget.TextView;
 
-import com.pda.birdex.pda.MyApplication;
 import com.pda.birdex.pda.R;
-import com.pda.birdex.pda.api.BirdApi;
-import com.pda.birdex.pda.interfaces.RequestCallBackInterface;
-import com.pda.birdex.pda.response.PrintEntity;
-import com.pda.birdex.pda.utils.GsonHelper;
-import com.pda.birdex.pda.utils.T;
+import com.pda.birdex.pda.fragments.BaseFragment;
+import com.pda.birdex.pda.fragments.PrintOrderDetailFragment;
+import com.pda.birdex.pda.fragments.PrintOrderScanFragment;
+import com.pda.birdex.pda.interfaces.BackHandledInterface;
 import com.pda.birdex.pda.widget.ClearEditText;
 import com.pda.birdex.pda.widget.TitleView;
 
-import org.json.JSONObject;
+import org.greenrobot.eventbus.Subscribe;
 
 import java.util.List;
 
 import butterknife.Bind;
-import butterknife.OnClick;
 
 /**
  * Created by hyj on 2016/6/17.
@@ -33,152 +25,119 @@ import butterknife.OnClick;
  * 清点打印清点单
  * 入库打印容器单
  */
-public class PrintOrderActivity extends BasePrintBarScanActivity implements View.OnClickListener, RequestCallBackInterface {
+public class PrintOrderActivity extends BasePrintBarScanActivity implements BaseFragment.OnFragmentInteractionListener, BackHandledInterface {
 
     String tag = "PrintOrderActivity";
 
-    @Bind(R.id.titleView)
-    com.pda.birdex.pda.widget.TitleView title;
+    @Bind(R.id.title)
+    TitleView title;
 
-    @Bind(R.id.code_et)
-    com.pda.birdex.pda.widget.ClearEditText codeEt;
-
-    @Bind(R.id.no_tv)
-    TextView no_tv;
-
-    @Bind(R.id.button_ll)
-    com.zhy.android.percent.support.PercentLinearLayout button_ll;
-
-    @Bind(R.id.main)
-    com.zhy.android.percent.support.PercentRelativeLayout main;
+    PrintOrderDetailFragment printOrderDetailFragment;
+    PrintOrderScanFragment printOrderScanFragment;
 
     @Override
     public int getPrintContentLayoutResId() {
-        return R.layout.activity_lanshouprint;
+        return R.layout.activity_tool_layout;
     }
 
     @Override
     public void printInitializeContentViews() {
+        bus.register(this);
         String titleText = getIntent().getExtras().getString("title");
-        String name = getIntent().getExtras().getString("inputname");
+
         if (!TextUtils.isEmpty(titleText)) {
             title.setTitle(titleText);
         }
-        if (!TextUtils.isEmpty(name)) {
-            no_tv.setText(name);
-        }
-        codeEt.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                if (TextUtils.isEmpty(codeEt.getText())) {
-                    gone();
-                }
-            }
-        });
-
-        codeEt.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-            @Override
-            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                if(actionId == KeyEvent.KEYCODE_ENTER || actionId == KeyEvent.KEYCODE_UNKNOWN || actionId == KeyEvent.KEYCODE_ENDCALL)
-                    ClearEditTextCallBack(v.getText().toString());
-                return false;
-            }
-        });
-
-        main.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-
-                main.setFocusable(true);
-                main.setFocusableInTouchMode(true);
-                main.requestFocus();
-
-                if (!TextUtils.isEmpty(codeEt.getText())) {
-                    if (button_ll.getVisibility() != View.VISIBLE) {
-                        visible();
-                    }
-                }
-
-                return false;
-            }
-        });
+        addFragment(0, false,"");
     }
 
     @Override
     public ClearEditText getClearEditText() {
-        return codeEt;
+        return null;
     }
 
     @Override
     public void ClearEditTextCallBack(String code) {
 //        SoftKeyboardUtil.hideSoftKeyboard(this);
         if (!TextUtils.isEmpty(code)) {
-            visible();
+//            visible();
         }
     }
 
     // Visible 动画
-    private void visible() {
-        TranslateAnimation mShowAction = new TranslateAnimation(Animation.RELATIVE_TO_SELF, 0.0f,
-                Animation.RELATIVE_TO_SELF, 0.0f, Animation.RELATIVE_TO_SELF,
-                2.0f, Animation.RELATIVE_TO_SELF, 0.0f);
-        mShowAction.setDuration(500);
-        button_ll.startAnimation(mShowAction);
-        button_ll.setVisibility(View.VISIBLE);
+//    private void visible() {
+//        TranslateAnimation mShowAction = new TranslateAnimation(Animation.RELATIVE_TO_SELF, 0.0f,
+//                Animation.RELATIVE_TO_SELF, 0.0f, Animation.RELATIVE_TO_SELF,
+//                2.0f, Animation.RELATIVE_TO_SELF, 0.0f);
+//        mShowAction.setDuration(500);
+//        button_ll.startAnimation(mShowAction);
+//        button_ll.setVisibility(View.VISIBLE);
+//    }
+//
+//    // gone 动画
+//    private void gone() {
+//        TranslateAnimation mHiddenAction = new TranslateAnimation(Animation.RELATIVE_TO_SELF,
+//                0.0f, Animation.RELATIVE_TO_SELF, 0.0f,
+//                Animation.RELATIVE_TO_SELF, 0.0f, Animation.RELATIVE_TO_SELF,
+//                2.0f);
+//        mHiddenAction.setDuration(500);
+//        button_ll.startAnimation(mHiddenAction);
+//        button_ll.setVisibility(View.GONE);
+//    }
+    android.support.v4.app.FragmentTransaction fragmentTransaction;
+
+    @Subscribe
+    public void onEvent(String print_detail) {
+        addFragment(1, true,print_detail);
     }
 
-    // gone 动画
-    private void gone() {
-        TranslateAnimation mHiddenAction = new TranslateAnimation(Animation.RELATIVE_TO_SELF,
-                0.0f, Animation.RELATIVE_TO_SELF, 0.0f,
-                Animation.RELATIVE_TO_SELF, 0.0f, Animation.RELATIVE_TO_SELF,
-                2.0f);
-        mHiddenAction.setDuration(500);
-        button_ll.startAnimation(mHiddenAction);
-        button_ll.setVisibility(View.GONE);
-    }
-
-    @OnClick({R.id.printsame, R.id.printnew})
-    @Override
-    public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.printsame:
-                printSame();
+    /**
+     * 隐藏添加fragment
+     */
+    private void addFragment(int position, boolean flag,String text) {
+        printOrderDetailFragment = null;
+        if (printOrderDetailFragment == null)
+            printOrderDetailFragment = new PrintOrderDetailFragment();
+        if (printOrderScanFragment == null)
+            printOrderScanFragment = new PrintOrderScanFragment();
+        BaseFragment baseFragment = null;
+        if (flag)
+            fragmentTransaction = getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim.in_from_right, R.anim.out_from_left, R.anim.in_from_left, R.anim.out_from_right).addToBackStack(null);
+        else
+            fragmentTransaction = getSupportFragmentManager().beginTransaction();
+        hideFragment();
+        switch (position) {
+            case 0:
+                baseFragment = printOrderScanFragment;
                 break;
-            case R.id.printnew:
-                printNew();
+            case 1:
+                baseFragment = printOrderDetailFragment;
                 break;
         }
+
+        if (!baseFragment.isAdded()) {
+            fragmentTransaction.add(R.id.framelayout, baseFragment);
+        }
+        Bundle b = new Bundle();
+        b.putString("code", text);
+        baseFragment.setUIArguments(b);
+        fragmentTransaction.show(baseFragment);
+        fragmentTransaction.commit();
     }
 
-    //打印相同箱单
-    private void printSame() {
-        if (no_tv.getText().equals(getString(R.string.count_box_no)))// 清点
-            BirdApi.postCountingCodeSamePrint(this, codeEt.getText().toString(), this, tag, true);
-        else if (no_tv.getText().equals(getString(R.string.taking_num)))// 揽收
-            BirdApi.postTakingCodeSamePrint(this, codeEt.getText().toString(), this, tag, true);
-        else if (no_tv.getText().equals(getString(R.string.count_vessel_no)))// 入库
-            BirdApi.postStockInCodeSamePrint(this, codeEt.getText().toString(), this, tag, true);
+    private void hideFragment() {
+        if (printOrderDetailFragment != null)
+            fragmentTransaction.hide(printOrderDetailFragment);
+        if (printOrderScanFragment != null)
+            fragmentTransaction.hide(printOrderScanFragment);
     }
 
-    //打印相同箱单
-    private void printNew() {
-        if (no_tv.getText().equals(getString(R.string.count_box_no)))// 清点
-            BirdApi.postCountingCodeNewPrint(this, codeEt.getText().toString(), this, tag, true);
-        else if (no_tv.getText().equals(getString(R.string.taking_num)))// 揽收
-            BirdApi.postTakingCodeNewPrint(this, codeEt.getText().toString(), this, tag, true);
-        else if (no_tv.getText().equals(getString(R.string.count_vessel_no)))// 入库
-            BirdApi.postStockInCodeNewPrint(this, codeEt.getText().toString(), this, tag, true);
+    @Subscribe
+    public void onEvent(List<String> list) {
+        for (String s : list) {
+            sendMessage(s);
+        }
     }
 
     @Override
@@ -187,40 +146,32 @@ public class PrintOrderActivity extends BasePrintBarScanActivity implements View
     }
 
     @Override
-    public void successCallBack(JSONObject object) {
-        PrintEntity entity = GsonHelper.getPerson(object.toString(), PrintEntity.class);
-        //日志上报
-        String orderId = entity.getOrderNo();
-        String tid = entity.getTid();
-        if (no_tv.getText().equals(getString(R.string.count_box_no)))// 清点日志上报
-            MyApplication.loggingUpload.countPrint(this, tag, orderId, tid, entity.getContainerNos());
-        else if (no_tv.getText().equals(getString(R.string.taking_num)))//揽收日志上报
-            MyApplication.loggingUpload.takePrint(this, tag, orderId, tid, entity.getContainerNos());
-        else if (no_tv.getText().equals(getString(R.string.count_vessel_no)))// 入库
-        {
-
-        }
-        if (entity != null) {
-            print(entity.getData());
-        } else {
-            T.showLong(this, getString(R.string.parse_error));
-        }
-    }
-
-    private void print(List<String> list) {
-        for (String s : list) {
-            sendMessage(s);
-        }
-    }
-
-    @Override
-    public void errorCallBack(JSONObject object) {
-
-    }
-
-    @Override
     public void onDestroy() {
         super.onDestroy();
-        BirdApi.cancelRequestWithTag(tag);
+        bus.unregister(this);
+    }
+
+
+    @Override
+    public void onFragmentInteraction(Uri uri) {
+
+    }
+
+    BaseFragment baseFragment;
+
+    @Override
+    public void setSelectedFragment(BaseFragment selectedFragment) {
+        baseFragment = selectedFragment;
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        boolean flag = false;
+        if (getSupportFragmentManager().getBackStackEntryCount() > 0) {
+            getSupportFragmentManager().popBackStack();
+            flag = true;
+        }else
+            flag = super.onKeyDown(keyCode, event);
+        return flag;
     }
 }

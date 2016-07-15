@@ -94,10 +94,11 @@ public class TakingSelectMerchantActivity extends BaseActivity implements OnClic
                 if (list.get(position).getShowCo() == 0) {
                     pll_code.setVisibility(View.GONE);
                     pll_reciver.setVisibility(View.GONE);
+                    edt_recivier.setText(getString(R.string.birdex));
                 } else {
                     pll_code.setVisibility(View.VISIBLE);
                     pll_reciver.setVisibility(View.VISIBLE);
-                    edt_recivier.setText(getString(R.string.birdex));
+                    edt_recivier.setText("");
                 }
 //                    isSpinnerFirst = false;
             }
@@ -127,6 +128,7 @@ public class TakingSelectMerchantActivity extends BaseActivity implements OnClic
             jsonObject.put("expressNo", getIntent().getStringExtra("expressNo"));
             if (StringUtils.isEmpty(merchantId)) {
                 T.showShort(this, getString(R.string.select_merchant));
+                return;
             } else
                 jsonObject.put("merchant", merchantId);
             jsonObject.put("name", edt_recivier.getText().toString());

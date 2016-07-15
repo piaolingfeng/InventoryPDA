@@ -87,6 +87,7 @@ public class CheckActivity extends BaseActivity {
         if (b.getString("checkType").equals(getString(R.string.count))) {//清点
             title.setTitle(getString(R.string.check_counting_info));
             tv_taking_num_head.setText(R.string.count_num);
+            tv_print_num.setText(getString(R.string.count_vessel_no));
             pll_amount.setVisibility(View.VISIBLE);
             pll_upc.setVisibility(View.VISIBLE);
             toolMenu = getResources().getStringArray(R.array.counting_tool_menu);

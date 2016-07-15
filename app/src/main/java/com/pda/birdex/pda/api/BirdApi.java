@@ -22,7 +22,6 @@ import com.pda.birdex.pda.widget.RotateLoading;
 import org.apache.http.Header;
 import org.apache.http.HttpEntity;
 import org.apache.http.entity.StringEntity;
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -410,8 +409,8 @@ public class BirdApi {
             }
 
             @Override
-            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
-                super.onFailure(statusCode, headers, responseString, throwable);
+            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+                super.onFailure(statusCode, headers, throwable, errorResponse);
                 if (MyApplication.ahc != null) {
                     MyApplication.ahc.addHeader("x-access-token", PreferenceUtils.getPrefString(mContext, "token", ""));
                 }
@@ -421,6 +420,9 @@ public class BirdApi {
                         break;
                     case 404:
                         T.showShort(mContext, mContext.getString(R.string.request404));
+                        break;
+                    default:
+                        T.showShort(mContext, mContext.getString(R.string.service_no_response));
                         break;
                 }
             }
@@ -470,10 +472,13 @@ public class BirdApi {
                 super.onFailure(statusCode, headers, throwable, errorResponse);
                 switch (statusCode) {
                     case 401:
-                        T.showShort(mContext, mContext.getString(R.string.log_report_error) + mContext.getString(R.string.request401));
+                        T.showShort(mContext, mContext.getString(R.string.request401));
                         break;
                     case 404:
-                        T.showShort(mContext, mContext.getString(R.string.log_report_error) + mContext.getString(R.string.request404));
+                        T.showShort(mContext, mContext.getString(R.string.request404));
+                        break;
+                    default:
+                        T.showShort(mContext, mContext.getString(R.string.service_no_response));
                         break;
                 }
 //                callBackInterface.errorCallBack(errorResponse);
@@ -527,22 +532,22 @@ public class BirdApi {
                 }
             }
 
-            @Override
-            public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
-                super.onSuccess(statusCode, headers, response);
-
-            }
 
             @Override
             public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
                 super.onFailure(statusCode, headers, throwable, errorResponse);
                 callBackInterface.errorCallBack(errorResponse);
+                if (showDialog)
+                    hideLoading();
                 switch (statusCode) {
                     case 401:
                         T.showShort(mContext, mContext.getString(R.string.request401));
                         break;
                     case 404:
                         T.showShort(mContext, mContext.getString(R.string.request404));
+                        break;
+                    default:
+                        T.showShort(mContext, mContext.getString(R.string.service_no_response));
                         break;
                 }
             }
@@ -596,14 +601,10 @@ public class BirdApi {
             }
 
             @Override
-            public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
-                super.onSuccess(statusCode, headers, response);
-
-            }
-
-            @Override
             public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
                 super.onFailure(statusCode, headers, throwable, errorResponse);
+                if (showDialog)
+                    hideLoading();
                 callBackInterface.errorCallBack(errorResponse);
                 switch (statusCode) {
                     case 401:
@@ -611,6 +612,9 @@ public class BirdApi {
                         break;
                     case 404:
                         T.showShort(mContext, mContext.getString(R.string.request404));
+                        break;
+                    default:
+                        T.showShort(mContext, mContext.getString(R.string.service_no_response));
                         break;
                 }
             }
@@ -727,6 +731,9 @@ public class BirdApi {
                         break;
                     case 404:
                         T.showShort(mContext, mContext.getString(R.string.request404));
+                        break;
+                    default:
+                        T.showShort(mContext, mContext.getString(R.string.service_no_response));
                         break;
                 }
                 if (url.contains("login"))//登录接口才把错误回调
