@@ -92,7 +92,7 @@ public class StorageBindPositionFragment extends BarScanBaseFragment implements 
 
     @Override
     public void ClearEditTextCallBack(String code) {
-        if (this.isVisible && edt_storage_position.getVisibility() == View.VISIBLE) {
+        if (!this.isHidden() && edt_storage_position.getVisibility() == View.VISIBLE) {
 
         }
     }

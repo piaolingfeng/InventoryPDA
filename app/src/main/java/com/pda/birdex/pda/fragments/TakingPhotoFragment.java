@@ -352,7 +352,7 @@ public class TakingPhotoFragment extends BarScanBaseFragment implements View.OnC
 
     @Override
     public void ClearEditTextCallBack(String code) {
-//        if (this.isVisible()) {
+//        if (!this.isHidden()) {
 //            if ("1".equals(from)) {
 //                // 说明是从揽收进入的 需要通过容器号 调用接口  获取区域信息
 //                getAreaMes(code);

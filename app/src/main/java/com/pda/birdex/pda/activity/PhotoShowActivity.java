@@ -28,7 +28,7 @@ import butterknife.OnClick;
 /**
  * Created by hyj on 2016/3/14.
  */
-public class PhotoShowActivity extends BaseActivity{
+public class PhotoShowActivity extends BaseActivity {
 
 //    private ImageView iv;
 
@@ -75,7 +75,6 @@ public class PhotoShowActivity extends BaseActivity{
 //        viewpager.setAdapter(myPagerAdapter);
 //        viewpager.setCurrentItem(position);
 
-        titleView.setSaveText(getString(R.string.photo_delete));
         View.OnClickListener listener = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -96,16 +95,21 @@ public class PhotoShowActivity extends BaseActivity{
                 finish();
             }
         };
-        titleView.setSaveListener(listener);
 
         String path = (String) getIntent().getExtras().get("path");
         position = getIntent().getExtras().getInt("position");
         GlideUtils.setImageToLocalPath(iv, path);
+
+        if (!path.startsWith("http")) {
+            titleView.setSaveText(getString(R.string.photo_delete));
+            titleView.setSaveListener(listener);
+        }
     }
 
 
     /**
      * 加载本地图片
+     *
      * @param url
      * @return
      */

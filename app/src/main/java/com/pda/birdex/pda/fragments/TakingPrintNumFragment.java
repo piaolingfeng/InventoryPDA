@@ -84,7 +84,7 @@ public class TakingPrintNumFragment extends BarScanBaseFragment implements View.
 
     @Override
     public void ClearEditTextCallBack(String code) {
-        if (this.isVisible()) {
+        if (!this.isHidden()) {
             SoftKeyboardUtil.hideSoftKeyboard((BaseActivity) getActivity());
         }
     }

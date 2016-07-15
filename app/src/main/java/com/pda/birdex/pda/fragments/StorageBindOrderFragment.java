@@ -87,7 +87,7 @@ public class StorageBindOrderFragment extends BarScanBaseFragment implements Vie
 
     @Override
     public void ClearEditTextCallBack(String code) {
-        if (this.isVisible) {
+        if (!this.isHidden()) {
 
         }
     }
