@@ -311,7 +311,7 @@ public class CountClearFragment extends BarScanBaseFragment implements View.OnCl
                         if ("success".equals(object.getString("result"))) {
                             //清点日志上报
                             String upc = edt_upc.getText().toString();
-                            int count = Integer.parseInt(edt_count_length.getText().toString());
+                            long count = Long.parseLong(edt_count_length.getText().toString());
                             String ctNo = edt_count_num.getText().toString();
                             MyApplication.loggingUpload.countClearCommit(getActivity(), tag, orderNo, tid, upc,ctNo,count);
                             T.showShort(getContext(), getString(R.string.taking_upload_suc));

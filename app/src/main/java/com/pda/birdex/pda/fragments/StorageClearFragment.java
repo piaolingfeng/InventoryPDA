@@ -307,6 +307,13 @@ public class StorageClearFragment extends BarScanBaseFragment implements View.On
                             photoFragment.showException(false);
                             tv_upc.setText(edt_upc.getText());
                             tv_amount.setText(edt_amount.getText());
+                            //日志上报
+                            String orderId = entity.getOrderNo();
+                            String tid = entity.getTid();
+                            String upc = edt_upc.getText()+"";
+                            long upcCount=Long.parseLong(edt_amount.getText().toString());
+                            String ctNo = tv_vessel_num.getText().toString();
+                            MyApplication.loggingUpload.stockInClear(getActivity(),TAG,orderId,tid,ctNo,upc,upcCount);
                         } else {
                             T.showShort(getContext(), getString(R.string.taking_submit_fal));
                         }

@@ -4,6 +4,7 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.widget.TextView;
 
+import com.pda.birdex.pda.MyApplication;
 import com.pda.birdex.pda.R;
 import com.pda.birdex.pda.api.BirdApi;
 import com.pda.birdex.pda.interfaces.RequestCallBackInterface;
@@ -67,7 +68,7 @@ public class StoragePrintOrderFragment extends BaseFragment implements View.OnCl
             if (entity != null) {
                 object.put("count", 1);
                 object.put("owner", entity.getOwner());
-                object.put("orderNo", entity.getOrderNo());
+                object.put("orderNo", entity.getTid());
             }
         } catch (JSONException e) {
             e.printStackTrace();
@@ -75,9 +76,14 @@ public class StoragePrintOrderFragment extends BaseFragment implements View.OnCl
         BirdApi.postStockInCodePrint(getActivity(), object, new RequestCallBackInterface() {
             @Override
             public void successCallBack(JSONObject object) {
-                PrintEntity entity = GsonHelper.getPerson(object.toString(), PrintEntity.class);
-                if (entity != null)
-                    bus.post(entity.getData());
+                PrintEntity pentity = GsonHelper.getPerson(object.toString(), PrintEntity.class);
+                if (pentity != null) {
+                    bus.post(pentity.getData());
+                    //日志上报
+                    String orderId = entity.getOrderNo();
+                    String tid = entity.getTid();
+                    MyApplication.loggingUpload.stockInPrint(getActivity(),tag,orderId,tid,pentity.getData());
+                }
                 else
                     T.showShort(getActivity(), getString(R.string.parse_fail));
             }

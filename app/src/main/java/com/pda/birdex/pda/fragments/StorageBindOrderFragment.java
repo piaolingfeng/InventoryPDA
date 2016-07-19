@@ -7,6 +7,7 @@ import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.pda.birdex.pda.MyApplication;
 import com.pda.birdex.pda.R;
 import com.pda.birdex.pda.api.BirdApi;
 import com.pda.birdex.pda.interfaces.RequestCallBackInterface;
@@ -61,9 +62,9 @@ public class StorageBindOrderFragment extends BarScanBaseFragment implements Vie
             stockNum = bundle.getString("stockNum");
         }
         tv_vessel_num.setText(stockNum + "");
-        if (entity != null && !StringUtils.isEmpty(entity.getOrderNo())) {//异常，不能解绑
+        if (entity != null && !StringUtils.isEmpty(entity.getTid())) {//异常，不能解绑
             disableEditMode();
-            tv_storage_order.setText(entity.getOrderNo());
+            tv_storage_order.setText(entity.getTid());
         } else {
             editMode();
         }
@@ -122,7 +123,7 @@ public class StorageBindOrderFragment extends BarScanBaseFragment implements Vie
             JSONArray array = new JSONArray(containerStr);
             jsonObject.put("containers", array);
             jsonObject.put("orderNO", edt_storage_order.getText() + "");
-            BirdApi.postStockBindOrder(getContext(), jsonObject, new RequestCallBackInterface(){
+            BirdApi.postStockBindOrder(getContext(), jsonObject, new RequestCallBackInterface() {
 
                 @Override
                 public void successCallBack(JSONObject object) {
@@ -130,6 +131,12 @@ public class StorageBindOrderFragment extends BarScanBaseFragment implements Vie
                         if ("success".equals(object.getString("result"))) {
                             T.showShort(getContext(), getString(R.string.taking_submit_suc));
                             disableEditMode();
+                            //日志上报
+                            String orderId = entity.getOrderNo();
+                            String tid = entity.getTid();
+                            List<String> ctNos = new ArrayList<>();
+                            ctNos.add(stockNum);
+                            MyApplication.loggingUpload.stockInBindOrder(getActivity(), TAG, orderId, tid, ctNos);
                         } else {
                             T.showShort(getContext(), getString(R.string.taking_submit_fal));
                         }

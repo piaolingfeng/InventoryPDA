@@ -23,18 +23,17 @@ import butterknife.Bind;
  */
 public class StorageUnBindActivity extends BarScanActivity {
     String tag= "StorageUnBindActivity";
-    @Bind(R.id.titleView)
+    @Bind(R.id.title)
     TitleView titleView;
     @Bind(R.id.no_tv)
     TextView no_tv;
-    @Bind(R.id.code_et)
+    @Bind(R.id.edt_order)
     ClearEditText code_et;
-
 
 
     @Override
     public int getbarContentLayoutResId() {
-        return R.layout.activity_lanshouprint;
+        return R.layout.activity_storage_unbind_layout;
     }
 
     @Override

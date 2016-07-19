@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.zhy.android.percent.support.PercentLinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <com.pda.birdex.pda.widget.TitleView
+        android:id="@+id/title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+    <com.zhy.android.percent.support.PercentLinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_paddingPercent="@string/item_padding_3w">
+
+        <TextView
+            android:id="@+id/no_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/count_vessel_no"
+            android:textColor="@color/context_1"
+            app:layout_marginBottomPercent="@string/item_padding_3w"
+            app:layout_textSizePercent="@string/size_6w" />
+
+
+        <com.pda.birdex.pda.widget.ClearEditText
+            android:id="@+id/edt_order"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/context_2"
+            android:singleLine="true"
+            android:imeOptions="actionDone"
+            app:layout_textSizePercent="@string/size_6w" />
+    </com.zhy.android.percent.support.PercentLinearLayout>
+</com.zhy.android.percent.support.PercentLinearLayout>

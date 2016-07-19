@@ -1,6 +1,5 @@
 package com.pda.birdex.pda.activity;
 
-import android.nfc.Tag;
 import android.support.v7.widget.LinearLayoutManager;
 import android.text.TextUtils;
 import android.view.KeyEvent;
@@ -8,6 +7,7 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
+import com.pda.birdex.pda.MyApplication;
 import com.pda.birdex.pda.R;
 import com.pda.birdex.pda.adapter.BindNumAdapter;
 import com.pda.birdex.pda.api.BirdApi;
@@ -25,8 +25,6 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import org.json.JSONObject;
 
 import butterknife.Bind;
 import butterknife.OnClick;
@@ -131,6 +129,7 @@ public class StorageBindOrderActivity extends BarScanActivity implements View.On
         if (edt_storage_num.hasFocus()) {
             setEdt_input(edt_storage_container);
             edt_storage_container.requestFocus();
+            return;
         }
         if (edt_storage_container.hasFocus() && (!TextUtils.isEmpty(code.trim()))) {
             inputEntry(code);
@@ -151,6 +150,15 @@ public class StorageBindOrderActivity extends BarScanActivity implements View.On
                     try {
                         if ("success".equals(object.getString("result"))) {
                             T.showShort(getApplication(), getString(R.string.taking_submit_suc));
+                            //日志上报
+                            String tid = edt_storage_num.getText() + "";
+                            String orderId = "";
+                            try {
+                                orderId = object.getString("orderNo");
+                            }catch (Exception e){
+                                e.printStackTrace();
+                            }
+                            MyApplication.loggingUpload.stockInBindOrder(StorageBindOrderActivity.this, TAG, orderId, tid, containerList);
                         } else {
                             T.showShort(getApplication(), getString(R.string.taking_submit_fal));
                         }
