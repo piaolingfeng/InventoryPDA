@@ -65,6 +65,7 @@ public class SecondIndexActivity extends BarScanActivity implements OnRecycleVie
         title.setTitle(titleStr);
         if (titleStr.equals(getString(R.string.storge))) {//入库
             edt_search.setVisibility(View.VISIBLE);
+            edt_search.setHint(getString(R.string.storage_search));
         }
         for (int i = 0; i < lists.length; i++) {
             CommonItemEntity entity = new CommonItemEntity();
@@ -291,11 +292,11 @@ public class SecondIndexActivity extends BarScanActivity implements OnRecycleVie
                         //绑定入库单
                         intent.setClass(SecondIndexActivity.this, StorageBindOrderActivity.class);
                         break;
-                    case 3:
-                        //绑定库位
-                        intent.setClass(SecondIndexActivity.this, StorageBindStockActivity.class);
-                        break;
-                    case 5://解绑,最后跳转到storageFragmentActivity
+//                    case 3:
+//                        //绑定库位
+//                        intent.setClass(SecondIndexActivity.this, StorageBindStockActivity.class);
+//                        break;
+                    case 4://解绑,最后跳转到storageFragmentActivity
                         intent.setClass(SecondIndexActivity.this, StorageUnBindActivity.class);
                         break;
                     default:

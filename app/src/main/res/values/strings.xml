@@ -210,7 +210,9 @@
     <string name="print_count">打印容器号数量</string>
     <string name="print_each_copies">每个容器号打印份数</string>
     <string name="print_copies">打印份数</string>
-
+    <string name="storage_before_clear">请先入库清点</string>
+    <string name="storage_search">容器号搜索</string>
+    
 
 
 

@@ -362,12 +362,10 @@ public class BirdApi {
         jsonPostRequest(context, jsonObject, callBackInterface, "stockIn/track", tag, showDialog);
     }
 
-    //入库：绑单
-    public static void postStockInbBndOrderBat(Context context, JSONObject jsonObject, RequestCallBackInterface callBackInterface, String tag, boolean showDialog) {
-        jsonPostRequest(context, jsonObject, callBackInterface, "stockIn/code/bindOrderBat", tag, showDialog);
+    //入库：绑定库位
+    public static void postStockBndArea(Context context, JSONObject jsonObject, RequestCallBackInterface callBackInterface, String tag, boolean showDialog) {
+        jsonPostRequest(context, jsonObject, callBackInterface, "stockIn/code/bindArea", tag, showDialog);
     }
-
-
 
 
 

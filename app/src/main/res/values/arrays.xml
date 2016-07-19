@@ -70,9 +70,9 @@
         <item>打印入库单</item>
         <item>打印容器单</item>
         <item>绑定入库单</item>
-        <item>绑定库位</item>
+        <!--<item>绑定库位</item>-->
         <item>追踪箱号</item>
-        <item>解除绑单</item>
+        <item>解除绑定任务</item>
     </string-array>
 
     <string-array name="storage_tool_list">
@@ -81,7 +81,7 @@
         <item>绑定库位</item>
         <item>拍照</item>
         <item>追踪箱号</item>
-        <item>解除绑单</item>
+        <item>解除绑定任务</item>
         <item>清点</item>
     </string-array>
     

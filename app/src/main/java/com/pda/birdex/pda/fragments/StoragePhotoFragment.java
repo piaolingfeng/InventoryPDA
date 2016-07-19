@@ -8,7 +8,6 @@ import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
-import android.widget.Adapter;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.TextView;
@@ -17,7 +16,6 @@ import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 import com.pda.birdex.pda.MyApplication;
 import com.pda.birdex.pda.R;
-import com.pda.birdex.pda.adapter.PhotoGVAdapter;
 import com.pda.birdex.pda.adapter.PhotoGVUNAdapter;
 import com.pda.birdex.pda.api.BirdApi;
 import com.pda.birdex.pda.interfaces.RequestCallBackInterface;
@@ -305,6 +303,12 @@ public class StoragePhotoFragment extends BarScanBaseFragment implements View.On
                             disableEditMode();
                             photoFragment.showException(false);
                             tv_upc.setText(edt_upc.getText());
+                            //日志上报
+                            String orderId = entity.getOrderNo();
+                            String tid = entity.getTid();
+                            String ctNo= tv_vessel_num.getText() + "";
+                            String upc = edt_upc.getText() + "";
+                            MyApplication.loggingUpload.stockInPhoto(getActivity(),TAG,orderId,tid,ctNo,upc,photoUrl.size());
                         } else {
                             T.showShort(getContext(), getString(R.string.taking_upload_fal));
                         }

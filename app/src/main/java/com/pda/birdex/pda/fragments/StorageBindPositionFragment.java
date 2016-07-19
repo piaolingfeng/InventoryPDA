@@ -1,12 +1,19 @@
 package com.pda.birdex.pda.fragments;
 
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
 import com.pda.birdex.pda.R;
+import com.pda.birdex.pda.api.BirdApi;
+import com.pda.birdex.pda.interfaces.RequestCallBackInterface;
 import com.pda.birdex.pda.response.StockInContainerInfoEntity;
+import com.pda.birdex.pda.utils.T;
 import com.pda.birdex.pda.widget.ClearEditText;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import butterknife.Bind;
 import butterknife.OnClick;
@@ -16,10 +23,13 @@ import butterknife.OnClick;
  * 绑定库位
  */
 public class StorageBindPositionFragment extends BarScanBaseFragment implements View.OnClickListener {
+    String tag = "StorageBindPositionFragment";
     @Bind(R.id.tv_vessel_num)
     TextView tv_vessel_num;//容器号
     @Bind(R.id.tv_upc)
     TextView tv_upc;//upc
+    @Bind(R.id.tv_amount)
+    TextView tv_amount;
     @Bind(R.id.btn_edit)
     Button btn_edit;//查看参考库位
     @Bind(R.id.edt_storage_position)
@@ -62,9 +72,26 @@ public class StorageBindPositionFragment extends BarScanBaseFragment implements 
 //            }
             if (entity != null) {
                 tv_vessel_num.setText(stockNum);
-                if (entity.getUpcData().size() > 0)
+                if (entity.getUpcData().size() > 0) {
                     tv_upc.setText(entity.getUpcData().get(0).getUpc());
-//                if(entity.getAreaNo())
+                    tv_amount.setText(entity.getUpcData().get(0).getCount());
+                }
+                String level = entity.getCapacityLevel();
+                switch (level) {
+                    case "1":
+                        setSelect(capacityLevel_1);
+                        break;
+                    case "2":
+                        setSelect(capacityLevel_2);
+                        break;
+                    case "3":
+                        setSelect(capacityLevel_3);
+                        break;
+                }
+                if(TextUtils.isEmpty(entity.getAreaNo()))
+                    editMode();
+                else
+                    disableEditMode();
             }
         }
     }
@@ -72,6 +99,7 @@ public class StorageBindPositionFragment extends BarScanBaseFragment implements 
     private void editMode() {
         edt_storage_position.setVisibility(View.VISIBLE);
         tv_storage_position.setVisibility(View.INVISIBLE);
+        edt_storage_position.setText(tv_storage_position.getText());
         btn_commit.setClickable(true);
         btn_commit.setBackgroundResource(R.drawable.rect_fullbluew_selector);
         btn_commit.setTextColor(getResources().getColor(R.color.btn_blue_selector));
@@ -80,6 +108,7 @@ public class StorageBindPositionFragment extends BarScanBaseFragment implements 
     private void disableEditMode() {
         edt_storage_position.setVisibility(View.INVISIBLE);
         tv_storage_position.setVisibility(View.VISIBLE);
+        tv_storage_position.setText(edt_storage_position.getText());
         btn_commit.setClickable(false);
         btn_commit.setBackgroundResource(R.drawable.rect_fullgray);
         btn_commit.setTextColor(getResources().getColor(R.color.white));
@@ -97,12 +126,12 @@ public class StorageBindPositionFragment extends BarScanBaseFragment implements 
         }
     }
 
-    @OnClick({R.id.btn_commit, R.id.btn_edit,R.id.capacityLevel_1,R.id.capacityLevel_2,R.id.capacityLevel_3})
+    @OnClick({R.id.btn_commit, R.id.btn_edit, R.id.capacityLevel_1, R.id.capacityLevel_2, R.id.capacityLevel_3})
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btn_commit:
-                disableEditMode();
+                commit();
                 break;
             case R.id.btn_edit:
                 editMode();
@@ -115,8 +144,47 @@ public class StorageBindPositionFragment extends BarScanBaseFragment implements 
         }
     }
 
-    private void setSelect(View v){
-        switch (v.getId()){
+    private void commit() {
+        if (TextUtils.isEmpty(tv_amount.getText()) || TextUtils.isEmpty(tv_upc.getText())) {
+            T.showShort(getActivity(), getString(R.string.storage_before_clear));//清点后再提交绑库位
+            return;
+        }
+        if (entity == null)
+            return;
+        JSONObject object = new JSONObject();
+        String owner = entity.getOwner();
+        String storage_position = edt_storage_position.getText().toString();
+        try {
+            object.put("containerNo", tv_vessel_num.getText());
+            object.put("owner", owner);
+            object.put("areaCode", storage_position);
+            object.put("level", level);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        BirdApi.postStockBndArea(getActivity(), object, new RequestCallBackInterface() {
+            @Override
+            public void successCallBack(JSONObject object) {
+                disableEditMode();
+            }
+
+            @Override
+            public void errorCallBack(JSONObject object) {
+
+            }
+        }, tag, true);
+    }
+
+    @Override
+    public void onDestroy() {
+        BirdApi.cancelRequestWithTag(tag);
+        super.onDestroy();
+    }
+
+    String level = "1";
+
+    private void setSelect(View v) {
+        switch (v.getId()) {
             case R.id.capacityLevel_1:
                 capacityLevel_1.setTextColor(getResources().getColor(R.color.white));
                 capacityLevel_2.setTextColor(getResources().getColor(R.color.blue_head_1));
@@ -124,6 +192,7 @@ public class StorageBindPositionFragment extends BarScanBaseFragment implements 
                 capacityLevel_1.setBackgroundColor(getResources().getColor(R.color.blue_head_1));
                 capacityLevel_2.setBackgroundColor(getResources().getColor(R.color.white));
                 capacityLevel_3.setBackgroundColor(getResources().getColor(R.color.white));
+                level = "1";
                 break;
             case R.id.capacityLevel_2:
                 capacityLevel_1.setTextColor(getResources().getColor(R.color.blue_head_1));
@@ -132,6 +201,7 @@ public class StorageBindPositionFragment extends BarScanBaseFragment implements 
                 capacityLevel_1.setBackgroundColor(getResources().getColor(R.color.white));
                 capacityLevel_2.setBackgroundColor(getResources().getColor(R.color.blue_head_1));
                 capacityLevel_3.setBackgroundColor(getResources().getColor(R.color.white));
+                level = "2";
                 break;
             case R.id.capacityLevel_3:
                 capacityLevel_1.setTextColor(getResources().getColor(R.color.blue_head_1));
@@ -140,6 +210,7 @@ public class StorageBindPositionFragment extends BarScanBaseFragment implements 
                 capacityLevel_1.setBackgroundColor(getResources().getColor(R.color.white));
                 capacityLevel_2.setBackgroundColor(getResources().getColor(R.color.white));
                 capacityLevel_3.setBackgroundColor(getResources().getColor(R.color.blue_head_1));
+                level = "3";
                 break;
         }
     }

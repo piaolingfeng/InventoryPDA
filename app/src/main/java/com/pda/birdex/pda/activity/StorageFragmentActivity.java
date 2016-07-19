@@ -59,16 +59,18 @@ public class StorageFragmentActivity extends BaseActivity implements  BaseFragme
 //                    bindPositionFragment = new StorageBindPositionFragment();
 //                baseFragment = bindPositionFragment;
 //                break;
-            case 4:
+            case 3:
                 if (trackFragment == null)
                     trackFragment = new StorageTrackFragment();
                 baseFragment = trackFragment;
                 break;
-            case 5:
+            case 4:
                 if(unBindFragment ==null)
                     unBindFragment = new StorageUnBindFragment();
                 baseFragment = unBindFragment;
                 break;
+            default:
+                baseFragment = trackFragment;
         }
         Bundle b = getIntent().getExtras();
         b.putString("location_position", "SecondIndex");

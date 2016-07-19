@@ -162,7 +162,7 @@ public class CheckActivity extends BaseActivity {
         //入库数据
         if (stockInContainerInfoEntity != null) {
             tv_taking_num.setText(stockNum);//容器号
-            tv_taking_container.setText(stockInContainerInfoEntity.getOrderNo());//入库单号
+            tv_taking_container.setText(stockInContainerInfoEntity.getTid());//入库单号
 //            tv_upc.setText(stockInContainerInfoEntity.getUpcData().get());
             if (stockInContainerInfoEntity.getOperationLog().size() > 0) {
                 tv_operation_man.setText(stockInContainerInfoEntity.getOperationLog().get(0).getUserName());

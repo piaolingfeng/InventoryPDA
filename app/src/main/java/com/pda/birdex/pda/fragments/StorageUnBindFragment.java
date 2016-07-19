@@ -5,6 +5,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.pda.birdex.pda.MyApplication;
 import com.pda.birdex.pda.R;
 import com.pda.birdex.pda.api.BirdApi;
 import com.pda.birdex.pda.interfaces.RequestCallBackInterface;
@@ -23,7 +24,7 @@ import butterknife.OnClick;
  * 解除绑定
  */
 public class StorageUnBindFragment extends BaseFragment implements View.OnClickListener {
-    String tag= "StorageUnBindFragment";
+    String tag = "StorageUnBindFragment";
     @Bind(R.id.tv_vessel_num)
     TextView tv_vessel_num;
     @Bind(R.id.tv_storage_order)
@@ -53,10 +54,10 @@ public class StorageUnBindFragment extends BaseFragment implements View.OnClickL
             stockNum = bundle.getString("stockNum");
         }
         tv_vessel_num.setText(stockNum + "");
-        if(entity!=null && StringUtils.isEmpty(entity.getOrderNo())){//异常，不能解绑
+        if (entity != null && StringUtils.isEmpty(entity.getOrderNo())) {//异常，不能解绑
             disableEditMode();
-        }else{
-            if(entity!=null) {
+        } else {
+            if (entity != null) {
                 tv_storage_order.setText(entity.getOrderNo());
             }
             editMode();
@@ -64,13 +65,15 @@ public class StorageUnBindFragment extends BaseFragment implements View.OnClickL
     }
 
     //解绑操作
-    private void unBind(){
+    private void unBind() {
+        if (entity == null)
+            return;
         JSONObject object = new JSONObject();
         try {
-            object.put("containerNo",tv_vessel_num.getText());
-            object.put("orderNo",tv_storage_order.getText());
-            object.put("tid",entity.getTid());
-            object.put("owner",entity.getOwner());
+            object.put("containerNo", tv_vessel_num.getText());
+            object.put("orderNo", tv_storage_order.getText());
+            object.put("tid", entity.getTid());
+            object.put("owner", entity.getOwner());
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -78,14 +81,19 @@ public class StorageUnBindFragment extends BaseFragment implements View.OnClickL
         BirdApi.deleteRequest(getActivity(), object, new RequestCallBackInterface() {
             @Override
             public void successCallBack(JSONObject object) {
-                T.showShort(getActivity(),getString(R.string.unbind_success));
+                T.showShort(getActivity(), getString(R.string.unbind_success));
+                //日志上报
+                String orderId = tv_storage_order.getText() + "";
+                String tid = entity.getTid() + "";
+                String ctNo = tv_vessel_num.getText() + "";
+                MyApplication.loggingUpload.stockInUnbind(getActivity(), tag, orderId, tid, ctNo);
             }
 
             @Override
             public void errorCallBack(JSONObject object) {
-                T.showShort(getActivity(),getString(R.string.unbind_fail));
+                T.showShort(getActivity(), getString(R.string.unbind_fail));
             }
-        },"counting/code/unbind/area",tag,true);
+        }, "counting/code/unbind/area", tag, true);
     }
 
     private void editMode() {

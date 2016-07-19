@@ -295,7 +295,7 @@ public class TakingClearFragment extends BarScanBaseFragment implements View.OnC
 
             //日志上报
             String ctNo = edt_taking_num.getText().toString();
-            int count = Integer.parseInt(edt_box_size.getText().toString());
+            long count = Long.parseLong(edt_box_size.getText().toString());
             MyApplication.loggingUpload.takeTakeClear(getActivity(), tag, orderId, tid, ctNo, count);
 
             BirdApi.takingSubmit(getActivity(), jsonObject, new RequestCallBackInterface() {

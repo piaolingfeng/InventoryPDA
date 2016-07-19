@@ -1,7 +1,6 @@
 package com.pda.birdex.pda.fragments;
 
 import android.graphics.Color;
-import android.graphics.drawable.Drawable;
 import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.View;
@@ -9,6 +8,7 @@ import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.pda.birdex.pda.MyApplication;
 import com.pda.birdex.pda.R;
 import com.pda.birdex.pda.api.BirdApi;
 import com.pda.birdex.pda.interfaces.RequestCallBackInterface;
@@ -231,16 +231,50 @@ public class StorageTrackFragment extends BarScanBaseFragment implements View.On
                 if (!"SecondIndex".equals(location_position)) {
                     disEnableEditMode();
                 }
+                //日志上报
+                String orderId = "";
+                String tid = "";
+                String upc = edt_upc.getText() + "";
+                long count = Long.parseLong(edt_amout.getText() + "");
+                String ctFrom = "";
+                String ctTo = "";
+                if (flag)//true为转出  false为转自  默认 true
+                {
+                    if ("SecondIndex".equals(location_position)) {//从入库的首页进来
+                        ctFrom = edt_vessel_num.getText().toString();
+                    } else {
+                        ctFrom = tv_vessel_num.getText().toString();
+                    }
+                    ctTo = edt_storage_old_no.getText().toString();
+                } else {
+                    if ("SecondIndex".equals(location_position)) {//从入库的首页进来
+                        ctTo = edt_vessel_num.getText().toString();
+                    } else {
+                        ctTo = tv_vessel_num.getText().toString();
+                    }
+                    ctFrom = edt_storage_old_no.getText().toString();
+                }
+                try {//不管是哪个入口都会返回上面两个参数
+                    orderId = object.getString("orderNo");
+                    tid = object.getString("tid");
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                MyApplication.loggingUpload.stockInTrack(getActivity(), tag, orderId, tid,ctFrom,ctTo,upc,count);
             }
 
             @Override
             public void errorCallBack(JSONObject object) {
                 T.showShort(getActivity(), getString(R.string.taking_submit_fal));
-            }
-        }, tag, true);
-    }
 
-    // 点击转出
+            }
+        }
+
+                , tag, true);
+        }
+
+                // 点击转出
+
     private void clickOut() {
         tv_out.setBackgroundResource(R.drawable.textview_border_y);
         tv_out.setTextColor(Color.parseColor("#FFFFFF"));
@@ -256,6 +290,12 @@ public class StorageTrackFragment extends BarScanBaseFragment implements View.On
         tv_out.setBackgroundResource(R.drawable.textview_border_n);
         tv_out.setTextColor(getResources().getColor(R.color.context_2));
         flag = false;
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        BirdApi.cancelRequestWithTag(tag);
     }
 
     @OnClick({R.id.btn_commit, R.id.btn_edit, R.id.tv_out, R.id.tv_in})

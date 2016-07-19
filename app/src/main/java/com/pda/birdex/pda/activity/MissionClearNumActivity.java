@@ -191,8 +191,6 @@ public class MissionClearNumActivity extends BasePrintBarScanActivity implements
 
     //处理清点单
     private void dealCountDetail() {
-        tv_title_last_time.setText(countingOrderNoInfoEntity.getDetail().getBaseInfo().getBaseInfo().getDeadline());
-        tv_operate_vessl.setText(countingOrderNoInfoEntity.getDetail().getContainerList().size() + "");
         list = countingOrderNoInfoEntity.getDetail().getContainerList();
 //        list.addAll(countingOrderNoInfoEntity.getDetail().getTakingContainList());
         List<ContainerInfo> takingContainList =   countingOrderNoInfoEntity.getDetail().getTakingContainList();
@@ -206,6 +204,8 @@ public class MissionClearNumActivity extends BasePrintBarScanActivity implements
             }
         }
         list.addAll(takingContainList);
+        tv_title_last_time.setText(countingOrderNoInfoEntity.getDetail().getBaseInfo().getBaseInfo().getDeadline());
+        tv_operate_vessl.setText(countingOrderNoInfoEntity.getDetail().getContainerList().size() + "");
         adapter.setList(list);
         adapter.notifyDataSetChanged();
     }

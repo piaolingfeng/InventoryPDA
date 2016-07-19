@@ -153,7 +153,7 @@ public class LoggingUpload {
     }
 
     //揽收清点
-    public  void takeTakeClear(Context mContext, String tag, String orderId, String tid, String ctNo, int count){
+    public  void takeTakeClear(Context mContext, String tag, String orderId, String tid, String ctNo, long count){
         JSONObject object =createTakingJson(orderId,tid);
         try {
             object.put("job", "submit");
@@ -259,7 +259,6 @@ public class LoggingUpload {
      *          清点日志上报
      *
      */
-
     private JSONObject creatCountJsonObject(String orderId,String tid){
         JSONObject object = new JSONObject();
         try {
@@ -395,7 +394,7 @@ public class LoggingUpload {
 //    "upc": "UPC",
 //            "ctNo": "容器号",
 //            "count": number
-    public void countClearCommit(Context mContext,String tag,String orderId,String tid,String upc,String ctNo,int count){
+    public void countClearCommit(Context mContext,String tag,String orderId,String tid,String upc,String ctNo,long count){
         JSONObject object = creatCountJsonObject(orderId,tid);
         try {
             object.put("job", "submit");
@@ -405,6 +404,232 @@ public class LoggingUpload {
             params.put("upc",upc);
             params.put("ctNo", ctNo);
             params.put("count",count);
+            object.put("params",params);
+            L.e(object.toString());
+            BirdApi.jsonPostLoggingRequest(mContext, object, backInterface, tag, false);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+
+    /**
+     *
+     *          入库日志上报
+     *
+     */
+    private JSONObject creatStorageJsonObject(String orderId,String tid){
+        JSONObject object = new JSONObject();
+        try {
+            object.put("task","stockin");
+            object.put("source","PDA");
+            object.put("time",getLocalTime());
+            object.put("userId", PreferenceUtils.getPrefString(MyApplication.getInstans(), "username", ""));
+            object.put("userName", PreferenceUtils.getPrefString(MyApplication.getInstans(), "user_name", ""));
+            object.put("taskId", tid);
+            object.put("orderId", orderId);//"匹配的揽收单号; 若无匹配，返回空"
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return object;
+    }
+
+   /* 绑定入库任务
+    {
+        ...
+        "job": "bind_ct",
+            "logLevel": "info",
+            "event": "commit",
+            "params": {
+        "ctNo": "容器号"
+    }
+    }*/
+   public void stockInBindOrder(Context mContext,String tag,String orderId,String tid,List<String> ctNos){
+       JSONObject object = creatStorageJsonObject(orderId, tid);
+       try {
+           object.put("job", "bind_ct");
+           object.put("logLevel", "info");
+           object.put("event", "commit");
+           JSONObject params = new JSONObject();
+           JSONArray array = new JSONArray(ctNos);
+           params.put("ctNos", array);
+           object.put("params",params);
+           L.e(object.toString());
+           BirdApi.jsonPostLoggingRequest(mContext, object, backInterface, tag, false);
+       } catch (JSONException e) {
+           e.printStackTrace();
+       }
+   }
+
+   /* 打印容器单
+    {
+        ...
+        "job": "tag_print",
+            "logLevel": "info",
+            "event": "commit",
+            "params": {
+        "ctNos": []
+    }
+    }*/
+   public void stockInPrint(Context mContext,String tag,String orderId,String tid,List<String> ctNos){
+       JSONObject object = creatStorageJsonObject(orderId, tid);
+       try {
+           object.put("job", "tag_print");
+           object.put("logLevel", "info");
+           object.put("event", "commit");
+           JSONObject params = new JSONObject();
+           JSONArray array = new JSONArray(ctNos);
+           params.put("ctNo", array);
+           object.put("params",params);
+           L.e(object.toString());
+           BirdApi.jsonPostLoggingRequest(mContext, object, backInterface, tag, false);
+       } catch (JSONException e) {
+           e.printStackTrace();
+       }
+   }
+
+    /*绑定库位
+    {
+        ...
+        "job": "bind_rk",
+            "logLevel": "info",
+            "event": "commit",
+            "params": {
+        "ctNo": "",
+                "rkNo": "",
+                "upc": "",
+                "upcCount": ""
+    }
+    }*/
+    public void stockInBindArea(Context mContext,String tag,String orderId,String tid,String ctNo,String upc,String upcCount,String rkNo){
+        JSONObject object = creatStorageJsonObject(orderId, tid);
+        try {
+            object.put("job", "bind_rk");
+            object.put("logLevel", "info");
+            object.put("event", "commit");
+            JSONObject params = new JSONObject();
+            params.put("ctNo", ctNo);
+            params.put("rkNo", rkNo);
+            params.put("upc", upc);
+            params.put("upcCount", upcCount);
+            object.put("params",params);
+            L.e(object.toString());
+            BirdApi.jsonPostLoggingRequest(mContext, object, backInterface, tag, false);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /*拍照
+    {
+        ...
+        "job": "photo",
+            "logLevel": "info",
+            "event": "commit",
+            "params": {
+        "ctNo": "",
+                "upc": "",
+                "photoNum": int
+    }
+    }*/
+    public void stockInPhoto(Context mContext,String tag,String orderId,String tid,String ctNo,String upc,int photoNum){
+        JSONObject object = creatStorageJsonObject(orderId, tid);
+        try {
+            object.put("job", "photo");
+            object.put("logLevel", "info");
+            object.put("event", "commit");
+            JSONObject params = new JSONObject();
+            params.put("ctNo", ctNo);
+            params.put("upc", upc);
+            params.put("photoNum", photoNum);
+            object.put("params",params);
+            L.e(object.toString());
+            BirdApi.jsonPostLoggingRequest(mContext, object, backInterface, tag, false);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+   /* 追踪
+    {
+        ...
+        "job": "track",
+            "logLevel": "info",
+            "event": "commit",
+            "params": {
+        "ctFrom": "",
+                "ctTo": "",
+                "upc": "",
+                "upcCount": ""
+    }
+    }*/
+   public void stockInTrack(Context mContext,String tag,String orderId,String tid,String ctFrom,String ctTo,String upc,long upcCount){
+       JSONObject object = creatStorageJsonObject(orderId, tid);
+       try {
+           object.put("job", "track");
+           object.put("logLevel", "info");
+           object.put("event", "commit");
+           JSONObject params = new JSONObject();
+           params.put("ctFrom", ctFrom);
+           params.put("ctTo", ctTo);
+           params.put("upc", upc);
+           object.put("upcCount",upcCount);
+           L.e(object.toString());
+           BirdApi.jsonPostLoggingRequest(mContext, object, backInterface, tag, false);
+       } catch (JSONException e) {
+           e.printStackTrace();
+       }
+   }
+
+   /* 解除绑定
+    {
+        ...
+        "job": "unbind_ct",
+            "logLevel": "info",
+            "event": "commit",
+            "params": {
+        "ctNo": ""
+    }
+    }*/
+   public void stockInUnbind(Context mContext,String tag,String orderId,String tid,String ctNo){
+       JSONObject object = creatStorageJsonObject(orderId, tid);
+       try {
+           object.put("job", "unbind_ct");
+           object.put("logLevel", "info");
+           object.put("event", "commit");
+           JSONObject params = new JSONObject();
+           params.put("ctNo", ctNo);
+           object.put("params",params);
+           L.e(object.toString());
+           BirdApi.jsonPostLoggingRequest(mContext, object, backInterface, tag, false);
+       } catch (JSONException e) {
+           e.printStackTrace();
+       }
+   }
+
+    /*清点
+    {
+        ...
+        "job": "count",
+            "logLevel": "info",
+            "event": "commit",
+            "params": {
+        "ctNo": "",
+                "upc": "",
+                "upcCount": ""
+    }
+    }*/
+    public void stockInClear(Context mContext,String tag,String orderId,String tid,String ctNo,String upc,long upcCount){
+        JSONObject object = creatStorageJsonObject(orderId, tid);
+        try {
+            object.put("job", "count");
+            object.put("logLevel", "info");
+            object.put("event", "commit");
+            JSONObject params = new JSONObject();
+            params.put("ctNo", ctNo);
+            params.put("upc", upc);
+            params.put("upcCount", upcCount);
             object.put("params",params);
             L.e(object.toString());
             BirdApi.jsonPostLoggingRequest(mContext, object, backInterface, tag, false);

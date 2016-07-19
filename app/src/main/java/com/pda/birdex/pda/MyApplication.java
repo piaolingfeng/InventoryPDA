@@ -103,7 +103,7 @@ public class MyApplication extends Application {
 
         loggingUploadInit();
         initFile();
-//        iniCrash();
+        iniCrash();
         app_version = getVersionLocal();
         initAsyncHttpClient();
     }

@@ -132,11 +132,11 @@ public class PrintOrderDetailFragment extends BaseFragment implements View.OnCli
         String order = tv_order.getText().toString();
         String count = edt_print_count.getText().toString();
         if (no_tv.getText().equals(getString(R.string.count_box_no)))// 清点
-            BirdApi.postCountingCodeNewPrint(getActivity(), order+"/"+count, this, tag, true);
+            BirdApi.postCountingCodeNewPrint(getActivity(), order + "/" + count, this, tag, true);
         else if (no_tv.getText().equals(getString(R.string.taking_num)))// 揽收
-            BirdApi.postTakingCodeNewPrint(getActivity(), order+"/"+count, this, tag, true);
+            BirdApi.postTakingCodeNewPrint(getActivity(), order + "/" + count, this, tag, true);
         else if (no_tv.getText().equals(getString(R.string.count_vessel_no)))// 入库
-            BirdApi.postStockInCodeNewPrint(getActivity(), order+"/"+count, this, tag, true);
+            BirdApi.postStockInCodeNewPrint(getActivity(), order + "/" + count, this, tag, true);
     }
 
     @Override
@@ -149,9 +149,9 @@ public class PrintOrderDetailFragment extends BaseFragment implements View.OnCli
             MyApplication.loggingUpload.countPrint(getActivity(), tag, orderId, tid, entity.getContainerNos());
         else if (no_tv.getText().equals(getString(R.string.taking_num)))//揽收日志上报
             MyApplication.loggingUpload.takePrint(getActivity(), tag, orderId, tid, entity.getContainerNos());
-        else if (no_tv.getText().equals(getString(R.string.count_vessel_no)))// 入库
+        else if (no_tv.getText().equals(getString(R.string.count_vessel_no)))// 入库日志上报
         {
-
+            MyApplication.loggingUpload.stockInPrint(getActivity(), tag, orderId, tid, entity.getContainerNos());
         }
         if (entity != null) {
             List<String> list = entity.getData();
