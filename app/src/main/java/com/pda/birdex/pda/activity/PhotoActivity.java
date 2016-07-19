@@ -145,6 +145,10 @@ public class PhotoActivity extends BarScanActivity implements View.OnClickListen
                                                     try {
                                                         if ("success".equals(object.getString("result"))) {
                                                             T.showShort(PhotoActivity.this, getString(R.string.taking_upload_suc));
+                                                            pathList.clear();
+                                                            photoUrl.clear();
+                                                            photoFragment.setPathList(new ArrayList<String>());
+                                                            lanshouno_et.setText("");
                                                         } else {
                                                             T.showShort(PhotoActivity.this, getString(R.string.taking_upload_fal));
                                                         }

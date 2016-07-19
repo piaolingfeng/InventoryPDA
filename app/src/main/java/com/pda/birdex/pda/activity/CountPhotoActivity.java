@@ -170,6 +170,11 @@ public class CountPhotoActivity extends BarScanActivity implements View.OnClickL
                                                     try {
                                                         if ("success".equals(object.getString("result"))) {
                                                             T.showShort(CountPhotoActivity.this, getString(R.string.taking_upload_suc));
+                                                            pathList.clear();
+                                                            photoUrl.clear();
+                                                            photoFragment.setPathList(new ArrayList<String>());
+                                                            vessel_et.setText("");
+                                                            upc_et.setText("");
                                                         } else {
                                                             T.showShort(CountPhotoActivity.this, getString(R.string.taking_upload_fal));
                                                         }

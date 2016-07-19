@@ -7,6 +7,7 @@ import android.bluetooth.BluetoothDevice;
 import android.content.Intent;
 import android.os.Handler;
 import android.os.Message;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -15,6 +16,7 @@ import android.widget.Toast;
 
 import com.pda.birdex.pda.R;
 import com.pda.birdex.pda.services.BluetoothService;
+import com.pda.birdex.pda.utils.PreferenceUtils;
 import com.pda.birdex.pda.widget.ClearEditText;
 import com.pda.birdex.pda.widget.TitleView;
 
@@ -46,7 +48,7 @@ public abstract class BasePrintBarScanActivity extends BarScanActivity {
     private static final int REQUEST_ENABLE_BT = 2;
 
     // Name of the connected device
-    private static String mConnectedDeviceName ;
+    private static String mConnectedDeviceName;
     // String buffer for outgoing messages
     private StringBuffer mOutStringBuffer;
     // Local Bluetooth takingAdapter
@@ -54,8 +56,11 @@ public abstract class BasePrintBarScanActivity extends BarScanActivity {
     // Member object for the services
     public static BluetoothService mService;
 
+    private String btAddress = "";
+
     EventBus bus;
     private TitleView titleView;
+
     @Override
     public int getbarContentLayoutResId() {
         return getPrintContentLayoutResId();
@@ -75,12 +80,77 @@ public abstract class BasePrintBarScanActivity extends BarScanActivity {
         }
         bus = EventBus.getDefault();
         printInitializeContentViews();
+
+        //先判断蓝牙是否连接，如果未连接，从sp文件中拿到上次成功连接的address 进行连接
+        bluetoothConnect();
     }
 
-    @SuppressLint("NewApi") @Override
+
+    //先判断蓝牙是否连接，如果未连接，从sp文件中拿到上次成功连接的address 进行连接
+    private void bluetoothConnect() {
+        if (!isBlueToothHeadsetConnected()) {
+            // 没有连接
+            btAddress = PreferenceUtils.getPrefString(getApplication(), "btAddress", "");
+            if (!TextUtils.isEmpty(btAddress)) {
+
+                setupChat();
+
+                BluetoothAdapter mBtAdapter = BluetoothAdapter.getDefaultAdapter();
+                if (mBtAdapter.isDiscovering()) {
+                    mBtAdapter.cancelDiscovery();
+                }
+
+                // Request discover from BluetoothAdapter
+                mBtAdapter.startDiscovery();
+                //执行连接操作
+                BluetoothDevice device = mBluetoothAdapter.getRemoteDevice(btAddress);
+                // Attempt to connect to the device
+                mService.connect(device);
+            }
+        }
+    }
+
+    public boolean checkBluetoothAddress(String address) {
+        if (address == null || address.length() != 17) {
+            return false;
+        }
+        for (int i = 0; i < 17; i++) {
+            char c = address.charAt(i);
+            switch (i % 3) {
+                case 0:
+                case 1:
+                    if ((c >= '0' && c <= '9') || (c >= 'A' && c <= 'F')) {
+                        // hex character, OK
+                        break;
+                    }
+                    return false;
+                case 2:
+                    if (c == ':') {
+                        break;  // OK
+                    }
+                    return false;
+            }
+        }
+        return true;
+    }
+
+    private boolean isBlueToothHeadsetConnected() {
+        boolean retval = true;
+        try {
+            retval = BluetoothAdapter.getDefaultAdapter().getProfileConnectionState(android.bluetooth.BluetoothProfile.HEADSET)
+                    != android.bluetooth.BluetoothProfile.STATE_DISCONNECTED;
+
+        } catch (Exception exc) {
+            // nothing to do
+        }
+        return retval;
+    }
+
+    @SuppressLint("NewApi")
+    @Override
     public void onStart() {
         super.onStart();
-        if(D) Log.e(TAG, "++ ON START ++");
+        if (D) Log.e(TAG, "++ ON START ++");
 
         // If BT is not on, request that it be enabled.
         // setupChat() will then be called during onActivityResult
@@ -97,7 +167,7 @@ public abstract class BasePrintBarScanActivity extends BarScanActivity {
     @Override
     public synchronized void onResume() {
         super.onResume();
-        if(D) Log.e(TAG, "+ ON RESUME +");
+        if (D) Log.e(TAG, "+ ON RESUME +");
 
         // Performing this check in onResume() covers the case in which BT was
         // not enabled during onStart(), so we were paused to enable it...
@@ -143,14 +213,13 @@ public abstract class BasePrintBarScanActivity extends BarScanActivity {
 //        });
 
         // Initialize the BluetoothService to perform bluetooth connections
-        if(mService==null) {//让服务只作用一次
+        if (mService == null) {//让服务只作用一次
 //            mService = (BluetoothService) SavaObjectUtil.readObject(this,"mService");
 //            if(mService==null){
-                mService = new BluetoothService(this, mHandler);
+            mService = new BluetoothService(this, mHandler);
 //            }
-        }
-        else{
-            if(titleView!=null) {
+        } else {
+            if (titleView != null) {
                 mService.setmHandler(mHandler);//重新赋予mHandler地址，activity已经被销毁，handler被重新new过
                 switch (mService.getState()) {
                     case BluetoothService.STATE_NONE:
@@ -176,13 +245,13 @@ public abstract class BasePrintBarScanActivity extends BarScanActivity {
     @Override
     public synchronized void onPause() {
         super.onPause();
-        if(D) Log.e(TAG, "- ON PAUSE -");
+        if (D) Log.e(TAG, "- ON PAUSE -");
     }
 
     @Override
     public void onStop() {
         super.onStop();
-        if(D) Log.e(TAG, "-- ON STOP --");
+        if (D) Log.e(TAG, "-- ON STOP --");
     }
 
     @Override
@@ -190,15 +259,15 @@ public abstract class BasePrintBarScanActivity extends BarScanActivity {
         super.onDestroy();
         // Stop the Bluetooth services
 //        if (mService != null) mService.stop();
-        if(D) Log.e(TAG, "--- ON DESTROY ---");
+        if (D) Log.e(TAG, "--- ON DESTROY ---");
     }
 
     /**
      * Sends a message.
-     * @param message  A string of text to send.
      *
+     * @param message A string of text to send.
      */
-    public void sendMessage(String message){
+    public void sendMessage(String message) {
         // Check that we're actually connected before trying anything
         if (mService.getState() != BluetoothService.STATE_CONNECTED) {
             Toast.makeText(this, R.string.not_connected, Toast.LENGTH_SHORT).show();
@@ -209,11 +278,9 @@ public abstract class BasePrintBarScanActivity extends BarScanActivity {
         if (message.length() > 0) {
             // Get the message bytes and tell the BluetoothService to write
             byte[] send;
-            try{
-                send = new String(message.getBytes(),"UTF-8").getBytes("UTF-8");
-            }
-            catch(UnsupportedEncodingException e)
-            {
+            try {
+                send = new String(message.getBytes(), "UTF-8").getBytes("UTF-8");
+            } catch (UnsupportedEncodingException e) {
                 send = message.getBytes();
             }
             mService.write(send);
@@ -224,32 +291,33 @@ public abstract class BasePrintBarScanActivity extends BarScanActivity {
         }
     }
 
-    private  String data="";
+    private String data = "";
     // The Handler that gets information back from the BluetoothService
     private final Handler mHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
             switch (msg.what) {
                 case MESSAGE_STATE_CHANGE:
-                    if(D) Log.i(TAG, "MESSAGE_STATE_CHANGE: " + msg.arg1);
+                    if (D) Log.i(TAG, "MESSAGE_STATE_CHANGE: " + msg.arg1);
 //                    SavaObjectUtil.saveObject(BasePrintBarScanActivity.this,"mService",mService);
                     switch (msg.arg1) {
                         case BluetoothService.STATE_CONNECTED:
-                            if(titleView!=null)
-                            titleView.setSaveText(getString(R.string.title_connected_to) + mConnectedDeviceName);
+                            if (titleView != null)
+                                titleView.setSaveText(getString(R.string.title_connected_to) + mConnectedDeviceName);
 //                            mTitle.append(mConnectedDeviceName);
 //                            mPrintButton.setText(R.string.Print1);
+                            PreferenceUtils.setPrefString(getApplication(), "btAddress", btAddress);
                             break;
                         case BluetoothService.STATE_CONNECTING:
 //                            mTitle.setText(R.string.title_connecting);
-                            if(titleView!=null)
-                            titleView.setSaveText(getString(R.string.title_connecting));
+                            if (titleView != null)
+                                titleView.setSaveText(getString(R.string.title_connecting));
                             break;
                         case BluetoothService.STATE_LISTEN:
                         case BluetoothService.STATE_NONE:
 //                            mTitle.setText(R.string.title_not_connected);
-                            if(titleView!=null)
-                            titleView.setSaveText(getString(R.string.title_not_connected));
+                            if (titleView != null)
+                                titleView.setSaveText(getString(R.string.title_not_connected));
 //                            mPrintButton.setText(R.string.Print);
                             break;
                     }
@@ -263,13 +331,12 @@ public abstract class BasePrintBarScanActivity extends BarScanActivity {
                     byte[] readBuf = (byte[]) msg.obj;
                     // construct a string from the valid bytes in the buffer
                     String readMessage = new String(readBuf, 0, msg.arg1);
-                    data+=readMessage.trim();
-                    byte bt0='\r';
-                    byte bt1='\n';
-                    if(msg.arg1>1&&readBuf[msg.arg1-2]==bt0&&readBuf[msg.arg1-1]==bt1)
-                    {
+                    data += readMessage.trim();
+                    byte bt0 = '\r';
+                    byte bt1 = '\n';
+                    if (msg.arg1 > 1 && readBuf[msg.arg1 - 2] == bt0 && readBuf[msg.arg1 - 1] == bt1) {
 //                        mOutEditText.setText(data);
-                        data="";
+                        data = "";
 
                     }
                     break;
@@ -287,18 +354,21 @@ public abstract class BasePrintBarScanActivity extends BarScanActivity {
         }
     };
 
-    @SuppressLint("NewApi") public void onActivityResult(int requestCode, int resultCode, Intent data) {
+    @SuppressLint("NewApi")
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if(D) Log.d(TAG, "onActivityResult " + resultCode);
+        if (D) Log.d(TAG, "onActivityResult " + resultCode);
         switch (requestCode) {
             case REQUEST_CONNECT_DEVICE:
                 // When DeviceListActivity returns with a device to connect
                 if (resultCode == Activity.RESULT_OK) {
                     // Get the device MAC address
-                    String address = data.getExtras()
+                    btAddress = data.getExtras()
                             .getString(DeviceListActivity.EXTRA_DEVICE_ADDRESS);
+                    boolean flag = checkBluetoothAddress(btAddress);
+                    System.out.print(flag);
                     // Get the BLuetoothDevice object
-                    BluetoothDevice device = mBluetoothAdapter.getRemoteDevice(address);
+                    BluetoothDevice device = mBluetoothAdapter.getRemoteDevice(btAddress);
                     // Attempt to connect to the device
                     mService.connect(device);
                 }
