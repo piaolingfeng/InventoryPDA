@@ -93,7 +93,9 @@ public abstract class BasePrintBarScanActivity extends BarScanActivity {
             btAddress = PreferenceUtils.getPrefString(getApplication(), "btAddress", "");
             if (!TextUtils.isEmpty(btAddress)) {
 
-                setupChat();
+                if (mService == null) {
+                    setupChat();
+                }
 
                 BluetoothAdapter mBtAdapter = BluetoothAdapter.getDefaultAdapter();
                 if (mBtAdapter.isDiscovering()) {
